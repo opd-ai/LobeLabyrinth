@@ -1,0 +1,224 @@
+{
+  "questions": [
+    {
+      "id": "q001",
+      "category": "history",
+      "difficulty": "easy",
+      "question": "In which year did World War II end?",
+      "answers": ["1943", "1944", "1945", "1946"],
+      "correctAnswer": 2,
+      "points": 50,
+      "timeLimit": 30,
+      "explanation": "World War II ended in 1945 with the surrender of Japan on September 2, 1945."
+    },
+    {
+      "id": "q002",
+      "category": "science",
+      "difficulty": "medium",
+      "question": "What is the chemical symbol for gold?",
+      "answers": ["Go", "Gd", "Au", "Ag"],
+      "correctAnswer": 2,
+      "points": 75,
+      "timeLimit": 25,
+      "explanation": "Gold's chemical symbol is Au, derived from the Latin word 'aurum'."
+    },
+    {
+      "id": "q003",
+      "category": "literature",
+      "difficulty": "medium",
+      "question": "Who wrote the novel '1984'?",
+      "answers": ["Aldous Huxley", "George Orwell", "Ray Bradbury", "H.G. Wells"],
+      "correctAnswer": 1,
+      "points": 75,
+      "timeLimit": 25,
+      "explanation": "George Orwell wrote '1984', published in 1949 as a dystopian social science fiction novel."
+    },
+    {
+      "id": "q004",
+      "category": "geography",
+      "difficulty": "easy",
+      "question": "What is the capital of Australia?",
+      "answers": ["Sydney", "Melbourne", "Canberra", "Perth"],
+      "correctAnswer": 2,
+      "points": 50,
+      "timeLimit": 30,
+      "explanation": "Canberra is the capital city of Australia, located in the Australian Capital Territory."
+    },
+    {
+      "id": "q005",
+      "category": "mathematics",
+      "difficulty": "hard",
+      "question": "What is the value of π (pi) to 3 decimal places?",
+      "answers": ["3.141", "3.142", "3.143", "3.144"],
+      "correctAnswer": 1,
+      "points": 100,
+      "timeLimit": 20,
+      "explanation": "π (pi) is approximately 3.142 when rounded to 3 decimal places."
+    },
+    {
+      "id": "q006",
+      "category": "general",
+      "difficulty": "easy",
+      "question": "How many days are there in a leap year?",
+      "answers": ["364", "365", "366", "367"],
+      "correctAnswer": 2,
+      "points": 50,
+      "timeLimit": 30,
+      "explanation": "A leap year has 366 days, with the extra day added to February."
+    },
+    {
+      "id": "q007",
+      "category": "history",
+      "difficulty": "medium",
+      "question": "Who was the first person to walk on the moon?",
+      "answers": ["Buzz Aldrin", "Neil Armstrong", "John Glenn", "Alan Shepard"],
+      "correctAnswer": 1,
+      "points": 75,
+      "timeLimit": 25,
+      "explanation": "Neil Armstrong was the first person to walk on the moon on July 20, 1969."
+    },
+    {
+      "id": "q008",
+      "category": "science",
+      "difficulty": "hard",
+      "question": "What is the most abundant gas in Earth's atmosphere?",
+      "answers": ["Oxygen", "Carbon Dioxide", "Nitrogen", "Argon"],
+      "correctAnswer": 2,
+      "points": 100,
+      "timeLimit": 20,
+      "explanation": "Nitrogen makes up about 78% of Earth's atmosphere, making it the most abundant gas."
+    },
+    {
+      "id": "q009",
+      "category": "literature",
+      "difficulty": "easy",
+      "question": "Who wrote 'Romeo and Juliet'?",
+      "answers": ["Charles Dickens", "William Shakespeare", "Jane Austen", "Mark Twain"],
+      "correctAnswer": 1,
+      "points": 50,
+      "timeLimit": 30,
+      "explanation": "William Shakespeare wrote the tragic play 'Romeo and Juliet' in the early part of his career."
+    },
+    {
+      "id": "q010",
+      "category": "geography",
+      "difficulty": "medium",
+      "question": "Which river is the longest in the world?",
+      "answers": ["Amazon", "Nile", "Mississippi", "Yangtze"],
+      "correctAnswer": 1,
+      "points": 75,
+      "timeLimit": 25,
+      "explanation": "The Nile River is generally considered the longest river in the world at approximately 6,650 km."
+    },
+    {
+      "id": "q011",
+      "category": "astronomy",
+      "difficulty": "medium",
+      "question": "Which planet is known as the 'Red Planet'?",
+      "answers": ["Venus", "Mars", "Jupiter", "Saturn"],
+      "correctAnswer": 1,
+      "points": 75,
+      "timeLimit": 25,
+      "explanation": "Mars is known as the 'Red Planet' due to iron oxide (rust) on its surface."
+    },
+    {
+      "id": "q012",
+      "category": "general",
+      "difficulty": "medium",
+      "question": "What is the largest mammal in the world?",
+      "answers": ["African Elephant", "Blue Whale", "Giraffe", "Polar Bear"],
+      "correctAnswer": 1,
+      "points": 75,
+      "timeLimit": 25,
+      "explanation": "The Blue Whale is the largest mammal and the largest animal ever known to have lived on Earth."
+    },
+    {
+      "id": "q013",
+      "category": "history",
+      "difficulty": "hard",
+      "question": "In which year did the Berlin Wall fall?",
+      "answers": ["1987", "1988", "1989", "1990"],
+      "correctAnswer": 2,
+      "points": 100,
+      "timeLimit": 20,
+      "explanation": "The Berlin Wall fell on November 9, 1989, marking the beginning of German reunification."
+    },
+    {
+      "id": "q014",
+      "category": "science",
+      "difficulty": "easy",
+      "question": "How many bones are there in an adult human body?",
+      "answers": ["196", "206", "216", "226"],
+      "correctAnswer": 1,
+      "points": 50,
+      "timeLimit": 30,
+      "explanation": "An adult human body has 206 bones, while a baby is born with around 270 bones."
+    },
+    {
+      "id": "q015",
+      "category": "literature",
+      "difficulty": "hard",
+      "question": "Who wrote 'One Hundred Years of Solitude'?",
+      "answers": ["Gabriel García Márquez", "Mario Vargas Llosa", "Pablo Neruda", "Jorge Luis Borges"],
+      "correctAnswer": 0,
+      "points": 100,
+      "timeLimit": 20,
+      "explanation": "Gabriel García Márquez wrote 'One Hundred Years of Solitude', a landmark work of magical realism."
+    },
+    {
+      "id": "q016",
+      "category": "mathematics",
+      "difficulty": "medium",
+      "question": "What is 15% of 200?",
+      "answers": ["25", "30", "35", "40"],
+      "correctAnswer": 1,
+      "points": 75,
+      "timeLimit": 25,
+      "explanation": "15% of 200 is calculated as (15/100) × 200 = 30."
+    },
+    {
+      "id": "q017",
+      "category": "geography",
+      "difficulty": "hard",
+      "question": "What is the smallest country in the world?",
+      "answers": ["Monaco", "San Marino", "Vatican City", "Liechtenstein"],
+      "correctAnswer": 2,
+      "points": 100,
+      "timeLimit": 20,
+      "explanation": "Vatican City is the smallest country in the world by both area and population."
+    },
+    {
+      "id": "q018",
+      "category": "general",
+      "difficulty": "hard",
+      "question": "What is the hardest natural substance on Earth?",
+      "answers": ["Titanium", "Diamond", "Quartz", "Steel"],
+      "correctAnswer": 1,
+      "points": 100,
+      "timeLimit": 20,
+      "explanation": "Diamond is the hardest naturally occurring substance, rating 10 on the Mohs scale."
+    },
+    {
+      "id": "q019",
+      "category": "astronomy",
+      "difficulty": "easy",
+      "question": "How many planets are in our solar system?",
+      "answers": ["7", "8", "9", "10"],
+      "correctAnswer": 1,
+      "points": 50,
+      "timeLimit": 30,
+      "explanation": "There are 8 planets in our solar system since Pluto was reclassified as a dwarf planet in 2006."
+    },
+    {
+      "id": "q020",
+      "category": "history",
+      "difficulty": "easy",
+      "question": "Who painted the Mona Lisa?",
+      "answers": ["Michelangelo", "Leonardo da Vinci", "Raphael", "Donatello"],
+      "correctAnswer": 1,
+      "points": 50,
+      "timeLimit": 30,
+      "explanation": "Leonardo da Vinci painted the Mona Lisa between 1503 and 1519 during the Italian Renaissance."
+    }
+  ]
+}

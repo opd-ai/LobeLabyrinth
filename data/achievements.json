@@ -1,0 +1,40 @@
+{
+  "achievements": [
+    {
+      "id": "first_steps",
+      "name": "First Steps",
+      "description": "Answer your first question correctly",
+      "icon": "🏃",
+      "condition": {
+        "type": "correct_answers",
+        "value": 1
+      },
+      "points": 25,
+      "unlocked": false
+    },
+    {
+      "id": "knowledge_seeker",
+      "name": "Knowledge Seeker",
+      "description": "Explore 3 different rooms in the castle",
+      "icon": "🔍",
+      "condition": {
+        "type": "rooms_visited",
+        "value": 3
+      },
+      "points": 50,
+      "unlocked": false
+    },
+    {
+      "id": "castle_master",
+      "name": "Castle Master",
+      "description": "Reach the Royal Throne Room and complete the game",
+      "icon": "👑",
+      "condition": {
+        "type": "game_completed",
+        "value": true
+      },
+      "points": 100,
+      "unlocked": false
+    }
+  ]
+}

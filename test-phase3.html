@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - Phase 3 Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        .warning {
+            color: #ffc107;
+            font-weight: bold;
+        }
+        .log-output {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .question-display {
+            background: #e8f4f8;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+            border-left: 4px solid #007bff;
+        }
+        .timer-display {
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .timer-display.warning {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .answer-options {
+            margin: 15px 0;
+        }
+        .answer-option {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: left;
+        }
+        .answer-option:hover {
+            background: #e9ecef;
+        }
+        .answer-option.correct {
+            background: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .answer-option.incorrect {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .stats-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .category-tag {
+            background: #6c757d;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧠 LobeLabyrinth - Phase 3: Question/Answer Engine Test</h1>
+    
+    <div class="test-container">
+        <h2>Testing Quiz Engine Functionality</h2>
+        
+        <div class="test-section">
+            <h3>Current Question</h3>
+            <div id="currentQuestionDisplay" class="question-display">
+                No question loaded
+            </div>
+            <div id="timerDisplay" class="timer-display" style="display: none;">
+                Time Remaining: 30s
+            </div>
+            <div id="answerOptions" class="answer-options"></div>
+            <div>
+                <button onclick="presentRandomQuestion()">Present Random Question</button>
+                <button onclick="presentCategoryQuestion()">Present Science Question</button>
+                <button onclick="getHint()">Get Hint</button>
+                <button onclick="skipQuestion()">Skip Question</button>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>Question Selection Tests</h3>
+            <div>
+                <button onclick="testQuestionShuffling()">Test Question Shuffling</button>
+                <button onclick="testCategorySelection()">Test Category Selection</button>
+                <button onclick="testAdaptiveDifficulty()">Test Adaptive Difficulty</button>
+                <button onclick="showAvailableCategories()">Show Categories</button>
+            </div>
+            <div id="selectionResults" class="log-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Answer Validation Tests</h3>
+            <div>
+                <button onclick="testCorrectAnswerValidation()">Test Correct Answer</button>
+                <button onclick="testIncorrectAnswerValidation()">Test Incorrect Answer</button>
+                <button onclick="testTimeoutValidation()">Test Timeout</button>
+                <button onclick="testTimeBonusCalculation()">Test Time Bonus</button>
+            </div>
+            <div id="validationResults" class="log-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Quiz Statistics</h3>
+            <div id="quizStatsDisplay" class="stats-display">
+                Loading statistics...
+            </div>
+            <button onclick="updateQuizStatistics()">Update Statistics</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Event System Tests</h3>
+            <div id="eventResults" class="log-output"></div>
+            <button onclick="setupQuizEventListeners()">Setup Event Listeners</button>
+            <button onclick="clearEventLog()">Clear Event Log</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Console Output</h3>
+            <div id="consoleOutput" class="log-output"></div>
+            <button onclick="clearConsole()">Clear Console</button>
+        </div>
+    </div>
+
+    <!-- Load our modules -->
+    <script src="src/dataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+    <script src="src/quizEngine.js"></script>
+
+    <script>
+        let dataLoader;
+        let gameState;
+        let quizEngine;
+        let consoleLog = [];
+        let eventLog = [];
+        let currentQuestionData = null;
+
+        // Override console.log to capture output
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            consoleLog.push(new Date().toLocaleTimeString() + ': ' + args.join(' '));
+            updateConsoleDisplay();
+        };
+
+        // Initialize the quiz engine
+        async function initializeQuizEngine() {
+            try {
+                updateDisplay('currentQuestionDisplay', '<div class="info">Initializing quiz engine...</div>');
+                
+                dataLoader = new DataLoader();
+                await dataLoader.loadGameData();
+                
+                gameState = new GameState(dataLoader);
+                quizEngine = new QuizEngine(dataLoader, gameState);
+                
+                // Wait for question pool initialization
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                updateDisplay('currentQuestionDisplay', '<div class="success">Quiz Engine initialized successfully!</div>');
+                updateQuizStatistics();
+                
+            } catch (error) {
+                console.error('Failed to initialize quiz engine:', error);
+                updateDisplay('currentQuestionDisplay', `<div class="error">Failed to initialize: ${error.message}</div>`);
+            }
+        }
+
+        function updateDisplay(elementId, content) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = content;
+            }
+        }
+
+        function updateConsoleDisplay() {
+            const display = document.getElementById('consoleOutput');
+            if (display) {
+                display.textContent = consoleLog.slice(-20).join('\n');
+                display.scrollTop = display.scrollHeight;
+            }
+        }
+
+        function clearConsole() {
+            consoleLog = [];
+            updateConsoleDisplay();
+        }
+
+        function clearEventLog() {
+            eventLog = [];
+            updateDisplay('eventResults', '');
+        }
+
+        // Question presentation tests
+        async function presentRandomQuestion() {
+            if (!quizEngine) return;
+            
+            try {
+                currentQuestionData = await quizEngine.presentQuestion();
+                displayQuestion(currentQuestionData);
+            } catch (error) {
+                updateDisplay('currentQuestionDisplay', `<div class="error">Failed to present question: ${error.message}</div>`);
+            }
+        }
+
+        async function presentCategoryQuestion() {
+            if (!quizEngine) return;
+            
+            try {
+                currentQuestionData = await quizEngine.presentQuestion(null, 'science');
+                displayQuestion(currentQuestionData);
+            } catch (error) {
+                updateDisplay('currentQuestionDisplay', `<div class="error">Failed to present science question: ${error.message}</div>`);
+            }
+        }
+
+        function displayQuestion(questionData) {
+            if (!questionData) return;
+
+            const html = `
+                <h4>${questionData.question}</h4>
+                <p><strong>Category:</strong> ${questionData.category || 'General'}</p>
+                <p><strong>Difficulty:</strong> ${questionData.difficulty || 'Medium'}</p>
+                <p><strong>Points:</strong> ${questionData.points}</p>
+            `;
+            updateDisplay('currentQuestionDisplay', html);
+
+            // Display answer options
+            const optionsHtml = questionData.answers.map((answer, index) => 
+                `<button class="answer-option" onclick="selectAnswer(${index})">${index + 1}. ${answer}</button>`
+            ).join('');
+            updateDisplay('answerOptions', optionsHtml);
+
+            // Show timer
+            document.getElementById('timerDisplay').style.display = 'block';
+        }
+
+        function selectAnswer(answerIndex) {
+            if (!quizEngine || !currentQuestionData) return;
+            
+            quizEngine.validateAnswer(answerIndex);
+        }
+
+        function getHint() {
+            if (!quizEngine) return;
+            
+            const hint = quizEngine.getHint();
+            if (hint) {
+                updateDisplay('validationResults', `<div class="info">Hint: ${hint}</div>`);
+            } else {
+                updateDisplay('validationResults', '<div class="warning">No hint available</div>');
+            }
+        }
+
+        function skipQuestion() {
+            if (!quizEngine) return;
+            
+            const result = quizEngine.skipQuestion();
+            if (result) {
+                updateDisplay('validationResults', `<div class="warning">Question skipped. Penalty: ${result.pointsEarned} points</div>`);
+                clearQuestionDisplay();
+            }
+        }
+
+        function clearQuestionDisplay() {
+            updateDisplay('currentQuestionDisplay', 'No question loaded');
+            updateDisplay('answerOptions', '');
+            document.getElementById('timerDisplay').style.display = 'none';
+            currentQuestionData = null;
+        }
+
+        // Question selection tests
+        async function testQuestionShuffling() {
+            if (!quizEngine) return;
+            
+            const questions = [];
+            for (let i = 0; i < 5; i++) {
+                const q = await quizEngine.getNextQuestion();
+                if (q) questions.push(q.id);
+            }
+            
+            updateDisplay('selectionResults', `Question selection order: ${questions.join(', ')}`);
+        }
+
+        async function testCategorySelection() {
+            if (!quizEngine) return;
+            
+            const categories = quizEngine.getAvailableCategories();
+            const categoryTests = [];
+            
+            for (const category of categories.slice(0, 3)) {
+                const q = await quizEngine.getNextQuestion(category);
+                if (q) {
+                    categoryTests.push(`${category}: ${q.id} (${q.category})`);
+                }
+            }
+            
+            updateDisplay('selectionResults', `Category selection tests:\n${categoryTests.join('\n')}`);
+        }
+
+        async function testAdaptiveDifficulty() {
+            if (!quizEngine) return;
+            
+            const adaptiveQ = await quizEngine.getAdaptiveQuestion();
+            if (adaptiveQ) {
+                updateDisplay('selectionResults', `Adaptive question: ${adaptiveQ.id} (${adaptiveQ.difficulty || 'N/A'})`);
+            } else {
+                updateDisplay('selectionResults', 'No adaptive question available');
+            }
+        }
+
+        function showAvailableCategories() {
+            if (!quizEngine) return;
+            
+            const categories = quizEngine.getAvailableCategories();
+            const categoryHtml = categories.map(cat => 
+                `<span class="category-tag">${cat}</span>`
+            ).join('');
+            
+            updateDisplay('selectionResults', `<div>Available categories:</div><div class="category-list">${categoryHtml}</div>`);
+        }
+
+        // Answer validation tests
+        async function testCorrectAnswerValidation() {
+            if (!quizEngine) return;
+            
+            try {
+                const question = await quizEngine.presentQuestion('q1'); // Use known question
+                if (question) {
+                    // Wait a bit then answer correctly
+                    setTimeout(async () => {
+                        const result = await quizEngine.validateAnswer(question.correctAnswerIndex);
+                        updateDisplay('validationResults', 
+                            `<div class="success">Correct answer test: ${result.isCorrect ? 'PASS' : 'FAIL'} (${result.pointsEarned} points, ${result.timeBonus} time bonus)</div>`
+                        );
+                    }, 1000);
+                }
+            } catch (error) {
+                updateDisplay('validationResults', `<div class="error">Correct answer test failed: ${error.message}</div>`);
+            }
+        }
+
+        async function testIncorrectAnswerValidation() {
+            if (!quizEngine) return;
+            
+            try {
+                const question = await quizEngine.presentQuestion('q2'); // Use known question
+                if (question) {
+                    // Wait a bit then answer incorrectly
+                    setTimeout(async () => {
+                        const wrongAnswer = (question.correctAnswerIndex + 1) % question.answers.length;
+                        const result = await quizEngine.validateAnswer(wrongAnswer);
+                        updateDisplay('validationResults', 
+                            `<div class="info">Incorrect answer test: ${!result.isCorrect ? 'PASS' : 'FAIL'} (${result.pointsEarned} points)</div>`
+                        );
+                    }, 1000);
+                }
+            } catch (error) {
+                updateDisplay('validationResults', `<div class="error">Incorrect answer test failed: ${error.message}</div>`);
+            }
+        }
+
+        async function testTimeoutValidation() {
+            if (!quizEngine) return;
+            
+            // Temporarily reduce time limit for testing
+            const originalTimeLimit = quizEngine.questionTimeLimit;
+            quizEngine.questionTimeLimit = 2000; // 2 seconds
+            
+            try {
+                await quizEngine.presentQuestion('q3');
+                updateDisplay('validationResults', '<div class="info">Waiting for timeout (2 seconds)...</div>');
+                
+                // Wait for timeout
+                setTimeout(() => {
+                    updateDisplay('validationResults', '<div class="warning">Timeout test completed - check event log</div>');
+                    quizEngine.questionTimeLimit = originalTimeLimit; // Restore original time limit
+                }, 3000);
+                
+            } catch (error) {
+                updateDisplay('validationResults', `<div class="error">Timeout test failed: ${error.message}</div>`);
+                quizEngine.questionTimeLimit = originalTimeLimit;
+            }
+        }
+
+        function testTimeBonusCalculation() {
+            if (!quizEngine) return;
+            
+            const testTimes = [1000, 5000, 10000, 15000, 30000]; // Different response times
+            const bonuses = testTimes.map(time => ({
+                time: time / 1000,
+                bonus: quizEngine.calculateTimeBonus(time)
+            }));
+            
+            const bonusText = bonuses.map(b => `${b.time}s: ${b.bonus} points`).join('\n');
+            updateDisplay('validationResults', `Time bonus calculation:\n${bonusText}`);
+        }
+
+        // Statistics
+        function updateQuizStatistics() {
+            if (!quizEngine) return;
+            
+            const stats = quizEngine.getQuizStatistics();
+            const html = `
+                <h4>Quiz Statistics</h4>
+                <p><strong>Total Questions:</strong> ${stats.totalQuestions}</p>
+                <p><strong>Answered:</strong> ${stats.answeredQuestions}</p>
+                <p><strong>Remaining:</strong> ${stats.remainingQuestions}</p>
+                <p><strong>Completion:</strong> ${stats.completionPercentage}%</p>
+                <h5>By Category:</h5>
+                ${stats.categories.map(cat => 
+                    `<p>${cat.category}: ${cat.answered}/${cat.total} (${cat.percentage}%)</p>`
+                ).join('')}
+            `;
+            updateDisplay('quizStatsDisplay', html);
+        }
+
+        // Event listeners
+        function setupQuizEventListeners() {
+            if (!quizEngine) return;
+            
+            quizEngine.on('questionPresented', (data) => {
+                eventLog.push(`Question presented: ${data.id} (${data.category})`);
+                updateEventDisplay();
+            });
+            
+            quizEngine.on('answerValidated', (data) => {
+                eventLog.push(`Answer validated: ${data.isCorrect ? 'Correct' : 'Incorrect'} (+${data.pointsEarned} points)`);
+                updateEventDisplay();
+                clearQuestionDisplay();
+                updateQuizStatistics();
+            });
+            
+            quizEngine.on('timerUpdate', (data) => {
+                const seconds = Math.ceil(data.timeRemaining / 1000);
+                const timerElement = document.getElementById('timerDisplay');
+                if (timerElement) {
+                    timerElement.textContent = `Time Remaining: ${seconds}s`;
+                    if (seconds <= 5) {
+                        timerElement.className = 'timer-display warning';
+                    } else {
+                        timerElement.className = 'timer-display';
+                    }
+                }
+            });
+            
+            quizEngine.on('timeUp', (data) => {
+                eventLog.push(`Time up for question: ${data.questionId}`);
+                updateEventDisplay();
+                clearQuestionDisplay();
+            });
+            
+            quizEngine.on('questionSkipped', (data) => {
+                eventLog.push(`Question skipped: ${data.questionId} (${data.pointsEarned} penalty)`);
+                updateEventDisplay();
+            });
+            
+            quizEngine.on('hintRequested', (data) => {
+                eventLog.push(`Hint requested for: ${data.questionId}`);
+                updateEventDisplay();
+            });
+            
+            quizEngine.on('error', (data) => {
+                eventLog.push(`ERROR - ${data.type}: ${data.message}`);
+                updateEventDisplay();
+            });
+            
+            updateDisplay('eventResults', '<div class="success">✓ Quiz engine event listeners setup complete</div>');
+        }
+
+        function updateEventDisplay() {
+            const display = document.getElementById('eventResults');
+            if (display) {
+                display.textContent = eventLog.slice(-10).join('\n'); // Show last 10 events
+                display.scrollTop = display.scrollHeight;
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeQuizEngine);
+    </script>
+</body>
+</html>

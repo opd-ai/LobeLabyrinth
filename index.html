@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - Phase 1 Test</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #4a5568;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f7fafc;
+        }
+        
+        .test-section h2 {
+            color: #2d3748;
+            margin-top: 0;
+            border-bottom: 2px solid #4299e1;
+            padding-bottom: 10px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #4299e1, #3182ce);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+        }
+        
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: bold;
+        }
+        
+        .status.success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        
+        .status.error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+        
+        .status.info {
+            background: #bee3f8;
+            color: #2a4365;
+            border: 1px solid #90cdf4;
+        }
+        
+        pre {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .data-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .data-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .data-card h3 {
+            margin: 0 0 10px 0;
+            color: #4a5568;
+        }
+        
+        .data-card .count {
+            font-size: 2em;
+            font-weight: bold;
+            color: #4299e1;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #4299e1;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏰 LobeLabyrinth - Phase 1 Test</h1>
+        <p style="text-align: center; font-size: 18px; color: #666;">
+            Testing Data Foundation and Loading System
+        </p>
+        
+        <div class="test-section">
+            <h2>📊 Data Loading Test</h2>
+            <button id="loadDataBtn" onclick="testDataLoading()">Load Game Data</button>
+            <button id="validateDataBtn" onclick="testDataValidation()" disabled>Validate Data Integrity</button>
+            <button id="showDataBtn" onclick="showDataSummary()" disabled>Show Data Summary</button>
+            <div id="loadingStatus"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔍 Data Access Test</h2>
+            <button onclick="testRoomAccess()" disabled id="roomAccessBtn">Test Room Access</button>
+            <button onclick="testQuestionAccess()" disabled id="questionAccessBtn">Test Question Access</button>
+            <button onclick="testAchievementAccess()" disabled id="achievementAccessBtn">Test Achievement Access</button>
+            <div id="accessResults"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>⚠️ Error Handling Test</h2>
+            <button onclick="testErrorHandling()">Test Missing File Handling</button>
+            <div id="errorResults"></div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📝 Console Output</h2>
+            <p>Check the browser console (F12) for detailed logging output.</p>
+            <button onclick="clearConsole()">Clear Console</button>
+        </div>
+    </div>
+
+    <script src="src/dataLoader.js"></script>
+    <script>
+        let dataLoader;
+        let gameData;
+        
+        // Initialize DataLoader
+        document.addEventListener('DOMContentLoaded', function() {
+            dataLoader = new DataLoader();
+            console.log('🎮 LobeLabyrinth Phase 1 Test Initialized');
+            console.log('DataLoader instance created:', dataLoader);
+        });
+        
+        async function testDataLoading() {
+            const statusDiv = document.getElementById('loadingStatus');
+            const loadBtn = document.getElementById('loadDataBtn');
+            
+            try {
+                loadBtn.disabled = true;
+                statusDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading game data...</p></div>';
+                
+                console.log('🚀 Starting data loading test...');
+                gameData = await dataLoader.loadGameData();
+                
+                statusDiv.innerHTML = `
+                    <div class="status success">
+                        ✅ Data loaded successfully!
+                        <div class="data-summary">
+                            <div class="data-card">
+                                <h3>Rooms</h3>
+                                <div class="count">${gameData.rooms.length}</div>
+                            </div>
+                            <div class="data-card">
+                                <h3>Questions</h3>
+                                <div class="count">${gameData.questions.length}</div>
+                            </div>
+                            <div class="data-card">
+                                <h3>Achievements</h3>
+                                <div class="count">${gameData.achievements.length}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Enable other test buttons
+                document.getElementById('validateDataBtn').disabled = false;
+                document.getElementById('showDataBtn').disabled = false;
+                document.getElementById('roomAccessBtn').disabled = false;
+                document.getElementById('questionAccessBtn').disabled = false;
+                document.getElementById('achievementAccessBtn').disabled = false;
+                
+                console.log('✅ Data loading test passed!');
+                
+            } catch (error) {
+                console.error('❌ Data loading test failed:', error);
+                statusDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ Error loading data: ${error.message}
+                    </div>
+                `;
+            } finally {
+                loadBtn.disabled = false;
+            }
+        }
+        
+        function testDataValidation() {
+            const statusDiv = document.getElementById('loadingStatus');
+            
+            try {
+                console.log('🔍 Testing data validation...');
+                dataLoader.validateDataIntegrity();
+                
+                statusDiv.innerHTML += `
+                    <div class="status success">
+                        ✅ Data validation passed! All data structures are valid.
+                    </div>
+                `;
+                
+                console.log('✅ Data validation test passed!');
+                
+            } catch (error) {
+                console.error('❌ Data validation test failed:', error);
+                statusDiv.innerHTML += `
+                    <div class="status error">
+                        ❌ Validation error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function showDataSummary() {
+            const statusDiv = document.getElementById('loadingStatus');
+            
+            // Show starting room
+            const startingRoom = dataLoader.getStartingRoom();
+            
+            // Show sample data
+            statusDiv.innerHTML += `
+                <div class="status info">
+                    <h3>📋 Data Summary</h3>
+                    <p><strong>Starting Room:</strong> ${startingRoom ? startingRoom.name : 'Not found'}</p>
+                    <p><strong>Question Categories:</strong> ${[...new Set(gameData.questions.map(q => q.category))].join(', ')}</p>
+                    <p><strong>Difficulty Levels:</strong> ${[...new Set(gameData.questions.map(q => q.difficulty))].join(', ')}</p>
+                    <p><strong>Point Range:</strong> ${Math.min(...gameData.questions.map(q => q.points))} - ${Math.max(...gameData.questions.map(q => q.points))} points</p>
+                </div>
+            `;
+            
+            console.log('📊 Game Data Summary:');
+            console.log('Starting Room:', startingRoom);
+            console.log('All Rooms:', gameData.rooms);
+            console.log('Sample Questions:', gameData.questions.slice(0, 3));
+            console.log('Achievements:', gameData.achievements);
+        }
+        
+        function testRoomAccess() {
+            const resultsDiv = document.getElementById('accessResults');
+            
+            try {
+                console.log('🏠 Testing room access methods...');
+                
+                // Test getRoom
+                const entranceHall = dataLoader.getRoom('entrance_hall');
+                const nonExistentRoom = dataLoader.getRoom('non_existent');
+                const startingRoom = dataLoader.getStartingRoom();
+                
+                resultsDiv.innerHTML = `
+                    <div class="status success">
+                        <h3>🏠 Room Access Test Results</h3>
+                        <p><strong>Entrance Hall Found:</strong> ${entranceHall ? '✅' : '❌'} ${entranceHall ? entranceHall.name : ''}</p>
+                        <p><strong>Non-existent Room:</strong> ${nonExistentRoom === null ? '✅ Correctly returned null' : '❌ Should return null'}</p>
+                        <p><strong>Starting Room:</strong> ${startingRoom ? '✅' : '❌'} ${startingRoom ? startingRoom.name : ''}</p>
+                    </div>
+                `;
+                
+                console.log('✅ Room access test passed!');
+                console.log('Entrance Hall:', entranceHall);
+                console.log('Starting Room:', startingRoom);
+                
+            } catch (error) {
+                console.error('❌ Room access test failed:', error);
+                resultsDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ Room access error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function testQuestionAccess() {
+            const resultsDiv = document.getElementById('accessResults');
+            
+            try {
+                console.log('❓ Testing question access methods...');
+                
+                // Test getQuestion
+                const question1 = dataLoader.getQuestion('q001');
+                const nonExistentQuestion = dataLoader.getQuestion('non_existent');
+                
+                // Test getQuestionsByCategory
+                const historyQuestions = dataLoader.getQuestionsByCategory('history');
+                const scienceQuestions = dataLoader.getQuestionsByCategory('science');
+                
+                resultsDiv.innerHTML += `
+                    <div class="status success">
+                        <h3>❓ Question Access Test Results</h3>
+                        <p><strong>Question q001 Found:</strong> ${question1 ? '✅' : '❌'} ${question1 ? question1.question.substring(0, 50) + '...' : ''}</p>
+                        <p><strong>Non-existent Question:</strong> ${nonExistentQuestion === null ? '✅ Correctly returned null' : '❌ Should return null'}</p>
+                        <p><strong>History Questions:</strong> ${historyQuestions.length} found</p>
+                        <p><strong>Science Questions:</strong> ${scienceQuestions.length} found</p>
+                    </div>
+                `;
+                
+                console.log('✅ Question access test passed!');
+                console.log('Sample Question:', question1);
+                console.log('History Questions:', historyQuestions.length);
+                
+            } catch (error) {
+                console.error('❌ Question access test failed:', error);
+                resultsDiv.innerHTML += `
+                    <div class="status error">
+                        ❌ Question access error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function testAchievementAccess() {
+            const resultsDiv = document.getElementById('accessResults');
+            
+            try {
+                console.log('🏆 Testing achievement access methods...');
+                
+                // Test getAchievement
+                const firstSteps = dataLoader.getAchievement('first_steps');
+                const nonExistentAchievement = dataLoader.getAchievement('non_existent');
+                
+                resultsDiv.innerHTML += `
+                    <div class="status success">
+                        <h3>🏆 Achievement Access Test Results</h3>
+                        <p><strong>First Steps Achievement:</strong> ${firstSteps ? '✅' : '❌'} ${firstSteps ? firstSteps.name : ''}</p>
+                        <p><strong>Non-existent Achievement:</strong> ${nonExistentAchievement === null ? '✅ Correctly returned null' : '❌ Should return null'}</p>
+                    </div>
+                `;
+                
+                console.log('✅ Achievement access test passed!');
+                console.log('First Steps Achievement:', firstSteps);
+                
+            } catch (error) {
+                console.error('❌ Achievement access test failed:', error);
+                resultsDiv.innerHTML += `
+                    <div class="status error">
+                        ❌ Achievement access error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        async function testErrorHandling() {
+            const resultsDiv = document.getElementById('errorResults');
+            
+            try {
+                console.log('⚠️ Testing error handling...');
+                
+                // Create a new DataLoader that will try to load from non-existent files
+                const testLoader = new DataLoader();
+                
+                // Override fetch to simulate missing files
+                const originalFetch = window.fetch;
+                window.fetch = function(url) {
+                    if (url.includes('rooms.json')) {
+                        return Promise.resolve({ ok: false, status: 404 });
+                    }
+                    return originalFetch.apply(this, arguments);
+                };
+                
+                try {
+                    await testLoader.loadGameData();
+                    resultsDiv.innerHTML = `
+                        <div class="status error">
+                            ❌ Error handling failed - should have thrown an error
+                        </div>
+                    `;
+                } catch (error) {
+                    resultsDiv.innerHTML = `
+                        <div class="status success">
+                            ✅ Error handling works correctly: ${error.message}
+                        </div>
+                    `;
+                    console.log('✅ Error handling test passed!');
+                }
+                
+                // Restore original fetch
+                window.fetch = originalFetch;
+                
+            } catch (error) {
+                console.error('❌ Error handling test failed:', error);
+                resultsDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ Error in error handling test: ${error.message}
+                    </div>
+                `;
+            }
+        }
+        
+        function clearConsole() {
+            console.clear();
+            console.log('🧹 Console cleared');
+        }
+    </script>
+</body>
+</html>

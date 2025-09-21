@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - A MindMaze Adventure</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            grid-template-rows: auto 1fr auto;
+            grid-gap: 20px;
+            grid-template-areas: 
+                "header header"
+                "main sidebar"
+                "footer footer";
+        }
+
+        .game-header {
+            grid-area: header;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .game-header h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .game-main {
+            grid-area: main;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .game-sidebar {
+            grid-area: sidebar;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .game-footer {
+            grid-area: footer;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .section h3 {
+            margin-bottom: 15px;
+            color: #2d3748;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        /* Room Information */
+        #room-info h2 {
+            color: #2b6cb0;
+            margin-bottom: 10px;
+        }
+
+        #room-description {
+            color: #4a5568;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        /* Question Area */
+        #question-area {
+            display: none;
+        }
+
+        #question-text {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .question-meta {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            font-size: 0.9em;
+            color: #718096;
+        }
+
+        .meta-item {
+            background: #f7fafc;
+            padding: 5px 10px;
+            border-radius: 15px;
+            border: 1px solid #e2e8f0;
+        }
+
+        /* Answer Area */
+        #answer-area {
+            display: none;
+        }
+
+        .answer-btn {
+            display: block;
+            width: 100%;
+            margin: 8px 0;
+            padding: 12px 15px;
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 1em;
+            transition: all 0.2s ease;
+        }
+
+        .answer-btn:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .answer-btn.answer-correct {
+            background: #c6f6d5;
+            border-color: #68d391;
+            color: #22543d;
+        }
+
+        .answer-btn.answer-incorrect {
+            background: #fed7d7;
+            border-color: #fc8181;
+            color: #742a2a;
+        }
+
+        /* Timer */
+        #timer-area {
+            display: none;
+            margin: 20px 0;
+        }
+
+        .timer-container {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .timer-bar-container {
+            background: #e2e8f0;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        #timer-bar {
+            background: linear-gradient(90deg, #48bb78, #38a169);
+            height: 100%;
+            width: 100%;
+            transition: width 0.1s ease;
+        }
+
+        #timer-bar.timer-warning {
+            background: linear-gradient(90deg, #f56565, #e53e3e);
+        }
+
+        #timer-text {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2d3748;
+        }
+
+        /* Score Display */
+        .score-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .score-value {
+            font-weight: bold;
+            color: #2b6cb0;
+        }
+
+        /* Game Controls */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button.btn-secondary {
+            background: #718096;
+        }
+
+        button.btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        button.btn-danger {
+            background: #e53e3e;
+        }
+
+        button.btn-danger:hover {
+            background: #c53030;
+        }
+
+        /* Navigation */
+        .room-nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .room-nav-btn {
+            background: #ed8936;
+            padding: 8px 12px;
+            font-size: 0.9em;
+        }
+
+        .room-nav-btn:hover {
+            background: #dd6b20;
+        }
+
+        /* Feedback */
+        .feedback-message {
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+
+        .feedback-success {
+            background: #c6f6d5;
+            color: #22543d;
+            border: 1px solid #68d391;
+        }
+
+        .feedback-error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #fc8181;
+        }
+
+        .feedback-warning {
+            background: #faf089;
+            color: #744210;
+            border: 1px solid #f6e05e;
+        }
+
+        .feedback-info {
+            background: #bee3f8;
+            color: #2a4365;
+            border: 1px solid #63b3ed;
+        }
+
+        /* Game Completion */
+        .game-completion {
+            background: linear-gradient(135deg, #fef5e7, #fed7aa);
+            border: 2px solid #f6ad55;
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .game-completion h3 {
+            color: #7b341e;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .game-container {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "header"
+                    "main"
+                    "sidebar"
+                    "footer";
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .question-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+
+        /* Connection status indicators */
+        .connection-unlocked {
+            color: #38a169;
+            font-weight: bold;
+        }
+
+        .connection-locked {
+            color: #a0aec0;
+            text-decoration: line-through;
+        }
+
+        /* Loading states */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Header -->
+        <div class="game-header">
+            <h1>🏰 LobeLabyrinth</h1>
+            <p>Navigate the castle of knowledge through wisdom and wit</p>
+        </div>
+
+        <!-- Main Game Area -->
+        <div class="game-main">
+            <!-- Room Information -->
+            <div id="room-info" class="section">
+                <h2 id="room-name">Loading...</h2>
+                <p id="room-description">Initializing game...</p>
+                <p id="room-connections"></p>
+            </div>
+
+            <!-- Question Area -->
+            <div id="question-area" class="section">
+                <h3>Question</h3>
+                <div id="question-text"></div>
+                <div class="question-meta">
+                    <div class="meta-item">Category: <span id="question-category"></span></div>
+                    <div class="meta-item">Difficulty: <span id="question-difficulty"></span></div>
+                    <div class="meta-item">Points: <span id="question-points"></span></div>
+                </div>
+            </div>
+
+            <!-- Timer -->
+            <div id="timer-area" class="section">
+                <div class="timer-container">
+                    <div id="timer-text">30s</div>
+                    <div class="timer-bar-container">
+                        <div id="timer-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Answer Area -->
+            <div id="answer-area" class="section">
+                <h3>Choose Your Answer</h3>
+                <div id="answer-buttons"></div>
+            </div>
+
+            <!-- Feedback Area -->
+            <div id="feedback-area"></div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="game-sidebar">
+            <!-- Score Display -->
+            <div id="score-display" class="section">
+                <h3>Your Progress</h3>
+                <div class="score-item">
+                    <span>Score:</span>
+                    <span class="score-value" id="current-score">0</span>
+                </div>
+                <div class="score-item">
+                    <span>Questions Answered:</span>
+                    <span class="score-value" id="questions-answered">0</span>
+                </div>
+                <div class="score-item">
+                    <span>Rooms Visited:</span>
+                    <span class="score-value" id="rooms-visited">1</span>
+                </div>
+            </div>
+
+            <!-- Game Controls -->
+            <div id="game-controls" class="section">
+                <h3>Actions</h3>
+                <button id="new-question-btn">New Question</button>
+                <div class="controls-grid">
+                    <button id="hint-btn" disabled>💡 Hint</button>
+                    <button id="skip-btn" disabled>⏭️ Skip</button>
+                </div>
+                <div class="controls-grid">
+                    <button id="save-btn" class="btn-secondary">💾 Save</button>
+                    <button id="load-btn" class="btn-secondary">📁 Load</button>
+                </div>
+                <button id="reset-btn" class="btn-danger">🔄 Reset Game</button>
+            </div>
+
+            <!-- Navigation -->
+            <div id="navigation-area" class="section">
+                <h3>Navigation</h3>
+                <div id="available-rooms">
+                    <p>Answer questions to unlock new rooms!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="game-footer">
+            <div id="game-status">
+                <span class="loading"></span> Initializing game...
+            </div>
+        </div>
+    </div>
+
+    <!-- Load game modules -->
+    <script src="src/dataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+    <script src="src/quizEngine.js"></script>
+    <script src="src/uiManager.js"></script>
+
+    <script>
+        // Global game instances
+        let dataLoader;
+        let gameState;
+        let quizEngine;
+        let uiManager;
+
+        // Initialize the complete game
+        async function initializeGame() {
+            try {
+                updateGameStatus('Loading game data...');
+                
+                // Initialize core modules
+                dataLoader = new DataLoader();
+                await dataLoader.loadGameData();
+                
+                updateGameStatus('Initializing game state...');
+                gameState = new GameState(dataLoader);
+                
+                updateGameStatus('Setting up quiz engine...');
+                quizEngine = new QuizEngine(dataLoader, gameState);
+                
+                // Wait for quiz engine to initialize
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                updateGameStatus('Creating user interface...');
+                uiManager = new UIManager(dataLoader, gameState, quizEngine);
+                
+                // Try to load saved game
+                if (gameState.loadGame()) {
+                    updateGameStatus('Saved game loaded successfully!');
+                } else {
+                    updateGameStatus('New game started. Welcome to LobeLabyrinth!');
+                }
+
+                // Auto-save every 30 seconds
+                setInterval(() => {
+                    gameState.saveGame();
+                }, 30000);
+
+                console.log('LobeLabyrinth game initialized successfully!');
+
+            } catch (error) {
+                console.error('Failed to initialize game:', error);
+                updateGameStatus(`Failed to initialize game: ${error.message}`);
+            }
+        }
+
+        function updateGameStatus(message) {
+            const statusElement = document.getElementById('game-status');
+            if (statusElement) {
+                statusElement.innerHTML = message;
+            }
+        }
+
+        // Expose game instances globally for debugging
+        window.gameData = {
+            dataLoader: () => dataLoader,
+            gameState: () => gameState,
+            quizEngine: () => quizEngine,
+            uiManager: () => uiManager
+        };
+
+        // Initialize game when page loads
+        document.addEventListener('DOMContentLoaded', initializeGame);
+
+        // Handle page unload to save game
+        window.addEventListener('beforeunload', () => {
+            if (gameState) {
+                gameState.saveGame();
+            }
+        });
+    </script>
+</body>
+</html>

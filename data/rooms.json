@@ -1,0 +1,55 @@
+{
+  "rooms": [
+    {
+      "id": "entrance_hall",
+      "name": "Entrance Hall",
+      "description": "A grand hall with marble columns and ancient tapestries. Your journey begins here.",
+      "connections": ["library", "armory"],
+      "requiredScore": 0,
+      "isStartingRoom": true,
+      "imageUrl": "images/entrance_hall.jpg",
+      "questionCategories": ["general", "history"]
+    },
+    {
+      "id": "library",
+      "name": "Ancient Library",
+      "description": "Towering shelves filled with dusty tomes and scrolls containing the wisdom of ages.",
+      "connections": ["entrance_hall", "observatory", "secret_chamber"],
+      "requiredScore": 100,
+      "isStartingRoom": false,
+      "imageUrl": "images/library.jpg",
+      "questionCategories": ["literature", "science", "history"]
+    },
+    {
+      "id": "armory",
+      "name": "Royal Armory",
+      "description": "Gleaming weapons and armor line the walls, telling tales of ancient battles.",
+      "connections": ["entrance_hall", "throne_room"],
+      "requiredScore": 150,
+      "isStartingRoom": false,
+      "imageUrl": "images/armory.jpg",
+      "questionCategories": ["history", "geography", "general"]
+    },
+    {
+      "id": "observatory",
+      "name": "Celestial Observatory",
+      "description": "A dome-topped chamber with telescopes pointing toward the stars and celestial charts covering the walls.",
+      "connections": ["library", "throne_room"],
+      "requiredScore": 250,
+      "isStartingRoom": false,
+      "imageUrl": "images/observatory.jpg",
+      "questionCategories": ["science", "mathematics", "astronomy"]
+    },
+    {
+      "id": "throne_room",
+      "name": "Royal Throne Room",
+      "description": "The heart of the castle, where the final challenge awaits. Golden throne gleams in the torchlight.",
+      "connections": ["armory", "observatory"],
+      "requiredScore": 400,
+      "isStartingRoom": false,
+      "imageUrl": "images/throne_room.jpg",
+      "questionCategories": ["history", "literature", "general"],
+      "isFinalRoom": true
+    }
+  ]
+}

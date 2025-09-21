@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - Phase 2 Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .test-container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .info {
+            color: #17a2b8;
+        }
+        .log-output {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .state-display {
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏰 LobeLabyrinth - Phase 2: Game State Management Test</h1>
+    
+    <div class="test-container">
+        <h2>Testing Core Game State Functionality</h2>
+        
+        <div class="test-section">
+            <h3>Current Game State</h3>
+            <div id="gameStateDisplay" class="state-display">
+                Loading game state...
+            </div>
+            <button onclick="refreshState()">Refresh State</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Room Movement Tests</h3>
+            <div>
+                <button onclick="testMoveToLibrary()">Move to Library</button>
+                <button onclick="testMoveToInvalidRoom()">Move to Invalid Room</button>
+                <button onclick="testMoveToLockedRoom()">Move to Locked Room</button>
+                <button onclick="getCurrentAvailableRooms()">Show Available Rooms</button>
+            </div>
+            <div id="movementResults" class="log-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Question Answering Tests</h3>
+            <div>
+                <button onclick="testCorrectAnswer()">Answer Question Correctly</button>
+                <button onclick="testIncorrectAnswer()">Answer Question Incorrectly</button>
+                <button onclick="testDuplicateAnswer()">Answer Same Question Again</button>
+            </div>
+            <div id="questionResults" class="log-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Save/Load System Tests</h3>
+            <div>
+                <button onclick="testSaveGame()">Save Game</button>
+                <button onclick="testLoadGame()">Load Game</button>
+                <button onclick="testResetGame()">Reset Game</button>
+                <button onclick="checkLocalStorage()">Check localStorage</button>
+            </div>
+            <div id="saveLoadResults" class="log-output"></div>
+        </div>
+
+        <div class="test-section">
+            <h3>Game Statistics</h3>
+            <div id="statisticsDisplay" class="log-output"></div>
+            <button onclick="showStatistics()">Update Statistics</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Event System Test</h3>
+            <div id="eventResults" class="log-output"></div>
+            <button onclick="setupEventListeners()">Setup Event Listeners</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Console Output</h3>
+            <div id="consoleOutput" class="log-output"></div>
+            <button onclick="clearConsole()">Clear Console</button>
+        </div>
+    </div>
+
+    <!-- Load our modules -->
+    <script src="src/dataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+
+    <script>
+        let dataLoader;
+        let gameState;
+        let consoleLog = [];
+
+        // Override console.log to capture output
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            originalConsoleLog.apply(console, args);
+            consoleLog.push(args.join(' '));
+            updateConsoleDisplay();
+        };
+
+        // Initialize the game
+        async function initializeGame() {
+            try {
+                updateDisplay('gameStateDisplay', '<div class="info">Initializing game...</div>');
+                
+                dataLoader = new DataLoader();
+                await dataLoader.loadGameData();
+                
+                gameState = new GameState(dataLoader);
+                
+                updateDisplay('gameStateDisplay', '<div class="success">Game initialized successfully!</div>');
+                refreshState();
+                
+            } catch (error) {
+                console.error('Failed to initialize game:', error);
+                updateDisplay('gameStateDisplay', `<div class="error">Failed to initialize: ${error.message}</div>`);
+            }
+        }
+
+        function updateDisplay(elementId, content) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = content;
+            }
+        }
+
+        function updateConsoleDisplay() {
+            const display = document.getElementById('consoleOutput');
+            if (display) {
+                display.textContent = consoleLog.slice(-20).join('\n'); // Show last 20 entries
+                display.scrollTop = display.scrollHeight;
+            }
+        }
+
+        function clearConsole() {
+            consoleLog = [];
+            updateConsoleDisplay();
+        }
+
+        function refreshState() {
+            if (!gameState) return;
+            
+            const state = gameState.getStateSnapshot();
+            const html = `
+                <strong>Current Room:</strong> ${state.currentRoomId}<br>
+                <strong>Score:</strong> ${state.score}<br>
+                <strong>Visited Rooms:</strong> ${state.visitedRooms.join(', ')}<br>
+                <strong>Unlocked Rooms:</strong> ${state.unlockedRooms.join(', ')}<br>
+                <strong>Questions Answered:</strong> ${state.answeredQuestions.length}<br>
+                <strong>Game Completed:</strong> ${state.gameCompleted}<br>
+                <strong>Play Time:</strong> ${Math.floor(state.playTime / 1000)}s
+            `;
+            updateDisplay('gameStateDisplay', html);
+        }
+
+        // Movement tests
+        async function testMoveToLibrary() {
+            if (!gameState) return;
+            
+            try {
+                const result = await gameState.moveToRoom('library');
+                updateDisplay('movementResults', `<div class="success">✓ Moved to library successfully</div>`);
+                refreshState();
+            } catch (error) {
+                updateDisplay('movementResults', `<div class="error">✗ Failed to move: ${error.message}</div>`);
+            }
+        }
+
+        async function testMoveToInvalidRoom() {
+            if (!gameState) return;
+            
+            try {
+                await gameState.moveToRoom('nonexistent');
+                updateDisplay('movementResults', `<div class="error">✗ Should have failed for invalid room</div>`);
+            } catch (error) {
+                updateDisplay('movementResults', `<div class="success">✓ Correctly rejected invalid room: ${error.message}</div>`);
+            }
+        }
+
+        async function testMoveToLockedRoom() {
+            if (!gameState) return;
+            
+            try {
+                await gameState.moveToRoom('treasury');
+                updateDisplay('movementResults', `<div class="error">✗ Should have failed for locked room</div>`);
+            } catch (error) {
+                updateDisplay('movementResults', `<div class="success">✓ Correctly rejected locked room: ${error.message}</div>`);
+            }
+        }
+
+        async function getCurrentAvailableRooms() {
+            if (!gameState) return;
+            
+            const availableRooms = await gameState.getAvailableRooms();
+            updateDisplay('movementResults', `<div class="info">Available rooms: ${availableRooms.join(', ')}</div>`);
+        }
+
+        // Question tests
+        async function testCorrectAnswer() {
+            if (!gameState) return;
+            
+            try {
+                gameState.startQuestionTimer();
+                const result = await gameState.answerQuestion('q1', 2); // Correct answer for q1
+                updateDisplay('questionResults', `<div class="success">✓ Correct answer! Score: ${result.currentScore}, Points earned: ${result.pointsEarned}</div>`);
+                refreshState();
+            } catch (error) {
+                updateDisplay('questionResults', `<div class="error">✗ Error answering question: ${error.message}</div>`);
+            }
+        }
+
+        async function testIncorrectAnswer() {
+            if (!gameState) return;
+            
+            try {
+                gameState.startQuestionTimer();
+                const result = await gameState.answerQuestion('q2', 0); // Incorrect answer for q2
+                updateDisplay('questionResults', `<div class="info">Incorrect answer. Score: ${result.currentScore}</div>`);
+                refreshState();
+            } catch (error) {
+                updateDisplay('questionResults', `<div class="error">✗ Error answering question: ${error.message}</div>`);
+            }
+        }
+
+        async function testDuplicateAnswer() {
+            if (!gameState) return;
+            
+            try {
+                await gameState.answerQuestion('q1', 2); // Try to answer q1 again
+                updateDisplay('questionResults', `<div class="error">✗ Should have rejected duplicate answer</div>`);
+            } catch (error) {
+                updateDisplay('questionResults', `<div class="success">✓ Correctly rejected duplicate: ${error.message}</div>`);
+            }
+        }
+
+        // Save/Load tests
+        function testSaveGame() {
+            if (!gameState) return;
+            
+            const success = gameState.saveGame();
+            if (success) {
+                updateDisplay('saveLoadResults', `<div class="success">✓ Game saved successfully</div>`);
+            } else {
+                updateDisplay('saveLoadResults', `<div class="error">✗ Failed to save game</div>`);
+            }
+        }
+
+        function testLoadGame() {
+            if (!gameState) return;
+            
+            const success = gameState.loadGame();
+            if (success) {
+                updateDisplay('saveLoadResults', `<div class="success">✓ Game loaded successfully</div>`);
+                refreshState();
+            } else {
+                updateDisplay('saveLoadResults', `<div class="info">No saved game found</div>`);
+            }
+        }
+
+        function testResetGame() {
+            if (!gameState) return;
+            
+            gameState.resetGame();
+            updateDisplay('saveLoadResults', `<div class="success">✓ Game reset successfully</div>`);
+            refreshState();
+        }
+
+        function checkLocalStorage() {
+            const saveData = localStorage.getItem('lobeLabyrinthSave');
+            if (saveData) {
+                try {
+                    const parsed = JSON.parse(saveData);
+                    updateDisplay('saveLoadResults', `<div class="info">Save data found: ${JSON.stringify(parsed, null, 2)}</div>`);
+                } catch (error) {
+                    updateDisplay('saveLoadResults', `<div class="error">Invalid save data in localStorage</div>`);
+                }
+            } else {
+                updateDisplay('saveLoadResults', `<div class="info">No save data in localStorage</div>`);
+            }
+        }
+
+        function showStatistics() {
+            if (!gameState) return;
+            
+            const stats = gameState.getStatistics();
+            const html = `
+                Score: ${stats.score}<br>
+                Rooms Visited: ${stats.roomsVisited}<br>
+                Questions Answered: ${stats.questionsAnswered}<br>
+                Play Time: ${stats.playTime}s<br>
+                Game Completed: ${stats.gameCompleted}
+            `;
+            updateDisplay('statisticsDisplay', html);
+        }
+
+        function setupEventListeners() {
+            if (!gameState) return;
+            
+            gameState.on('roomChanged', (data) => {
+                updateDisplay('eventResults', `Event: Room changed from ${data.from} to ${data.to}`);
+            });
+            
+            gameState.on('questionAnswered', (data) => {
+                const result = data.isCorrect ? 'correct' : 'incorrect';
+                updateDisplay('eventResults', `Event: Question answered ${result}, points: ${data.pointsEarned}`);
+            });
+            
+            gameState.on('roomUnlocked', (data) => {
+                updateDisplay('eventResults', `Event: Room unlocked - ${data.roomId}`);
+            });
+            
+            gameState.on('error', (data) => {
+                updateDisplay('eventResults', `Event: Error - ${data.message}`);
+            });
+            
+            updateDisplay('eventResults', '<div class="success">✓ Event listeners setup complete</div>');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeGame);
+    </script>
+</body>
+</html>

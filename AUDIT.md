@@ -552,7 +552,16 @@ setupAnswerButtonKeyNavigation() {
 
 ### **Issue**: Missing Live Region Updates
 **WCAG Criterion**: 4.1.3 Status Messages  
+**Status**: RESOLVED (Commit: fdcbe99 - 2025-09-22)
 **Location**: Score and timer updates  
+**Resolution**:
+- Added setupAriaLiveRegions method to create polite and assertive announcement regions
+- Implemented announceToScreenReader utility for proper screen reader message delivery
+- Enhanced updateScoreDisplay with announcements for significant score changes (≥50 points)
+- Added assertive timer warnings at critical moments (10s, 5s, 1s remaining)
+- Implemented proper state tracking to prevent duplicate announcements
+- Reset timer warning tracking on new questions for accurate announcements
+
 **Fix**: Add proper aria-live regions for dynamic content
 ```javascript
 updateScore(newScore) {

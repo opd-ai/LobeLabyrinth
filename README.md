@@ -8,8 +8,9 @@ A web-based Encarta MindMaze clone built with vanilla JavaScript and static JSON
 2. **Answer Questions**: Click "New Question" to begin your adventure
 3. **Navigate**: Correct answers unlock connected rooms you can visit
 4. **Explore**: Each room contains different categories of questions
-5. **Progress**: Track your score, questions answered, and rooms visited
-6. **Save/Load**: Your progress is automatically saved every 30 seconds
+5. **Earn Achievements**: Unlock achievements for various accomplishments
+6. **Progress**: Track your score, questions answered, rooms visited, and achievements
+7. **Save/Load**: Your progress is automatically saved every 30 seconds
 
 ## 🏗️ Project Structure
 
@@ -27,6 +28,9 @@ LobeLabyrinth/
     ├── dataLoader.js       # Data loading and validation
     ├── gameState.js        # Game state management
     ├── quizEngine.js       # Question/answer logic
+    ├── animationManager.js # Animation and visual effects
+    ├── achievementManager.js # Achievement tracking and notifications
+    ├── mapRenderer.js      # Visual map rendering
     └── uiManager.js        # User interface management
 ```
 
@@ -57,9 +61,19 @@ LobeLabyrinth/
 - **Features**: Visual map navigation with canvas-based room display, click navigation, real-time state updates
 - **Test**: `test-phase5.html`
 
-### 📋 Phase 6: Polish and Game Flow (Planned)
-- **Goal**: Enhanced user experience
-- **Features**: Animations, victory conditions, achievement system
+### ✅ Phase 6.1: Animation Framework
+- **Status**: Completed  
+- **Features**: Smooth animations for UI transitions, score counting, room changes
+- **Test**: `test-phase6.1.html`
+
+### ✅ Phase 6.2: Achievement System
+- **Status**: Completed
+- **Features**: 12 achievements across 5 categories, unlock notifications, progress tracking, achievement gallery
+- **Test**: `test-phase6.2.html`
+
+### 📋 Phase 6.3-6.4: Game Completion & UX Polish (Planned)
+- **Goal**: Victory conditions, final polish
+- **Features**: Game completion flow, enhanced user experience
 
 ### 📋 Phase 7: Enhancement and Optimization (Planned)
 - **Goal**: Performance and accessibility
@@ -92,6 +106,15 @@ LobeLabyrinth/
 - Each room may have preferred question categories
 - Game completion requires visiting 80% of rooms and answering 70% of questions
 - Progress automatically saved to localStorage
+
+### Achievement System
+- **12 Achievements**: Across 5 categories (Progress, Exploration, Performance, Completion, Special)
+- **Rarity Levels**: Common, Uncommon, Rare, Epic, Legendary
+- **Real-time Tracking**: Automatic unlock detection based on gameplay
+- **Visual Notifications**: Toast-style popups with smooth animations
+- **Achievement Gallery**: Modal view with progress indicators and category organization
+- **Point Rewards**: Bonus points for achievement unlocks
+- **Persistent Progress**: Achievement progress saved with game state
 
 ## 🛠️ Technical Implementation
 

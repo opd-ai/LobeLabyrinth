@@ -137,11 +137,20 @@ class QuizEngine {
             this.questionStartTime = Date.now();
             this.timeRemaining = this.questionTimeLimit;
             
+            // Store original correct answer securely (basic obfuscation)
+            this.questionAnswerMap.set(question.id, {
+                correctAnswer: question.correctAnswer,
+                shuffledCorrectIndex: null // Will be set after shuffling
+            });
+            
             // Start the countdown timer
             this.startQuestionTimer();
             
             // Shuffle answers for this presentation
             const shuffledAnswers = this.shuffleAnswers(question);
+            
+            // Update stored correct index after shuffling
+            this.questionAnswerMap.get(question.id).shuffledCorrectIndex = shuffledAnswers.correctIndex;
             
             // Generate answer hash for validation (basic obfuscation)
             const answerHash = this.generateAnswerHash(question.id, shuffledAnswers.correctIndex);
@@ -351,11 +360,17 @@ class QuizEngine {
     /**
      * Get original correct answer for a question (only after validation)
      * @param {string} questionId - Question identifier
-     * @returns {number} - Original correct answer index
+     * @returns {number} - Original correct answer index (shuffled)
      */
     getOriginalCorrectAnswer(questionId) {
         try {
-            // Retrieve original question data to get correct answer
+            // Retrieve from secure storage first
+            const storedData = this.questionAnswerMap.get(questionId);
+            if (storedData && storedData.shuffledCorrectIndex !== null) {
+                return storedData.shuffledCorrectIndex;
+            }
+            
+            // Fallback to dataLoader (this still exposes the answer but only after submission)
             const originalQuestion = this.dataLoader.getQuestion(questionId);
             return originalQuestion ? originalQuestion.correctAnswer : -1;
         } catch (error) {

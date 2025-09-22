@@ -18,6 +18,9 @@ class UIManager {
         this.achievementQueue = [];
         this.showingAchievement = false;
         
+        // Track answer button listeners for cleanup
+        this.answerButtonListeners = [];
+        
         console.log('UIManager initialized with animations:', !!this.animationManager, 'achievements:', !!this.achievementManager);
         this.initializeElements();
         this.setupEventListeners();
@@ -1361,17 +1364,19 @@ Press any key to close this help.
     displayAnswerOptions(questionData) {
         if (!this.elements.answerButtons) return;
 
+        // Clear existing listeners before creating new buttons
+        this.clearAnswerButtonListeners();
+
         const buttonsHtml = questionData.answers.map((answer, index) => 
             `<button class="answer-btn" 
-                     onclick="uiManager.selectAnswer(${index})" 
                      data-answer="${index}"
                      role="radio"
                      aria-posinset="${index + 1}"
                      aria-setsize="${questionData.answers.length}"
-                     aria-label="Option ${String.fromCharCode(65 + index)}: ${answer}"
+                     aria-label="Option ${String.fromCharCode(65 + index)}: ${this.escapeHtml(answer)}"
                      tabindex="${index === 0 ? '0' : '-1'}">
                 <span class="answer-letter" aria-hidden="true">${String.fromCharCode(65 + index)}.</span>
-                <span class="answer-text">${answer}</span>
+                <span class="answer-text">${this.escapeHtml(answer)}</span>
             </button>`
         ).join('');
 
@@ -1381,18 +1386,40 @@ Press any key to close this help.
             this.elements.answerArea.style.display = 'block';
         }
 
-        // Add keyboard navigation for radio group
-        this.setupAnswerButtonKeyNavigation();
+        // Setup event listeners with proper tracking
+        this.setupAnswerButtonListeners();
     }
 
     /**
-     * Setup keyboard navigation for answer buttons (radio group pattern)
+     * Clear existing answer button listeners to prevent memory leaks
      */
-    setupAnswerButtonKeyNavigation() {
+    clearAnswerButtonListeners() {
+        if (this.answerButtonListeners) {
+            this.answerButtonListeners.forEach(listener => {
+                listener.element.removeEventListener(listener.event, listener.handler);
+            });
+            this.answerButtonListeners = [];
+        }
+    }
+
+    /**
+     * Setup all event listeners for answer buttons with proper tracking
+     */
+    setupAnswerButtonListeners() {
         const buttons = document.querySelectorAll('.answer-btn');
         
         buttons.forEach((button, index) => {
-            button.addEventListener('keydown', (e) => {
+            // Click handler
+            const clickHandler = () => this.selectAnswer(index);
+            button.addEventListener('click', clickHandler);
+            this.answerButtonListeners.push({
+                element: button,
+                event: 'click',
+                handler: clickHandler
+            });
+            
+            // Keyboard handler
+            const keyHandler = (e) => {
                 switch (e.key) {
                     case 'ArrowDown':
                     case 'ArrowRight':
@@ -1412,8 +1439,33 @@ Press any key to close this help.
                         this.selectAnswer(index);
                         break;
                 }
+            };
+            button.addEventListener('keydown', keyHandler);
+            this.answerButtonListeners.push({
+                element: button,
+                event: 'keydown',
+                handler: keyHandler
             });
         });
+    }
+
+    /**
+     * Escape HTML to prevent XSS attacks
+     */
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    /**
+     * Setup keyboard navigation for answer buttons (radio group pattern)
+     * @deprecated Use setupAnswerButtonListeners instead
+     */
+    setupAnswerButtonKeyNavigation() {
+        console.warn('setupAnswerButtonKeyNavigation is deprecated. Use setupAnswerButtonListeners instead.');
+        // This method is deprecated to prevent memory leaks
+        // The new setupAnswerButtonListeners method provides proper cleanup
     }
 
     /**

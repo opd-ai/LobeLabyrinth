@@ -8,7 +8,7 @@ class QuizEngine {
         this.gameState = gameState;
         
         this.currentQuestion = null;
-        this.questionTimer = null;
+        this.timerAnimationId = null; // For requestAnimationFrame timer
         this.questionTimeLimit = 30000; // 30 seconds per question
         this.questionStartTime = null;
         this.timeRemaining = 0;
@@ -200,13 +200,15 @@ class QuizEngine {
     }
 
     /**
-     * Start the question timer countdown
+     * Start the question timer countdown using requestAnimationFrame for smooth updates
      */
     startQuestionTimer() {
         this.clearQuestionTimer();
         
-        this.questionTimer = setInterval(() => {
-            const elapsed = Date.now() - this.questionStartTime;
+        // Use requestAnimationFrame for smooth updates
+        const startTime = performance.now();
+        const updateTimer = (currentTime) => {
+            const elapsed = currentTime - startTime;
             this.timeRemaining = Math.max(0, this.questionTimeLimit - elapsed);
             
             this.emit('timerUpdate', {
@@ -215,19 +217,23 @@ class QuizEngine {
                 percentage: (elapsed / this.questionTimeLimit) * 100
             });
             
-            if (this.timeRemaining <= 0) {
+            if (this.timeRemaining > 0) {
+                this.timerAnimationId = requestAnimationFrame(updateTimer);
+            } else {
                 this.handleTimeUp();
             }
-        }, 100); // Update every 100ms for smooth countdown
+        };
+        
+        this.timerAnimationId = requestAnimationFrame(updateTimer);
     }
 
     /**
-     * Clear the question timer
+     * Clear the question timer and cancel animation frame
      */
     clearQuestionTimer() {
-        if (this.questionTimer) {
-            clearInterval(this.questionTimer);
-            this.questionTimer = null;
+        if (this.timerAnimationId) {
+            cancelAnimationFrame(this.timerAnimationId);
+            this.timerAnimationId = null;
         }
     }
 

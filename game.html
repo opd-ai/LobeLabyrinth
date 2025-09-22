@@ -775,6 +775,277 @@
                 max-height: 90vh;
             }
         }
+
+        /* Victory Screen Styles */
+        .victory-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .victory-screen.visible {
+            display: flex;
+            opacity: 1;
+        }
+
+        .victory-content {
+            background: linear-gradient(135deg, #fef5e7, #fed7aa);
+            border: 3px solid #f6ad55;
+            border-radius: 20px;
+            max-width: 800px;
+            max-height: 90vh;
+            width: 100%;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: victorySlideIn 0.8s ease-out;
+        }
+
+        @keyframes victorySlideIn {
+            0% { transform: scale(0.7) translateY(50px); opacity: 0; }
+            50% { transform: scale(1.05) translateY(-10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .victory-header {
+            text-align: center;
+            padding: 30px 30px 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 17px 17px 0 0;
+        }
+
+        .victory-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            animation: victoryPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes victoryPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .victory-subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .victory-stats {
+            padding: 30px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .performance-breakdown {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .performance-breakdown h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .breakdown-grid {
+            display: grid;
+            gap: 8px;
+        }
+
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            font-size: 0.95em;
+        }
+
+        .breakdown-item span:first-child {
+            color: #4a5568;
+        }
+
+        .breakdown-item span:last-child {
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .achievement-summary {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .achievement-summary h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .achievement-icons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .achievement-icon-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .achievement-icon-badge:hover {
+            transform: scale(1.1);
+        }
+
+        .victory-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 0 30px 20px;
+            flex-wrap: wrap;
+        }
+
+        .victory-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 140px;
+        }
+
+        .victory-btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .victory-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .victory-btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: #4a5568;
+            border: 2px solid #e2e8f0;
+        }
+
+        .victory-btn-secondary:hover {
+            background: white;
+            border-color: #cbd5e0;
+            transform: translateY(-1px);
+        }
+
+        .victory-footer {
+            text-align: center;
+            padding: 20px 30px 30px;
+            color: #4a5568;
+        }
+
+        .completion-grade {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-top: 8px;
+        }
+
+        .grade-excellent { color: #22543d; }
+        .grade-good { color: #744210; }
+        .grade-fair { color: #c05621; }
+
+        /* Mobile responsiveness for victory screen */
+        @media (max-width: 768px) {
+            .victory-content {
+                margin: 10px;
+                max-height: 95vh;
+            }
+
+            .victory-title {
+                font-size: 2em;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+
+            .stat-card {
+                padding: 15px;
+            }
+
+            .victory-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .victory-btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -921,6 +1192,95 @@
     <!-- Achievement Notification (Hidden by default) -->
     <div id="achievement-notification" class="achievement-notification">
         <!-- Content will be dynamically populated -->
+    </div>
+
+    <!-- Victory Screen (Hidden by default) -->
+    <div id="victory-screen" class="victory-screen">
+        <div class="victory-content">
+            <div class="victory-header">
+                <div class="victory-title">🏆 Congratulations! 🏆</div>
+                <div class="victory-subtitle">You have completed LobeLabyrinth!</div>
+            </div>
+            
+            <div class="victory-stats">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-label">Final Score</div>
+                        <div class="stat-value" id="victory-final-score">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⏱️</div>
+                        <div class="stat-label">Time Taken</div>
+                        <div class="stat-value" id="victory-time">0m 0s</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-label">Accuracy</div>
+                        <div class="stat-value" id="victory-accuracy">0%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🗺️</div>
+                        <div class="stat-label">Rooms Explored</div>
+                        <div class="stat-value" id="victory-rooms">0/0</div>
+                    </div>
+                </div>
+                
+                <div class="performance-breakdown">
+                    <h3>Performance Breakdown</h3>
+                    <div class="breakdown-grid">
+                        <div class="breakdown-item">
+                            <span>Base Score:</span>
+                            <span id="victory-base-score">0</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Completion Bonus:</span>
+                            <span id="victory-completion-bonus">+500</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Exploration Bonus:</span>
+                            <span id="victory-exploration-bonus">+0</span>
+                        </div>
+                        <div class="breakdown-item" id="victory-perfect-bonus-item" style="display: none;">
+                            <span>Perfect Game Bonus:</span>
+                            <span id="victory-perfect-bonus">+1000</span>
+                        </div>
+                        <div class="breakdown-item" id="victory-speed-bonus-item" style="display: none;">
+                            <span>Speed Run Bonus:</span>
+                            <span id="victory-speed-bonus">+750</span>
+                        </div>
+                        <div class="breakdown-item" id="victory-achievement-bonus-item">
+                            <span>Achievement Points:</span>
+                            <span id="victory-achievement-bonus">+0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="achievement-summary" id="victory-achievements">
+                    <h3>Achievements Earned</h3>
+                    <div class="achievement-icons" id="victory-achievement-icons">
+                        <!-- Achievement icons will be populated here -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="victory-actions">
+                <button class="victory-btn victory-btn-primary" id="play-again-btn">
+                    🔄 Play Again
+                </button>
+                <button class="victory-btn victory-btn-secondary" id="view-achievements-btn">
+                    🏆 View All Achievements
+                </button>
+                <button class="victory-btn victory-btn-secondary" id="share-results-btn">
+                    📤 Share Results
+                </button>
+            </div>
+            
+            <div class="victory-footer">
+                <p>Thank you for playing LobeLabyrinth!</p>
+                <p class="completion-grade" id="victory-grade">Excellent Performance!</p>
+            </div>
+        </div>
     </div>
 
     <!-- Load game modules -->

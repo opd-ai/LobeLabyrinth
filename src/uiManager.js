@@ -78,7 +78,25 @@ class UIManager {
             achievementNotification: document.getElementById('achievement-notification'),
             achievementGallery: document.getElementById('achievement-gallery'),
             achievementToggle: document.getElementById('achievement-toggle'),
-            achievementStats: document.getElementById('achievement-stats')
+            achievementStats: document.getElementById('achievement-stats'),
+            
+            // Victory screen elements
+            victoryScreen: document.getElementById('victory-screen'),
+            victoryFinalScore: document.getElementById('victory-final-score'),
+            victoryTime: document.getElementById('victory-time'),
+            victoryAccuracy: document.getElementById('victory-accuracy'),
+            victoryRooms: document.getElementById('victory-rooms'),
+            victoryBaseScore: document.getElementById('victory-base-score'),
+            victoryCompletionBonus: document.getElementById('victory-completion-bonus'),
+            victoryExplorationBonus: document.getElementById('victory-exploration-bonus'),
+            victoryPerfectBonus: document.getElementById('victory-perfect-bonus'),
+            victorySpeedBonus: document.getElementById('victory-speed-bonus'),
+            victoryAchievementBonus: document.getElementById('victory-achievement-bonus'),
+            victoryAchievementIcons: document.getElementById('victory-achievement-icons'),
+            victoryGrade: document.getElementById('victory-grade'),
+            playAgainBtn: document.getElementById('play-again-btn'),
+            viewAchievementsBtn: document.getElementById('view-achievements-btn'),
+            shareResultsBtn: document.getElementById('share-results-btn')
         };
 
         console.log('UI elements initialized');
@@ -126,6 +144,23 @@ class UIManager {
             this.quizEngine.on('answerValidated', (data) => this.handleAnswerValidated(data));
             this.quizEngine.on('timerUpdate', (data) => this.updateTimer(data));
             this.quizEngine.on('timeUp', (data) => this.handleTimeUp(data));
+        }
+
+        // Victory screen event listeners
+        if (this.elements.victoryPlayAgain) {
+            this.elements.victoryPlayAgain.addEventListener('click', () => this.handlePlayAgain());
+        }
+        
+        if (this.elements.victoryViewAchievements) {
+            this.elements.victoryViewAchievements.addEventListener('click', () => this.showAchievements());
+        }
+        
+        if (this.elements.victoryShareResults) {
+            this.elements.victoryShareResults.addEventListener('click', () => this.shareResults());
+        }
+        
+        if (this.elements.victoryClose) {
+            this.elements.victoryClose.addEventListener('click', () => this.hideVictoryScreen());
         }
 
         console.log('Event listeners setup complete');
@@ -760,23 +795,15 @@ class UIManager {
      * Handle game completion
      */
     handleGameCompleted(data) {
-        this.showFeedback(`🎉 Congratulations! Game completed! Final score: ${data.finalScore}`, 'success');
+        console.log('Game completed:', data);
         
-        // Show completion modal or update UI
-        if (this.elements.feedbackArea) {
-            setTimeout(() => {
-                this.elements.feedbackArea.innerHTML += `
-                    <div class="game-completion">
-                        <h3>🏆 Victory!</h3>
-                        <p>You have successfully navigated the Lobe Labyrinth!</p>
-                        <p><strong>Final Score:</strong> ${data.finalScore}</p>
-                        <p><strong>Rooms Visited:</strong> ${data.gameState.visitedRooms.length}</p>
-                        <p><strong>Questions Answered:</strong> ${data.gameState.answeredQuestions.length}</p>
-                        <button onclick="uiManager.resetGame()">Play Again</button>
-                    </div>
-                `;
-            }, 2000);
-        }
+        // Show brief success message
+        this.showFeedback(`🎉 Congratulations! Game completed!`, 'success');
+        
+        // Show victory screen after a brief delay
+        setTimeout(() => {
+            this.showVictoryScreen(data);
+        }, 1500);
     }
 
     /**
@@ -894,6 +921,197 @@ class UIManager {
             isQuestionActive: this.isQuestionActive,
             elementsFound: Object.keys(this.elements).filter(key => this.elements[key] !== null)
         };
+    }
+
+    /**
+     * Show victory screen with game statistics
+     */
+    showVictoryScreen(data) {
+        if (!this.elements.victoryScreen) {
+            console.error('Victory screen element not found');
+            return;
+        }
+
+        try {
+            // Get comprehensive game statistics
+            const stats = this.gameState.getGameStatistics();
+            
+            // Update victory screen content
+            this.updateVictoryScreenContent(stats, data);
+            
+            // Show victory screen with animation
+            this.elements.victoryScreen.style.display = 'flex';
+            this.elements.victoryScreen.classList.add('show');
+            
+            console.log('Victory screen displayed');
+        } catch (error) {
+            console.error('Error showing victory screen:', error);
+        }
+    }
+
+    /**
+     * Update victory screen content with game statistics
+     */
+    updateVictoryScreenContent(stats, data) {
+        // Update final score
+        if (this.elements.victoryFinalScore) {
+            this.elements.victoryFinalScore.textContent = stats.finalScore.toLocaleString();
+        }
+
+        // Update base score
+        if (this.elements.victoryBaseScore) {
+            this.elements.victoryBaseScore.textContent = stats.baseScore.toLocaleString();
+        }
+
+        // Update bonuses
+        if (this.elements.victoryAccuracyBonus) {
+            this.elements.victoryAccuracyBonus.textContent = `+${stats.accuracyBonus.toLocaleString()}`;
+        }
+        if (this.elements.victorySpeedBonus) {
+            this.elements.victorySpeedBonus.textContent = `+${stats.speedBonus.toLocaleString()}`;
+        }
+        if (this.elements.victoryExplorationBonus) {
+            this.elements.victoryExplorationBonus.textContent = `+${stats.explorationBonus.toLocaleString()}`;
+        }
+
+        // Update timing statistics
+        if (this.elements.victoryTotalTime) {
+            this.elements.victoryTotalTime.textContent = this.gameState.formatTime(stats.totalTime);
+        }
+        if (this.elements.victoryAvgQuestionTime) {
+            this.elements.victoryAvgQuestionTime.textContent = this.gameState.formatTime(stats.avgQuestionTime);
+        }
+
+        // Update completion percentages
+        if (this.elements.victoryRoomsExplored) {
+            this.elements.victoryRoomsExplored.textContent = `${stats.roomsExploredPercent}%`;
+        }
+        if (this.elements.victoryQuestionsAnswered) {
+            this.elements.victoryQuestionsAnswered.textContent = `${stats.questionsAnsweredPercent}%`;
+        }
+        if (this.elements.victoryAccuracyRate) {
+            this.elements.victoryAccuracyRate.textContent = `${stats.accuracyPercent}%`;
+        }
+
+        // Update achievement count
+        if (this.elements.victoryAchievementCount && this.achievementManager) {
+            const unlockedAchievements = this.achievementManager.getUnlockedAchievements();
+            this.elements.victoryAchievementCount.textContent = unlockedAchievements.length;
+        }
+
+        // Update performance grade
+        if (this.elements.victoryPerformanceGrade) {
+            const grade = this.calculatePerformanceGrade(stats);
+            this.elements.victoryPerformanceGrade.textContent = grade;
+            this.elements.victoryPerformanceGrade.className = `performance-grade grade-${grade.toLowerCase()}`;
+        }
+    }
+
+    /**
+     * Calculate performance grade based on statistics
+     */
+    calculatePerformanceGrade(stats) {
+        const score = (stats.accuracyPercent * 0.4) + 
+                     (stats.roomsExploredPercent * 0.3) + 
+                     (stats.questionsAnsweredPercent * 0.3);
+
+        if (score >= 95) return 'S';
+        if (score >= 90) return 'A';
+        if (score >= 80) return 'B';
+        if (score >= 70) return 'C';
+        if (score >= 60) return 'D';
+        return 'F';
+    }
+
+    /**
+     * Hide victory screen
+     */
+    hideVictoryScreen() {
+        if (this.elements.victoryScreen) {
+            this.elements.victoryScreen.classList.remove('show');
+            setTimeout(() => {
+                this.elements.victoryScreen.style.display = 'none';
+            }, 300);
+        }
+    }
+
+    /**
+     * Handle play again button click
+     */
+    handlePlayAgain() {
+        this.hideVictoryScreen();
+        setTimeout(() => {
+            this.resetGame();
+        }, 300);
+    }
+
+    /**
+     * Show achievements panel
+     */
+    showAchievements() {
+        if (this.achievementManager) {
+            // If there's an achievement display method, use it
+            if (typeof this.achievementManager.showAchievements === 'function') {
+                this.achievementManager.showAchievements();
+            } else {
+                console.log('Achievement display not implemented yet');
+                this.showFeedback('Achievement display coming soon!', 'info');
+            }
+        }
+    }
+
+    /**
+     * Share game results
+     */
+    shareResults() {
+        try {
+            const stats = this.gameState.getGameStatistics();
+            const shareText = `🎮 I just completed Lobe Labyrinth! 🧠\n\n` +
+                            `🏆 Final Score: ${stats.finalScore.toLocaleString()}\n` +
+                            `⚡ Accuracy: ${stats.accuracyPercent}%\n` +
+                            `🗺️ Rooms Explored: ${stats.roomsExploredPercent}%\n` +
+                            `⏱️ Time: ${this.gameState.formatTime(stats.totalTime)}\n\n` +
+                            `Can you beat my score? 🚀`;
+
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Lobe Labyrinth Results',
+                    text: shareText
+                }).catch(console.error);
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareText).then(() => {
+                    this.showFeedback('Results copied to clipboard!', 'success');
+                }).catch(() => {
+                    this.fallbackShare(shareText);
+                });
+            } else {
+                this.fallbackShare(shareText);
+            }
+        } catch (error) {
+            console.error('Error sharing results:', error);
+            this.showFeedback('Unable to share results', 'error');
+        }
+    }
+
+    /**
+     * Fallback share method
+     */
+    fallbackShare(text) {
+        // Create temporary textarea for copying
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        
+        try {
+            document.execCommand('copy');
+            this.showFeedback('Results copied to clipboard!', 'success');
+        } catch (error) {
+            console.error('Copy failed:', error);
+            this.showFeedback('Unable to copy results', 'error');
+        } finally {
+            document.body.removeChild(textarea);
+        }
     }
 }
 

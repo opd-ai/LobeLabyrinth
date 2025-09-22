@@ -173,6 +173,73 @@
             color: #742a2a;
         }
 
+        /* Keyboard Navigation Styles */
+        .answer-btn.keyboard-selected {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #4c51bf;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .answer-btn.keyboard-selected:hover {
+            background: linear-gradient(135deg, #5a67d8, #6b46c1);
+        }
+
+        /* Focus indicators for accessibility */
+        button:focus,
+        .answer-btn:focus {
+            outline: 2px solid #4299e1;
+            outline-offset: 2px;
+        }
+
+        /* Keyboard help overlay */
+        .keyboard-help-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+        }
+
+        .keyboard-help-content {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            white-space: pre-line;
+            line-height: 1.6;
+        }
+
+        /* Map focus indicator */
+        #map-canvas:focus {
+            outline: 3px solid #4299e1;
+            outline-offset: -3px;
+        }
+
+        /* Keyboard shortcut hints */
+        .keyboard-hint {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            opacity: 0.8;
+        }
+
         /* Timer */
         #timer-area {
             display: none;

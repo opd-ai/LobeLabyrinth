@@ -181,7 +181,659 @@ class UIManager {
             this.elements.victoryClose.addEventListener('click', () => this.hideVictoryScreen());
         }
 
+        // Keyboard navigation setup
+        this.setupKeyboardNavigation();
+
         console.log('Event listeners setup complete');
+    }
+
+    /**
+     * Setup comprehensive keyboard navigation system
+     */
+    setupKeyboardNavigation() {
+        // Keyboard navigation state
+        this.keyboardEnabled = true;
+        this.currentFocusIndex = 0;
+        this.focusableElements = [];
+        
+        // Add global keyboard event listener
+        document.addEventListener('keydown', (event) => this.handleKeyboardInput(event));
+        
+        // Prevent default handling for specific keys
+        document.addEventListener('keydown', (event) => {
+            if (this.shouldPreventDefault(event)) {
+                event.preventDefault();
+            }
+        });
+        
+        console.log('Keyboard navigation setup complete');
+    }
+
+    /**
+     * Handle keyboard input for navigation and shortcuts
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleKeyboardInput(event) {
+        if (!this.keyboardEnabled) return;
+        
+        const key = event.key;
+        const code = event.code;
+        const ctrlKey = event.ctrlKey;
+        const altKey = event.altKey;
+        
+        try {
+            // Handle different contexts
+            if (this.isVictoryScreenVisible()) {
+                this.handleVictoryScreenKeys(event);
+                return;
+            }
+            
+            if (this.isQuestionActive()) {
+                this.handleQuestionKeys(event);
+                return;
+            }
+            
+            if (this.isMapFocused()) {
+                this.handleMapNavigationKeys(event);
+                return;
+            }
+            
+            // Global shortcuts (work in all contexts)
+            this.handleGlobalShortcuts(event);
+            
+        } catch (error) {
+            console.error('Error handling keyboard input:', error);
+        }
+    }
+
+    /**
+     * Handle keyboard input when victory screen is visible
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleVictoryScreenKeys(event) {
+        const key = event.key;
+        
+        switch (key) {
+            case 'Enter':
+            case ' ':
+                // Default action: Play Again
+                this.handlePlayAgain();
+                event.preventDefault();
+                break;
+            case 'Escape':
+                this.hideVictoryScreen();
+                event.preventDefault();
+                break;
+            case '1':
+                this.handlePlayAgain();
+                event.preventDefault();
+                break;
+            case '2':
+                this.handleViewAchievements();
+                event.preventDefault();
+                break;
+            case '3':
+                this.handleShareResults();
+                event.preventDefault();
+                break;
+        }
+    }
+
+    /**
+     * Handle keyboard input when a question is active
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleQuestionKeys(event) {
+        const key = event.key;
+        
+        // Number keys for answer selection (1-4)
+        if (key >= '1' && key <= '4') {
+            const answerIndex = parseInt(key) - 1;
+            this.selectAnswerByIndex(answerIndex);
+            event.preventDefault();
+            return;
+        }
+        
+        // Special actions
+        switch (key) {
+            case 'Enter':
+            case ' ':
+                // Submit current answer if one is selected
+                this.submitCurrentAnswer();
+                event.preventDefault();
+                break;
+            case 'h':
+            case 'H':
+                // Show hint
+                this.showHint();
+                event.preventDefault();
+                break;
+            case 's':
+            case 'S':
+                // Skip question
+                this.skipQuestion();
+                event.preventDefault();
+                break;
+            case 'n':
+            case 'N':
+                // New question (if no current question)
+                if (!this.currentQuestion) {
+                    this.presentNewQuestion();
+                    event.preventDefault();
+                }
+                break;
+            case 'Escape':
+                // Clear selection or go back
+                this.clearAnswerSelection();
+                event.preventDefault();
+                break;
+        }
+    }
+
+    /**
+     * Handle keyboard input for map navigation
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleMapNavigationKeys(event) {
+        const key = event.key;
+        
+        switch (key) {
+            case 'ArrowUp':
+            case 'w':
+            case 'W':
+                this.navigateMapDirection('up');
+                event.preventDefault();
+                break;
+            case 'ArrowDown':
+            case 's':
+            case 'S':
+                this.navigateMapDirection('down');
+                event.preventDefault();
+                break;
+            case 'ArrowLeft':
+            case 'a':
+            case 'A':
+                this.navigateMapDirection('left');
+                event.preventDefault();
+                break;
+            case 'ArrowRight':
+            case 'd':
+            case 'D':
+                this.navigateMapDirection('right');
+                event.preventDefault();
+                break;
+            case 'Enter':
+            case ' ':
+                // Enter current room or start question
+                this.enterCurrentRoom();
+                event.preventDefault();
+                break;
+        }
+    }
+
+    /**
+     * Handle global keyboard shortcuts
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleGlobalShortcuts(event) {
+        const key = event.key;
+        const ctrlKey = event.ctrlKey;
+        const altKey = event.altKey;
+        const shiftKey = event.shiftKey;
+        
+        // Ctrl+key combinations
+        if (ctrlKey) {
+            switch (key) {
+                case 's':
+                    this.saveGame();
+                    event.preventDefault();
+                    break;
+                case 'l':
+                    this.loadGame();
+                    event.preventDefault();
+                    break;
+                case 'r':
+                    this.resetGame();
+                    event.preventDefault();
+                    break;
+                case 'h':
+                    this.showKeyboardHelp();
+                    event.preventDefault();
+                    break;
+                case 'n':
+                    // Start new question quickly
+                    this.presentNewQuestion();
+                    event.preventDefault();
+                    break;
+                case 'p':
+                    // Quick pause/resume timer
+                    this.toggleTimer();
+                    event.preventDefault();
+                    break;
+            }
+        }
+        
+        // Alt+key combinations
+        if (altKey) {
+            switch (key) {
+                case 'a':
+                    this.handleViewAchievements();
+                    event.preventDefault();
+                    break;
+                case 'm':
+                    this.focusMap();
+                    event.preventDefault();
+                    break;
+                case 'q':
+                    this.focusQuestion();
+                    event.preventDefault();
+                    break;
+                case 's':
+                    // Quick stats view
+                    this.showQuickStats();
+                    event.preventDefault();
+                    break;
+                case 'h':
+                    // Quick hint
+                    this.showHint();
+                    event.preventDefault();
+                    break;
+            }
+        }
+        
+        // Ctrl+Shift combinations for advanced actions
+        if (ctrlKey && shiftKey) {
+            switch (key) {
+                case 'R':
+                    // Force complete reset
+                    this.confirmAndResetGame();
+                    event.preventDefault();
+                    break;
+                case 'D':
+                    // Developer/debug mode toggle
+                    this.toggleDebugMode();
+                    event.preventDefault();
+                    break;
+                case 'S':
+                    // Export save data
+                    this.exportSaveData();
+                    event.preventDefault();
+                    break;
+            }
+        }
+        
+        // Function keys
+        switch (key) {
+            case 'F1':
+                this.showKeyboardHelp();
+                event.preventDefault();
+                break;
+            case 'F2':
+                this.showQuickStats();
+                event.preventDefault();
+                break;
+            case 'F5':
+                // Refresh/restart current room
+                this.refreshCurrentRoom();
+                event.preventDefault();
+                break;
+        }
+        
+        // Single key shortcuts (when not in input)
+        if (!this.isInInputField(event.target)) {
+            switch (key) {
+                case '?':
+                    this.showKeyboardHelp();
+                    event.preventDefault();
+                    break;
+                case 'Tab':
+                    // Cycle through focusable elements
+                    this.cycleFocus();
+                    event.preventDefault();
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Determine if default handling should be prevented for specific keys
+     * @param {KeyboardEvent} event - Keyboard event
+     * @returns {boolean} Whether to prevent default
+     */
+    shouldPreventDefault(event) {
+        const key = event.key;
+        const target = event.target;
+        
+        // Don't prevent default in input fields (unless specific shortcuts)
+        if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) {
+            return false;
+        }
+        
+        // Prevent default for navigation keys in game context
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', ' '].includes(key)) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Check if victory screen is currently visible
+     * @returns {boolean} True if victory screen is visible
+     */
+    isVictoryScreenVisible() {
+        return this.elements.victoryScreen && 
+               this.elements.victoryScreen.style.display !== 'none' &&
+               this.elements.victoryScreen.classList.contains('show');
+    }
+
+    /**
+     * Check if a question is currently active
+     * @returns {boolean} True if question is active
+     */
+    isQuestionActive() {
+        return this.currentQuestion && this.isQuestionActive;
+    }
+
+    /**
+     * Check if map should receive navigation input
+     * @returns {boolean} True if map should handle navigation
+     */
+    isMapFocused() {
+        return !this.isQuestionActive() && !this.isVictoryScreenVisible();
+    }
+
+    /**
+     * Select answer by index (0-3) for keyboard navigation
+     * @param {number} index - Answer index
+     */
+    selectAnswerByIndex(index) {
+        if (!this.currentQuestion || index < 0 || index >= 4) {
+            return;
+        }
+        
+        try {
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            if (answerButtons && answerButtons[index]) {
+                // Simulate click on the answer button
+                answerButtons[index].click();
+                
+                // Add visual focus indicator
+                this.highlightSelectedAnswer(index);
+            }
+        } catch (error) {
+            console.error('Error selecting answer by index:', error);
+        }
+    }
+
+    /**
+     * Highlight the selected answer for keyboard navigation
+     * @param {number} index - Answer index to highlight
+     */
+    highlightSelectedAnswer(index) {
+        try {
+            // Remove previous highlights
+            document.querySelectorAll('.answer-btn').forEach(btn => {
+                btn.classList.remove('keyboard-selected');
+            });
+            
+            // Add highlight to selected answer
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            if (answerButtons && answerButtons[index]) {
+                answerButtons[index].classList.add('keyboard-selected');
+                this.selectedAnswerIndex = index;
+            }
+        } catch (error) {
+            console.error('Error highlighting answer:', error);
+        }
+    }
+
+    /**
+     * Submit the currently selected answer
+     */
+    submitCurrentAnswer() {
+        if (this.selectedAnswerIndex !== null && this.selectedAnswerIndex !== undefined) {
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            if (answerButtons && answerButtons[this.selectedAnswerIndex]) {
+                answerButtons[this.selectedAnswerIndex].click();
+            }
+        }
+    }
+
+    /**
+     * Clear answer selection
+     */
+    clearAnswerSelection() {
+        document.querySelectorAll('.answer-btn').forEach(btn => {
+            btn.classList.remove('keyboard-selected');
+        });
+        this.selectedAnswerIndex = null;
+    }
+
+    /**
+     * Navigate map in specified direction
+     * @param {string} direction - Direction to navigate (up, down, left, right)
+     */
+    navigateMapDirection(direction) {
+        if (this.mapRenderer && typeof this.mapRenderer.navigateDirection === 'function') {
+            this.mapRenderer.navigateDirection(direction);
+        } else {
+            console.log(`Map navigation: ${direction} (map renderer not available)`);
+        }
+    }
+
+    /**
+     * Enter the currently selected room
+     */
+    enterCurrentRoom() {
+        if (this.mapRenderer && typeof this.mapRenderer.enterCurrentRoom === 'function') {
+            this.mapRenderer.enterCurrentRoom();
+        } else {
+            // Fallback: start a new question
+            this.presentNewQuestion();
+        }
+    }
+
+    /**
+     * Focus the map for navigation
+     */
+    focusMap() {
+        if (this.elements.mapCanvas) {
+            this.elements.mapCanvas.focus();
+            this.showFeedback('🗺️ Map focused - Use arrow keys to navigate', 'info');
+        }
+    }
+
+    /**
+     * Focus the question area
+     */
+    focusQuestion() {
+        if (this.elements.questionText) {
+            this.elements.questionText.focus();
+            this.showFeedback('❓ Question focused - Use number keys to select answers', 'info');
+        }
+    }
+
+    /**
+     * Show keyboard help dialog
+     */
+    showKeyboardHelp() {
+        const helpText = `
+🎮 LobeLabyrinth Keyboard Controls
+
+📍 NAVIGATION
+• Arrow Keys / WASD: Navigate map
+• Enter / Space: Enter room or confirm action
+• Escape: Go back or clear selection
+
+❓ QUESTIONS
+• 1-4: Select answer options
+• H: Show hint
+• S: Skip question
+• N: New question
+• Enter: Submit selected answer
+
+🎯 SHORTCUTS
+• Ctrl+S: Save game
+• Ctrl+L: Load game
+• Ctrl+R: Reset game
+• Ctrl+H: Show this help
+• Ctrl+N: New question
+• Ctrl+P: Pause/Resume timer
+• Alt+A: View achievements
+• Alt+M: Focus map
+• Alt+Q: Focus question
+• Alt+S: Quick stats
+• Alt+H: Quick hint
+• F1: Show help
+• F2: Quick stats
+• F5: Refresh room
+• ?: Show help
+
+🏆 VICTORY SCREEN
+• 1: Play again
+• 2: View achievements
+• 3: Share results
+• Escape: Close
+
+🚀 ADVANCED
+• Ctrl+Shift+R: Force reset
+• Ctrl+Shift+D: Debug mode
+• Ctrl+Shift+S: Export save
+
+Press any key to close this help.
+        `;
+        
+        this.showFeedback(helpText.trim(), 'info', 8000);
+    }
+
+    /**
+     * Show quick statistics overlay
+     */
+    showQuickStats() {
+        try {
+            const stats = this.gameState.getGameStatistics();
+            const quickStatsText = `
+📊 Quick Stats
+
+🏆 Score: ${stats.finalScore.toLocaleString()}
+⚡ Accuracy: ${stats.accuracyPercent}%
+🗺️ Rooms: ${stats.roomsExploredPercent}% explored
+⏱️ Time: ${this.gameState.formatTime(stats.totalTime)}
+🎯 Correct: ${stats.correctAnswers}/${stats.totalAnswers}
+            `;
+            
+            this.showTooltip(quickStatsText.trim(), 4000);
+        } catch (error) {
+            console.error('Error showing quick stats:', error);
+            this.showTooltip('Stats not available', 2000);
+        }
+    }
+
+    /**
+     * Toggle timer pause/resume
+     */
+    toggleTimer() {
+        if (this.gameState.isPaused) {
+            this.gameState.resumeTimer();
+            this.showTooltip('⏱️ Timer resumed', 1500);
+        } else {
+            this.gameState.pauseTimer();
+            this.showTooltip('⏸️ Timer paused', 1500);
+        }
+    }
+
+    /**
+     * Confirm and reset game (for Ctrl+Shift+R)
+     */
+    confirmAndResetGame() {
+        const confirmed = confirm('Are you sure you want to completely reset the game? This will lose all progress.');
+        if (confirmed) {
+            this.resetGame();
+            this.showTooltip('🔄 Game completely reset', 2000);
+        }
+    }
+
+    /**
+     * Toggle debug mode
+     */
+    toggleDebugMode() {
+        if (window.gameDebugMode === undefined) {
+            window.gameDebugMode = false;
+        }
+        
+        window.gameDebugMode = !window.gameDebugMode;
+        
+        if (window.gameDebugMode) {
+            this.showTooltip('🔧 Debug mode enabled', 2000);
+            console.log('Debug mode enabled - Game state:', this.gameState);
+        } else {
+            this.showTooltip('🔧 Debug mode disabled', 2000);
+        }
+    }
+
+    /**
+     * Export save data
+     */
+    exportSaveData() {
+        try {
+            const saveData = this.gameState.exportSaveData();
+            const blob = new Blob([JSON.stringify(saveData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `lobe-labyrinth-save-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            this.showTooltip('💾 Save data exported', 2000);
+        } catch (error) {
+            console.error('Error exporting save data:', error);
+            this.showTooltip('❌ Export failed', 2000);
+        }
+    }
+
+    /**
+     * Refresh current room
+     */
+    refreshCurrentRoom() {
+        try {
+            this.updateDisplay();
+            if (this.currentQuestion) {
+                this.clearQuestion();
+            }
+            this.showTooltip('🔄 Room refreshed', 1500);
+        } catch (error) {
+            console.error('Error refreshing room:', error);
+            this.showTooltip('❌ Refresh failed', 2000);
+        }
+    }
+
+    /**
+     * Cycle focus through interactive elements
+     */
+    cycleFocus() {
+        const focusableElements = [
+            ...document.querySelectorAll('.answer-btn'),
+            ...document.querySelectorAll('button'),
+            document.getElementById('game-canvas')
+        ].filter(el => el && el.style.display !== 'none');
+
+        if (focusableElements.length === 0) return;
+
+        const currentIndex = focusableElements.indexOf(document.activeElement);
+        const nextIndex = (currentIndex + 1) % focusableElements.length;
+        
+        focusableElements[nextIndex].focus();
+        this.showTooltip(`Focus: ${focusableElements[nextIndex].tagName}`, 1000);
+    }
+
+    /**
+     * Check if target is an input field
+     */
+    isInInputField(target) {
+        return target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.contentEditable === 'true');
     }
 
     /**
@@ -1371,6 +2023,64 @@ class UIManager {
             console.error('Fallback copy failed:', error);
             this.showFeedback('❌ Copy not supported in this browser', 'error');
         }
+    }
+
+    /**
+     * Show a temporary tooltip message
+     * @param {string} message - The message to display
+     * @param {number} duration - How long to show the tooltip in milliseconds (default: 2000)
+     */
+    showTooltip(message, duration = 2000) {
+        // Remove any existing tooltip
+        const existingTooltip = document.getElementById('game-tooltip');
+        if (existingTooltip) {
+            existingTooltip.remove();
+        }
+
+        // Create tooltip element
+        const tooltip = document.createElement('div');
+        tooltip.id = 'game-tooltip';
+        tooltip.textContent = message;
+        tooltip.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            z-index: 10000;
+            pointer-events: none;
+            animation: fadeInOut ${duration}ms ease;
+        `;
+
+        // Add CSS animation if not already present
+        if (!document.getElementById('tooltip-styles')) {
+            const style = document.createElement('style');
+            style.id = 'tooltip-styles';
+            style.textContent = `
+                @keyframes fadeInOut {
+                    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                    10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                    90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Add to page
+        document.body.appendChild(tooltip);
+
+        // Remove after duration
+        setTimeout(() => {
+            if (tooltip.parentNode) {
+                tooltip.remove();
+            }
+        }, duration);
     }
 }
 

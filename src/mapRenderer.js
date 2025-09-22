@@ -114,6 +114,11 @@ class MapRenderer {
             this.handleCanvasClick(event);
         });
 
+        // Canvas double-click events for fast room movement
+        this.canvas.addEventListener('dblclick', (event) => {
+            this.handleCanvasDoubleClick(event);
+        });
+
         // Canvas hover events for tooltips
         this.canvas.addEventListener('mousemove', (event) => {
             this.handleCanvasHover(event);
@@ -340,6 +345,39 @@ class MapRenderer {
     }
 
     /**
+     * Handle canvas double-click events for fast room movement
+     * @param {MouseEvent} event - Double-click event
+     */
+    handleCanvasDoubleClick(event) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        const clickedRoom = this.getRoomAtPosition(x, y);
+        if (clickedRoom) {
+            console.log('Double-clicked room:', clickedRoom);
+            
+            // For double-click, immediately navigate if accessible
+            const roomStatus = this.getRoomStatus(clickedRoom);
+            if (roomStatus === 'accessible' || roomStatus === 'visited') {
+                // Show loading indicator for fast movement
+                this.showFastMovementFeedback(clickedRoom);
+                
+                // Navigate immediately without confirmation
+                this.gameState.moveToRoom(clickedRoom);
+                
+                // Trigger room entry (including questions if needed)
+                if (window.quizEngine) {
+                    window.quizEngine.handleRoomEntry(clickedRoom);
+                }
+            } else {
+                // Show feedback that room is not accessible
+                this.showInaccessibleRoomFeedback(clickedRoom);
+            }
+        }
+    }
+
+    /**
      * Handle canvas hover events for tooltips
      * @param {MouseEvent} event - Mouse move event
      */
@@ -416,6 +454,48 @@ class MapRenderer {
         this.ctx.textBaseline = 'top';
         this.ctx.fillStyle = this.colors.text;
         this.ctx.fillText('Castle Map', this.mapWidth / 2, 10);
+    }
+
+    /**
+     * Show visual feedback for fast movement (double-click)
+     * @param {string} roomId - Target room ID
+     */
+    showFastMovementFeedback(roomId) {
+        const position = this.roomPositions.get(roomId);
+        if (!position) return;
+
+        // Create a brief flash effect
+        const originalColor = this.colors.current;
+        
+        // Flash effect
+        setTimeout(() => {
+            this.drawRoom(roomId, position.x, position.y, '#FFD700'); // Gold flash
+            setTimeout(() => {
+                this.render(); // Return to normal
+            }, 150);
+        }, 50);
+    }
+
+    /**
+     * Show feedback for inaccessible rooms
+     * @param {string} roomId - Target room ID
+     */
+    showInaccessibleRoomFeedback(roomId) {
+        const position = this.roomPositions.get(roomId);
+        if (!position) return;
+
+        // Create a red flash to indicate inaccessible
+        setTimeout(() => {
+            this.drawRoom(roomId, position.x, position.y, '#E53E3E'); // Red flash
+            setTimeout(() => {
+                this.render(); // Return to normal
+            }, 200);
+        }, 50);
+
+        // Show tooltip or message
+        if (window.uiManager) {
+            window.uiManager.showTooltip('This room is not accessible yet!', 2000);
+        }
     }
 
     /**

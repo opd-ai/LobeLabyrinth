@@ -333,7 +333,15 @@ class SecureQuizEngine extends QuizEngine {
 
 ### **Issue**: Inefficient DOM Queries
 **Impact**: Unnecessary performance overhead on every UI update  
+**Status**: RESOLVED (Commit: 7752e1e - 2025-09-22)
 **Location**: `src/uiManager.js:55-95`  
+**Resolution**: 
+- Replaced 50+ individual getElementById calls with efficient getElementsByIds helper method
+- Added DOM element caching with error handling for missing elements
+- Implemented automatic kebab-case to camelCase conversion for object keys
+- Added warning logs for missing DOM elements to aid debugging
+- Reduced DOM traversal overhead on every UI update
+
 **Solution**: Cache DOM elements in constructor and add nullability checks
 ```javascript
 initializeElements() {
@@ -360,7 +368,15 @@ getElementsByIds(ids) {
 
 ### **Issue**: Unnecessary Timer Recreation
 **Impact**: Performance degradation and potential memory leaks  
+**Status**: RESOLVED (Commit: 67d6e6e - 2025-09-22)
 **Location**: `src/quizEngine.js:180-200`  
+**Resolution**:
+- Replaced setInterval with requestAnimationFrame for smooth 60fps timer updates
+- Switched to performance.now() for high-resolution timing precision 
+- Properly cancel animation frames to prevent memory leaks
+- Eliminated timer recreation overhead and timing drift issues
+- Maintained same event emission interface for full compatibility
+
 **Solution**: Reuse timer objects and properly clean up intervals
 ```javascript
 startQuestionTimer() {

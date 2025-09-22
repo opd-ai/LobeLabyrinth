@@ -1345,10 +1345,15 @@ Press any key to close this help.
         // Clear existing listeners before creating new buttons
         this.clearAnswerButtonListeners();
 
+        // Add radiogroup role to container for proper semantics
+        this.elements.answerButtons.setAttribute('role', 'radiogroup');
+        this.elements.answerButtons.setAttribute('aria-label', 'Answer options');
+
         const buttonsHtml = questionData.answers.map((answer, index) => 
             `<button class="answer-btn" 
                      data-answer="${index}"
                      role="radio"
+                     aria-checked="false"
                      aria-posinset="${index + 1}"
                      aria-setsize="${questionData.answers.length}"
                      aria-label="Option ${String.fromCharCode(65 + index)}: ${this.escapeHtml(answer)}"
@@ -1447,13 +1452,14 @@ Press any key to close this help.
     }
 
     /**
-     * Focus specific answer button and update tabindex
+     * Focus specific answer button and update tabindex and aria-checked
      */
     focusAnswerButton(index) {
         const buttons = document.querySelectorAll('.answer-btn');
         
         buttons.forEach((btn, i) => {
             btn.tabIndex = i === index ? 0 : -1;
+            btn.setAttribute('aria-checked', i === index ? 'true' : 'false');
             if (i === index) {
                 btn.focus();
             }

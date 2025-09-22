@@ -11,8 +11,11 @@ class GameState {
         this.unlockedRooms = new Set(['entrance']);
         this.answeredQuestions = new Set();
         this.startTime = Date.now();
+        this.currentRoomStartTime = Date.now(); // Track time in current room
         this.gameCompleted = false;
         this.playerName = '';
+        this.isPaused = false;
+        this.pausedTime = 0;
         
         // Event system for state changes
         this.eventListeners = {};
@@ -41,6 +44,7 @@ class GameState {
             const previousRoom = this.currentRoomId;
             this.currentRoomId = roomId;
             this.visitedRooms.add(roomId);
+            this.currentRoomStartTime = Date.now(); // Reset room timer
 
             console.log(`Moved from ${previousRoom} to ${roomId}`);
             this.emit('roomChanged', { from: previousRoom, to: roomId, room: targetRoom });
@@ -489,6 +493,54 @@ class GameState {
             playTime: Math.floor(playTime / 1000), // in seconds
             gameCompleted: this.gameCompleted
         };
+    }
+
+    /**
+     * Get time spent in current room (in milliseconds)
+     */
+    getTimeInCurrentRoom() {
+        if (this.isPaused) {
+            return this.pausedTime;
+        }
+        return Date.now() - this.currentRoomStartTime;
+    }
+
+    /**
+     * Pause the timer
+     */
+    pauseTimer() {
+        if (!this.isPaused) {
+            this.isPaused = true;
+            this.pausedTime = Date.now() - this.currentRoomStartTime;
+        }
+    }
+
+    /**
+     * Resume the timer
+     */
+    resumeTimer() {
+        if (this.isPaused) {
+            this.isPaused = false;
+            this.currentRoomStartTime = Date.now() - this.pausedTime;
+            this.pausedTime = 0;
+        }
+    }
+
+    /**
+     * Format time duration in readable format
+     */
+    formatTime(milliseconds) {
+        const seconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(seconds / 60);
+        const hours = Math.floor(minutes / 60);
+        
+        if (hours > 0) {
+            return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
+        } else if (minutes > 0) {
+            return `${minutes}m ${seconds % 60}s`;
+        } else {
+            return `${seconds}s`;
+        }
     }
 }
 

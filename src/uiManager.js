@@ -1336,17 +1336,189 @@ Press any key to close this help.
     }
 
     /**
-     * Show hint for current question
+     * Show hint for current question or context-aware help
      */
     showHint() {
-        if (!this.isQuestionActive || !this.quizEngine) return;
+        // If there's an active question, show question-specific hint
+        if (this.isQuestionActive && this.quizEngine && this.currentQuestion) {
+            this.showQuestionHint();
+            return;
+        }
+        
+        // Otherwise, show context-aware smart hints
+        this.showSmartHint();
+    }
 
+    /**
+     * Show question-specific hint
+     */
+    showQuestionHint() {
         const hint = this.quizEngine.getHint();
         if (hint) {
             this.showFeedback(`💡 Hint: ${hint}`, 'info');
         } else {
-            this.showFeedback('No hint available for this question.', 'warning');
+            // Generate smart hint based on question difficulty and category
+            const smartHint = this.generateQuestionSmartHint();
+            this.showFeedback(`💡 Smart Hint: ${smartHint}`, 'info');
         }
+    }
+
+    /**
+     * Generate smart hint based on question properties
+     */
+    generateQuestionSmartHint() {
+        if (!this.currentQuestion) return 'Think carefully about each option.';
+
+        const difficulty = this.currentQuestion.difficulty;
+        const category = this.currentQuestion.category;
+        
+        const hints = {
+            'easy': [
+                'This is a straightforward question - trust your first instinct!',
+                'Look for the most obvious answer.',
+                'Easy questions usually have clear, direct answers.'
+            ],
+            'medium': [
+                'Consider all options carefully.',
+                'Think about what you know about this topic.',
+                'Look for clues in the question wording.',
+                'Eliminate obviously wrong answers first.'
+            ],
+            'hard': [
+                'Break down the question into smaller parts.',
+                'Use process of elimination.',
+                'Consider what makes each answer unique.',
+                'Hard questions often test specific knowledge - think precisely.'
+            ]
+        };
+
+        const categoryHints = {
+            'science': 'Think about scientific principles and facts.',
+            'history': 'Consider the time period and context.',
+            'literature': 'Think about themes, characters, and literary devices.',
+            'general': 'Use your general knowledge and common sense.',
+            'art': 'Consider artistic movements and techniques.',
+            'geography': 'Think about locations, features, and relationships.'
+        };
+
+        const difficultyHints = hints[difficulty] || hints['medium'];
+        const categoryHint = categoryHints[category.toLowerCase()] || categoryHints['general'];
+        
+        const randomDifficultyHint = difficultyHints[Math.floor(Math.random() * difficultyHints.length)];
+        
+        return `${randomDifficultyHint} ${categoryHint}`;
+    }
+
+    /**
+     * Show context-aware smart hints based on game state
+     */
+    showSmartHint() {
+        const stats = this.gameState.getGameStatistics();
+        const currentRoom = this.gameState.currentRoomId;
+        const isNewPlayer = stats.totalAnswers < 5;
+        const hasLowAccuracy = stats.accuracyPercent < 50;
+        const isStuck = this.gameState.getTimeInCurrentRoom() > 120000; // 2 minutes
+        
+        let hint = '';
+        
+        if (isNewPlayer) {
+            hint = this.getNewPlayerHints();
+        } else if (hasLowAccuracy) {
+            hint = this.getLowAccuracyHints();
+        } else if (isStuck) {
+            hint = this.getStuckPlayerHints();
+        } else if (!this.currentQuestion) {
+            hint = this.getNavigationHints();
+        } else {
+            hint = this.getGeneralGameplayHints();
+        }
+        
+        this.showTooltip(`💡 Smart Tip: ${hint}`, 4000);
+    }
+
+    /**
+     * Get hints for new players
+     */
+    getNewPlayerHints() {
+        const hints = [
+            'Welcome! Click on connected rooms (orange) to explore the castle.',
+            'Answer questions correctly to unlock new areas and earn points.',
+            'Use keyboard shortcuts: 1-4 for answers, H for hints, S to save.',
+            'Green rooms are visited, blue is current, orange are accessible.',
+            'Your goal is to explore all rooms and answer questions correctly.',
+            'Double-click rooms for quick movement!',
+            'Press F1 or ? for a complete list of keyboard shortcuts.'
+        ];
+        
+        return hints[Math.floor(Math.random() * hints.length)];
+    }
+
+    /**
+     * Get hints for players with low accuracy
+     */
+    getLowAccuracyHints() {
+        const hints = [
+            'Take your time reading questions carefully.',
+            'Use the hint button (H) when you\'re unsure.',
+            'Try to eliminate obviously wrong answers first.',
+            'Don\'t rush - accuracy is more important than speed.',
+            'Review the question category for context clues.',
+            'If stuck, skip the question and come back later.',
+            'Consider the question difficulty - easier questions have more obvious answers.'
+        ];
+        
+        return hints[Math.floor(Math.random() * hints.length)];
+    }
+
+    /**
+     * Get hints for stuck players
+     */
+    getStuckPlayerHints() {
+        const hints = [
+            'Feeling stuck? Try moving to a different room for a change of pace.',
+            'Skip difficult questions and return to them later.',
+            'Look for rooms with easier questions to build confidence.',
+            'Use Ctrl+N to get a new question in the current room.',
+            'Check your progress with F2 or Alt+S for quick stats.',
+            'Try exploring rooms you haven\'t visited yet.',
+            'Consider taking a short break - fresh perspective helps!'
+        ];
+        
+        return hints[Math.floor(Math.random() * hints.length)];
+    }
+
+    /**
+     * Get navigation hints
+     */
+    getNavigationHints() {
+        const hints = [
+            'Click on orange rooms to move there and get new questions.',
+            'Use arrow keys or WASD to navigate the map quickly.',
+            'Double-click rooms for instant movement.',
+            'Green rooms are completed, blue is current, orange are accessible.',
+            'Look for rooms you haven\'t fully explored yet.',
+            'Some rooms may unlock new areas when completed.',
+            'Try visiting different room types for varied questions.'
+        ];
+        
+        return hints[Math.floor(Math.random() * hints.length)];
+    }
+
+    /**
+     * Get general gameplay hints
+     */
+    getGeneralGameplayHints() {
+        const hints = [
+            'Maintain a steady pace - consistency beats speed.',
+            'Use keyboard shortcuts to play more efficiently.',
+            'Save your progress regularly with Ctrl+S.',
+            'Track your progress with the quick stats (F2).',
+            'Explore all rooms to maximize your score.',
+            'Each room type offers different categories of questions.',
+            'Aim for high accuracy to unlock achievement bonuses.'
+        ];
+        
+        return hints[Math.floor(Math.random() * hints.length)];
     }
 
     /**

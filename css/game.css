@@ -959,10 +959,401 @@ button.btn-danger:hover {
     
     .game-container {
         box-shadow: none;
-        border: 1px solid black;
+        border: 1px solid #ccc;
+    }
+}
+
+/* Loading State Animations - Skeleton Screens */
+.skeleton-loader {
+    background: linear-gradient(90deg, 
+        var(--medieval-parchment-light) 25%, 
+        var(--medieval-ink-light) 50%, 
+        var(--medieval-parchment-light) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 8px;
+    opacity: 0.7;
+}
+
+@keyframes skeleton-loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.question-skeleton {
+    height: 120px;
+    margin: 15px 0;
+    border-radius: 12px;
+}
+
+.answer-skeleton {
+    height: 48px;
+    margin: 12px 0;
+    border-radius: 8px;
+}
+
+.answer-skeleton:nth-child(1) { animation-delay: 0.1s; }
+.answer-skeleton:nth-child(2) { animation-delay: 0.2s; }
+.answer-skeleton:nth-child(3) { animation-delay: 0.3s; }
+.answer-skeleton:nth-child(4) { animation-delay: 0.4s; }
+
+.room-info-skeleton {
+    height: 80px;
+    margin: 10px 0;
+    border-radius: 10px;
+}
+
+.score-skeleton {
+    height: 24px;
+    margin: 8px 0;
+    border-radius: 6px;
+    width: 80%;
+}
+
+.loading-state {
+    position: relative;
+    min-height: 100px;
+}
+
+.loading-state .skeleton-loader {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-state .skeleton-loader::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.3), 
+        transparent);
+    animation: skeleton-shimmer 2s infinite;
+}
+
+@keyframes skeleton-shimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .skeleton-loader {
+        animation: none;
+        background: var(--medieval-parchment-light);
     }
     
-    .section {
-        break-inside: avoid;
+    .skeleton-loader::before {
+        animation: none;
+        display: none;
+    }
+}
+
+/* Micro-interactions - Medieval Theme Enhancement */
+.micro-interaction {
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Button Tap Feedback */
+@keyframes tapFeedback {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+@keyframes swordGleam {
+    0% { 
+        opacity: 0; 
+        transform: translateY(-50%) translateX(10px) rotate(45deg);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(-50%) translateX(0) rotate(45deg);
+    }
+    100% { 
+        opacity: 0; 
+        transform: translateY(-50%) translateX(-10px) rotate(45deg);
+    }
+}
+
+@keyframes shieldPulse {
+    0% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.4);
+    }
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 10px rgba(212, 175, 55, 0.1);
+    }
+    100% { 
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(212, 175, 55, 0);
+    }
+}
+
+@keyframes crownFloat {
+    0%, 100% { 
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-3px) rotate(1deg);
+    }
+    75% {
+        transform: translateY(-1px) rotate(-1deg);
+    }
+}
+
+@keyframes gemSparkle {
+    0%, 100% { 
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.2);
+    }
+}
+
+/* Enhanced Button Interactions */
+.answer-btn:active,
+button:active {
+    animation: tapFeedback 0.15s ease-out;
+}
+
+.answer-btn:hover::after {
+    content: '⚔️';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    font-size: 1.2em;
+    opacity: 0;
+    animation: swordGleam 0.6s ease-out;
+    pointer-events: none;
+}
+
+.answer-btn.answer-correct:hover::after {
+    content: '🛡️';
+    animation: shieldPulse 0.8s ease-out;
+}
+
+.answer-btn.answer-incorrect:hover::after {
+    content: '💥';
+    animation: tapFeedback 0.3s ease-out;
+}
+
+/* Score Animation Enhancements */
+.score-value {
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.score-value.score-increase {
+    animation: crownFloat 1s ease-in-out;
+    color: var(--medieval-gold);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+.score-value.score-increase::after {
+    content: '💎';
+    position: absolute;
+    margin-left: 5px;
+    animation: gemSparkle 1s ease-in-out;
+}
+
+/* Room Transition Effects */
+.room-transition {
+    animation: roomEnter 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes roomEnter {
+    0% {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    50% {
+        opacity: 0.7;
+        transform: translateY(-5px) scale(1.02);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Question Reveal Animation */
+.question-reveal {
+    animation: questScroll 1s ease-out;
+}
+
+@keyframes questScroll {
+    0% {
+        opacity: 0;
+        transform: rotateX(90deg) scale(0.8);
+        transform-origin: top center;
+    }
+    30% {
+        opacity: 0.3;
+        transform: rotateX(45deg) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: rotateX(0deg) scale(1);
+    }
+}
+
+/* Interactive Map Enhancements */
+.map-room-hover {
+    animation: castleGlow 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes castleGlow {
+    0% {
+        filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.3));
+    }
+    100% {
+        filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.7));
+    }
+}
+
+/* Achievement Sparkle Effect */
+.achievement-sparkle {
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-sparkle::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.3) 2px, transparent 2px),
+        radial-gradient(circle at 75% 75%, rgba(212, 175, 55, 0.3) 1px, transparent 1px),
+        radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+    background-size: 50px 50px, 30px 30px, 40px 40px;
+    animation: sparkleMove 3s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes sparkleMove {
+    0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+    100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+/* Timer Pulse Enhancement */
+.timer-critical {
+    animation: heartbeat 1s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% {
+        transform: scale(1);
+    }
+    25% {
+        transform: scale(1.05);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    75% {
+        transform: scale(1.05);
+    }
+}
+
+/* Progress Bar Animations */
+.progress-fill {
+    transition: width 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+}
+
+.progress-fill.progress-milestone::after {
+    content: '⭐';
+    position: absolute;
+    right: -15px;
+    top: 50%;
+    transform: translateY(-50%);
+    animation: milestoneReached 2s ease-out;
+}
+
+@keyframes milestoneReached {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scale(0) rotate(0deg);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.5) rotate(180deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1) rotate(360deg);
+    }
+}
+
+/* Loading Spinner Enhancement */
+.loading::after {
+    content: '⚙️';
+    animation: spin 2s linear infinite;
+    display: inline-block;
+}
+
+/* Hover Enhancements for Interactive Elements */
+.interactive-element {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.interactive-element:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* Focus Enhancements */
+.focus-glow:focus {
+    animation: focusGlow 2s ease-in-out infinite;
+}
+
+@keyframes focusGlow {
+    0%, 100% {
+        box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(212, 175, 55, 0.8);
+    }
+}
+
+/* Respect reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .answer-btn:hover::after,
+    .score-value.score-increase,
+    .room-transition,
+    .question-reveal,
+    .map-room-hover,
+    .achievement-sparkle::before,
+    .timer-critical,
+    .progress-fill.progress-milestone::after,
+    .loading::after,
+    .focus-glow:focus {
+        animation: none;
+    }
+    
+    .interactive-element:hover {
+        transform: none;
+    }
+    
+    .micro-interaction,
+    .score-value,
+    .progress-fill,
+    .interactive-element {
+        transition: none;
     }
 }

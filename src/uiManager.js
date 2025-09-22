@@ -31,6 +31,12 @@ class UIManager {
         this.setupAriaLiveRegions();
         this.updateDisplay();
         this.setupAchievementNotifications();
+        
+        // Initialize loading state management
+        this.loadingStates = new Map();
+        
+        // Initialize haptic feedback system
+        this.setupHapticFeedback();
     }
 
     /**
@@ -2524,6 +2530,373 @@ Press any key to close this help.
                 tooltip.remove();
             }
         }, duration);
+    }
+
+    /**
+     * Show skeleton loading state for better perceived performance
+     * @param {HTMLElement} container - Container to show skeleton in
+     * @param {string} type - Type of skeleton ('question', 'answers', 'room-info', 'score')
+     */
+    showSkeletonLoading(container, type = 'question') {
+        if (!container) return;
+
+        const loadingId = `skeleton-${Date.now()}`;
+        this.loadingStates.set(container, loadingId);
+
+        // Clear existing content
+        const originalContent = container.innerHTML;
+        container.setAttribute('data-original-content', originalContent);
+        
+        let skeletonHTML = '';
+        
+        switch (type) {
+            case 'question':
+                skeletonHTML = `
+                    <div class="loading-state">
+                        <div class="skeleton-loader question-skeleton" aria-label="Loading question..."></div>
+                        <div class="skeleton-loader answer-skeleton"></div>
+                        <div class="skeleton-loader answer-skeleton"></div>
+                        <div class="skeleton-loader answer-skeleton"></div>
+                        <div class="skeleton-loader answer-skeleton"></div>
+                    </div>
+                `;
+                break;
+            case 'answers':
+                skeletonHTML = `
+                    <div class="loading-state">
+                        <div class="skeleton-loader answer-skeleton"></div>
+                        <div class="skeleton-loader answer-skeleton"></div>
+                        <div class="skeleton-loader answer-skeleton"></div>
+                        <div class="skeleton-loader answer-skeleton"></div>
+                    </div>
+                `;
+                break;
+            case 'room-info':
+                skeletonHTML = `
+                    <div class="loading-state">
+                        <div class="skeleton-loader room-info-skeleton" aria-label="Loading room information..."></div>
+                    </div>
+                `;
+                break;
+            case 'score':
+                skeletonHTML = `
+                    <div class="loading-state">
+                        <div class="skeleton-loader score-skeleton"></div>
+                        <div class="skeleton-loader score-skeleton"></div>
+                        <div class="skeleton-loader score-skeleton"></div>
+                    </div>
+                `;
+                break;
+            default:
+                skeletonHTML = `
+                    <div class="loading-state">
+                        <div class="skeleton-loader" style="height: 60px;" aria-label="Loading..."></div>
+                    </div>
+                `;
+        }
+
+        container.innerHTML = skeletonHTML;
+        container.setAttribute('aria-busy', 'true');
+    }
+
+    /**
+     * Hide skeleton loading and restore content
+     * @param {HTMLElement} container - Container to restore
+     */
+    hideSkeletonLoading(container) {
+        if (!container) return;
+
+        const loadingId = this.loadingStates.get(container);
+        if (!loadingId) return;
+
+        const originalContent = container.getAttribute('data-original-content');
+        if (originalContent) {
+            container.innerHTML = originalContent;
+            container.removeAttribute('data-original-content');
+        }
+        
+        container.removeAttribute('aria-busy');
+        this.loadingStates.delete(container);
+    }
+
+    /**
+     * Show loading state with skeleton animation
+     * @param {string} elementId - ID of element to show loading in
+     * @param {string} type - Type of skeleton to show
+     */
+    showLoadingState(elementId, type = 'question') {
+        const element = document.getElementById(elementId);
+        if (element) {
+            this.showSkeletonLoading(element, type);
+        }
+    }
+
+    /**
+     * Hide loading state and restore content
+     * @param {string} elementId - ID of element to hide loading from
+     */
+    hideLoadingState(elementId) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            this.hideSkeletonLoading(element);
+        }
+    }
+
+    /**
+     * Setup haptic feedback system for enhanced user experience
+     */
+    setupHapticFeedback() {
+        this.hapticSupported = 'vibrate' in navigator;
+        this.hapticEnabled = true; // Could be user preference
+        
+        console.log('🎮 Haptic feedback:', this.hapticSupported ? 'supported' : 'not supported');
+    }
+
+    /**
+     * Trigger haptic feedback with specified pattern
+     * @param {string} type - Type of feedback ('tap', 'success', 'error', 'warning', 'achievement')
+     */
+    triggerHapticFeedback(type = 'tap') {
+        if (!this.hapticSupported || !this.hapticEnabled) return;
+
+        const patterns = {
+            tap: [50],                    // Short tap
+            success: [100, 50, 100],      // Double pulse
+            error: [200],                 // Strong pulse
+            warning: [50, 50, 50, 50, 50], // Rapid pulses
+            achievement: [100, 100, 200], // Celebration pattern
+            roomEnter: [75],              // Medium pulse
+            questionCorrect: [50, 50, 100], // Success sequence
+            questionIncorrect: [150],      // Error pulse
+            buttonPress: [25],            // Subtle feedback
+            milestone: [100, 50, 100, 50, 200] // Achievement milestone
+        };
+
+        const pattern = patterns[type] || patterns.tap;
+        
+        try {
+            navigator.vibrate(pattern);
+        } catch (error) {
+            console.warn('Haptic feedback failed:', error);
+        }
+    }
+
+    /**
+     * Add micro-interaction effects to element
+     * @param {HTMLElement} element - Element to enhance
+     * @param {string} effectType - Type of effect ('sword', 'shield', 'crown', 'gem', 'sparkle')
+     */
+    addMicroInteraction(element, effectType = 'sword') {
+        if (!element) return;
+
+        // Add base micro-interaction class
+        element.classList.add('micro-interaction');
+
+        const effects = {
+            sword: () => this.addSwordGleam(element),
+            shield: () => this.addShieldPulse(element),
+            crown: () => this.addCrownFloat(element),
+            gem: () => this.addGemSparkle(element),
+            sparkle: () => this.addSparkleEffect(element)
+        };
+
+        const effect = effects[effectType];
+        if (effect) {
+            effect();
+        }
+    }
+
+    /**
+     * Add sword gleam effect to element
+     * @param {HTMLElement} element - Target element
+     */
+    addSwordGleam(element) {
+        element.addEventListener('mouseenter', () => {
+            if (!element.querySelector('.sword-gleam')) {
+                const gleam = document.createElement('span');
+                gleam.className = 'sword-gleam';
+                gleam.innerHTML = '⚔️';
+                gleam.style.cssText = `
+                    position: absolute;
+                    right: 15px;
+                    top: 50%;
+                    transform: translateY(-50%);
+                    font-size: 1.2em;
+                    opacity: 0;
+                    animation: swordGleam 0.6s ease-out;
+                    pointer-events: none;
+                `;
+                element.style.position = element.style.position || 'relative';
+                element.appendChild(gleam);
+                
+                setTimeout(() => gleam.remove(), 600);
+            }
+        });
+    }
+
+    /**
+     * Add shield pulse effect to element
+     * @param {HTMLElement} element - Target element
+     */
+    addShieldPulse(element) {
+        element.addEventListener('click', () => {
+            element.style.animation = 'shieldPulse 0.8s ease-out';
+            setTimeout(() => {
+                element.style.animation = '';
+            }, 800);
+        });
+    }
+
+    /**
+     * Add crown floating effect to element
+     * @param {HTMLElement} element - Target element
+     */
+    addCrownFloat(element) {
+        element.classList.add('score-increase');
+        setTimeout(() => {
+            element.classList.remove('score-increase');
+        }, 1000);
+    }
+
+    /**
+     * Add gem sparkle effect to element
+     * @param {HTMLElement} element - Target element
+     */
+    addGemSparkle(element) {
+        if (!element.querySelector('.gem-sparkle')) {
+            const gem = document.createElement('span');
+            gem.className = 'gem-sparkle';
+            gem.innerHTML = '💎';
+            gem.style.cssText = `
+                position: absolute;
+                margin-left: 5px;
+                animation: gemSparkle 1s ease-in-out;
+                pointer-events: none;
+            `;
+            element.style.position = element.style.position || 'relative';
+            element.appendChild(gem);
+            
+            setTimeout(() => gem.remove(), 1000);
+        }
+    }
+
+    /**
+     * Add sparkle effect to element
+     * @param {HTMLElement} element - Target element
+     */
+    addSparkleEffect(element) {
+        element.classList.add('achievement-sparkle');
+        setTimeout(() => {
+            element.classList.remove('achievement-sparkle');
+        }, 3000);
+    }
+
+    /**
+     * Enhanced button click handler with micro-interactions
+     * @param {HTMLElement} button - Button element
+     * @param {Function} callback - Click callback
+     * @param {string} feedbackType - Haptic feedback type
+     */
+    enhanceButton(button, callback, feedbackType = 'tap') {
+        if (!button) return;
+
+        // Add interactive styling
+        button.classList.add('interactive-element');
+
+        // Enhanced click handler
+        button.addEventListener('click', (event) => {
+            // Trigger haptic feedback
+            this.triggerHapticFeedback(feedbackType);
+            
+            // Add visual feedback
+            button.style.animation = 'tapFeedback 0.15s ease-out';
+            setTimeout(() => {
+                button.style.animation = '';
+            }, 150);
+            
+            // Execute callback
+            if (callback) {
+                callback(event);
+            }
+        });
+
+        // Add hover effects
+        button.addEventListener('mouseenter', () => {
+            if (button.classList.contains('answer-btn')) {
+                this.addSwordGleam(button);
+            }
+        });
+    }
+
+    /**
+     * Animate score increase with enhanced effects
+     * @param {number} newScore - New score value
+     * @param {number} points - Points gained
+     */
+    animateScoreIncrease(newScore, points) {
+        const scoreElement = this.elements.currentScore;
+        if (!scoreElement) return;
+
+        // Trigger haptic feedback based on points
+        if (points >= 100) {
+            this.triggerHapticFeedback('achievement');
+        } else {
+            this.triggerHapticFeedback('success');
+        }
+
+        // Add visual effects
+        this.addCrownFloat(scoreElement);
+        if (points >= 50) {
+            this.addGemSparkle(scoreElement);
+        }
+
+        // Update score with animation
+        if (this.animationManager) {
+            this.animationManager.animateScoreIncrease(scoreElement, this.previousScore, newScore);
+        } else {
+            scoreElement.textContent = newScore;
+        }
+
+        this.previousScore = newScore;
+    }
+
+    /**
+     * Enhanced room transition with micro-interactions
+     * @param {Object} roomData - Room data
+     */
+    enhancedRoomTransition(roomData) {
+        const roomInfoElement = this.elements.roomInfo;
+        if (roomInfoElement) {
+            // Add transition effect
+            roomInfoElement.classList.add('room-transition');
+            setTimeout(() => {
+                roomInfoElement.classList.remove('room-transition');
+            }, 800);
+        }
+
+        // Trigger haptic feedback
+        this.triggerHapticFeedback('roomEnter');
+
+        // Announce to screen readers
+        this.announceToScreenReader(`Entered ${roomData.name}`);
+    }
+
+    /**
+     * Enhanced question presentation with reveal animation
+     * @param {Object} questionData - Question data
+     */
+    enhancedQuestionPresentation(questionData) {
+        const questionElement = this.elements.questionText;
+        if (questionElement) {
+            // Add reveal animation
+            questionElement.classList.add('question-reveal');
+            setTimeout(() => {
+                questionElement.classList.remove('question-reveal');
+            }, 1000);
+        }
+
+        // Subtle haptic feedback
+        this.triggerHapticFeedback('tap');
     }
 }
 

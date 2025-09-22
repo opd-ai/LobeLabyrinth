@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LobeLabyrinth - A MindMaze Adventure</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Navigate the castle of knowledge through wisdom and wit in this medieval-themed educational game">
+    <meta name="theme-color" content="#D4AF37">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="LobeLabyrinth">
+    <meta name="mobile-web-app-capable" content="yes">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyIiBoZWlnaHQ9IjE5MiIgdmlld0JveD0iMCAwIDE5MiAxOTIiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxOTIiIGhlaWdodD0iMTkyIiBmaWxsPSIjMkMxODEwIiByeD0iMjQiLz4KPHN2ZyB4PSI0OCIgeT0iNDgiIHdpZHRoPSI5NiIgaGVpZ2h0PSI5NiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjRDRBRjM3Ij4KPHA+8J+PsD48L3A+Cjwvc3ZnPgo8L3N2Zz4K">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="css/game.css">
     <link rel="stylesheet" href="css/achievements.css">
     <link rel="stylesheet" href="css/victory.css">
@@ -304,6 +320,7 @@
     <script src="src/achievementManager.js"></script>
     <script src="src/mapRenderer.js"></script>
     <script src="src/uiManager.js"></script>
+    <script src="src/errorBoundary.js"></script>
 
     <script>
         // Global game instances
@@ -314,10 +331,16 @@
         let achievementManager;
         let mapRenderer;
         let uiManager;
+        let errorBoundary;
 
         // Initialize the complete game
         async function initializeGame() {
             try {
+                updateGameStatus('Initializing error boundary...');
+                
+                // Initialize error boundary first
+                errorBoundary = new ErrorBoundary();
+                
                 updateGameStatus('Loading game data...');
                 
                 // Initialize core modules
@@ -326,6 +349,9 @@
                 
                 updateGameStatus('Initializing game state...');
                 gameState = new GameState(dataLoader);
+                
+                // Initialize error boundary with game references
+                errorBoundary.gameState = gameState;
                 
                 updateGameStatus('Setting up quiz engine...');
                 quizEngine = new QuizEngine(dataLoader, gameState);
@@ -352,6 +378,9 @@
                 
                 updateGameStatus('Creating user interface...');
                 uiManager = new UIManager(dataLoader, gameState, quizEngine, animationManager, achievementManager);
+                
+                // Connect error boundary to UI manager for better error handling
+                errorBoundary.uiManager = uiManager;
                 
                 // Try to load saved game
                 if (gameState.loadGame()) {
@@ -388,11 +417,40 @@
             animationManager: () => animationManager,
             achievementManager: () => achievementManager,
             mapRenderer: () => mapRenderer,
-            uiManager: () => uiManager
+            uiManager: () => uiManager,
+            errorBoundary: () => errorBoundary
         };
 
         // Initialize game when page loads
         document.addEventListener('DOMContentLoaded', initializeGame);
+
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('🚀 PWA: Service Worker registered successfully', registration.scope);
+                    
+                    // Handle service worker updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        if (newWorker) {
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Show update notification
+                                    if (uiManager) {
+                                        uiManager.showTooltip('🔄 New version available! Refresh to update.', 5000);
+                                    }
+                                }
+                            });
+                        }
+                    });
+                    
+                } catch (error) {
+                    console.warn('⚠️ PWA: Service Worker registration failed:', error);
+                }
+            });
+        }
 
         // Handle page unload to save game
         window.addEventListener('beforeunload', () => {

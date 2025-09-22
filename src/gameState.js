@@ -5,10 +5,10 @@
 class GameState {
     constructor(dataLoader) {
         this.dataLoader = dataLoader;
-        this.currentRoomId = 'entrance';
+        this.currentRoomId = null; // Will be set after data loads
         this.score = 0;
-        this.visitedRooms = new Set(['entrance']);
-        this.unlockedRooms = new Set(['entrance']);
+        this.visitedRooms = new Set();
+        this.unlockedRooms = new Set();
         this.answeredQuestions = new Set();
         this.startTime = Date.now();
         this.currentRoomStartTime = Date.now(); // Track time in current room
@@ -17,10 +17,41 @@ class GameState {
         this.isPaused = false;
         this.pausedTime = 0;
         
+        // Initialize starting room after construction
+        this.initializeStartingRoom();
+        
         // Event system for state changes
         this.eventListeners = {};
         
         console.log('GameState initialized:', this.getStateSnapshot());
+    }
+
+    /**
+     * Initialize the starting room based on data from dataLoader
+     */
+    initializeStartingRoom() {
+        try {
+            const startingRoom = this.dataLoader.getStartingRoom();
+            if (startingRoom) {
+                this.currentRoomId = startingRoom.id;
+                this.visitedRooms.add(startingRoom.id);
+                this.unlockedRooms.add(startingRoom.id);
+                console.log(`Starting room initialized: ${startingRoom.id} (${startingRoom.name})`);
+            } else {
+                console.error('No starting room found in data!');
+                // Fallback to first room if no starting room marked
+                const gameData = this.dataLoader.getAllData();
+                if (gameData.rooms && gameData.rooms.length > 0) {
+                    const firstRoom = gameData.rooms[0];
+                    this.currentRoomId = firstRoom.id;
+                    this.visitedRooms.add(firstRoom.id);
+                    this.unlockedRooms.add(firstRoom.id);
+                    console.warn(`Using first room as fallback: ${firstRoom.id}`);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to initialize starting room:', error);
+        }
     }
 
     /**
@@ -405,10 +436,14 @@ class GameState {
 
             const data = JSON.parse(saveData);
             
-            this.currentRoomId = data.currentRoomId || 'entrance';
+            // Get the actual starting room as fallback
+            const startingRoom = this.dataLoader.getStartingRoom();
+            const defaultRoomId = startingRoom ? startingRoom.id : null;
+            
+            this.currentRoomId = data.currentRoomId || defaultRoomId;
             this.score = data.score || 0;
-            this.visitedRooms = new Set(data.visitedRooms || ['entrance']);
-            this.unlockedRooms = new Set(data.unlockedRooms || ['entrance']);
+            this.visitedRooms = new Set(data.visitedRooms || (defaultRoomId ? [defaultRoomId] : []));
+            this.unlockedRooms = new Set(data.unlockedRooms || (defaultRoomId ? [defaultRoomId] : []));
             this.answeredQuestions = new Set(data.answeredQuestions || []);
             this.startTime = data.startTime || Date.now();
             this.gameCompleted = data.gameCompleted || false;

@@ -350,9 +350,8 @@ class UIManager {
             const result = await this.quizEngine.validateAnswer(answerIndex);
             
             // Animate answer feedback if animation manager is available
-            if (this.animationManager && clickedButton) {
-                const isCorrect = result?.correct || false;
-                await this.animationManager.animateAnswerFeedback(clickedButton, isCorrect);
+            if (this.animationManager && clickedButton && result) {
+                await this.animationManager.animateAnswerFeedback(clickedButton, result.isCorrect);
             }
             
         } catch (error) {

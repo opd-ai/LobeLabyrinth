@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - Phase 6.1 Animation Manager Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .test-header h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .test-header p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-section h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .test-section h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        /* Test Controls */
+        .test-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .control-group h4 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 3px;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+            min-width: 120px;
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #48bb78;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-warning {
+            background: #ed8936;
+        }
+
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+
+        .btn-danger {
+            background: #f56565;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        /* Animation Test Areas */
+        .animation-target {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            text-align: center;
+            transition: all 0.3s ease;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .score-display {
+            font-size: 2em;
+            color: #2b6cb0;
+            font-weight: bold;
+        }
+
+        .answer-button {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            color: #2d3748;
+            padding: 15px 20px;
+            margin: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1em;
+        }
+
+        .answer-button:hover {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+        }
+
+        .room-transition-area {
+            background: #edf2f7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px 0;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1em;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* Status Display */
+        .status-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .status-value {
+            font-weight: bold;
+            color: #2b6cb0;
+        }
+
+        /* Performance Metrics */
+        .performance-metrics {
+            background: #f0fff4;
+            border: 1px solid #68d391;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .performance-metrics h3 {
+            color: #22543d;
+            margin-bottom: 10px;
+        }
+
+        .metric-item {
+            margin: 8px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #c6f6d5;
+        }
+
+        .metric-item:last-child {
+            border-bottom: none;
+        }
+
+        /* Console Output */
+        .console-output {
+            background: #1a202c;
+            color: #a0aec0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .console-output .log-error {
+            color: #fc8181;
+        }
+
+        .console-output .log-warn {
+            color: #f6e05e;
+        }
+
+        .console-output .log-success {
+            color: #68d391;
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            .animation-target,
+            .room-transition-area,
+            button {
+                transition: none;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .test-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .control-group {
+                text-align: center;
+            }
+            
+            button {
+                display: block;
+                width: 100%;
+                margin: 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>✨ Phase 6.1: Animation Manager Test</h1>
+            <p>Testing smooth animations, visual feedback, and performance optimization</p>
+        </div>
+
+        <!-- Animation Status -->
+        <div class="test-section">
+            <h2>📊 Animation Manager Status</h2>
+            <div class="status-display">
+                <div class="status-item">
+                    <span>Animation Manager:</span>
+                    <span class="status-value" id="status-manager">Initializing...</span>
+                </div>
+                <div class="status-item">
+                    <span>Reduced Motion:</span>
+                    <span class="status-value" id="status-reduced-motion">Checking...</span>
+                </div>
+                <div class="status-item">
+                    <span>Active Animations:</span>
+                    <span class="status-value" id="status-active">0</span>
+                </div>
+                <div class="status-item">
+                    <span>Total Animations:</span>
+                    <span class="status-value" id="status-total">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Score Animation Tests -->
+        <div class="test-section">
+            <h2>🎯 Score Animation Tests</h2>
+            <div class="animation-target">
+                <div>
+                    <div>Current Score:</div>
+                    <div class="score-display" id="score-display">0</div>
+                </div>
+            </div>
+            <div class="test-controls">
+                <div class="control-group">
+                    <h4>Score Increments</h4>
+                    <button onclick="testScoreAnimation(50)">+50 Points</button>
+                    <button onclick="testScoreAnimation(100)">+100 Points</button>
+                    <button onclick="testScoreAnimation(250)">+250 Points</button>
+                    <button onclick="testScoreAnimation(500)">+500 Points</button>
+                </div>
+                <div class="control-group">
+                    <h4>Score Operations</h4>
+                    <button onclick="testRandomScore()" class="btn-warning">Random Score</button>
+                    <button onclick="testLargeScore()" class="btn-warning">Large Increment</button>
+                    <button onclick="resetScore()" class="btn-danger">Reset Score</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Answer Feedback Tests -->
+        <div class="test-section">
+            <h2>✅ Answer Feedback Tests</h2>
+            <h3>Click buttons to test answer feedback animations:</h3>
+            <div style="text-align: center;">
+                <button class="answer-button" onclick="testAnswerFeedback(this, true)">
+                    Correct Answer (Click Me)
+                </button>
+                <button class="answer-button" onclick="testAnswerFeedback(this, false)">
+                    Incorrect Answer (Click Me)
+                </button>
+                <button class="answer-button" onclick="testAnswerFeedback(this, true)">
+                    Another Correct
+                </button>
+                <button class="answer-button" onclick="testAnswerFeedback(this, false)">
+                    Another Incorrect
+                </button>
+            </div>
+            <div class="test-controls">
+                <div class="control-group">
+                    <h4>Batch Tests</h4>
+                    <button onclick="testMultipleAnswers(true)" class="btn-success">Test All Correct</button>
+                    <button onclick="testMultipleAnswers(false)" class="btn-danger">Test All Incorrect</button>
+                    <button onclick="testRandomAnswers()" class="btn-warning">Random Sequence</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Room Transition Tests -->
+        <div class="test-section">
+            <h2>🏰 Room Transition Tests</h2>
+            <div class="room-transition-area" id="room-transition-area">
+                <div>
+                    <h3 id="room-name">Entrance Hall</h3>
+                    <p id="room-description">A grand hall with marble columns and ancient tapestries.</p>
+                </div>
+            </div>
+            <div class="test-controls">
+                <div class="control-group">
+                    <h4>Room Navigation</h4>
+                    <button onclick="testRoomTransition('Library', 'Towering shelves filled with ancient knowledge.')">To Library</button>
+                    <button onclick="testRoomTransition('Observatory', 'Celestial dome with telescopes and star charts.')">To Observatory</button>
+                    <button onclick="testRoomTransition('Throne Room', 'Majestic chamber with golden throne.')">To Throne Room</button>
+                    <button onclick="testRoomTransition('Entrance Hall', 'A grand hall with marble columns.')">Back to Entrance</button>
+                </div>
+                <div class="control-group">
+                    <h4>Transition Options</h4>
+                    <button onclick="testFastTransition()" class="btn-warning">Fast Transition</button>
+                    <button onclick="testSlowTransition()" class="btn-warning">Slow Transition</button>
+                    <button onclick="testRandomTransitions()" class="btn-warning">Random Sequence</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Achievement Animation Tests -->
+        <div class="test-section">
+            <h2>🏆 Achievement Animation Tests</h2>
+            <div id="achievement-container" style="position: relative; min-height: 100px;">
+                <p style="text-align: center; color: #718096; margin-top: 40px;">
+                    Click buttons below to test achievement notifications
+                </p>
+            </div>
+            <div class="test-controls">
+                <div class="control-group">
+                    <h4>Achievement Types</h4>
+                    <button onclick="testAchievement('first_question')" class="btn-success">First Question</button>
+                    <button onclick="testAchievement('explorer')" class="btn-success">Room Explorer</button>
+                    <button onclick="testAchievement('master')" class="btn-success">Knowledge Master</button>
+                    <button onclick="testAchievement('speed')" class="btn-success">Speed Demon</button>
+                </div>
+                <div class="control-group">
+                    <h4>Achievement Tests</h4>
+                    <button onclick="testMultipleAchievements()" class="btn-warning">Multiple Achievements</button>
+                    <button onclick="testCustomAchievement()" class="btn-warning">Custom Achievement</button>
+                    <button onclick="clearAchievements()" class="btn-danger">Clear All</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Performance Tests -->
+        <div class="test-section">
+            <h2>⚡ Performance Tests</h2>
+            <div class="test-controls">
+                <div class="control-group">
+                    <h4>Performance Testing</h4>
+                    <button onclick="runPerformanceTest()" class="btn-warning">Run Performance Test</button>
+                    <button onclick="runStressTest()" class="btn-warning">Stress Test (10 animations)</button>
+                    <button onclick="testMemoryUsage()" class="btn-warning">Memory Usage Test</button>
+                    <button onclick="getPerformanceMetrics()">Get Metrics</button>
+                </div>
+                <div class="control-group">
+                    <h4>Animation Control</h4>
+                    <button onclick="cancelAllAnimations()" class="btn-danger">Cancel All Animations</button>
+                    <button onclick="toggleReducedMotion()" class="btn-warning">Toggle Reduced Motion</button>
+                    <button onclick="resetAnimationManager()">Reset Manager</button>
+                </div>
+            </div>
+            <div id="performance-results" class="performance-metrics" style="display: none;">
+                <h3>Performance Results</h3>
+                <div id="performance-content"></div>
+            </div>
+        </div>
+
+        <!-- Automated Tests -->
+        <div class="test-section">
+            <h2>🧪 Automated Test Suite</h2>
+            <button onclick="runAllTests()" class="btn-success" style="margin-bottom: 15px; font-size: 1.1em; padding: 15px 30px;">
+                🚀 Run Complete Test Suite
+            </button>
+            <div id="test-results" style="display: none;">
+                <h3>Test Results</h3>
+                <div id="test-results-content"></div>
+            </div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="test-section">
+            <h2>📝 Console Output</h2>
+            <button onclick="clearConsole()" style="margin-bottom: 10px;">Clear Console</button>
+            <div id="console-output" class="console-output">
+                <div>Animation Manager Test Console - Waiting for initialization...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load AnimationManager -->
+    <script src="src/animationManager.js"></script>
+
+    <script>
+        // Global test variables
+        let animationManager;
+        let currentScore = 0;
+        let consoleOutput = [];
+
+        // Test console logging
+        function logToConsole(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            consoleOutput.push({ message: logEntry, type });
+            
+            updateConsoleDisplay();
+            console.log(message);
+        }
+
+        function updateConsoleDisplay() {
+            const consoleElement = document.getElementById('console-output');
+            const maxEntries = 50;
+            
+            if (consoleOutput.length > maxEntries) {
+                consoleOutput = consoleOutput.slice(-maxEntries);
+            }
+            
+            consoleElement.innerHTML = consoleOutput
+                .map(entry => `<div class="log-${entry.type}">${entry.message}</div>`)
+                .join('');
+            
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        }
+
+        function clearConsole() {
+            consoleOutput = [];
+            updateConsoleDisplay();
+        }
+
+        // Initialize Animation Manager
+        function initializeAnimationManager() {
+            try {
+                logToConsole('Initializing AnimationManager...', 'info');
+                
+                animationManager = new AnimationManager({
+                    defaultDuration: 800,
+                    easing: 'ease-out'
+                });
+                
+                updateStatus();
+                logToConsole('✅ AnimationManager initialized successfully', 'success');
+                
+            } catch (error) {
+                logToConsole(`❌ Failed to initialize AnimationManager: ${error.message}`, 'error');
+                document.getElementById('status-manager').textContent = 'Error';
+            }
+        }
+
+        function updateStatus() {
+            if (!animationManager) return;
+            
+            const metrics = animationManager.getPerformanceMetrics();
+            document.getElementById('status-manager').textContent = 'Ready';
+            document.getElementById('status-reduced-motion').textContent = metrics.reducedMotion ? 'Yes' : 'No';
+            document.getElementById('status-active').textContent = metrics.activeAnimations;
+            document.getElementById('status-total').textContent = metrics.animationsStarted;
+        }
+
+        // Score Animation Tests
+        async function testScoreAnimation(increment) {
+            try {
+                const scoreElement = document.getElementById('score-display');
+                const oldScore = currentScore;
+                currentScore += increment;
+                
+                logToConsole(`Testing score animation: ${oldScore} → ${currentScore}`, 'info');
+                await animationManager.animateScoreIncrease(scoreElement, oldScore, currentScore);
+                logToConsole('✅ Score animation completed', 'success');
+                updateStatus();
+                
+            } catch (error) {
+                logToConsole(`❌ Score animation failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRandomScore() {
+            const increment = Math.floor(Math.random() * 500) + 50;
+            await testScoreAnimation(increment);
+        }
+
+        async function testLargeScore() {
+            await testScoreAnimation(1000);
+        }
+
+        function resetScore() {
+            currentScore = 0;
+            document.getElementById('score-display').textContent = '0';
+            logToConsole('Score reset to 0', 'info');
+        }
+
+        // Answer Feedback Tests
+        async function testAnswerFeedback(button, isCorrect) {
+            try {
+                logToConsole(`Testing answer feedback: ${isCorrect ? 'correct' : 'incorrect'}`, 'info');
+                await animationManager.animateAnswerFeedback(isCorrect, button);
+                logToConsole('✅ Answer feedback animation completed', 'success');
+                updateStatus();
+                
+            } catch (error) {
+                logToConsole(`❌ Answer feedback failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testMultipleAnswers(isCorrect) {
+            const buttons = document.querySelectorAll('.answer-button');
+            logToConsole(`Testing multiple ${isCorrect ? 'correct' : 'incorrect'} answers`, 'info');
+            
+            for (let i = 0; i < buttons.length; i++) {
+                setTimeout(() => {
+                    testAnswerFeedback(buttons[i], isCorrect);
+                }, i * 300);
+            }
+        }
+
+        async function testRandomAnswers() {
+            const buttons = document.querySelectorAll('.answer-button');
+            logToConsole('Testing random answer sequence', 'info');
+            
+            buttons.forEach((button, index) => {
+                setTimeout(() => {
+                    testAnswerFeedback(button, Math.random() > 0.5);
+                }, index * 400);
+            });
+        }
+
+        // Room Transition Tests
+        async function testRoomTransition(roomName, description) {
+            try {
+                const roomArea = document.getElementById('room-transition-area');
+                const nameElement = document.getElementById('room-name');
+                const descElement = document.getElementById('room-description');
+                
+                logToConsole(`Testing room transition to: ${roomName}`, 'info');
+                
+                // Animate transition
+                await animationManager.animateRoomTransition(roomArea, {
+                    from: nameElement.textContent,
+                    to: roomName
+                });
+                
+                // Update content during transition
+                nameElement.textContent = roomName;
+                descElement.textContent = description;
+                
+                logToConsole('✅ Room transition completed', 'success');
+                updateStatus();
+                
+            } catch (error) {
+                logToConsole(`❌ Room transition failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testFastTransition() {
+            const roomArea = document.getElementById('room-transition-area');
+            await animationManager.animateRoomTransition(roomArea, {
+                from: 'Current',
+                to: 'Fast Room'
+            }, { duration: 200 });
+            
+            document.getElementById('room-name').textContent = 'Fast Transition Test';
+            document.getElementById('room-description').textContent = 'This was a fast transition!';
+        }
+
+        async function testSlowTransition() {
+            const roomArea = document.getElementById('room-transition-area');
+            await animationManager.animateRoomTransition(roomArea, {
+                from: 'Current',
+                to: 'Slow Room'
+            }, { duration: 2000 });
+            
+            document.getElementById('room-name').textContent = 'Slow Transition Test';
+            document.getElementById('room-description').textContent = 'This was a slow transition!';
+        }
+
+        async function testRandomTransitions() {
+            const rooms = [
+                ['Library', 'Ancient books and scrolls'],
+                ['Observatory', 'Stars and celestial wonders'],
+                ['Dungeon', 'Dark and mysterious chambers'],
+                ['Treasury', 'Gold and precious treasures']
+            ];
+            
+            for (let i = 0; i < 3; i++) {
+                const [name, desc] = rooms[Math.floor(Math.random() * rooms.length)];
+                setTimeout(() => {
+                    testRoomTransition(name, desc);
+                }, i * 1000);
+            }
+        }
+
+        // Achievement Tests
+        const achievementData = {
+            first_question: {
+                name: 'First Steps',
+                description: 'Answer your first question correctly',
+                icon: '🎯',
+                points: 50
+            },
+            explorer: {
+                name: 'Castle Explorer',
+                description: 'Visit 5 different rooms',
+                icon: '🗺️',
+                points: 100
+            },
+            master: {
+                name: 'Knowledge Master',
+                description: 'Answer 20 questions correctly',
+                icon: '🧠',
+                points: 200
+            },
+            speed: {
+                name: 'Speed Demon',
+                description: 'Answer 3 questions in under 30 seconds',
+                icon: '⚡',
+                points: 150
+            }
+        };
+
+        async function testAchievement(achievementId) {
+            try {
+                const achievement = achievementData[achievementId];
+                const container = document.getElementById('achievement-container');
+                
+                logToConsole(`Testing achievement: ${achievement.name}`, 'info');
+                await animationManager.animateAchievementUnlock(achievement, container);
+                logToConsole('✅ Achievement animation completed', 'success');
+                updateStatus();
+                
+            } catch (error) {
+                logToConsole(`❌ Achievement animation failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function testMultipleAchievements() {
+            const achievements = Object.keys(achievementData);
+            logToConsole('Testing multiple achievements', 'info');
+            
+            for (let i = 0; i < achievements.length; i++) {
+                setTimeout(() => {
+                    testAchievement(achievements[i]);
+                }, i * 1500);
+            }
+        }
+
+        async function testCustomAchievement() {
+            const customAchievement = {
+                name: 'Test Master',
+                description: 'Successfully test all animations',
+                icon: '🧪',
+                points: 300
+            };
+            
+            const container = document.getElementById('achievement-container');
+            await animationManager.animateAchievementUnlock(customAchievement, container);
+        }
+
+        function clearAchievements() {
+            const container = document.getElementById('achievement-container');
+            const notifications = container.querySelectorAll('.achievement-notification');
+            notifications.forEach(notification => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            });
+            logToConsole('All achievement notifications cleared', 'info');
+        }
+
+        // Performance Tests
+        async function runPerformanceTest() {
+            try {
+                logToConsole('Starting performance test...', 'info');
+                const results = await animationManager.testPerformance(5);
+                
+                const resultsDiv = document.getElementById('performance-results');
+                const contentDiv = document.getElementById('performance-content');
+                
+                contentDiv.innerHTML = `
+                    <div class="metric-item">
+                        <strong>Iterations:</strong> ${results.iterations}
+                    </div>
+                    <div class="metric-item">
+                        <strong>Total Time:</strong> ${results.totalTime}ms
+                    </div>
+                    <div class="metric-item">
+                        <strong>Average Time:</strong> ${results.averageTime}ms
+                    </div>
+                    <div class="metric-item">
+                        <strong>Performance:</strong> ${results.performance}
+                    </div>
+                `;
+                
+                resultsDiv.style.display = 'block';
+                logToConsole(`✅ Performance test completed: ${results.performance}`, 'success');
+                
+            } catch (error) {
+                logToConsole(`❌ Performance test failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function runStressTest() {
+            logToConsole('Starting stress test with 10 simultaneous animations...', 'info');
+            const promises = [];
+            
+            for (let i = 0; i < 10; i++) {
+                const testElement = document.createElement('div');
+                testElement.textContent = '0';
+                testElement.style.position = 'absolute';
+                testElement.style.top = '-100px';
+                document.body.appendChild(testElement);
+                
+                promises.push(
+                    animationManager.animateScoreIncrease(testElement, 0, 100, 500)
+                        .finally(() => document.body.removeChild(testElement))
+                );
+            }
+            
+            try {
+                await Promise.all(promises);
+                logToConsole('✅ Stress test completed successfully', 'success');
+            } catch (error) {
+                logToConsole(`❌ Stress test failed: ${error.message}`, 'error');
+            }
+        }
+
+        function testMemoryUsage() {
+            if (performance.memory) {
+                const memory = performance.memory;
+                logToConsole(`Memory usage - Used: ${Math.round(memory.usedJSHeapSize / 1024 / 1024)}MB, Total: ${Math.round(memory.totalJSHeapSize / 1024 / 1024)}MB`, 'info');
+            } else {
+                logToConsole('Memory usage information not available in this browser', 'warn');
+            }
+        }
+
+        function getPerformanceMetrics() {
+            const metrics = animationManager.getPerformanceMetrics();
+            logToConsole('Performance metrics:', 'info');
+            logToConsole(JSON.stringify(metrics, null, 2), 'info');
+        }
+
+        function cancelAllAnimations() {
+            animationManager.cancelAllAnimations();
+            logToConsole('All animations cancelled', 'info');
+            updateStatus();
+        }
+
+        function toggleReducedMotion() {
+            animationManager.reducedMotion = !animationManager.reducedMotion;
+            logToConsole(`Reduced motion ${animationManager.reducedMotion ? 'enabled' : 'disabled'}`, 'info');
+            updateStatus();
+        }
+
+        function resetAnimationManager() {
+            animationManager.cancelAllAnimations();
+            animationManager.performanceMetrics = {
+                animationsStarted: 0,
+                animationsCompleted: 0,
+                totalDuration: 0
+            };
+            logToConsole('Animation manager reset', 'info');
+            updateStatus();
+        }
+
+        // Automated Test Suite
+        async function runAllTests() {
+            logToConsole('🚀 Starting complete animation test suite...', 'info');
+            const results = [];
+            
+            try {
+                // Test 1: AnimationManager initialization
+                results.push({
+                    name: 'AnimationManager Initialization',
+                    passed: animationManager !== null && animationManager !== undefined,
+                    message: animationManager ? 'AnimationManager initialized successfully' : 'AnimationManager failed to initialize'
+                });
+
+                // Test 2: Score animation
+                const testElement = document.createElement('div');
+                testElement.textContent = '0';
+                testElement.style.position = 'absolute';
+                testElement.style.top = '-100px';
+                document.body.appendChild(testElement);
+                
+                try {
+                    await animationManager.animateScoreIncrease(testElement, 0, 100, 200);
+                    results.push({
+                        name: 'Score Animation',
+                        passed: true,
+                        message: 'Score animation completed successfully'
+                    });
+                } catch (error) {
+                    results.push({
+                        name: 'Score Animation',
+                        passed: false,
+                        message: `Score animation failed: ${error.message}`
+                    });
+                } finally {
+                    document.body.removeChild(testElement);
+                }
+
+                // Test 3: Answer feedback
+                const buttonTest = document.createElement('button');
+                buttonTest.style.position = 'absolute';
+                buttonTest.style.top = '-100px';
+                document.body.appendChild(buttonTest);
+                
+                try {
+                    await animationManager.animateAnswerFeedback(true, buttonTest);
+                    results.push({
+                        name: 'Answer Feedback Animation',
+                        passed: true,
+                        message: 'Answer feedback animation completed successfully'
+                    });
+                } catch (error) {
+                    results.push({
+                        name: 'Answer Feedback Animation',
+                        passed: false,
+                        message: `Answer feedback animation failed: ${error.message}`
+                    });
+                } finally {
+                    document.body.removeChild(buttonTest);
+                }
+
+                // Test 4: Performance metrics
+                const metrics = animationManager.getPerformanceMetrics();
+                results.push({
+                    name: 'Performance Metrics',
+                    passed: typeof metrics === 'object' && metrics.animationsStarted !== undefined,
+                    message: metrics ? 'Performance metrics available' : 'Performance metrics not available'
+                });
+
+                // Test 5: Reduced motion detection
+                results.push({
+                    name: 'Reduced Motion Detection',
+                    passed: typeof animationManager.reducedMotion === 'boolean',
+                    message: `Reduced motion detection working: ${animationManager.reducedMotion}`
+                });
+
+                displayTestResults(results);
+                
+            } catch (error) {
+                logToConsole(`❌ Test suite execution failed: ${error.message}`, 'error');
+            }
+        }
+
+        function displayTestResults(results) {
+            const resultsContainer = document.getElementById('test-results');
+            const resultsContent = document.getElementById('test-results-content');
+            
+            const passedTests = results.filter(r => r.passed).length;
+            const totalTests = results.length;
+            
+            resultsContent.innerHTML = `
+                <div style="margin-bottom: 15px; font-weight: bold; color: ${passedTests === totalTests ? '#22543d' : '#744210'}">
+                    Tests Passed: ${passedTests}/${totalTests} (${Math.round(passedTests/totalTests*100)}%)
+                </div>
+                ${results.map(result => `
+                    <div class="metric-item" style="color: ${result.passed ? '#22543d' : '#742a2a'}">
+                        <strong>${result.passed ? '✅' : '❌'} ${result.name}</strong><br>
+                        <small>${result.message}</small>
+                    </div>
+                `).join('')}
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            logToConsole(`🧪 Test suite completed: ${passedTests}/${totalTests} tests passed`, 'success');
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeAnimationManager();
+            
+            // Update status every 2 seconds
+            setInterval(updateStatus, 2000);
+        });
+
+        // Global access for debugging
+        window.animationTestManager = {
+            animationManager: () => animationManager,
+            testScoreAnimation,
+            testAnswerFeedback,
+            testRoomTransition,
+            testAchievement,
+            runPerformanceTest
+        };
+    </script>
+</body>
+</html>

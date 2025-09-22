@@ -588,7 +588,16 @@ announceToScreenReader(message) {
 
 ### **Issue**: Color-Only Information
 **WCAG Criterion**: 1.4.1 Use of Color  
+**Status**: RESOLVED (Commit: febd37b - 2025-09-22)
 **Location**: Timer bar color changes and room state indicators  
+**Resolution**:
+- Added urgency text indicators to timer display ("URGENT", "Warning" labels)
+- Implemented consistent timer styling classes (timer-urgent, timer-warning) 
+- Added visual icons (✓/🔒) and descriptive tooltips for room connection states
+- Replaced color-only timer warnings with accessible text/icon combinations
+- Enhanced timer bar and text consistency with unified urgency logic
+- Ensured full WCAG 1.4.1 compliance by avoiding color-only information conveyance
+
 **Fix**: Add text/icon indicators alongside color changes
 ```javascript
 updateTimerDisplay(timeData) {

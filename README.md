@@ -52,9 +52,10 @@ LobeLabyrinth/
 - **Features**: Complete working UI with HTML structure and UIManager
 - **Play**: `game.html`
 
-### 🚧 Phase 5: Castle Map Visualization (In Progress)
-- **Goal**: Visual map navigation with castle layout
-- **Features**: Map renderer, navigation controls, room highlighting
+### ✅ Phase 5: Castle Map Visualization  
+- **Status**: Completed
+- **Features**: Visual map navigation with canvas-based room display, click navigation, real-time state updates
+- **Test**: `test-phase5.html`
 
 ### 📋 Phase 6: Polish and Game Flow (Planned)
 - **Goal**: Enhanced user experience

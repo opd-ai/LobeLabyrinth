@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - Phase 5 Map Renderer Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .test-header h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .test-header p {
+            color: #718096;
+            font-size: 1.1em;
+        }
+
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .test-section h2 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .test-section h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        /* Map Container */
+        .map-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        #test-map-canvas {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #f7fafc;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .map-legend {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            font-size: 0.9em;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid #cbd5e0;
+        }
+
+        .legend-current { background-color: #3182ce; }
+        .legend-visited { background-color: #48bb78; }
+        .legend-accessible { background-color: #ed8936; }
+        .legend-locked { background-color: #a0aec0; }
+
+        /* Test Controls */
+        .test-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .control-group h4 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin: 2px;
+            transition: all 0.2s ease;
+            font-size: 0.9em;
+        }
+
+        button:hover {
+            background: #5a67d8;
+            transform: translateY(-1px);
+        }
+
+        button:disabled {
+            background: #a0aec0;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: #48bb78;
+        }
+
+        .btn-success:hover {
+            background: #38a169;
+        }
+
+        .btn-warning {
+            background: #ed8936;
+        }
+
+        .btn-warning:hover {
+            background: #dd6b20;
+        }
+
+        .btn-danger {
+            background: #f56565;
+        }
+
+        .btn-danger:hover {
+            background: #e53e3e;
+        }
+
+        /* Status Display */
+        .status-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+
+        .status-value {
+            font-weight: bold;
+            color: #2b6cb0;
+        }
+
+        /* Test Results */
+        .test-results {
+            background: #f0fff4;
+            border: 1px solid #68d391;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        .test-results h3 {
+            color: #22543d;
+            margin-bottom: 10px;
+        }
+
+        .test-item {
+            margin: 8px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #c6f6d5;
+        }
+
+        .test-item:last-child {
+            border-bottom: none;
+        }
+
+        .test-pass {
+            color: #22543d;
+        }
+
+        .test-fail {
+            color: #742a2a;
+        }
+
+        /* Console Output */
+        .console-output {
+            background: #1a202c;
+            color: #a0aec0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            max-height: 200px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+
+        .console-output .log-error {
+            color: #fc8181;
+        }
+
+        .console-output .log-warn {
+            color: #f6e05e;
+        }
+
+        .console-output .log-success {
+            color: #68d391;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <div class="test-header">
+            <h1>🗺️ Phase 5: Castle Map Renderer Test</h1>
+            <p>Testing the MapRenderer class functionality and canvas-based room visualization</p>
+        </div>
+
+        <!-- Map Display Test -->
+        <div class="test-section">
+            <h2>🎨 Map Rendering Test</h2>
+            <div class="map-container">
+                <canvas id="test-map-canvas" width="800" height="400"></canvas>
+                <div class="map-legend">
+                    <div class="legend-item">
+                        <div class="legend-color legend-current"></div>
+                        <span>Current Room</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-visited"></div>
+                        <span>Visited</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-accessible"></div>
+                        <span>Accessible</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color legend-locked"></div>
+                        <span>Locked</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Controls -->
+        <div class="test-section">
+            <h2>🎮 Interactive Test Controls</h2>
+            <div class="test-controls">
+                <!-- Room Navigation -->
+                <div class="control-group">
+                    <h4>Room Navigation</h4>
+                    <button id="move-library" onclick="testMoveToRoom('library')">Move to Library</button>
+                    <button id="move-armory" onclick="testMoveToRoom('armory')">Move to Armory</button>
+                    <button id="move-observatory" onclick="testMoveToRoom('observatory')">Move to Observatory</button>
+                    <button id="move-throne" onclick="testMoveToRoom('throne_room')">Move to Throne Room</button>
+                    <button id="reset-position" onclick="testMoveToRoom('entrance_hall')">Reset to Entrance</button>
+                </div>
+
+                <!-- Room Unlocking -->
+                <div class="control-group">
+                    <h4>Room Unlocking</h4>
+                    <button onclick="testUnlockRoom('library')" class="btn-success">Unlock Library</button>
+                    <button onclick="testUnlockRoom('armory')" class="btn-success">Unlock Armory</button>
+                    <button onclick="testUnlockRoom('observatory')" class="btn-success">Unlock Observatory</button>
+                    <button onclick="testUnlockRoom('throne_room')" class="btn-success">Unlock Throne Room</button>
+                    <button onclick="testUnlockAllRooms()" class="btn-success">Unlock All</button>
+                </div>
+
+                <!-- Visual Tests -->
+                <div class="control-group">
+                    <h4>Visual Tests</h4>
+                    <button onclick="testRenderRefresh()" class="btn-warning">Refresh Map</button>
+                    <button onclick="testClickDetection()" class="btn-warning">Test Click Detection</button>
+                    <button onclick="testHoverEffects()" class="btn-warning">Test Hover Effects</button>
+                    <button onclick="testAnimations()" class="btn-warning">Test Animations</button>
+                </div>
+
+                <!-- Debug Actions -->
+                <div class="control-group">
+                    <h4>Debug Actions</h4>
+                    <button onclick="getRendererState()">Get Renderer State</button>
+                    <button onclick="getGameState()">Get Game State</button>
+                    <button onclick="testErrorHandling()" class="btn-danger">Test Error Handling</button>
+                    <button onclick="clearConsole()">Clear Console</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Display -->
+        <div class="test-section">
+            <h2>📊 Current Game State</h2>
+            <div class="status-display">
+                <div class="status-item">
+                    <span>Current Room:</span>
+                    <span class="status-value" id="status-current-room">entrance_hall</span>
+                </div>
+                <div class="status-item">
+                    <span>Visited Rooms:</span>
+                    <span class="status-value" id="status-visited-rooms">1</span>
+                </div>
+                <div class="status-item">
+                    <span>Unlocked Rooms:</span>
+                    <span class="status-value" id="status-unlocked-rooms">1</span>
+                </div>
+                <div class="status-item">
+                    <span>Map Renderer Status:</span>
+                    <span class="status-value" id="status-renderer">Initializing...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Automated Test Results -->
+        <div class="test-section">
+            <h2>🧪 Automated Test Results</h2>
+            <button onclick="runAllTests()" class="btn-success" style="margin-bottom: 15px;">Run All Tests</button>
+            <div id="test-results" class="test-results" style="display: none;">
+                <h3>Test Results</h3>
+                <div id="test-results-content"></div>
+            </div>
+        </div>
+
+        <!-- Console Output -->
+        <div class="test-section">
+            <h2>📝 Console Output</h2>
+            <div id="console-output" class="console-output">
+                <div>MapRenderer Test Console - Waiting for initialization...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load game modules -->
+    <script src="src/dataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+    <script src="src/mapRenderer.js"></script>
+
+    <script>
+        // Global test instances
+        let dataLoader;
+        let gameState;
+        let mapRenderer;
+        let testCanvas;
+
+        // Test console logging
+        let consoleOutput = [];
+
+        function logToConsole(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            consoleOutput.push({ message: logEntry, type });
+            
+            updateConsoleDisplay();
+            
+            // Also log to browser console
+            console.log(message);
+        }
+
+        function updateConsoleDisplay() {
+            const consoleElement = document.getElementById('console-output');
+            const maxEntries = 50;
+            
+            // Keep only the latest entries
+            if (consoleOutput.length > maxEntries) {
+                consoleOutput = consoleOutput.slice(-maxEntries);
+            }
+            
+            consoleElement.innerHTML = consoleOutput
+                .map(entry => `<div class="log-${entry.type}">${entry.message}</div>`)
+                .join('');
+            
+            consoleElement.scrollTop = consoleElement.scrollHeight;
+        }
+
+        function clearConsole() {
+            consoleOutput = [];
+            updateConsoleDisplay();
+        }
+
+        // Initialize test environment
+        async function initializeTest() {
+            try {
+                logToConsole('Starting MapRenderer test initialization...', 'info');
+                
+                // Initialize core modules
+                dataLoader = new DataLoader();
+                await dataLoader.loadGameData();
+                logToConsole('✅ DataLoader initialized successfully', 'success');
+                
+                gameState = new GameState(dataLoader);
+                logToConsole('✅ GameState initialized successfully', 'success');
+                
+                // Initialize map renderer
+                testCanvas = document.getElementById('test-map-canvas');
+                mapRenderer = new MapRenderer(testCanvas, gameState, dataLoader);
+                logToConsole('✅ MapRenderer initialized successfully', 'success');
+                
+                // Initial render
+                await mapRenderer.render();
+                logToConsole('✅ Initial map render completed', 'success');
+                
+                // Update status display
+                updateStatusDisplay();
+                
+                // Setup event listeners
+                setupEventListeners();
+                
+                document.getElementById('status-renderer').textContent = 'Ready';
+                logToConsole('🎉 Test environment fully initialized!', 'success');
+                
+            } catch (error) {
+                logToConsole(`❌ Test initialization failed: ${error.message}`, 'error');
+                document.getElementById('status-renderer').textContent = 'Error';
+                console.error('Test initialization error:', error);
+            }
+        }
+
+        function setupEventListeners() {
+            // Listen to game state changes
+            gameState.on('roomChanged', (data) => {
+                logToConsole(`🚪 Room changed: ${data.from} → ${data.to}`, 'info');
+                updateStatusDisplay();
+            });
+
+            gameState.on('scoreChanged', (data) => {
+                logToConsole(`🎯 Score changed: ${data.oldScore} → ${data.newScore}`, 'info');
+            });
+        }
+
+        function updateStatusDisplay() {
+            document.getElementById('status-current-room').textContent = gameState.currentRoomId;
+            document.getElementById('status-visited-rooms').textContent = gameState.visitedRooms.size;
+            document.getElementById('status-unlocked-rooms').textContent = gameState.unlockedRooms.size;
+        }
+
+        // Test Functions
+        async function testMoveToRoom(roomId) {
+            try {
+                logToConsole(`🎯 Testing move to room: ${roomId}`, 'info');
+                await gameState.moveToRoom(roomId);
+                logToConsole(`✅ Successfully moved to ${roomId}`, 'success');
+            } catch (error) {
+                logToConsole(`❌ Failed to move to ${roomId}: ${error.message}`, 'error');
+            }
+        }
+
+        async function testUnlockRoom(roomId) {
+            try {
+                logToConsole(`🔓 Testing unlock room: ${roomId}`, 'info');
+                gameState.unlockedRooms.add(roomId);
+                await mapRenderer.render();
+                logToConsole(`✅ Successfully unlocked ${roomId}`, 'success');
+                updateStatusDisplay();
+            } catch (error) {
+                logToConsole(`❌ Failed to unlock ${roomId}: ${error.message}`, 'error');
+            }
+        }
+
+        async function testUnlockAllRooms() {
+            try {
+                logToConsole('🔓 Testing unlock all rooms...', 'info');
+                const rooms = await dataLoader.getAllRooms();
+                rooms.forEach(room => gameState.unlockedRooms.add(room.id));
+                await mapRenderer.render();
+                logToConsole('✅ All rooms unlocked successfully', 'success');
+                updateStatusDisplay();
+            } catch (error) {
+                logToConsole(`❌ Failed to unlock all rooms: ${error.message}`, 'error');
+            }
+        }
+
+        async function testRenderRefresh() {
+            try {
+                logToConsole('🔄 Testing map render refresh...', 'info');
+                await mapRenderer.render();
+                logToConsole('✅ Map refreshed successfully', 'success');
+            } catch (error) {
+                logToConsole(`❌ Map refresh failed: ${error.message}`, 'error');
+            }
+        }
+
+        function testClickDetection() {
+            logToConsole('🖱️ Testing click detection (try clicking on rooms)...', 'info');
+            logToConsole('Click detection is active - try clicking on any room on the map', 'info');
+        }
+
+        function testHoverEffects() {
+            logToConsole('👆 Testing hover effects (move mouse over rooms)...', 'info');
+            logToConsole('Hover effects are active - move mouse over rooms to see cursor changes', 'info');
+        }
+
+        function testAnimations() {
+            logToConsole('✨ Testing animations (placeholder for future implementation)...', 'info');
+            // Future animation tests can be added here
+        }
+
+        function getRendererState() {
+            if (mapRenderer) {
+                const state = mapRenderer.getRendererState();
+                logToConsole('📊 Current renderer state:', 'info');
+                logToConsole(JSON.stringify(state, null, 2), 'info');
+            } else {
+                logToConsole('❌ MapRenderer not initialized', 'error');
+            }
+        }
+
+        function getGameState() {
+            if (gameState) {
+                const state = gameState.getStateSnapshot();
+                logToConsole('📊 Current game state:', 'info');
+                logToConsole(JSON.stringify(state, null, 2), 'info');
+            } else {
+                logToConsole('❌ GameState not initialized', 'error');
+            }
+        }
+
+        function testErrorHandling() {
+            logToConsole('⚠️ Testing error handling...', 'warn');
+            // Test invalid room movement
+            testMoveToRoom('nonexistent_room');
+            // Test renderer with invalid data
+            if (mapRenderer) {
+                mapRenderer.renderError('Test error message');
+            }
+        }
+
+        // Automated Tests
+        async function runAllTests() {
+            logToConsole('🧪 Running automated test suite...', 'info');
+            const results = [];
+            
+            try {
+                // Test 1: Renderer initialization
+                results.push({
+                    name: 'MapRenderer Initialization',
+                    passed: mapRenderer !== null && mapRenderer !== undefined,
+                    message: mapRenderer ? 'MapRenderer initialized successfully' : 'MapRenderer failed to initialize'
+                });
+
+                // Test 2: Canvas setup
+                results.push({
+                    name: 'Canvas Setup',
+                    passed: testCanvas && testCanvas.getContext('2d'),
+                    message: testCanvas ? 'Canvas and context available' : 'Canvas setup failed'
+                });
+
+                // Test 3: Room positioning
+                const hasPositions = mapRenderer && mapRenderer.roomPositions && mapRenderer.roomPositions.size > 0;
+                results.push({
+                    name: 'Room Positioning',
+                    passed: hasPositions,
+                    message: hasPositions ? `${mapRenderer.roomPositions.size} room positions configured` : 'Room positions not configured'
+                });
+
+                // Test 4: Data integration
+                const rooms = await dataLoader.getAllRooms();
+                results.push({
+                    name: 'Data Integration',
+                    passed: rooms && rooms.length > 0,
+                    message: rooms ? `${rooms.length} rooms loaded from data` : 'No room data available'
+                });
+
+                // Test 5: Event system
+                const hasEventListeners = gameState && typeof gameState.on === 'function';
+                results.push({
+                    name: 'Event System',
+                    passed: hasEventListeners,
+                    message: hasEventListeners ? 'Event system functional' : 'Event system not available'
+                });
+
+                // Test 6: Click detection
+                const hasClickHandler = mapRenderer && typeof mapRenderer.handleCanvasClick === 'function';
+                results.push({
+                    name: 'Click Detection',
+                    passed: hasClickHandler,
+                    message: hasClickHandler ? 'Click detection system ready' : 'Click detection not implemented'
+                });
+
+                displayTestResults(results);
+                
+            } catch (error) {
+                logToConsole(`❌ Test suite execution failed: ${error.message}`, 'error');
+            }
+        }
+
+        function displayTestResults(results) {
+            const resultsContainer = document.getElementById('test-results');
+            const resultsContent = document.getElementById('test-results-content');
+            
+            const passedTests = results.filter(r => r.passed).length;
+            const totalTests = results.length;
+            
+            resultsContent.innerHTML = `
+                <div style="margin-bottom: 15px; font-weight: bold;">
+                    Tests Passed: ${passedTests}/${totalTests} (${Math.round(passedTests/totalTests*100)}%)
+                </div>
+                ${results.map(result => `
+                    <div class="test-item ${result.passed ? 'test-pass' : 'test-fail'}">
+                        <strong>${result.passed ? '✅' : '❌'} ${result.name}</strong><br>
+                        <small>${result.message}</small>
+                    </div>
+                `).join('')}
+            `;
+            
+            resultsContainer.style.display = 'block';
+            
+            logToConsole(`🧪 Test suite completed: ${passedTests}/${totalTests} tests passed`, 'success');
+        }
+
+        // Initialize test when page loads
+        document.addEventListener('DOMContentLoaded', initializeTest);
+
+        // Make test functions available globally
+        window.testFunctions = {
+            testMoveToRoom,
+            testUnlockRoom,
+            testUnlockAllRooms,
+            testRenderRefresh,
+            testClickDetection,
+            testHoverEffects,
+            getRendererState,
+            getGameState,
+            runAllTests
+        };
+    </script>
+</body>
+</html>

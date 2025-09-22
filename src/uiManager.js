@@ -21,9 +21,14 @@ class UIManager {
         // Track answer button listeners for cleanup
         this.answerButtonListeners = [];
         
+        // Track timer state for accessibility announcements
+        this.previousTimeRemaining = null;
+        this.lastTimerWarning = null;
+        
         console.log('UIManager initialized with animations:', !!this.animationManager, 'achievements:', !!this.achievementManager);
         this.initializeElements();
         this.setupEventListeners();
+        this.setupAriaLiveRegions();
         this.updateDisplay();
         this.setupAchievementNotifications();
     }
@@ -199,6 +204,53 @@ class UIManager {
         });
         
         console.log('Keyboard navigation setup complete');
+    }
+
+    /**
+     * Setup ARIA live regions for screen reader announcements
+     */
+    setupAriaLiveRegions() {
+        // Create polite announcements region for score updates
+        this.politeRegion = document.createElement('div');
+        this.politeRegion.setAttribute('aria-live', 'polite');
+        this.politeRegion.setAttribute('aria-atomic', 'true');
+        this.politeRegion.className = 'sr-only';
+        this.politeRegion.id = 'polite-announcements';
+        document.body.appendChild(this.politeRegion);
+        
+        // Create assertive announcements region for urgent messages (timer warnings)
+        this.assertiveRegion = document.createElement('div');
+        this.assertiveRegion.setAttribute('aria-live', 'assertive');
+        this.assertiveRegion.setAttribute('aria-atomic', 'true');
+        this.assertiveRegion.className = 'sr-only';
+        this.assertiveRegion.id = 'assertive-announcements';
+        document.body.appendChild(this.assertiveRegion);
+        
+        console.log('ARIA live regions initialized for accessibility');
+    }
+
+    /**
+     * Announce message to screen readers
+     * @param {string} message - Message to announce
+     * @param {string} priority - 'polite' or 'assertive'
+     */
+    announceToScreenReader(message, priority = 'polite') {
+        const region = priority === 'assertive' ? this.assertiveRegion : this.politeRegion;
+        
+        if (region) {
+            // Clear previous message first
+            region.textContent = '';
+            
+            // Set new message after a brief delay to ensure screen readers detect the change
+            setTimeout(() => {
+                region.textContent = message;
+                
+                // Clear message after announcement to avoid repetition
+                setTimeout(() => {
+                    region.textContent = '';
+                }, 1000);
+            }, 100);
+        }
     }
 
     /**
@@ -1141,18 +1193,26 @@ Press any key to close this help.
      */
     async updateScoreDisplay() {
         const stats = this.gameState.getStatistics();
+        const scoreChange = stats.score - this.previousScore;
         
         // Animate score change if AnimationManager is available
         if (this.elements.currentScore && this.animationManager) {
             try {
                 // Only animate if score has changed significantly (more than just page refresh)
-                if (Math.abs(stats.score - this.previousScore) > 0 && this.previousScore !== 0) {
+                if (Math.abs(scoreChange) > 0 && this.previousScore !== 0) {
                     console.log(`Animating score: ${this.previousScore} → ${stats.score}`);
                     await this.animationManager.animateScoreIncrease(
                         this.elements.currentScore, 
                         this.previousScore, 
                         stats.score
                     );
+                    
+                    // Announce significant score changes to screen readers
+                    if (scoreChange >= 100) {
+                        this.announceToScreenReader(`Great! Score increased by ${scoreChange} points. Total score: ${stats.score}`);
+                    } else if (scoreChange >= 50) {
+                        this.announceToScreenReader(`Score increased by ${scoreChange} points. Total score: ${stats.score}`);
+                    }
                 } else {
                     this.elements.currentScore.textContent = stats.score;
                 }
@@ -1164,6 +1224,12 @@ Press any key to close this help.
             }
         } else if (this.elements.currentScore) {
             this.elements.currentScore.textContent = stats.score;
+            
+            // Announce score changes without animation
+            if (Math.abs(scoreChange) >= 50 && this.previousScore !== 0) {
+                this.announceToScreenReader(`Score updated: ${stats.score} points`);
+            }
+            
             this.previousScore = stats.score;
         }
         
@@ -1305,6 +1371,9 @@ Press any key to close this help.
     displayQuestion(questionData) {
         this.currentQuestion = questionData;
         this.isQuestionActive = true;
+        
+        // Reset timer warning tracking for new question
+        this.lastTimerWarning = null;
         
         // Update question text and metadata
         if (this.elements.questionText) {
@@ -1764,7 +1833,7 @@ Press any key to close this help.
     }
 
     /**
-     * Handle timer updates
+     * Handle timer updates with accessibility announcements
      */
     updateTimer(data) {
         if (this.elements.timerBar) {
@@ -1781,7 +1850,21 @@ Press any key to close this help.
         if (this.elements.timerText) {
             const seconds = Math.ceil(data.timeRemaining / 1000);
             this.elements.timerText.textContent = `${seconds}s`;
+            
+            // Announce critical time warnings to screen readers
+            if (seconds === 10 && this.lastTimerWarning !== 10) {
+                this.announceToScreenReader('10 seconds remaining', 'assertive');
+                this.lastTimerWarning = 10;
+            } else if (seconds === 5 && this.lastTimerWarning !== 5) {
+                this.announceToScreenReader('5 seconds remaining', 'assertive');
+                this.lastTimerWarning = 5;
+            } else if (seconds === 1 && this.lastTimerWarning !== 1) {
+                this.announceToScreenReader('1 second remaining', 'assertive');
+                this.lastTimerWarning = 1;
+            }
         }
+        
+        this.previousTimeRemaining = data.timeRemaining;
     }
 
     /**

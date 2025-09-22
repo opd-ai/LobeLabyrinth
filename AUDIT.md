@@ -509,8 +509,17 @@ checkGameCompletion() {
 
 ### **Issue**: Insufficient Keyboard Navigation
 **WCAG Criterion**: 2.1.1 Keyboard  
+**Status**: RESOLVED (Commit: 5f1a99b - 2025-09-22)
 **Location**: `src/uiManager.js:1390-1420`  
-**Fix**: 
+**Resolution**:
+- Enhanced existing keyboard navigation with missing ARIA radiogroup semantics
+- Added radiogroup role and aria-label to answer button container
+- Implemented aria-checked state management for proper radio button behavior
+- Updated focus management to maintain aria-checked states correctly
+- Ensured full WCAG 2.1.1 compliance with arrow keys, Enter/Space activation
+- Maintained existing number key shortcuts (1-4) for direct answer selection
+
+**Fix**: Complete keyboard navigation with proper ARIA semantics 
 ```javascript
 setupAnswerButtonKeyNavigation() {
     const buttons = this.elements.answerButtons.querySelectorAll('.answer-btn');

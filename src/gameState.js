@@ -246,8 +246,9 @@ class GameState {
         
         // Calculate detailed bonuses
         const bonusDetails = this.calculateDetailedBonuses();
-        const totalRooms = this.dataLoader ? this.dataLoader.getAllRooms().length : 10;
-        const totalQuestions = this.dataLoader ? this.dataLoader.getAllQuestions().length : 50;
+        const gameData = this.dataLoader ? this.dataLoader.getAllData() : null;
+        const totalRooms = gameData ? gameData.rooms.length : 10;
+        const totalQuestions = gameData ? gameData.questions.length : 50;
         
         return {
             // Basic stats

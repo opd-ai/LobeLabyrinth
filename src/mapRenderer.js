@@ -150,7 +150,8 @@ class MapRenderer {
             this.clearCanvas();
 
             // Get all room data
-            const rooms = await this.dataLoader.getAllRooms();
+            const gameData = this.dataLoader.getAllData();
+            const rooms = gameData.rooms;
             
             // Draw connections first (behind rooms)
             await this.renderConnections(rooms);

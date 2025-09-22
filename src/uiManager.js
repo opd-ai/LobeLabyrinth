@@ -1171,13 +1171,15 @@ Press any key to close this help.
                 this.elements.roomDescription.textContent = currentRoom.description;
             }
 
-            // Update room connections
+            // Update room connections with text indicators
             if (this.elements.roomConnections && currentRoom.connections) {
                 const connectionsHtml = currentRoom.connections
                     .map(roomId => {
                         const isUnlocked = this.gameState.unlockedRooms.has(roomId);
                         const className = isUnlocked ? 'connection-unlocked' : 'connection-locked';
-                        return `<span class="${className}">${roomId}</span>`;
+                        const statusIcon = isUnlocked ? '\u2713' : '\u1F512'; // ✓ or 🔒
+                        const statusText = isUnlocked ? ' (accessible)' : ' (locked)';
+                        return `<span class="${className}" title="${roomId}${statusText}">${statusIcon} ${roomId}</span>`;
                     })
                     .join(', ');
                 this.elements.roomConnections.innerHTML = `Connected to: ${connectionsHtml}`;
@@ -1840,16 +1842,33 @@ Press any key to close this help.
             const percentage = 100 - data.percentage;
             this.elements.timerBar.style.width = `${percentage}%`;
             
-            if (percentage < 20) {
-                this.elements.timerBar.classList.add('timer-warning');
+            // Apply consistent urgency classes based on percentage
+            if (data.percentage > 80) {
+                this.elements.timerBar.className = 'timer-bar timer-urgent';
+            } else if (data.percentage > 60) {
+                this.elements.timerBar.className = 'timer-bar timer-warning';
             } else {
-                this.elements.timerBar.classList.remove('timer-warning');
+                this.elements.timerBar.className = 'timer-bar';
             }
         }
         
         if (this.elements.timerText) {
             const seconds = Math.ceil(data.timeRemaining / 1000);
-            this.elements.timerText.textContent = `${seconds}s`;
+            
+            // Add text indicators for urgency levels
+            let urgencyText = '';
+            let urgencyClass = '';
+            
+            if (data.percentage > 80) {
+                urgencyText = ' (URGENT)';
+                urgencyClass = 'timer-urgent';
+            } else if (data.percentage > 60) {
+                urgencyText = ' (Warning)';
+                urgencyClass = 'timer-warning';
+            }
+            
+            this.elements.timerText.textContent = `${seconds}s${urgencyText}`;
+            this.elements.timerText.className = `timer-text ${urgencyClass}`;
             
             // Announce critical time warnings to screen readers
             if (seconds === 10 && this.lastTimerWarning !== 10) {

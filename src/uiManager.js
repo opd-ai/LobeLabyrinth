@@ -564,15 +564,17 @@ class UIManager {
      */
     highlightSelectedAnswer(index) {
         try {
-            // Remove previous highlights
-            document.querySelectorAll('.answer-btn').forEach(btn => {
+            // Remove previous highlights and aria-checked states
+            document.querySelectorAll('.answer-btn').forEach((btn, i) => {
                 btn.classList.remove('keyboard-selected');
+                btn.setAttribute('aria-checked', 'false');
             });
             
             // Add highlight to selected answer
             const answerButtons = document.querySelectorAll('.answer-btn');
             if (answerButtons && answerButtons[index]) {
                 answerButtons[index].classList.add('keyboard-selected');
+                answerButtons[index].setAttribute('aria-checked', 'true');
                 this.selectedAnswerIndex = index;
             }
         } catch (error) {
@@ -598,6 +600,7 @@ class UIManager {
     clearAnswerSelection() {
         document.querySelectorAll('.answer-btn').forEach(btn => {
             btn.classList.remove('keyboard-selected');
+            btn.setAttribute('aria-checked', 'false');
         });
         this.selectedAnswerIndex = null;
     }

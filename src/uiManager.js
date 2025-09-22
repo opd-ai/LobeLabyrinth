@@ -2,21 +2,27 @@
  * UIManager class handles the user interface interactions and display updates
  */
 class UIManager {
-    constructor(dataLoader, gameState, quizEngine, animationManager = null) {
+    constructor(dataLoader, gameState, quizEngine, animationManager = null, achievementManager = null) {
         this.dataLoader = dataLoader;
         this.gameState = gameState;
         this.quizEngine = quizEngine;
         this.animationManager = animationManager;
+        this.achievementManager = achievementManager;
         
         this.elements = {};
         this.currentQuestion = null;
         this.isQuestionActive = false;
         this.previousScore = 0; // Track previous score for animations
         
-        console.log('UIManager initialized with animations:', !!this.animationManager);
+        // Achievement notification queue
+        this.achievementQueue = [];
+        this.showingAchievement = false;
+        
+        console.log('UIManager initialized with animations:', !!this.animationManager, 'achievements:', !!this.achievementManager);
         this.initializeElements();
         this.setupEventListeners();
         this.updateDisplay();
+        this.setupAchievementNotifications();
     }
 
     /**
@@ -66,7 +72,13 @@ class UIManager {
             
             // Navigation
             navigationArea: document.getElementById('navigation-area'),
-            availableRooms: document.getElementById('available-rooms')
+            availableRooms: document.getElementById('available-rooms'),
+            
+            // Achievement elements
+            achievementNotification: document.getElementById('achievement-notification'),
+            achievementGallery: document.getElementById('achievement-gallery'),
+            achievementToggle: document.getElementById('achievement-toggle'),
+            achievementStats: document.getElementById('achievement-stats')
         };
 
         console.log('UI elements initialized');
@@ -117,6 +129,264 @@ class UIManager {
         }
 
         console.log('Event listeners setup complete');
+    }
+
+    /**
+     * Setup achievement notification system
+     */
+    setupAchievementNotifications() {
+        if (this.achievementManager) {
+            // Listen for achievement unlocks
+            this.achievementManager.addEventListener('achievementUnlocked', (event) => {
+                this.queueAchievementNotification(event.detail);
+            });
+            
+            // Setup achievement gallery toggle
+            if (this.elements.achievementToggle) {
+                this.elements.achievementToggle.addEventListener('click', () => {
+                    this.toggleAchievementGallery();
+                });
+            }
+            
+            console.log('Achievement notifications setup complete');
+        }
+    }
+
+    /**
+     * Queue an achievement notification for display
+     */
+    queueAchievementNotification(achievementData) {
+        this.achievementQueue.push(achievementData);
+        
+        // Start processing queue if not already showing
+        if (!this.showingAchievement) {
+            this.processAchievementQueue();
+        }
+    }
+
+    /**
+     * Process the achievement notification queue
+     */
+    async processAchievementQueue() {
+        if (this.achievementQueue.length === 0) {
+            this.showingAchievement = false;
+            return;
+        }
+        
+        this.showingAchievement = true;
+        const achievementData = this.achievementQueue.shift();
+        
+        await this.showAchievementNotification(achievementData);
+        
+        // Continue with next achievement after a delay
+        setTimeout(() => {
+            this.processAchievementQueue();
+        }, 500);
+    }
+
+    /**
+     * Show achievement unlock notification with animation
+     */
+    async showAchievementNotification(achievementData) {
+        const { achievement, totalPoints, unlockedCount } = achievementData;
+        
+        // Create notification element if it doesn't exist
+        let notification = this.elements.achievementNotification;
+        if (!notification) {
+            notification = this.createAchievementNotificationElement();
+        }
+        
+        // Update notification content
+        notification.innerHTML = `
+            <div class="achievement-unlock-animation">
+                <div class="achievement-icon">${achievement.icon}</div>
+                <div class="achievement-details">
+                    <div class="achievement-title">Achievement Unlocked!</div>
+                    <div class="achievement-name">${achievement.name}</div>
+                    <div class="achievement-description">${achievement.description}</div>
+                    <div class="achievement-points">+${achievement.points} points</div>
+                </div>
+                <div class="achievement-rarity achievement-rarity-${achievement.rarity}">
+                    ${achievement.rarity.toUpperCase()}
+                </div>
+            </div>
+        `;
+        
+        // Add CSS classes for animation
+        notification.className = 'achievement-notification show';
+        
+        // Use animation manager if available
+        if (this.animationManager) {
+            await this.animationManager.animateAchievementUnlock(notification);
+        } else {
+            // Fallback animation with setTimeout
+            notification.style.transform = 'translateY(-100%)';
+            notification.style.opacity = '0';
+            
+            setTimeout(() => {
+                notification.style.transform = 'translateY(0)';
+                notification.style.opacity = '1';
+            }, 50);
+        }
+        
+        // Auto-hide after 4 seconds
+        setTimeout(() => {
+            this.hideAchievementNotification(notification);
+        }, 4000);
+        
+        // Update achievement stats display
+        this.updateAchievementStats();
+    }
+
+    /**
+     * Hide achievement notification
+     */
+    hideAchievementNotification(notification) {
+        notification.style.transform = 'translateY(-100%)';
+        notification.style.opacity = '0';
+        
+        setTimeout(() => {
+            notification.className = 'achievement-notification';
+        }, 300);
+    }
+
+    /**
+     * Create achievement notification element if it doesn't exist
+     */
+    createAchievementNotificationElement() {
+        let notification = document.getElementById('achievement-notification');
+        
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'achievement-notification';
+            notification.className = 'achievement-notification';
+            
+            // Add to body or a container
+            document.body.appendChild(notification);
+            this.elements.achievementNotification = notification;
+        }
+        
+        return notification;
+    }
+
+    /**
+     * Toggle achievement gallery visibility
+     */
+    toggleAchievementGallery() {
+        const gallery = this.elements.achievementGallery;
+        if (!gallery) {
+            console.warn('Achievement gallery element not found');
+            return;
+        }
+        
+        const isVisible = gallery.classList.contains('visible');
+        
+        if (isVisible) {
+            gallery.classList.remove('visible');
+        } else {
+            this.populateAchievementGallery();
+            gallery.classList.add('visible');
+        }
+    }
+
+    /**
+     * Populate achievement gallery with current achievements
+     */
+    populateAchievementGallery() {
+        if (!this.achievementManager || !this.elements.achievementGallery) {
+            return;
+        }
+        
+        const achievements = this.achievementManager.getAllAchievements();
+        const stats = this.achievementManager.getAchievementStats();
+        
+        // Group achievements by category
+        const categories = {};
+        achievements.forEach(achievement => {
+            if (!categories[achievement.category]) {
+                categories[achievement.category] = [];
+            }
+            categories[achievement.category].push(achievement);
+        });
+        
+        // Create gallery HTML
+        let galleryHTML = `
+            <div class="achievement-gallery-header">
+                <h3>🏆 Achievements</h3>
+                <div class="achievement-summary">
+                    ${stats.unlocked}/${stats.total} unlocked (${stats.percentage}%)
+                    <br>
+                    ${stats.totalPoints} total points
+                </div>
+                <button class="achievement-close-btn" onclick="this.closest('.achievement-gallery').classList.remove('visible')">×</button>
+            </div>
+            <div class="achievement-categories">
+        `;
+        
+        // Add each category
+        Object.keys(categories).forEach(categoryName => {
+            const categoryAchievements = categories[categoryName];
+            const categoryStats = stats.categories[categoryName];
+            
+            galleryHTML += `
+                <div class="achievement-category">
+                    <h4 class="category-title">
+                        ${categoryName.charAt(0).toUpperCase() + categoryName.slice(1)}
+                        <span class="category-progress">(${categoryStats.unlocked}/${categoryStats.total})</span>
+                    </h4>
+                    <div class="achievement-grid">
+            `;
+            
+            categoryAchievements.forEach(achievement => {
+                const progressWidth = Math.max(achievement.progressPercentage, achievement.unlocked ? 100 : 0);
+                const unlockClass = achievement.unlocked ? 'unlocked' : 'locked';
+                
+                galleryHTML += `
+                    <div class="achievement-card ${unlockClass} achievement-rarity-${achievement.rarity}">
+                        <div class="achievement-icon">${achievement.icon}</div>
+                        <div class="achievement-info">
+                            <div class="achievement-name">${achievement.name}</div>
+                            <div class="achievement-description">${achievement.description}</div>
+                            <div class="achievement-progress-bar">
+                                <div class="achievement-progress-fill" style="width: ${progressWidth}%"></div>
+                            </div>
+                            <div class="achievement-meta">
+                                <span class="achievement-points">${achievement.points} pts</span>
+                                <span class="achievement-rarity">${achievement.rarity}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            galleryHTML += `
+                    </div>
+                </div>
+            `;
+        });
+        
+        galleryHTML += '</div>';
+        
+        this.elements.achievementGallery.innerHTML = galleryHTML;
+    }
+
+    /**
+     * Update achievement stats display
+     */
+    updateAchievementStats() {
+        if (!this.achievementManager || !this.elements.achievementStats) {
+            return;
+        }
+        
+        const stats = this.achievementManager.getAchievementStats();
+        
+        this.elements.achievementStats.innerHTML = `
+            <div class="achievement-stats-summary">
+                🏆 ${stats.unlocked}/${stats.total} 
+                (${stats.percentage}%)
+                <span class="achievement-points">+${stats.totalPoints} pts</span>
+            </div>
+        `;
     }
 
     /**

@@ -29,96 +29,74 @@ class UIManager {
     }
 
     /**
-     * Initialize DOM element references
+     * Initialize DOM element references with efficient caching and error handling
      */
     initializeElements() {
-        this.elements = {
+        // Cache elements once with error handling
+        this.elements = this.getElementsByIds([
             // Room display
-            roomInfo: document.getElementById('room-info'),
-            roomName: document.getElementById('room-name'),
-            roomDescription: document.getElementById('room-description'),
-            roomConnections: document.getElementById('room-connections'),
+            'room-info', 'room-name', 'room-description', 'room-connections',
             
             // Question area
-            questionArea: document.getElementById('question-area'),
-            questionText: document.getElementById('question-text'),
-            questionCategory: document.getElementById('question-category'),
-            questionDifficulty: document.getElementById('question-difficulty'),
-            questionPoints: document.getElementById('question-points'),
+            'question-area', 'question-text', 'question-category', 'question-difficulty', 'question-points',
             
             // Answer area
-            answerArea: document.getElementById('answer-area'),
-            answerButtons: document.getElementById('answer-buttons'),
+            'answer-area', 'answer-buttons',
             
             // Timer
-            timerArea: document.getElementById('timer-area'),
-            timerBar: document.getElementById('timer-bar'),
-            timerText: document.getElementById('timer-text'),
+            'timer-area', 'timer-bar', 'timer-text',
             
             // Score and stats
-            scoreDisplay: document.getElementById('score-display'),
-            currentScore: document.getElementById('current-score'),
-            questionsAnswered: document.getElementById('questions-answered'),
-            roomsVisited: document.getElementById('rooms-visited'),
+            'score-display', 'current-score', 'questions-answered', 'rooms-visited',
             
             // Progress indicators
-            progressIndicators: document.getElementById('progress-indicators'),
-            overallProgressPercent: document.getElementById('overall-progress-percent'),
-            overallProgressFill: document.getElementById('overall-progress-fill'),
-            roomsProgressPercent: document.getElementById('rooms-progress-percent'),
-            roomsProgressFill: document.getElementById('rooms-progress-fill'),
-            accuracyProgressPercent: document.getElementById('accuracy-progress-percent'),
-            accuracyProgressFill: document.getElementById('accuracy-progress-fill'),
-            playTimeDisplay: document.getElementById('play-time-display'),
-            timePulse: document.getElementById('time-pulse'),
+            'progress-indicators', 'overall-progress-percent', 'overall-progress-fill',
+            'rooms-progress-percent', 'rooms-progress-fill', 'accuracy-progress-percent',
+            'accuracy-progress-fill', 'play-time-display', 'time-pulse',
             
             // Game controls
-            gameControls: document.getElementById('game-controls'),
-            newQuestionBtn: document.getElementById('new-question-btn'),
-            hintBtn: document.getElementById('hint-btn'),
-            skipBtn: document.getElementById('skip-btn'),
-            saveBtn: document.getElementById('save-btn'),
-            loadBtn: document.getElementById('load-btn'),
-            resetBtn: document.getElementById('reset-btn'),
+            'game-controls', 'new-question-btn', 'hint-btn', 'skip-btn',
+            'save-btn', 'load-btn', 'reset-btn',
             
             // Feedback area
-            feedbackArea: document.getElementById('feedback-area'),
+            'feedback-area',
             
             // Navigation
-            navigationArea: document.getElementById('navigation-area'),
-            availableRooms: document.getElementById('available-rooms'),
+            'navigation-area', 'available-rooms',
             
             // Achievement elements
-            achievementNotification: document.getElementById('achievement-notification'),
-            achievementGallery: document.getElementById('achievement-gallery'),
-            achievementToggle: document.getElementById('achievement-toggle'),
-            achievementStats: document.getElementById('achievement-stats'),
+            'achievement-notification', 'achievement-gallery', 'achievement-toggle', 'achievement-stats',
             
             // Victory screen elements
-            victoryScreen: document.getElementById('victory-screen'),
-            victoryFinalScore: document.getElementById('victory-final-score'),
-            victoryTime: document.getElementById('victory-time'),
-            victoryAccuracy: document.getElementById('victory-accuracy'),
-            victoryRooms: document.getElementById('victory-rooms'),
-            victoryBaseScore: document.getElementById('victory-base-score'),
-            victoryCompletionBonus: document.getElementById('victory-completion-bonus'),
-            victoryExplorationBonus: document.getElementById('victory-exploration-bonus'),
-            victoryPerfectBonus: document.getElementById('victory-perfect-bonus'),
-            victorySpeedBonus: document.getElementById('victory-speed-bonus'),
-            victoryAchievementBonus: document.getElementById('victory-achievement-bonus'),
-            victoryAchievementIcons: document.getElementById('victory-achievement-icons'),
-            victoryGrade: document.getElementById('victory-grade'),
+            'victory-screen', 'victory-final-score', 'victory-time', 'victory-accuracy',
+            'victory-rooms', 'victory-base-score', 'victory-completion-bonus',
+            'victory-exploration-bonus', 'victory-perfect-bonus', 'victory-speed-bonus',
+            'victory-achievement-bonus', 'victory-achievement-icons', 'victory-grade',
             
             // Victory action buttons
-            playAgainBtn: document.getElementById('play-again-btn'),
-            viewAchievementsBtn: document.getElementById('view-achievements-btn'),
-            shareResultsBtn: document.getElementById('share-results-btn'),
-            playAgainBtn: document.getElementById('play-again-btn'),
-            viewAchievementsBtn: document.getElementById('view-achievements-btn'),
-            shareResultsBtn: document.getElementById('share-results-btn')
-        };
+            'play-again-btn', 'view-achievements-btn', 'share-results-btn'
+        ]);
 
-        console.log('UI elements initialized');
+        console.log('UI elements initialized with caching');
+    }
+
+    /**
+     * Efficiently cache DOM elements by ID with error handling
+     * @param {string[]} ids - Array of element IDs to cache
+     * @returns {Object} Object with camelCase keys and cached DOM elements
+     */
+    getElementsByIds(ids) {
+        const elements = {};
+        ids.forEach(id => {
+            const element = document.getElementById(id);
+            if (!element) {
+                console.warn(`UIManager: Element with ID '${id}' not found in DOM`);
+            }
+            // Convert kebab-case to camelCase for object keys
+            const camelCaseKey = id.replace(/-([a-z])/g, (match, letter) => letter.toUpperCase());
+            elements[camelCaseKey] = element;
+        });
+        return elements;
     }
 
     /**

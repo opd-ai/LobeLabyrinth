@@ -915,18 +915,18 @@ Press any key to close this help.
             notification = this.createAchievementNotificationElement();
         }
         
-        // Update notification content
+        // Update notification content with escaped data to prevent XSS
         notification.innerHTML = `
             <div class="achievement-unlock-animation">
-                <div class="achievement-icon">${achievement.icon}</div>
+                <div class="achievement-icon">${this.escapeHtml(achievement.icon)}</div>
                 <div class="achievement-details">
                     <div class="achievement-title">Achievement Unlocked!</div>
-                    <div class="achievement-name">${achievement.name}</div>
-                    <div class="achievement-description">${achievement.description}</div>
+                    <div class="achievement-name">${this.escapeHtml(achievement.name)}</div>
+                    <div class="achievement-description">${this.escapeHtml(achievement.description)}</div>
                     <div class="achievement-points">+${achievement.points} points</div>
                 </div>
-                <div class="achievement-rarity achievement-rarity-${achievement.rarity}">
-                    ${achievement.rarity.toUpperCase()}
+                <div class="achievement-rarity achievement-rarity-${this.escapeHtml(achievement.rarity)}">
+                    ${this.escapeHtml(achievement.rarity).toUpperCase()}
                 </div>
             </div>
         `;
@@ -1061,17 +1061,17 @@ Press any key to close this help.
                 const unlockClass = achievement.unlocked ? 'unlocked' : 'locked';
                 
                 galleryHTML += `
-                    <div class="achievement-card ${unlockClass} achievement-rarity-${achievement.rarity}">
-                        <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-card ${unlockClass} achievement-rarity-${this.escapeHtml(achievement.rarity)}">
+                        <div class="achievement-icon">${this.escapeHtml(achievement.icon)}</div>
                         <div class="achievement-info">
-                            <div class="achievement-name">${achievement.name}</div>
-                            <div class="achievement-description">${achievement.description}</div>
+                            <div class="achievement-name">${this.escapeHtml(achievement.name)}</div>
+                            <div class="achievement-description">${this.escapeHtml(achievement.description)}</div>
                             <div class="achievement-progress-bar">
                                 <div class="achievement-progress-fill" style="width: ${progressWidth}%"></div>
                             </div>
                             <div class="achievement-meta">
                                 <span class="achievement-points">${achievement.points} pts</span>
-                                <span class="achievement-rarity">${achievement.rarity}</span>
+                                <span class="achievement-rarity">${this.escapeHtml(achievement.rarity)}</span>
                             </div>
                         </div>
                     </div>

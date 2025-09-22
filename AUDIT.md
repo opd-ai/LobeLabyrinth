@@ -275,8 +275,26 @@ validateSaveData(data) {
 
 ### **Vulnerability ID**: SEC-003
 **Severity**: Medium  
+**Status**: PARTIALLY MITIGATED (Commit: 6ee6d2e - 2025-09-22)
 **Location**: Client-side answer validation throughout codebase  
 **Description**: All answer validation happens client-side, making it trivial to bypass using browser dev tools or script injection.
+
+**Root Cause**: Complete question objects including correctAnswer field were accessible client-side, enabling easy cheating through dev tools or code modification.
+
+**Resolution (Basic Obfuscation)**:
+- Removed correctAnswer and correctAnswerIndex from question data sent to client
+- Implemented answer hash generation using questionId, answerIndex, and timestamp
+- Added secure storage of original answers in questionAnswerMap
+- Updated validation to use hash comparison instead of direct answer checking
+- Original correct answers only revealed after answer submission
+
+**Security Note**: This is basic obfuscation, not cryptographic security. Determined attackers can still:
+- Override validateAnswerHash() method via console
+- Access questions.json file directly through network inspection  
+- Reverse-engineer the simple hash algorithm
+- True security requires server-side answer validation
+
+**Recommendation**: For production deployment, implement server-side answer validation with cryptographically secure methods.
 
 **Recommended Fix**:
 ```javascript

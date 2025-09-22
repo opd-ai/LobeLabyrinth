@@ -308,7 +308,7 @@ The game is completed when:
 - **Load Time**: Optimized for sub-2 second loading
 - **Memory Usage**: Efficient object pooling and cleanup
 - **Frame Rate**: Smooth 60fps animations and transitions
-- **Offline**: Works offline after initial load (except localStorage)
+- **Browser Storage**: Uses localStorage for save game persistence
 
 ## 🤝 Contributing
 

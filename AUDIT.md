@@ -157,6 +157,7 @@ clearAnswerButtonListeners() {
 
 ### **Vulnerability ID**: SEC-001
 **Severity**: High  
+**Status**: RESOLVED (Commit: 63e1e41 - 2025-09-22)
 **Location**: `src/uiManager.js:916-926, 1378, 1861`  
 **Description**: Multiple XSS vulnerabilities through unsanitized data injection via `innerHTML`. Achievement names, descriptions, question text, and answer options are directly interpolated into HTML without escaping.  
 **OWASP Reference**: A03:2021 – Injection
@@ -165,6 +166,14 @@ clearAnswerButtonListeners() {
 1. Modify `achievements.json` to include `<script>alert('XSS')</script>` in an achievement name  
 2. Unlock the achievement  
 3. Observe script execution  
+
+**Root Cause**: Achievement notification and gallery systems used innerHTML with unescaped user data from achievements.json.
+
+**Resolution**:
+- Applied escapeHtml() method to all achievement names and descriptions in showAchievementNotification()
+- Fixed achievement gallery to escape all dynamic content before HTML insertion
+- Added HTML entity encoding for achievement icons and rarity fields
+- Leveraged existing escapeHtml() utility method from BUG-003 fix  
 
 **Recommended Fix**:
 ```javascript
@@ -211,9 +220,20 @@ showAchievementNotification(achievement) {
 
 ### **Vulnerability ID**: SEC-002
 **Severity**: Medium  
+**Status**: RESOLVED (Commit: 0c04a8e - 2025-09-22)
 **Location**: `src/gameState.js:384, 400`  
 **Description**: localStorage data is not validated on load, potentially allowing malicious data injection through browser storage manipulation.  
 **OWASP Reference**: A08:2021 – Software and Data Integrity Failures
+
+**Root Cause**: Game state data loaded from localStorage was directly assigned without validation, type checking, or sanitization.
+
+**Resolution**:
+- Added validateSaveData() method to verify data structure and field types
+- Implemented comprehensive sanitization methods for all save data fields
+- Added bounds checking for scores, array sizes, and timestamp ranges
+- Implemented regex validation for room IDs and question IDs
+- Added HTML tag removal for player names to prevent XSS
+- Automatic cleanup of corrupted save data with fallback to fresh game state
 
 **Recommended Fix**:
 ```javascript

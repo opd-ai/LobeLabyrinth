@@ -14,6 +14,9 @@ class QuizEngine {
         this.timeRemaining = 0;
         this.processingAnswer = false; // Prevent concurrent answer processing
         
+        // Secure storage for original question data (basic obfuscation)
+        this.questionAnswerMap = new Map(); // Store original correct answers
+        
         // Question selection state
         this.questionHistory = new Set();
         this.categoryQuestions = new Map();
@@ -140,10 +143,16 @@ class QuizEngine {
             // Shuffle answers for this presentation
             const shuffledAnswers = this.shuffleAnswers(question);
             
+            // Generate answer hash for validation (basic obfuscation)
+            const answerHash = this.generateAnswerHash(question.id, shuffledAnswers.correctIndex);
+            
             const questionData = {
                 ...question,
                 answers: shuffledAnswers.answers,
-                correctAnswerIndex: shuffledAnswers.correctIndex,
+                // Remove correctAnswer from client-side data
+                correctAnswer: undefined,
+                correctAnswerIndex: undefined,
+                answerHash: answerHash,
                 timeLimit: this.questionTimeLimit,
                 startTime: this.questionStartTime
             };
@@ -232,7 +241,7 @@ class QuizEngine {
             isCorrect: false,
             isTimeUp: true,
             timeRemaining: 0,
-            correctAnswer: this.currentQuestion?.correctAnswer,
+            correctAnswer: this.getOriginalCorrectAnswer(this.currentQuestion?.id),
             explanation: this.currentQuestion?.explanation || '',
             pointsEarned: 0
         };
@@ -259,7 +268,9 @@ class QuizEngine {
 
             const question = this.currentQuestion;
             const timeElapsed = Date.now() - this.questionStartTime;
-            const isCorrect = answerIndex === question.correctAnswer;
+            
+            // Validate answer using hash (basic obfuscation)
+            const isCorrect = this.validateAnswerHash(question.id, answerIndex, question.answerHash);
             
             // Stop the timer
             this.clearQuestionTimer();
@@ -276,7 +287,7 @@ class QuizEngine {
                 questionId: question.id,
                 isCorrect,
                 selectedAnswer: answerIndex,
-                correctAnswer: question.correctAnswer,
+                correctAnswer: this.getOriginalCorrectAnswer(question.id), // Only revealed after answer
                 timeElapsed,
                 timeBonus,
                 pointsEarned,
@@ -302,6 +313,54 @@ class QuizEngine {
             throw error;
         } finally {
             this.processingAnswer = false;
+        }
+    }
+
+    /**
+     * Generate a hash for answer validation (basic obfuscation)
+     * Note: This is not cryptographically secure - true security requires server-side validation
+     * @param {string} questionId - Question identifier
+     * @param {number} correctIndex - Correct answer index
+     * @returns {string} - Answer hash
+     */
+    generateAnswerHash(questionId, correctIndex) {
+        // Simple obfuscation - not cryptographically secure but makes casual cheating harder
+        const seed = `${questionId}_${correctIndex}_${this.questionStartTime || Date.now()}`;
+        let hash = 0;
+        for (let i = 0; i < seed.length; i++) {
+            const char = seed.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32-bit integer
+        }
+        return Math.abs(hash).toString(16);
+    }
+
+    /**
+     * Validate answer using hash comparison
+     * @param {string} questionId - Question identifier  
+     * @param {number} answerIndex - Selected answer index
+     * @param {string} expectedHash - Expected answer hash
+     * @returns {boolean} - True if answer is correct
+     */
+    validateAnswerHash(questionId, answerIndex, expectedHash) {
+        // Generate hash for submitted answer and compare
+        const submittedHash = this.generateAnswerHash(questionId, answerIndex);
+        return submittedHash === expectedHash;
+    }
+
+    /**
+     * Get original correct answer for a question (only after validation)
+     * @param {string} questionId - Question identifier
+     * @returns {number} - Original correct answer index
+     */
+    getOriginalCorrectAnswer(questionId) {
+        try {
+            // Retrieve original question data to get correct answer
+            const originalQuestion = this.dataLoader.getQuestion(questionId);
+            return originalQuestion ? originalQuestion.correctAnswer : -1;
+        } catch (error) {
+            console.error('Error retrieving original correct answer:', error);
+            return -1;
         }
     }
 

@@ -436,27 +436,173 @@ class GameState {
 
             const data = JSON.parse(saveData);
             
+            // Validate save data structure and integrity
+            if (!this.validateSaveData(data)) {
+                console.warn('Invalid save data detected, starting new game');
+                localStorage.removeItem('lobeLabyrinthSave');
+                return false;
+            }
+            
             // Get the actual starting room as fallback
             const startingRoom = this.dataLoader.getStartingRoom();
             const defaultRoomId = startingRoom ? startingRoom.id : null;
             
-            this.currentRoomId = data.currentRoomId || defaultRoomId;
-            this.score = data.score || 0;
-            this.visitedRooms = new Set(data.visitedRooms || (defaultRoomId ? [defaultRoomId] : []));
-            this.unlockedRooms = new Set(data.unlockedRooms || (defaultRoomId ? [defaultRoomId] : []));
-            this.answeredQuestions = new Set(data.answeredQuestions || []);
-            this.startTime = data.startTime || Date.now();
-            this.gameCompleted = data.gameCompleted || false;
-            this.playerName = data.playerName || '';
+            // Sanitize and validate all fields before assignment
+            this.currentRoomId = this.sanitizeRoomId(data.currentRoomId) || defaultRoomId;
+            this.score = Math.max(0, parseInt(data.score) || 0);
+            this.visitedRooms = new Set(this.sanitizeRoomArray(data.visitedRooms, defaultRoomId));
+            this.unlockedRooms = new Set(this.sanitizeRoomArray(data.unlockedRooms, defaultRoomId));
+            this.answeredQuestions = new Set(this.sanitizeQuestionArray(data.answeredQuestions));
+            this.startTime = this.sanitizeTimestamp(data.startTime) || Date.now();
+            this.gameCompleted = Boolean(data.gameCompleted);
+            this.playerName = this.sanitizePlayerName(data.playerName) || '';
 
             console.log('Game loaded successfully:', this.getStateSnapshot());
             this.emit('gameLoaded', data);
             return true;
         } catch (error) {
-            console.error('Failed to load game:', error);
-            this.emit('error', { type: 'load', message: error.message });
+            console.error('Failed to load save game:', error);
+            localStorage.removeItem('lobeLabyrinthSave');
+            this.emit('error', { type: 'load', message: 'Save data corrupted or invalid' });
             return false;
         }
+    }
+
+    /**
+     * Validate save data structure and types
+     * @param {Object} data - Parsed save data
+     * @returns {boolean} - True if data is valid
+     */
+    validateSaveData(data) {
+        // Check if data is an object
+        if (!data || typeof data !== 'object') {
+            return false;
+        }
+        
+        // Check required fields and types
+        if (data.score !== undefined && (typeof data.score !== 'number' || isNaN(data.score))) {
+            return false;
+        }
+        
+        if (data.currentRoomId !== undefined && typeof data.currentRoomId !== 'string') {
+            return false;
+        }
+        
+        if (data.visitedRooms !== undefined && !Array.isArray(data.visitedRooms)) {
+            return false;
+        }
+        
+        if (data.unlockedRooms !== undefined && !Array.isArray(data.unlockedRooms)) {
+            return false;
+        }
+        
+        if (data.answeredQuestions !== undefined && !Array.isArray(data.answeredQuestions)) {
+            return false;
+        }
+        
+        if (data.startTime !== undefined && (typeof data.startTime !== 'number' || isNaN(data.startTime))) {
+            return false;
+        }
+        
+        return true;
+    }
+
+    /**
+     * Sanitize room ID string
+     * @param {any} roomId - Room ID to sanitize
+     * @returns {string|null} - Sanitized room ID or null
+     */
+    sanitizeRoomId(roomId) {
+        if (typeof roomId !== 'string' || roomId.length === 0 || roomId.length > 50) {
+            return null;
+        }
+        
+        // Only allow alphanumeric characters, underscores, and hyphens
+        if (!/^[a-zA-Z0-9_-]+$/.test(roomId)) {
+            return null;
+        }
+        
+        return roomId;
+    }
+
+    /**
+     * Sanitize array of room IDs
+     * @param {any} roomArray - Array to sanitize
+     * @param {string} defaultRoom - Default room to include
+     * @returns {Array} - Sanitized room array
+     */
+    sanitizeRoomArray(roomArray, defaultRoom) {
+        if (!Array.isArray(roomArray)) {
+            return defaultRoom ? [defaultRoom] : [];
+        }
+        
+        const sanitized = roomArray
+            .filter(room => typeof room === 'string')
+            .map(room => this.sanitizeRoomId(room))
+            .filter(room => room !== null)
+            .slice(0, 20); // Limit array size
+            
+        // Ensure default room is included if available
+        if (defaultRoom && !sanitized.includes(defaultRoom)) {
+            sanitized.unshift(defaultRoom);
+        }
+        
+        return sanitized;
+    }
+
+    /**
+     * Sanitize array of question IDs
+     * @param {any} questionArray - Array to sanitize
+     * @returns {Array} - Sanitized question array
+     */
+    sanitizeQuestionArray(questionArray) {
+        if (!Array.isArray(questionArray)) {
+            return [];
+        }
+        
+        return questionArray
+            .filter(q => typeof q === 'string' && q.length > 0 && q.length < 100)
+            .filter(q => /^[a-zA-Z0-9_-]+$/.test(q))
+            .slice(0, 100); // Limit array size
+    }
+
+    /**
+     * Sanitize timestamp value
+     * @param {any} timestamp - Timestamp to sanitize
+     * @returns {number|null} - Sanitized timestamp or null
+     */
+    sanitizeTimestamp(timestamp) {
+        if (typeof timestamp !== 'number' || isNaN(timestamp)) {
+            return null;
+        }
+        
+        // Check if timestamp is reasonable (not too far in past/future)
+        const now = Date.now();
+        const oneYearAgo = now - (365 * 24 * 60 * 60 * 1000);
+        const oneYearFuture = now + (365 * 24 * 60 * 60 * 1000);
+        
+        if (timestamp < oneYearAgo || timestamp > oneYearFuture) {
+            return null;
+        }
+        
+        return timestamp;
+    }
+
+    /**
+     * Sanitize player name
+     * @param {any} playerName - Player name to sanitize
+     * @returns {string} - Sanitized player name
+     */
+    sanitizePlayerName(playerName) {
+        if (typeof playerName !== 'string') {
+            return '';
+        }
+        
+        // Remove HTML tags and limit length
+        return playerName
+            .replace(/<[^>]*>/g, '') // Remove HTML tags
+            .trim()
+            .slice(0, 50); // Limit length
     }
 
     /**

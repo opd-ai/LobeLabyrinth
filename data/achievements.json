@@ -5,36 +5,170 @@
       "name": "First Steps",
       "description": "Answer your first question correctly",
       "icon": "🏃",
+      "category": "progress",
       "condition": {
         "type": "correct_answers",
         "value": 1
       },
       "points": 25,
-      "unlocked": false
+      "unlocked": false,
+      "rarity": "common"
     },
     {
       "id": "knowledge_seeker",
-      "name": "Knowledge Seeker",
+      "name": "Knowledge Seeker", 
       "description": "Explore 3 different rooms in the castle",
       "icon": "🔍",
+      "category": "exploration",
       "condition": {
         "type": "rooms_visited",
         "value": 3
       },
       "points": 50,
-      "unlocked": false
+      "unlocked": false,
+      "rarity": "common"
+    },
+    {
+      "id": "quick_thinker",
+      "name": "Quick Thinker",
+      "description": "Answer 5 questions within 10 seconds each",
+      "icon": "⚡",
+      "category": "performance",
+      "condition": {
+        "type": "quick_answers",
+        "value": 5,
+        "timeLimit": 10
+      },
+      "points": 75,
+      "unlocked": false,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "scholar",
+      "name": "Scholar",
+      "description": "Answer 25 questions correctly",
+      "icon": "📚",
+      "category": "progress",
+      "condition": {
+        "type": "correct_answers",
+        "value": 25
+      },
+      "points": 100,
+      "unlocked": false,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "perfectionist",
+      "name": "Perfectionist",
+      "description": "Answer 10 questions in a row correctly",
+      "icon": "🎯",
+      "category": "performance",
+      "condition": {
+        "type": "consecutive_correct",
+        "value": 10
+      },
+      "points": 150,
+      "unlocked": false,
+      "rarity": "rare"
+    },
+    {
+      "id": "explorer",
+      "name": "Castle Explorer",
+      "description": "Visit all rooms in the castle",
+      "icon": "🗺️",
+      "category": "exploration",
+      "condition": {
+        "type": "all_rooms_visited",
+        "value": true
+      },
+      "points": 200,
+      "unlocked": false,
+      "rarity": "rare"
+    },
+    {
+      "id": "treasure_hunter",
+      "name": "Treasure Hunter",
+      "description": "Find and unlock the Treasury room",
+      "icon": "💰",
+      "category": "exploration",
+      "condition": {
+        "type": "specific_room_visited",
+        "value": "treasury"
+      },
+      "points": 100,
+      "unlocked": false,
+      "rarity": "uncommon"
+    },
+    {
+      "id": "speed_demon",
+      "name": "Speed Demon",
+      "description": "Complete the game in under 10 minutes",
+      "icon": "🏎️",
+      "category": "performance",
+      "condition": {
+        "type": "completion_time",
+        "value": 600000
+      },
+      "points": 300,
+      "unlocked": false,
+      "rarity": "epic"
+    },
+    {
+      "id": "knowledge_master",
+      "name": "Knowledge Master",
+      "description": "Achieve 95% accuracy with at least 20 questions",
+      "icon": "🧠",
+      "category": "performance",
+      "condition": {
+        "type": "accuracy_with_minimum",
+        "accuracy": 0.95,
+        "minQuestions": 20
+      },
+      "points": 250,
+      "unlocked": false,
+      "rarity": "epic"
     },
     {
       "id": "castle_master",
       "name": "Castle Master",
-      "description": "Reach the Royal Throne Room and complete the game",
+      "description": "Complete the game with 100% room exploration",
       "icon": "👑",
+      "category": "completion",
       "condition": {
-        "type": "game_completed",
+        "type": "game_completed_perfect",
         "value": true
       },
+      "points": 500,
+      "unlocked": false,
+      "rarity": "legendary"
+    },
+    {
+      "id": "persistent_learner",
+      "name": "Persistent Learner",
+      "description": "Answer 100 questions (correct or incorrect)",
+      "icon": "🎓",
+      "category": "progress",
+      "condition": {
+        "type": "total_questions",
+        "value": 100
+      },
+      "points": 150,
+      "unlocked": false,
+      "rarity": "rare"
+    },
+    {
+      "id": "comeback_champion",
+      "name": "Comeback Champion",
+      "description": "Answer correctly after 3 consecutive wrong answers",
+      "icon": "🔥",
+      "category": "special",
+      "condition": {
+        "type": "comeback_correct",
+        "value": 3
+      },
       "points": 100,
-      "unlocked": false
+      "unlocked": false,
+      "rarity": "uncommon"
     }
   ]
 }

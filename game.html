@@ -23,6 +23,7 @@
     <link rel="stylesheet" href="css/game.css">
     <link rel="stylesheet" href="css/achievements.css">
     <link rel="stylesheet" href="css/victory.css">
+    <link rel="stylesheet" href="css/accessibility.css">
 </head>
 <body>
     <div class="game-container">
@@ -321,6 +322,7 @@
     <script src="src/mapRenderer.js"></script>
     <script src="src/uiManager.js"></script>
     <script src="src/errorBoundary.js"></script>
+    <script src="src/accessibilityManager.js"></script>
 
     <script>
         // Global game instances
@@ -332,6 +334,7 @@
         let mapRenderer;
         let uiManager;
         let errorBoundary;
+        let accessibilityManager;
 
         // Initialize the complete game
         async function initializeGame() {
@@ -379,6 +382,16 @@
                 updateGameStatus('Creating user interface...');
                 uiManager = new UIManager(dataLoader, gameState, quizEngine, animationManager, achievementManager);
                 
+                updateGameStatus('Initializing accessibility features...');
+                accessibilityManager = new AccessibilityManager();
+                
+                // Connect accessibility manager to game components
+                accessibilityManager.gameState = gameState;
+                accessibilityManager.uiManager = uiManager;
+                
+                // Setup accessibility event listeners
+                setupAccessibilityIntegration();
+                
                 // Connect error boundary to UI manager for better error handling
                 errorBoundary.uiManager = uiManager;
                 
@@ -409,6 +422,61 @@
             }
         }
 
+        // Setup accessibility integration with game components
+        function setupAccessibilityIntegration() {
+            // Listen for map navigation accessibility events
+            document.addEventListener('accessibility-map-navigate', (event) => {
+                const direction = event.detail.direction;
+                // Integrate with map renderer for keyboard navigation
+                if (mapRenderer && mapRenderer.navigateWithKeyboard) {
+                    mapRenderer.navigateWithKeyboard(direction);
+                }
+            });
+
+            // Listen for game state changes to announce them
+            gameState.addEventListener('roomChanged', (event) => {
+                const roomData = event.detail;
+                accessibilityManager.announceGameState({
+                    roomChanged: true,
+                    currentRoom: roomData
+                });
+            });
+
+            gameState.addEventListener('scoreChanged', (event) => {
+                const scoreData = event.detail;
+                accessibilityManager.announceGameState({
+                    scoreChanged: true,
+                    score: scoreData.score
+                });
+            });
+
+            // Listen for quiz events
+            if (quizEngine) {
+                quizEngine.addEventListener('questionChanged', (event) => {
+                    const questionData = event.detail;
+                    accessibilityManager.announceGameState({
+                        questionChanged: true,
+                        question: questionData
+                    });
+                });
+
+                quizEngine.addEventListener('answerResult', (event) => {
+                    const result = event.detail;
+                    accessibilityManager.announceAnswerResult(
+                        result.isCorrect, 
+                        result.explanation
+                    );
+                });
+            }
+
+            // Enhance UI manager with accessibility hooks
+            if (uiManager && uiManager.addAccessibilityHooks) {
+                uiManager.addAccessibilityHooks(accessibilityManager);
+            }
+
+            console.log('♿ Accessibility integration setup complete');
+        }
+
         // Expose game instances globally for debugging
         window.gameData = {
             dataLoader: () => dataLoader,
@@ -418,7 +486,8 @@
             achievementManager: () => achievementManager,
             mapRenderer: () => mapRenderer,
             uiManager: () => uiManager,
-            errorBoundary: () => errorBoundary
+            errorBoundary: () => errorBoundary,
+            accessibilityManager: () => accessibilityManager
         };
 
         // Initialize game when page loads

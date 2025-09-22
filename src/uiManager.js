@@ -94,6 +94,11 @@ class UIManager {
             victoryAchievementBonus: document.getElementById('victory-achievement-bonus'),
             victoryAchievementIcons: document.getElementById('victory-achievement-icons'),
             victoryGrade: document.getElementById('victory-grade'),
+            
+            // Victory action buttons
+            playAgainBtn: document.getElementById('play-again-btn'),
+            viewAchievementsBtn: document.getElementById('view-achievements-btn'),
+            shareResultsBtn: document.getElementById('share-results-btn'),
             playAgainBtn: document.getElementById('play-again-btn'),
             viewAchievementsBtn: document.getElementById('view-achievements-btn'),
             shareResultsBtn: document.getElementById('share-results-btn')
@@ -144,6 +149,19 @@ class UIManager {
             this.quizEngine.on('answerValidated', (data) => this.handleAnswerValidated(data));
             this.quizEngine.on('timerUpdate', (data) => this.updateTimer(data));
             this.quizEngine.on('timeUp', (data) => this.handleTimeUp(data));
+        }
+
+        // Victory screen event listeners
+        if (this.elements.playAgainBtn) {
+            this.elements.playAgainBtn.addEventListener('click', () => this.handlePlayAgain());
+        }
+        
+        if (this.elements.viewAchievementsBtn) {
+            this.elements.viewAchievementsBtn.addEventListener('click', () => this.handleViewAchievements());
+        }
+        
+        if (this.elements.shareResultsBtn) {
+            this.elements.shareResultsBtn.addEventListener('click', () => this.handleShareResults());
         }
 
         // Victory screen event listeners
@@ -952,68 +970,158 @@ class UIManager {
     /**
      * Update victory screen content with game statistics
      */
+    /**
+     * Update victory screen content with comprehensive game statistics
+     * @param {Object} stats - Game statistics from gameState.getGameStatistics()
+     * @param {Object} data - Victory data
+     */
     updateVictoryScreenContent(stats, data) {
-        // Update final score
-        if (this.elements.victoryFinalScore) {
-            this.elements.victoryFinalScore.textContent = stats.finalScore.toLocaleString();
-        }
-
-        // Update base score
-        if (this.elements.victoryBaseScore) {
-            this.elements.victoryBaseScore.textContent = stats.baseScore.toLocaleString();
-        }
-
-        // Update bonuses
-        if (this.elements.victoryAccuracyBonus) {
-            this.elements.victoryAccuracyBonus.textContent = `+${stats.accuracyBonus.toLocaleString()}`;
-        }
-        if (this.elements.victorySpeedBonus) {
-            this.elements.victorySpeedBonus.textContent = `+${stats.speedBonus.toLocaleString()}`;
-        }
-        if (this.elements.victoryExplorationBonus) {
-            this.elements.victoryExplorationBonus.textContent = `+${stats.explorationBonus.toLocaleString()}`;
-        }
-
-        // Update timing statistics
-        if (this.elements.victoryTotalTime) {
-            this.elements.victoryTotalTime.textContent = this.gameState.formatTime(stats.totalTime);
-        }
-        if (this.elements.victoryAvgQuestionTime) {
-            this.elements.victoryAvgQuestionTime.textContent = this.gameState.formatTime(stats.avgQuestionTime);
-        }
-
-        // Update completion percentages
-        if (this.elements.victoryRoomsExplored) {
-            this.elements.victoryRoomsExplored.textContent = `${stats.roomsExploredPercent}%`;
-        }
-        if (this.elements.victoryQuestionsAnswered) {
-            this.elements.victoryQuestionsAnswered.textContent = `${stats.questionsAnsweredPercent}%`;
-        }
-        if (this.elements.victoryAccuracyRate) {
-            this.elements.victoryAccuracyRate.textContent = `${stats.accuracyPercent}%`;
-        }
-
-        // Update achievement count
-        if (this.elements.victoryAchievementCount && this.achievementManager) {
-            const unlockedAchievements = this.achievementManager.getUnlockedAchievements();
-            this.elements.victoryAchievementCount.textContent = unlockedAchievements.length;
-        }
-
-        // Update performance grade
-        if (this.elements.victoryPerformanceGrade) {
-            const grade = this.calculatePerformanceGrade(stats);
-            this.elements.victoryPerformanceGrade.textContent = grade;
-            this.elements.victoryPerformanceGrade.className = `performance-grade grade-${grade.toLowerCase()}`;
+        try {
+            console.log('Updating victory screen with stats:', stats);
+            
+            // Update main statistics
+            if (this.elements.victoryFinalScore) {
+                this.elements.victoryFinalScore.textContent = stats.finalScore.toLocaleString();
+            }
+            
+            if (this.elements.victoryTime) {
+                this.elements.victoryTime.textContent = stats.playTimeFormatted;
+            }
+            
+            if (this.elements.victoryAccuracy) {
+                this.elements.victoryAccuracy.textContent = `${stats.accuracyPercent}%`;
+            }
+            
+            if (this.elements.victoryRooms) {
+                this.elements.victoryRooms.textContent = `${stats.roomsVisited}/${stats.roomsTotal}`;
+            }
+            
+            // Update score breakdown
+            if (this.elements.victoryBaseScore) {
+                this.elements.victoryBaseScore.textContent = stats.baseScore.toLocaleString();
+            }
+            
+            if (this.elements.victoryCompletionBonus) {
+                this.elements.victoryCompletionBonus.textContent = `+${stats.completionBonus}`;
+            }
+            
+            if (this.elements.victoryExplorationBonus) {
+                this.elements.victoryExplorationBonus.textContent = `+${stats.explorationBonus}`;
+            }
+            
+            // Show/hide conditional bonuses
+            const perfectBonusItem = document.getElementById('victory-perfect-bonus-item');
+            if (perfectBonusItem) {
+                if (stats.perfectBonus > 0) {
+                    perfectBonusItem.style.display = 'flex';
+                    if (this.elements.victoryPerfectBonus) {
+                        this.elements.victoryPerfectBonus.textContent = `+${stats.perfectBonus}`;
+                    }
+                } else {
+                    perfectBonusItem.style.display = 'none';
+                }
+            }
+            
+            const speedBonusItem = document.getElementById('victory-speed-bonus-item');
+            if (speedBonusItem) {
+                if (stats.speedBonus > 0) {
+                    speedBonusItem.style.display = 'flex';
+                    if (this.elements.victorySpeedBonus) {
+                        this.elements.victorySpeedBonus.textContent = `+${stats.speedBonus}`;
+                    }
+                } else {
+                    speedBonusItem.style.display = 'none';
+                }
+            }
+            
+            // Update achievement bonus
+            if (this.elements.victoryAchievementBonus) {
+                const achievementPoints = this.achievementManager ? this.achievementManager.getTotalPoints() : 0;
+                this.elements.victoryAchievementBonus.textContent = `+${achievementPoints}`;
+            }
+            
+            // Update achievement icons
+            this.updateAchievementIcons();
+            
+            // Update performance grade
+            this.updatePerformanceGrade(stats);
+            
+        } catch (error) {
+            console.error('Error updating victory screen content:', error);
         }
     }
 
     /**
+     * Update achievement icons in victory screen
+     */
+    updateAchievementIcons() {
+        if (!this.elements.victoryAchievementIcons || !this.achievementManager) {
+            return;
+        }
+        
+        try {
+            const unlockedAchievements = this.achievementManager.getUnlockedAchievements();
+            this.elements.victoryAchievementIcons.innerHTML = '';
+            
+            if (unlockedAchievements.length === 0) {
+                this.elements.victoryAchievementIcons.innerHTML = '<p class="no-achievements">No achievements unlocked yet</p>';
+                return;
+            }
+            
+            unlockedAchievements.slice(0, 6).forEach(achievement => {
+                const iconElement = document.createElement('div');
+                iconElement.className = 'achievement-icon';
+                iconElement.innerHTML = `
+                    <span class="achievement-emoji">${achievement.icon || '🏆'}</span>
+                    <span class="achievement-name">${achievement.name}</span>
+                `;
+                iconElement.title = achievement.description;
+                this.elements.victoryAchievementIcons.appendChild(iconElement);
+            });
+            
+            if (unlockedAchievements.length > 6) {
+                const moreElement = document.createElement('div');
+                moreElement.className = 'achievement-icon more-achievements';
+                moreElement.innerHTML = `<span class="achievement-count">+${unlockedAchievements.length - 6}</span>`;
+                moreElement.title = 'Click "View All Achievements" to see more';
+                this.elements.victoryAchievementIcons.appendChild(moreElement);
+            }
+            
+        } catch (error) {
+            console.error('Error updating achievement icons:', error);
+        }
+    }
+    /**
+     * Update performance grade display
+     * @param {Object} stats - Game statistics
+     */
+    updatePerformanceGrade(stats) {
+        if (!this.elements.victoryGrade) {
+            return;
+        }
+        
+        try {
+            const grade = this.calculatePerformanceGrade(stats);
+            const gradeInfo = this.getGradeInfo(grade, stats);
+            
+            this.elements.victoryGrade.textContent = gradeInfo.message;
+            this.elements.victoryGrade.className = `completion-grade grade-${grade.toLowerCase()}`;
+            
+        } catch (error) {
+            console.error('Error updating performance grade:', error);
+        }
+    }
+    
+    /**
      * Calculate performance grade based on statistics
+     * @param {Object} stats - Game statistics
+     * @returns {string} Performance grade (S, A, B, C, D, F)
      */
     calculatePerformanceGrade(stats) {
-        const score = (stats.accuracyPercent * 0.4) + 
-                     (stats.roomsExploredPercent * 0.3) + 
-                     (stats.questionsAnsweredPercent * 0.3);
+        const score = stats.performanceScore || 
+                     ((stats.accuracyPercent * 0.5) + 
+                      (stats.roomsExploredPercent * 0.3) + 
+                      (stats.questionsAnsweredPercent * 0.2));
 
         if (score >= 95) return 'S';
         if (score >= 90) return 'A';
@@ -1021,6 +1129,29 @@ class UIManager {
         if (score >= 70) return 'C';
         if (score >= 60) return 'D';
         return 'F';
+    }
+    
+    /**
+     * Get grade information and message
+     * @param {string} grade - Performance grade
+     * @param {Object} stats - Game statistics
+     * @returns {Object} Grade information
+     */
+    getGradeInfo(grade, stats) {
+        const gradeMessages = {
+            'S': 'Legendary Performance! 🌟',
+            'A': 'Excellent Work! 🎉',
+            'B': 'Good Job! 👍',
+            'C': 'Nice Try! 😊',
+            'D': 'Keep Practicing! 💪',
+            'F': 'Better Luck Next Time! 🔄'
+        };
+        
+        return {
+            grade,
+            message: gradeMessages[grade] || 'Performance Evaluated!',
+            score: stats.performanceScore || 0
+        };
     }
 
     /**
@@ -1094,23 +1225,151 @@ class UIManager {
     }
 
     /**
-     * Fallback share method
+     * Hide victory screen with animation
      */
-    fallbackShare(text) {
-        // Create temporary textarea for copying
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
+    hideVictoryScreen() {
+        if (!this.elements.victoryScreen) {
+            return;
+        }
         
         try {
-            document.execCommand('copy');
-            this.showFeedback('Results copied to clipboard!', 'success');
+            this.elements.victoryScreen.classList.remove('show');
+            this.elements.victoryScreen.classList.add('hide');
+            
+            setTimeout(() => {
+                this.elements.victoryScreen.style.display = 'none';
+                this.elements.victoryScreen.classList.remove('hide');
+            }, 300);
+            
+            console.log('Victory screen hidden');
         } catch (error) {
-            console.error('Copy failed:', error);
-            this.showFeedback('Unable to copy results', 'error');
-        } finally {
-            document.body.removeChild(textarea);
+            console.error('Error hiding victory screen:', error);
+        }
+    }
+
+    /**
+     * Handle play again button click
+     */
+    handlePlayAgain() {
+        try {
+            console.log('Play again requested');
+            
+            // Hide victory screen
+            this.hideVictoryScreen();
+            
+            // Reset game after animation
+            setTimeout(() => {
+                this.resetGame();
+                this.showFeedback('🎮 Starting new game...', 'info');
+            }, 500);
+            
+        } catch (error) {
+            console.error('Error handling play again:', error);
+            this.showFeedback('❌ Error starting new game', 'error');
+        }
+    }
+    
+    /**
+     * Handle view achievements button click
+     */
+    handleViewAchievements() {
+        try {
+            console.log('View achievements requested');
+            
+            if (this.achievementManager && typeof this.achievementManager.showAchievementGallery === 'function') {
+                this.achievementManager.showAchievementGallery();
+            } else {
+                this.showFeedback('🏆 Achievement gallery coming soon!', 'info');
+            }
+            
+        } catch (error) {
+            console.error('Error viewing achievements:', error);
+            this.showFeedback('❌ Error loading achievements', 'error');
+        }
+    }
+    
+    /**
+     * Handle share results button click
+     */
+    handleShareResults() {
+        try {
+            console.log('Share results requested');
+            
+            const stats = this.gameState.getGameStatistics();
+            const grade = this.calculatePerformanceGrade(stats);
+            
+            const shareText = `🏰 I just completed LobeLabyrinth! 🧠\n\n` +
+                            `🏆 Final Score: ${stats.finalScore.toLocaleString()}\n` +
+                            `⏱️ Time: ${stats.playTimeFormatted}\n` +
+                            `🎯 Accuracy: ${stats.accuracyPercent}%\n` +
+                            `🗺️ Rooms Explored: ${stats.roomsVisited}/${stats.roomsTotal}\n` +
+                            `📊 Grade: ${grade}\n\n` +
+                            `Can you beat my score? 🚀`;
+            
+            // Try Web Share API first (mobile/modern browsers)
+            if (navigator.share) {
+                navigator.share({
+                    title: 'LobeLabyrinth Results',
+                    text: shareText
+                }).then(() => {
+                    this.showFeedback('✅ Results shared successfully!', 'success');
+                }).catch((error) => {
+                    console.log('Share failed, falling back to clipboard');
+                    this.copyToClipboard(shareText);
+                });
+            } else {
+                // Fallback to clipboard
+                this.copyToClipboard(shareText);
+            }
+            
+        } catch (error) {
+            console.error('Error sharing results:', error);
+            this.showFeedback('❌ Error sharing results', 'error');
+        }
+    }
+    
+    /**
+     * Copy text to clipboard with fallback
+     * @param {string} text - Text to copy
+     */
+    copyToClipboard(text) {
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(text).then(() => {
+                this.showFeedback('📋 Results copied to clipboard!', 'success');
+            }).catch(() => {
+                this.fallbackCopyToClipboard(text);
+            });
+        } else {
+            this.fallbackCopyToClipboard(text);
+        }
+    }
+    
+    /**
+     * Fallback clipboard copy method
+     * @param {string} text - Text to copy
+     */
+    fallbackCopyToClipboard(text) {
+        try {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            if (successful) {
+                this.showFeedback('📋 Results copied to clipboard!', 'success');
+            } else {
+                this.showFeedback('❌ Could not copy results', 'error');
+            }
+        } catch (error) {
+            console.error('Fallback copy failed:', error);
+            this.showFeedback('❌ Copy not supported in this browser', 'error');
         }
     }
 }

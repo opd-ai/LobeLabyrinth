@@ -240,18 +240,47 @@ class GameState {
         const correctAnswers = this.getCorrectAnswersCount();
         const accuracy = questionsAnsweredCount > 0 ? (correctAnswers / questionsAnsweredCount) * 100 : 0;
         
+        // Calculate detailed bonuses
+        const bonusDetails = this.calculateDetailedBonuses();
+        const totalRooms = this.dataLoader ? this.dataLoader.getAllRooms().length : 10;
+        const totalQuestions = this.dataLoader ? this.dataLoader.getAllQuestions().length : 50;
+        
         return {
+            // Basic stats
             score: this.score,
+            baseScore: this.score,
             finalScore: this.calculateFinalScore(),
+            
+            // Timing stats
             playTime,
             playTimeFormatted: this.formatTime(playTime),
+            averageAnswerTime: questionsAnsweredCount > 0 ? playTime / questionsAnsweredCount : 0,
+            averageAnswerTimeFormatted: this.formatTime(questionsAnsweredCount > 0 ? playTime / questionsAnsweredCount : 0),
+            
+            // Completion stats
             roomsVisited: this.visitedRooms.size,
+            roomsTotal: totalRooms,
+            roomsExploredPercent: Math.round((this.visitedRooms.size / totalRooms) * 100),
             questionsAnswered: questionsAnsweredCount,
+            questionsTotal: totalQuestions,
+            questionsAnsweredPercent: Math.round((questionsAnsweredCount / totalQuestions) * 100),
             correctAnswers,
             incorrectAnswers: questionsAnsweredCount - correctAnswers,
             accuracy: Math.round(accuracy * 10) / 10,
+            accuracyPercent: Math.round(accuracy),
+            
+            // Bonus breakdown
+            completionBonus: bonusDetails.completionBonus,
+            explorationBonus: bonusDetails.explorationBonus,
+            perfectBonus: bonusDetails.perfectBonus,
+            speedBonus: bonusDetails.speedBonus,
+            achievementBonus: bonusDetails.achievementBonus,
+            
+            // Game state
             gameCompleted: this.gameCompleted,
-            averageAnswerTime: questionsAnsweredCount > 0 ? playTime / questionsAnsweredCount : 0
+            
+            // Performance grade calculation
+            performanceScore: this.calculatePerformanceScore(accuracy, this.visitedRooms.size / totalRooms * 100, questionsAnsweredCount / totalQuestions * 100)
         };
     }
 
@@ -273,23 +302,42 @@ class GameState {
     }
 
     /**
-     * Calculate final score with bonuses
+     * Calculate detailed bonus breakdown
+     * @returns {Object} Detailed bonus calculations
      */
-    calculateFinalScore() {
-        const completionBonus = this.gameCompleted ? 500 : 0;
-        const explorationBonus = this.visitedRooms.size * 10;
-        
-        // Perfect game bonus
+    calculateDetailedBonuses() {
         const questionsAnsweredCount = this.answeredQuestions.size;
         const correctAnswers = this.getCorrectAnswersCount();
         const accuracy = questionsAnsweredCount > 0 ? (correctAnswers / questionsAnsweredCount) * 100 : 0;
-        const perfectBonus = accuracy === 100 ? 1000 : 0;
-        
-        // Speed bonus (under 10 minutes)
         const playTime = Date.now() - this.startTime;
-        const speedBonus = playTime < 600000 ? 750 : 0;
         
-        return this.score + completionBonus + explorationBonus + perfectBonus + speedBonus;
+        return {
+            completionBonus: this.gameCompleted ? 500 : 0,
+            explorationBonus: this.visitedRooms.size * 10,
+            perfectBonus: accuracy === 100 ? 1000 : 0,
+            speedBonus: playTime < 600000 ? 750 : 0, // Under 10 minutes
+            achievementBonus: 0 // Will be calculated by achievement manager
+        };
+    }
+    
+    /**
+     * Calculate final score with bonuses
+     */
+    calculateFinalScore() {
+        const bonuses = this.calculateDetailedBonuses();
+        return this.score + bonuses.completionBonus + bonuses.explorationBonus + 
+               bonuses.perfectBonus + bonuses.speedBonus + bonuses.achievementBonus;
+    }
+    
+    /**
+     * Calculate performance score for grading
+     * @param {number} accuracy - Accuracy percentage
+     * @param {number} exploration - Exploration percentage
+     * @param {number} completion - Question completion percentage
+     * @returns {number} Performance score 0-100
+     */
+    calculatePerformanceScore(accuracy, exploration, completion) {
+        return Math.round((accuracy * 0.5) + (exploration * 0.3) + (completion * 0.2));
     }
 
     /**

@@ -1016,6 +1016,104 @@
         .grade-good { color: #744210; }
         .grade-fair { color: #c05621; }
 
+        /* Achievement icons in victory screen */
+        .achievement-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .achievement-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            min-width: 60px;
+        }
+
+        .achievement-icon:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-color: #cbd5e0;
+        }
+
+        .achievement-emoji {
+            font-size: 1.8em;
+            margin-bottom: 4px;
+        }
+
+        .achievement-name {
+            font-size: 0.7em;
+            font-weight: 600;
+            color: #4a5568;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .more-achievements {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .achievement-count {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .no-achievements {
+            color: #718096;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Performance grade styling */
+        .grade-s { 
+            color: #9f7aea; 
+            text-shadow: 0 0 8px rgba(159, 122, 234, 0.5);
+            animation: gradientShine 2s ease-in-out infinite;
+        }
+        .grade-a { color: #38a169; }
+        .grade-b { color: #3182ce; }
+        .grade-c { color: #d69e2e; }
+        .grade-d { color: #e53e3e; }
+        .grade-f { color: #742a2a; }
+
+        @keyframes gradientShine {
+            0%, 100% { text-shadow: 0 0 8px rgba(159, 122, 234, 0.5); }
+            50% { text-shadow: 0 0 16px rgba(159, 122, 234, 0.8); }
+        }
+
+        /* Victory screen animations */
+        .victory-screen.show {
+            display: flex;
+            opacity: 1;
+            animation: victoryFadeIn 0.5s ease-out;
+        }
+
+        .victory-screen.hide {
+            animation: victoryFadeOut 0.3s ease-in;
+        }
+
+        @keyframes victoryFadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes victoryFadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
         /* Mobile responsiveness for victory screen */
         @media (max-width: 768px) {
             .victory-content {

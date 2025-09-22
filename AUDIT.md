@@ -18,6 +18,7 @@ The LobeLabyrinth trivia game is a well-structured implementation of an Encarta 
 
 ### **Bug ID**: BUG-001
 **Severity**: High  
+**Status**: RESOLVED (Commit: b2722f6 - 2025-09-22)
 **Location**: `src/gameState.js:34`  
 **Description**: Hardcoded starting room ID conflicts with data structure. GameState constructor sets `currentRoomId = 'entrance'` but `rooms.json` uses `'entrance_hall'` as the starting room ID.  
 
@@ -25,6 +26,13 @@ The LobeLabyrinth trivia game is a well-structured implementation of an Encarta 
 1. Load the game  
 2. Check console logs  
 3. Observe error when trying to get current room data  
+
+**Root Cause**: GameState constructor hardcoded 'entrance' instead of calling dataLoader.getStartingRoom() to get the actual starting room from data.
+
+**Resolution**: 
+- Added initializeStartingRoom() method that calls dataLoader.getStartingRoom()
+- Removed hardcoded room IDs from constructor and loadGame() method
+- Added proper fallback handling for edge cases  
 
 **Recommended Fix**:
 ```javascript
@@ -51,6 +59,7 @@ async initializeStartingRoom() {
 
 ### **Bug ID**: BUG-002
 **Severity**: Medium  
+**Status**: RESOLVED (Commit: d6e0100 - 2025-09-22)
 **Location**: `src/quizEngine.js:200-210`  
 **Description**: Race condition when rapidly clicking answer buttons. The `isQuestionActive` flag is not properly managed, allowing multiple simultaneous answer submissions.
 
@@ -58,6 +67,14 @@ async initializeStartingRoom() {
 1. Start a question  
 2. Rapidly click multiple answer buttons  
 3. Observe multiple answer processing events  
+
+**Root Cause**: No protection against concurrent answer processing between UI guard checks and actual processing.
+
+**Resolution**:
+- Added processingAnswer flag to QuizEngine to prevent concurrent submissions
+- Enhanced selectAnswer() method in UIManager with additional race condition checks  
+- Added protection in handleTimeUp() to prevent conflicts with ongoing answer processing
+- Used finally block to ensure processingAnswer flag is always reset  
 
 **Recommended Fix**:
 ```javascript
@@ -81,13 +98,26 @@ async submitAnswer(answerIndex) {
 
 ### **Bug ID**: BUG-003
 **Severity**: Medium  
+**Status**: RESOLVED (Commit: d36b718 - 2025-09-22)
 **Location**: `src/uiManager.js:1370-1378`  
-**Description**: Memory leak from event listeners not being cleaned up when creating new answer buttons. Each call to `displayAnswerButtons()` adds new event listeners without removing old ones.
+**Description**: Memory leak from event listeners not being cleaned up when creating new answer buttons. Each call to `displayAnswerOptions()` adds new event listeners without removing old ones.
 
 **Steps to Reproduce**:
 1. Answer multiple questions  
 2. Check browser dev tools performance  
 3. Observe increasing event listener count  
+
+**Root Cause**: Multiple issues causing memory leaks:
+1. Inline onclick handlers in innerHTML prevent proper tracking
+2. setupAnswerButtonKeyNavigation() adds listeners without cleanup
+3. No mechanism to remove old listeners when creating new buttons
+
+**Resolution**:
+- Added answerButtonListeners tracking array for proper listener management
+- Implemented clearAnswerButtonListeners() method to clean up old listeners
+- Replaced inline onclick handlers with tracked addEventListener calls
+- Added escapeHtml() method to prevent XSS vulnerabilities in answer text
+- Deprecated old setupAnswerButtonKeyNavigation method to prevent duplicate listeners  
 
 **Recommended Fix**:
 ```javascript

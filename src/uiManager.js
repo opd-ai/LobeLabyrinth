@@ -1435,6 +1435,12 @@ Press any key to close this help.
      */
     async selectAnswer(answerIndex) {
         if (!this.isQuestionActive || !this.currentQuestion) return;
+        
+        // Check if quiz engine is already processing an answer
+        if (this.quizEngine && this.quizEngine.processingAnswer) {
+            console.warn('Answer already being processed, ignoring click');
+            return;
+        }
 
         try {
             // Get the clicked button element for animation

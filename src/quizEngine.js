@@ -12,6 +12,7 @@ class QuizEngine {
         this.questionTimeLimit = 30000; // 30 seconds per question
         this.questionStartTime = null;
         this.timeRemaining = 0;
+        this.processingAnswer = false; // Prevent concurrent answer processing
         
         // Question selection state
         this.questionHistory = new Set();
@@ -218,6 +219,12 @@ class QuizEngine {
     handleTimeUp() {
         this.clearQuestionTimer();
         
+        // If answer is already being processed, don't emit timeUp
+        if (this.processingAnswer) {
+            console.log('Answer already being processed, skipping timeUp');
+            return;
+        }
+        
         console.log('Time up for question:', this.currentQuestion?.id);
         
         const result = {
@@ -242,6 +249,13 @@ class QuizEngine {
             if (!this.currentQuestion) {
                 throw new Error('No question currently active');
             }
+            
+            if (this.processingAnswer) {
+                console.warn('Answer processing already in progress, ignoring duplicate submission');
+                return null;
+            }
+            
+            this.processingAnswer = true;
 
             const question = this.currentQuestion;
             const timeElapsed = Date.now() - this.questionStartTime;
@@ -286,6 +300,8 @@ class QuizEngine {
             console.error('Failed to validate answer:', error);
             this.emit('error', { type: 'validation', message: error.message });
             throw error;
+        } finally {
+            this.processingAnswer = false;
         }
     }
 

@@ -371,6 +371,46 @@
             50% { transform: translateX(calc(100vw - 40px)); opacity: 0.7; }
         }
 
+        .progress-fill.completed {
+            background: linear-gradient(90deg, #48bb78 0%, #38a169 100%);
+            box-shadow: 0 0 8px rgba(72, 187, 120, 0.4);
+        }
+
+        .progress-fill.completed::after {
+            animation: completedPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes completedPulse {
+            0%, 100% { opacity: 0.2; }
+            50% { opacity: 0.4; }
+        }
+
+        /* Screen reader only content */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Focus styles for accessibility */
+        *:focus {
+            outline: 2px solid #667eea;
+            outline-offset: 2px;
+        }
+
+        .answer-btn:focus,
+        button:focus {
+            outline: 3px solid #667eea;
+            outline-offset: 3px;
+            transform: scale(1.02);
+        }
+
         /* Game Controls */
         .controls-grid {
             display: grid;
@@ -1295,96 +1335,100 @@
 <body>
     <div class="game-container">
         <!-- Header -->
-        <div class="game-header">
+        <div class="game-header" role="banner">
             <h1>🏰 LobeLabyrinth</h1>
             <p>Navigate the castle of knowledge through wisdom and wit</p>
         </div>
 
         <!-- Main Game Area -->
-        <div class="game-main">
+        <main class="game-main" role="main">
             <!-- Castle Map -->
-            <div id="map-area" class="section">
+            <section id="map-area" class="section" aria-labelledby="map-title">
                 <div class="map-header">
-                    <h3>🏰 Castle Map</h3>
+                    <h3 id="map-title">🏰 Castle Map</h3>
                     <p>Click on rooms to navigate (when unlocked)</p>
                 </div>
-                <canvas id="map-canvas" width="800" height="400"></canvas>
-                <div class="map-legend">
+                <canvas id="map-canvas" width="800" height="400" 
+                        role="img" 
+                        aria-label="Interactive castle map showing rooms and connections"
+                        tabindex="0"></canvas>
+                <div class="map-legend" role="region" aria-label="Map legend">
                     <div class="legend-item">
-                        <div class="legend-color legend-current"></div>
+                        <div class="legend-color legend-current" aria-hidden="true"></div>
                         <span>Current Room</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-color legend-visited"></div>
+                        <div class="legend-color legend-visited" aria-hidden="true"></div>
                         <span>Visited</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-color legend-accessible"></div>
+                        <div class="legend-color legend-accessible" aria-hidden="true"></div>
                         <span>Accessible</span>
                     </div>
                     <div class="legend-item">
-                        <div class="legend-color legend-locked"></div>
+                        <div class="legend-color legend-locked" aria-hidden="true"></div>
                         <span>Locked</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Room Information -->
-            <div id="room-info" class="section">
+            <section id="room-info" class="section" aria-labelledby="room-name">
                 <h2 id="room-name">Loading...</h2>
                 <p id="room-description">Initializing game...</p>
                 <p id="room-connections"></p>
-            </div>
+            </section>
 
             <!-- Question Area -->
-            <div id="question-area" class="section">
-                <h3>Question</h3>
-                <div id="question-text"></div>
-                <div class="question-meta">
+            <section id="question-area" class="section" aria-labelledby="question-heading">
+                <h3 id="question-heading">Question</h3>
+                <div id="question-text" role="region" aria-live="polite" tabindex="0"></div>
+                <div class="question-meta" role="region" aria-label="Question metadata">
                     <div class="meta-item">Category: <span id="question-category"></span></div>
                     <div class="meta-item">Difficulty: <span id="question-difficulty"></span></div>
                     <div class="meta-item">Points: <span id="question-points"></span></div>
                 </div>
-            </div>
+            </section>
 
             <!-- Timer -->
-            <div id="timer-area" class="section">
-                <div class="timer-container">
-                    <div id="timer-text">30s</div>
-                    <div class="timer-bar-container">
+            <section id="timer-area" class="section" aria-labelledby="timer-heading">
+                <h3 id="timer-heading" class="sr-only">Question Timer</h3>
+                <div class="timer-container" role="timer" aria-label="Time remaining for current question">
+                    <div id="timer-text" aria-live="polite">30s</div>
+                    <div class="timer-bar-container" role="progressbar" aria-valuemin="0" aria-valuemax="30" aria-valuenow="30">
                         <div id="timer-bar"></div>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Answer Area -->
-            <div id="answer-area" class="section">
-                <h3>Choose Your Answer</h3>
-                <div id="answer-buttons"></div>
-            </div>
+            <section id="answer-area" class="section" aria-labelledby="answer-heading">
+                <h3 id="answer-heading">Choose Your Answer</h3>
+                <div id="answer-buttons" role="radiogroup" aria-labelledby="answer-heading" aria-required="true"></div>
+            </section>
 
             <!-- Feedback Area -->
             <div id="feedback-area"></div>
         </div>
 
         <!-- Sidebar -->
-        <div class="game-sidebar">
+        <aside class="game-sidebar" role="complementary" aria-label="Game information and controls">
             <!-- Score Display -->
-            <div id="score-display" class="section">
-                <h3>Your Progress</h3>
+            <section id="score-display" class="section" aria-labelledby="progress-heading">
+                <h3 id="progress-heading">Your Progress</h3>
                 <div class="score-item">
                     <span>Score:</span>
-                    <span class="score-value" id="current-score">0</span>
+                    <span class="score-value" id="current-score" aria-live="polite">0</span>
                 </div>
                 <div class="score-item">
                     <span>Questions Answered:</span>
-                    <span class="score-value" id="questions-answered">0</span>
+                    <span class="score-value" id="questions-answered" aria-live="polite">0</span>
                 </div>
                 <div class="score-item">
                     <span>Rooms Visited:</span>
-                    <span class="score-value" id="rooms-visited">1</span>
+                    <span class="score-value" id="rooms-visited" aria-live="polite">1</span>
                 </div>
-            </div>
+            </section>
 
             <!-- Progress Indicators -->
             <div id="progress-indicators" class="section">

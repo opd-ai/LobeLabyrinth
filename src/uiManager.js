@@ -58,6 +58,17 @@ class UIManager {
             questionsAnswered: document.getElementById('questions-answered'),
             roomsVisited: document.getElementById('rooms-visited'),
             
+            // Progress indicators
+            progressIndicators: document.getElementById('progress-indicators'),
+            overallProgressPercent: document.getElementById('overall-progress-percent'),
+            overallProgressFill: document.getElementById('overall-progress-fill'),
+            roomsProgressPercent: document.getElementById('rooms-progress-percent'),
+            roomsProgressFill: document.getElementById('rooms-progress-fill'),
+            accuracyProgressPercent: document.getElementById('accuracy-progress-percent'),
+            accuracyProgressFill: document.getElementById('accuracy-progress-fill'),
+            playTimeDisplay: document.getElementById('play-time-display'),
+            timePulse: document.getElementById('time-pulse'),
+            
             // Game controls
             gameControls: document.getElementById('game-controls'),
             newQuestionBtn: document.getElementById('new-question-btn'),
@@ -1179,6 +1190,62 @@ Press any key to close this help.
         if (this.elements.roomsVisited) {
             this.elements.roomsVisited.textContent = stats.roomsVisited;
         }
+
+        // Update progress indicators
+        this.updateProgressIndicators();
+    }
+
+    /**
+     * Update visual progress indicators
+     */
+    updateProgressIndicators() {
+        try {
+            const stats = this.gameState.getGameStatistics();
+            
+            // Overall progress (combination of rooms and accuracy)
+            const overallProgress = Math.round((stats.roomsExploredPercent + stats.accuracyPercent) / 2);
+            this.updateProgressBar('overall', overallProgress);
+            
+            // Room exploration progress
+            this.updateProgressBar('rooms', stats.roomsExploredPercent);
+            
+            // Answer accuracy progress
+            this.updateProgressBar('accuracy', stats.accuracyPercent);
+            
+            // Play time display
+            if (this.elements.playTimeDisplay) {
+                const timeInCurrentRoom = this.gameState.getTimeInCurrentRoom();
+                this.elements.playTimeDisplay.textContent = this.gameState.formatTime(timeInCurrentRoom);
+            }
+            
+        } catch (error) {
+            console.error('Error updating progress indicators:', error);
+        }
+    }
+
+    /**
+     * Update individual progress bar
+     * @param {string} type - Progress bar type (overall, rooms, accuracy)
+     * @param {number} percentage - Progress percentage (0-100)
+     */
+    updateProgressBar(type, percentage) {
+        const percentElement = this.elements[`${type}ProgressPercent`];
+        const fillElement = this.elements[`${type}ProgressFill`];
+        
+        if (percentElement && fillElement) {
+            // Clamp percentage between 0 and 100
+            const clampedPercentage = Math.max(0, Math.min(100, percentage || 0));
+            
+            percentElement.textContent = `${clampedPercentage}%`;
+            fillElement.style.width = `${clampedPercentage}%`;
+            
+            // Add visual feedback for milestones
+            if (clampedPercentage >= 100) {
+                fillElement.classList.add('completed');
+            } else {
+                fillElement.classList.remove('completed');
+            }
+        }
     }
 
     /**
@@ -1295,8 +1362,16 @@ Press any key to close this help.
         if (!this.elements.answerButtons) return;
 
         const buttonsHtml = questionData.answers.map((answer, index) => 
-            `<button class="answer-btn" onclick="uiManager.selectAnswer(${index})" data-answer="${index}">
-                ${String.fromCharCode(65 + index)}. ${answer}
+            `<button class="answer-btn" 
+                     onclick="uiManager.selectAnswer(${index})" 
+                     data-answer="${index}"
+                     role="radio"
+                     aria-posinset="${index + 1}"
+                     aria-setsize="${questionData.answers.length}"
+                     aria-label="Option ${String.fromCharCode(65 + index)}: ${answer}"
+                     tabindex="${index === 0 ? '0' : '-1'}">
+                <span class="answer-letter" aria-hidden="true">${String.fromCharCode(65 + index)}.</span>
+                <span class="answer-text">${answer}</span>
             </button>`
         ).join('');
 
@@ -1305,6 +1380,54 @@ Press any key to close this help.
         if (this.elements.answerArea) {
             this.elements.answerArea.style.display = 'block';
         }
+
+        // Add keyboard navigation for radio group
+        this.setupAnswerButtonKeyNavigation();
+    }
+
+    /**
+     * Setup keyboard navigation for answer buttons (radio group pattern)
+     */
+    setupAnswerButtonKeyNavigation() {
+        const buttons = document.querySelectorAll('.answer-btn');
+        
+        buttons.forEach((button, index) => {
+            button.addEventListener('keydown', (e) => {
+                switch (e.key) {
+                    case 'ArrowDown':
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        const nextIndex = (index + 1) % buttons.length;
+                        this.focusAnswerButton(nextIndex);
+                        break;
+                    case 'ArrowUp':
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        const prevIndex = (index - 1 + buttons.length) % buttons.length;
+                        this.focusAnswerButton(prevIndex);
+                        break;
+                    case ' ':
+                    case 'Enter':
+                        e.preventDefault();
+                        this.selectAnswer(index);
+                        break;
+                }
+            });
+        });
+    }
+
+    /**
+     * Focus specific answer button and update tabindex
+     */
+    focusAnswerButton(index) {
+        const buttons = document.querySelectorAll('.answer-btn');
+        
+        buttons.forEach((btn, i) => {
+            btn.tabIndex = i === index ? 0 : -1;
+            if (i === index) {
+                btn.focus();
+            }
+        });
     }
 
     /**

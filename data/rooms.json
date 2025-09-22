@@ -44,11 +44,22 @@
       "id": "throne_room",
       "name": "Royal Throne Room",
       "description": "The heart of the castle, where the final challenge awaits. Golden throne gleams in the torchlight.",
-      "connections": ["armory", "observatory"],
+      "connections": ["armory", "observatory", "secret_chamber"],
       "requiredScore": 400,
       "isStartingRoom": false,
       "imageUrl": "images/throne_room.jpg",
       "questionCategories": ["history", "literature", "general"],
+      "isFinalRoom": false
+    },
+    {
+      "id": "secret_chamber",
+      "name": "Secret Chamber",
+      "description": "A hidden chamber behind the throne, filled with ancient mysteries and the ultimate test of knowledge.",
+      "connections": ["library", "throne_room"],
+      "requiredScore": 500,
+      "isStartingRoom": false,
+      "imageUrl": "images/secret_chamber.jpg",
+      "questionCategories": ["science", "literature", "history", "general"],
       "isFinalRoom": true
     }
   ]

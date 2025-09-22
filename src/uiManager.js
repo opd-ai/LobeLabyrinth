@@ -193,14 +193,15 @@ class UIManager {
         this.currentFocusIndex = 0;
         this.focusableElements = [];
         
-        // Add global keyboard event listener
-        document.addEventListener('keydown', (event) => this.handleKeyboardInput(event));
-        
-        // Prevent default handling for specific keys
+        // Add single global keyboard event listener for efficiency
         document.addEventListener('keydown', (event) => {
+            // Handle preventDefault first to avoid unnecessary processing
             if (this.shouldPreventDefault(event)) {
                 event.preventDefault();
             }
+            
+            // Process keyboard input
+            this.handleKeyboardInput(event);
         });
         
         console.log('Keyboard navigation setup complete');

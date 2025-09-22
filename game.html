@@ -440,6 +440,341 @@
         .legend-visited { background-color: #48bb78; }
         .legend-accessible { background-color: #ed8936; }
         .legend-locked { background-color: #a0aec0; }
+
+        /* Achievement System Styles */
+        
+        /* Achievement Stats in Sidebar */
+        .achievement-stats-summary {
+            font-size: 0.9em;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+
+        .achievement-points {
+            color: #9f7aea;
+            font-weight: bold;
+        }
+
+        /* Achievement Notification */
+        .achievement-notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            transform: translateY(-100%);
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            pointer-events: none;
+        }
+
+        .achievement-notification.show {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .achievement-unlock-animation {
+            background: linear-gradient(135deg, #fef5e7, #fed7aa);
+            border: 2px solid #f6ad55;
+            border-radius: 12px;
+            padding: 15px;
+            max-width: 350px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: achievementPulse 0.6s ease-out;
+        }
+
+        @keyframes achievementPulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .achievement-unlock-animation .achievement-icon {
+            font-size: 2.5em;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .achievement-unlock-animation .achievement-details {
+            flex: 1;
+        }
+
+        .achievement-unlock-animation .achievement-title {
+            font-weight: bold;
+            color: #7b341e;
+            font-size: 0.9em;
+            margin-bottom: 2px;
+        }
+
+        .achievement-unlock-animation .achievement-name {
+            font-weight: bold;
+            color: #2d3748;
+            font-size: 1.1em;
+            margin-bottom: 4px;
+        }
+
+        .achievement-unlock-animation .achievement-description {
+            color: #4a5568;
+            font-size: 0.85em;
+            margin-bottom: 4px;
+        }
+
+        .achievement-unlock-animation .achievement-points {
+            color: #9f7aea;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .achievement-rarity {
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            font-size: 0.7em;
+            font-weight: bold;
+            padding: 4px 6px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .achievement-rarity-common {
+            background: #e2e8f0;
+            color: #4a5568;
+        }
+
+        .achievement-rarity-uncommon {
+            background: #c6f6d5;
+            color: #22543d;
+        }
+
+        .achievement-rarity-rare {
+            background: #bee3f8;
+            color: #2a4365;
+        }
+
+        .achievement-rarity-epic {
+            background: #e9d8fd;
+            color: #553c9a;
+        }
+
+        .achievement-rarity-legendary {
+            background: #fed7aa;
+            color: #7b341e;
+        }
+
+        /* Achievement Gallery */
+        .achievement-gallery {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1001;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .achievement-gallery.visible {
+            display: flex;
+        }
+
+        .achievement-gallery > div {
+            background: white;
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 80vh;
+            width: 100%;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .achievement-gallery-header {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 20px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .achievement-gallery-header h3 {
+            color: #2d3748;
+            margin: 0;
+        }
+
+        .achievement-summary {
+            color: #4a5568;
+            font-size: 0.9em;
+        }
+
+        .achievement-close-btn {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .achievement-close-btn:hover {
+            background: #c53030;
+        }
+
+        .achievement-categories {
+            padding: 20px;
+        }
+
+        .achievement-category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            color: #2d3748;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-progress {
+            color: #4a5568;
+            font-size: 0.8em;
+            font-weight: normal;
+        }
+
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+
+        .achievement-card {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 15px;
+            display: flex;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .achievement-card.unlocked {
+            background: linear-gradient(135deg, #f0fff4, #c6f6d5);
+            border-color: #68d391;
+        }
+
+        .achievement-card.locked {
+            background: #edf2f7;
+            border-color: #cbd5e0;
+            opacity: 0.7;
+        }
+
+        .achievement-card.locked .achievement-icon {
+            opacity: 0.5;
+            filter: grayscale(100%);
+        }
+
+        .achievement-card .achievement-icon {
+            font-size: 2em;
+            width: 50px;
+            text-align: center;
+        }
+
+        .achievement-info {
+            flex: 1;
+        }
+
+        .achievement-card .achievement-name {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 4px;
+            font-size: 0.95em;
+        }
+
+        .achievement-card .achievement-description {
+            color: #4a5568;
+            font-size: 0.8em;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .achievement-progress-bar {
+            background: #e2e8f0;
+            border-radius: 10px;
+            height: 6px;
+            margin-bottom: 8px;
+            overflow: hidden;
+        }
+
+        .achievement-progress-fill {
+            background: linear-gradient(90deg, #9f7aea, #b794f6);
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+
+        .achievement-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.75em;
+        }
+
+        .achievement-card .achievement-points {
+            color: #9f7aea;
+            font-weight: bold;
+        }
+
+        .achievement-card .achievement-rarity {
+            color: #4a5568;
+            font-style: italic;
+            writing-mode: initial;
+            text-orientation: initial;
+            padding: 2px 6px;
+            border-radius: 4px;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Mobile responsiveness for achievements */
+        @media (max-width: 768px) {
+            .achievement-notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+            }
+
+            .achievement-unlock-animation {
+                max-width: none;
+            }
+
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .achievement-gallery {
+                padding: 10px;
+            }
+
+            .achievement-gallery > div {
+                max-height: 90vh;
+            }
+        }
     </style>
 </head>
 <body>
@@ -578,11 +913,22 @@
         </div>
     </div>
 
+    <!-- Achievement Gallery (Hidden by default) -->
+    <div id="achievement-gallery" class="achievement-gallery">
+        <!-- Content will be dynamically populated -->
+    </div>
+
+    <!-- Achievement Notification (Hidden by default) -->
+    <div id="achievement-notification" class="achievement-notification">
+        <!-- Content will be dynamically populated -->
+    </div>
+
     <!-- Load game modules -->
     <script src="src/dataLoader.js"></script>
     <script src="src/gameState.js"></script>
     <script src="src/quizEngine.js"></script>
     <script src="src/animationManager.js"></script>
+    <script src="src/achievementManager.js"></script>
     <script src="src/mapRenderer.js"></script>
     <script src="src/uiManager.js"></script>
 
@@ -592,6 +938,7 @@
         let gameState;
         let quizEngine;
         let animationManager;
+        let achievementManager;
         let mapRenderer;
         let uiManager;
 
@@ -626,8 +973,12 @@
                 // Initial map render
                 await mapRenderer.render();
                 
+                updateGameStatus('Setting up achievement system...');
+                achievementManager = new AchievementManager(dataLoader, gameState);
+                await achievementManager.initialize();
+                
                 updateGameStatus('Creating user interface...');
-                uiManager = new UIManager(dataLoader, gameState, quizEngine, animationManager);
+                uiManager = new UIManager(dataLoader, gameState, quizEngine, animationManager, achievementManager);
                 
                 // Try to load saved game
                 if (gameState.loadGame()) {
@@ -662,6 +1013,7 @@
             gameState: () => gameState,
             quizEngine: () => quizEngine,
             animationManager: () => animationManager,
+            achievementManager: () => achievementManager,
             mapRenderer: () => mapRenderer,
             uiManager: () => uiManager
         };

@@ -572,6 +572,7 @@
     <script src="src/dataLoader.js"></script>
     <script src="src/gameState.js"></script>
     <script src="src/quizEngine.js"></script>
+    <script src="src/animationManager.js"></script>
     <script src="src/mapRenderer.js"></script>
     <script src="src/uiManager.js"></script>
 
@@ -580,6 +581,7 @@
         let dataLoader;
         let gameState;
         let quizEngine;
+        let animationManager;
         let mapRenderer;
         let uiManager;
 
@@ -601,6 +603,12 @@
                 // Wait for quiz engine to initialize
                 await new Promise(resolve => setTimeout(resolve, 200));
                 
+                updateGameStatus('Initializing animations...');
+                animationManager = new AnimationManager({
+                    defaultDuration: 800,
+                    easing: 'ease-out'
+                });
+                
                 updateGameStatus('Initializing castle map...');
                 const mapCanvas = document.getElementById('map-canvas');
                 mapRenderer = new MapRenderer(mapCanvas, gameState, dataLoader);
@@ -609,7 +617,7 @@
                 await mapRenderer.render();
                 
                 updateGameStatus('Creating user interface...');
-                uiManager = new UIManager(dataLoader, gameState, quizEngine);
+                uiManager = new UIManager(dataLoader, gameState, quizEngine, animationManager);
                 
                 // Try to load saved game
                 if (gameState.loadGame()) {
@@ -643,6 +651,7 @@
             dataLoader: () => dataLoader,
             gameState: () => gameState,
             quizEngine: () => quizEngine,
+            animationManager: () => animationManager,
             mapRenderer: () => mapRenderer,
             uiManager: () => uiManager
         };

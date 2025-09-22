@@ -2,16 +2,18 @@
  * UIManager class handles the user interface interactions and display updates
  */
 class UIManager {
-    constructor(dataLoader, gameState, quizEngine) {
+    constructor(dataLoader, gameState, quizEngine, animationManager = null) {
         this.dataLoader = dataLoader;
         this.gameState = gameState;
         this.quizEngine = quizEngine;
+        this.animationManager = animationManager;
         
         this.elements = {};
         this.currentQuestion = null;
         this.isQuestionActive = false;
+        this.previousScore = 0; // Track previous score for animations
         
-        console.log('UIManager initialized');
+        console.log('UIManager initialized with animations:', !!this.animationManager);
         this.initializeElements();
         this.setupEventListeners();
         this.updateDisplay();
@@ -118,16 +120,20 @@ class UIManager {
     }
 
     /**
-     * Update the entire display
+     * Update all UI displays
      */
     async updateDisplay() {
+        // Initialize previous score if not set
+        if (this.previousScore === 0) {
+            const stats = this.gameState.getStatistics();
+            this.previousScore = stats.score;
+        }
+        
         await this.updateRoomInfo();
-        this.updateScoreDisplay();
-        this.updateNavigationOptions();
+        await this.updateScoreDisplay();
+        await this.updateNavigationOptions();
         this.updateGameControls();
-    }
-
-    /**
+    }    /**
      * Update room information display
      */
     async updateRoomInfo() {
@@ -163,11 +169,32 @@ class UIManager {
     /**
      * Update score and statistics display
      */
-    updateScoreDisplay() {
+    async updateScoreDisplay() {
         const stats = this.gameState.getStatistics();
         
-        if (this.elements.currentScore) {
+        // Animate score change if AnimationManager is available
+        if (this.elements.currentScore && this.animationManager) {
+            try {
+                // Only animate if score has changed significantly (more than just page refresh)
+                if (Math.abs(stats.score - this.previousScore) > 0 && this.previousScore !== 0) {
+                    console.log(`Animating score: ${this.previousScore} → ${stats.score}`);
+                    await this.animationManager.animateScoreIncrease(
+                        this.elements.currentScore, 
+                        this.previousScore, 
+                        stats.score
+                    );
+                } else {
+                    this.elements.currentScore.textContent = stats.score;
+                }
+                this.previousScore = stats.score;
+            } catch (error) {
+                console.warn('Score animation failed, using direct update:', error);
+                this.elements.currentScore.textContent = stats.score;
+                this.previousScore = stats.score;
+            }
+        } else if (this.elements.currentScore) {
             this.elements.currentScore.textContent = stats.score;
+            this.previousScore = stats.score;
         }
         
         if (this.elements.questionsAnswered) {
@@ -312,11 +339,21 @@ class UIManager {
         if (!this.isQuestionActive || !this.currentQuestion) return;
 
         try {
+            // Get the clicked button element for animation
+            const answerButtons = document.querySelectorAll('.answer-btn');
+            const clickedButton = answerButtons[answerIndex];
+            
             // Disable answer buttons
             this.disableAnswerButtons();
             
             // Validate answer through quiz engine
-            await this.quizEngine.validateAnswer(answerIndex);
+            const result = await this.quizEngine.validateAnswer(answerIndex);
+            
+            // Animate answer feedback if animation manager is available
+            if (this.animationManager && clickedButton) {
+                const isCorrect = result?.correct || false;
+                await this.animationManager.animateAnswerFeedback(clickedButton, isCorrect);
+            }
             
         } catch (error) {
             this.showFeedback(`Error validating answer: ${error.message}`, 'error');

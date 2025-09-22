@@ -124,6 +124,16 @@ class MapRenderer {
             this.handleCanvasHover(event);
         });
 
+        // Keyboard navigation for accessibility
+        this.canvas.addEventListener('keydown', (event) => {
+            this.handleKeyboardNavigation(event);
+        });
+
+        // Make canvas focusable for keyboard navigation
+        this.canvas.setAttribute('tabindex', '0');
+        this.canvas.setAttribute('role', 'application');
+        this.canvas.setAttribute('aria-label', 'Castle map - Use arrow keys to navigate between rooms');
+
         // Game state change events
         this.gameState.on('roomChanged', () => {
             this.render();
@@ -529,6 +539,193 @@ class MapRenderer {
             visitedRooms: Array.from(this.gameState.visitedRooms),
             unlockedRooms: Array.from(this.gameState.unlockedRooms)
         };
+    }
+
+    /**
+     * Handle keyboard navigation for accessibility
+     * @param {KeyboardEvent} event - Keyboard event
+     */
+    handleKeyboardNavigation(event) {
+        const directions = {
+            'ArrowUp': 'north',
+            'ArrowDown': 'south',
+            'ArrowLeft': 'west',
+            'ArrowRight': 'east'
+        };
+
+        const direction = directions[event.key];
+        if (direction) {
+            event.preventDefault();
+            this.navigateWithKeyboard(direction);
+        } else if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            this.activateCurrentRoom();
+        } else if (event.key === 'Escape') {
+            event.preventDefault();
+            this.canvas.blur();
+        }
+    }
+
+    /**
+     * Navigate map using keyboard direction
+     * @param {string} direction - Direction to navigate (north, south, east, west)
+     */
+    navigateWithKeyboard(direction) {
+        const currentRoomId = this.gameState.currentRoomId;
+        const currentRoom = this.dataLoader.getRoomById(currentRoomId);
+        
+        if (!currentRoom) {
+            console.warn('No current room for keyboard navigation');
+            return;
+        }
+
+        // Find accessible room in the given direction
+        const targetRoomId = this.findRoomInDirection(currentRoomId, direction);
+        
+        if (targetRoomId) {
+            const targetRoom = this.dataLoader.getRoomById(targetRoomId);
+            if (targetRoom && this.gameState.isRoomAccessible(targetRoomId)) {
+                // Announce navigation intent
+                this.announceRoomNavigation(targetRoom, direction);
+                
+                // Attempt to navigate
+                this.attemptRoomNavigation(targetRoomId);
+            } else {
+                // Announce that room is not accessible
+                this.announceNavigationBlocked(direction);
+            }
+        } else {
+            // No room in that direction
+            this.announceNoRoom(direction);
+        }
+    }
+
+    /**
+     * Find room in a specific direction from current room
+     * @param {string} fromRoomId - Starting room ID
+     * @param {string} direction - Direction to search
+     * @returns {string|null} Room ID in that direction or null
+     */
+    findRoomInDirection(fromRoomId, direction) {
+        const currentPos = this.roomPositions.get(fromRoomId);
+        if (!currentPos) return null;
+
+        let targetPos = null;
+        let minDistance = Infinity;
+        let targetRoomId = null;
+
+        // Get direction vector
+        const directionVectors = {
+            'north': { x: 0, y: -1 },
+            'south': { x: 0, y: 1 },
+            'west': { x: -1, y: 0 },
+            'east': { x: 1, y: 0 }
+        };
+
+        const dirVector = directionVectors[direction];
+        if (!dirVector) return null;
+
+        // Check all room positions
+        for (const [roomId, position] of this.roomPositions.entries()) {
+            if (roomId === fromRoomId) continue;
+
+            const deltaX = position.x - currentPos.x;
+            const deltaY = position.y - currentPos.y;
+
+            // Check if room is generally in the right direction
+            const dotProduct = deltaX * dirVector.x + deltaY * dirVector.y;
+            if (dotProduct <= 0) continue; // Room is not in this direction
+
+            // Calculate distance
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            
+            // Find closest room in this direction
+            if (distance < minDistance) {
+                minDistance = distance;
+                targetRoomId = roomId;
+                targetPos = position;
+            }
+        }
+
+        return targetRoomId;
+    }
+
+    /**
+     * Activate the current room (Enter/Space)
+     */
+    activateCurrentRoom() {
+        const currentRoomId = this.gameState.currentRoomId;
+        if (this.gameState.isRoomAccessible(currentRoomId)) {
+            // Trigger room entry if not already there
+            this.attemptRoomNavigation(currentRoomId);
+        }
+    }
+
+    /**
+     * Announce room navigation for screen readers
+     * @param {Object} targetRoom - Target room data
+     * @param {string} direction - Navigation direction
+     */
+    announceRoomNavigation(targetRoom, direction) {
+        const message = `Navigating ${direction} to ${targetRoom.name}`;
+        console.log(`♿ Map navigation: ${message}`);
+        
+        // Emit accessibility event for announcement
+        const event = new CustomEvent('accessibility-map-announce', {
+            detail: { message, type: 'navigation' }
+        });
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Announce blocked navigation
+     * @param {string} direction - Blocked direction
+     */
+    announceNavigationBlocked(direction) {
+        const message = `Cannot move ${direction} - room is locked or inaccessible`;
+        console.log(`♿ Map navigation blocked: ${message}`);
+        
+        const event = new CustomEvent('accessibility-map-announce', {
+            detail: { message, type: 'blocked' }
+        });
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Announce no room in direction
+     * @param {string} direction - Direction with no room
+     */
+    announceNoRoom(direction) {
+        const message = `No room available to the ${direction}`;
+        console.log(`♿ Map navigation: ${message}`);
+        
+        const event = new CustomEvent('accessibility-map-announce', {
+            detail: { message, type: 'no-room' }
+        });
+        document.dispatchEvent(event);
+    }
+
+    /**
+     * Add accessibility announcements to the render cycle
+     */
+    announceMapState() {
+        const currentRoom = this.dataLoader.getRoomById(this.gameState.currentRoomId);
+        if (!currentRoom) return;
+
+        const accessibleRooms = Array.from(this.gameState.unlockedRooms)
+            .filter(roomId => roomId !== this.gameState.currentRoomId)
+            .map(roomId => this.dataLoader.getRoomById(roomId))
+            .filter(room => room)
+            .map(room => room.name);
+
+        const message = `Current location: ${currentRoom.name}. ` +
+                       `Accessible rooms: ${accessibleRooms.length > 0 ? accessibleRooms.join(', ') : 'none'}. ` +
+                       `Use arrow keys to navigate.`;
+
+        const event = new CustomEvent('accessibility-map-announce', {
+            detail: { message, type: 'state' }
+        });
+        document.dispatchEvent(event);
     }
 }
 

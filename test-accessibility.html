@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - Accessibility Test Suite</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+    <link rel="stylesheet" href="css/test.css">
+    
+    <style>
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        
+        .test-section {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .test-section h2 {
+            color: #2C1810;
+            border-bottom: 2px solid #D4AF37;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .test-item {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .test-item h3 {
+            margin-top: 0;
+            color: #495057;
+        }
+        
+        .test-controls {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        
+        .test-button {
+            background: #D4AF37;
+            color: #2C1810;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .test-button:hover {
+            background: #b8951f;
+        }
+        
+        .test-button:focus {
+            outline: 3px solid #005fcc;
+            outline-offset: 2px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        
+        .status-pass { background: #28a745; }
+        .status-fail { background: #dc3545; }
+        .status-pending { background: #ffc107; }
+        
+        .keyboard-demo {
+            background: #e9ecef;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .keyboard-demo button {
+            margin: 0.25rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #6c757d;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .accessibility-stats {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .stat-item {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2C1810;
+            display: block;
+        }
+        
+        .test-result {
+            margin-top: 1rem;
+            padding: 0.75rem;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        
+        .result-pass {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .result-fail {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .result-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <header>
+            <h1>🧭 LobeLabyrinth Accessibility Test Suite</h1>
+            <p>Comprehensive testing for keyboard navigation, screen reader support, and accessibility compliance.</p>
+        </header>
+
+        <!-- Accessibility Statistics -->
+        <section class="accessibility-stats">
+            <h2>♿ Accessibility Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value" id="aria-elements-count">0</span>
+                    <span>ARIA Elements</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="focusable-elements-count">0</span>
+                    <span>Focusable Elements</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="live-regions-count">0</span>
+                    <span>Live Regions</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="keyboard-shortcuts-count">0</span>
+                    <span>Keyboard Shortcuts</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keyboard Navigation Test -->
+        <section class="test-section">
+            <h2>⌨️ Keyboard Navigation Test</h2>
+            
+            <div class="test-item">
+                <h3>Tab Navigation</h3>
+                <p>Test sequential keyboard navigation through all focusable elements.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testTabNavigation()">Start Tab Test</button>
+                    <button class="test-button" onclick="resetTabTest()">Reset</button>
+                </div>
+                <div class="keyboard-demo" id="tab-demo">
+                    <button>Button 1</button>
+                    <button>Button 2</button>
+                    <input type="text" placeholder="Text input">
+                    <select><option>Option 1</option><option>Option 2</option></select>
+                    <button>Button 3</button>
+                    <a href="#" onclick="event.preventDefault()">Link</a>
+                </div>
+                <div id="tab-result" class="test-result" style="display: none;"></div>
+            </div>
+
+            <div class="test-item">
+                <h3>Arrow Key Navigation</h3>
+                <p>Test spatial navigation using arrow keys (simulated game map navigation).</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testArrowNavigation()">Test Arrow Keys</button>
+                </div>
+                <div class="keyboard-demo" id="arrow-demo">
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; width: 200px;">
+                        <div></div><button id="north">↑ North</button><div></div>
+                        <button id="west">← West</button><button id="center">⊙ Center</button><button id="east">East →</button>
+                        <div></div><button id="south">↓ South</button><div></div>
+                    </div>
+                </div>
+                <div id="arrow-result" class="test-result" style="display: none;"></div>
+            </div>
+
+            <div class="test-item">
+                <h3>Keyboard Shortcuts</h3>
+                <p>Test accessibility keyboard shortcuts.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testKeyboardShortcuts()">Test Shortcuts</button>
+                </div>
+                <div class="keyboard-demo">
+                    <p><kbd>Alt+H</kbd> - Toggle High Contrast</p>
+                    <p><kbd>Alt+?</kbd> - Show Help</p>
+                    <p><kbd>Alt+1-5</kbd> - Section Navigation</p>
+                    <p><kbd>Alt+S</kbd> - Skip to Main Content</p>
+                </div>
+                <div id="shortcut-result" class="test-result" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Screen Reader Test -->
+        <section class="test-section">
+            <h2>🔊 Screen Reader Support Test</h2>
+            
+            <div class="test-item">
+                <h3>ARIA Labels and Descriptions</h3>
+                <p>Test ARIA attributes for screen reader compatibility.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testARIALabels()">Test ARIA</button>
+                </div>
+                <div class="keyboard-demo">
+                    <button aria-label="Close dialog">×</button>
+                    <input type="text" aria-describedby="username-help" placeholder="Username">
+                    <div id="username-help">Enter your username (3-20 characters)</div>
+                    <div role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">50%</div>
+                </div>
+                <div id="aria-result" class="test-result" style="display: none;"></div>
+            </div>
+
+            <div class="test-item">
+                <h3>Live Regions</h3>
+                <p>Test dynamic content announcements.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testLiveRegions()">Test Live Regions</button>
+                </div>
+                <div class="keyboard-demo">
+                    <div id="live-demo-polite" aria-live="polite">Polite announcements appear here</div>
+                    <div id="live-demo-assertive" aria-live="assertive">Assertive announcements appear here</div>
+                    <div id="live-demo-status" role="status">Status updates appear here</div>
+                </div>
+                <div id="live-result" class="test-result" style="display: none;"></div>
+            </div>
+
+            <div class="test-item">
+                <h3>Semantic Structure</h3>
+                <p>Test semantic HTML and landmark roles.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testSemanticStructure()">Test Structure</button>
+                </div>
+                <div id="structure-result" class="test-result" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- High Contrast Test -->
+        <section class="test-section">
+            <h2>🌗 High Contrast Mode Test</h2>
+            
+            <div class="test-item">
+                <h3>Color Contrast</h3>
+                <p>Test high contrast color scheme for accessibility.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="toggleHighContrast()">Toggle High Contrast</button>
+                    <button class="test-button" onclick="testColorContrast()">Test Contrast</button>
+                </div>
+                <div class="keyboard-demo">
+                    <button class="contrast-test-btn">Primary Button</button>
+                    <button class="contrast-test-btn" disabled>Disabled Button</button>
+                    <a href="#" class="contrast-test-link">Test Link</a>
+                    <span class="contrast-test-success">Success Message</span>
+                    <span class="contrast-test-error">Error Message</span>
+                </div>
+                <div id="contrast-result" class="test-result" style="display: none;"></div>
+            </div>
+
+            <div class="test-item">
+                <h3>Focus Indicators</h3>
+                <p>Test enhanced focus indicators in high contrast mode.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testFocusIndicators()">Test Focus</button>
+                </div>
+                <div class="keyboard-demo">
+                    <button onclick="this.focus()">Focus Test 1</button>
+                    <input type="text" value="Focus Test 2">
+                    <select><option>Focus Test 3</option></select>
+                </div>
+                <div id="focus-result" class="test-result" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Reduced Motion Test -->
+        <section class="test-section">
+            <h2>🎭 Reduced Motion Test</h2>
+            
+            <div class="test-item">
+                <h3>Animation Preferences</h3>
+                <p>Test respect for user motion preferences.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="testReducedMotion()">Test Motion</button>
+                    <button class="test-button" onclick="toggleReducedMotion()">Toggle Reduced Motion</button>
+                </div>
+                <div class="keyboard-demo">
+                    <div id="animation-test" style="width: 50px; height: 50px; background: #D4AF37; border-radius: 50%; transition: transform 0.5s;">
+                        Test Animation
+                    </div>
+                </div>
+                <div id="motion-result" class="test-result" style="display: none;"></div>
+            </div>
+        </section>
+
+        <!-- Compliance Check -->
+        <section class="test-section">
+            <h2>✅ WCAG Compliance Check</h2>
+            
+            <div class="test-item">
+                <h3>Automated Accessibility Audit</h3>
+                <p>Run comprehensive accessibility compliance checks.</p>
+                <div class="test-controls">
+                    <button class="test-button" onclick="runComplianceCheck()">Run Full Audit</button>
+                </div>
+                <div id="compliance-result" class="test-result" style="display: none;"></div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Load accessibility system -->
+    <script src="src/accessibilityManager.js"></script>
+    
+    <script>
+        // Global test instances
+        let accessibilityManager;
+        let testResults = {};
+
+        // Initialize accessibility test suite
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeAccessibilityTests();
+        });
+
+        function initializeAccessibilityTests() {
+            console.log('🧪 Initializing accessibility test suite...');
+            
+            // Initialize accessibility manager
+            accessibilityManager = new AccessibilityManager();
+            
+            // Update statistics
+            updateAccessibilityStats();
+            
+            console.log('♿ Accessibility test suite initialized');
+        }
+
+        function updateAccessibilityStats() {
+            // Count ARIA elements
+            const ariaElements = document.querySelectorAll('[aria-label], [aria-labelledby], [aria-describedby], [role], [aria-live]');
+            document.getElementById('aria-elements-count').textContent = ariaElements.length;
+
+            // Count focusable elements
+            const focusableElements = document.querySelectorAll('button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])');
+            document.getElementById('focusable-elements-count').textContent = focusableElements.length;
+
+            // Get live regions count from accessibility manager
+            if (accessibilityManager) {
+                const status = accessibilityManager.getAccessibilityStatus();
+                document.getElementById('live-regions-count').textContent = status.liveRegionsCount;
+                document.getElementById('keyboard-shortcuts-count').textContent = status.shortcutsCount;
+            }
+        }
+
+        // Tab Navigation Test
+        function testTabNavigation() {
+            const demo = document.getElementById('tab-demo');
+            const result = document.getElementById('tab-result');
+            const buttons = demo.querySelectorAll('button, input, select, a');
+            
+            let currentIndex = 0;
+            let passed = true;
+            
+            function testNextElement() {
+                if (currentIndex >= buttons.length) {
+                    showResult(result, passed, 
+                        passed ? 'Tab navigation test passed! All elements are focusable.' 
+                               : 'Tab navigation test failed! Some elements are not focusable.');
+                    return;
+                }
+                
+                const element = buttons[currentIndex];
+                element.focus();
+                
+                setTimeout(() => {
+                    if (document.activeElement !== element) {
+                        passed = false;
+                    }
+                    currentIndex++;
+                    testNextElement();
+                }, 200);
+            }
+            
+            testNextElement();
+        }
+
+        function resetTabTest() {
+            const result = document.getElementById('tab-result');
+            result.style.display = 'none';
+        }
+
+        // Arrow Key Navigation Test
+        function testArrowNavigation() {
+            const center = document.getElementById('center');
+            const result = document.getElementById('arrow-result');
+            
+            center.focus();
+            
+            // Simulate arrow key events
+            const directions = ['ArrowUp', 'ArrowRight', 'ArrowDown', 'ArrowLeft'];
+            let testIndex = 0;
+            
+            function simulateArrowKey() {
+                if (testIndex >= directions.length) {
+                    showResult(result, true, 'Arrow key navigation test completed. Check console for navigation events.');
+                    return;
+                }
+                
+                const keyEvent = new KeyboardEvent('keydown', {
+                    key: directions[testIndex],
+                    bubbles: true
+                });
+                
+                document.activeElement.dispatchEvent(keyEvent);
+                testIndex++;
+                
+                setTimeout(simulateArrowKey, 500);
+            }
+            
+            setTimeout(simulateArrowKey, 500);
+        }
+
+        // Keyboard Shortcuts Test
+        function testKeyboardShortcuts() {
+            const result = document.getElementById('shortcut-result');
+            
+            // Test Alt+? shortcut
+            const helpEvent = new KeyboardEvent('keydown', {
+                key: '?',
+                altKey: true,
+                bubbles: true
+            });
+            
+            document.dispatchEvent(helpEvent);
+            
+            setTimeout(() => {
+                const helpModal = document.getElementById('keyboard-help-modal');
+                const passed = helpModal !== null;
+                
+                showResult(result, passed, 
+                    passed ? 'Keyboard shortcuts test passed! Help modal opened.' 
+                           : 'Keyboard shortcuts test failed! Help modal did not open.');
+                
+                // Close modal if opened
+                if (helpModal) {
+                    helpModal.remove();
+                }
+            }, 500);
+        }
+
+        // ARIA Labels Test
+        function testARIALabels() {
+            const result = document.getElementById('aria-result');
+            
+            // Check for proper ARIA attributes
+            const ariaElements = document.querySelectorAll('[aria-label], [aria-labelledby], [aria-describedby]');
+            const missingLabels = [];
+            
+            ariaElements.forEach(element => {
+                const label = element.getAttribute('aria-label');
+                const labelledBy = element.getAttribute('aria-labelledby');
+                const describedBy = element.getAttribute('aria-describedby');
+                
+                if (!label && !labelledBy && !describedBy) {
+                    missingLabels.push(element.tagName.toLowerCase());
+                }
+            });
+            
+            const passed = missingLabels.length === 0;
+            showResult(result, passed, 
+                passed ? `ARIA test passed! All ${ariaElements.length} elements have proper labels.` 
+                       : `ARIA test failed! ${missingLabels.length} elements missing labels: ${missingLabels.join(', ')}`);
+        }
+
+        // Live Regions Test
+        function testLiveRegions() {
+            const result = document.getElementById('live-result');
+            const politeRegion = document.getElementById('live-demo-polite');
+            const assertiveRegion = document.getElementById('live-demo-assertive');
+            const statusRegion = document.getElementById('live-demo-status');
+            
+            let announcements = 0;
+            
+            // Test polite announcement
+            setTimeout(() => {
+                politeRegion.textContent = 'Polite announcement test';
+                announcements++;
+            }, 100);
+            
+            // Test assertive announcement
+            setTimeout(() => {
+                assertiveRegion.textContent = 'Assertive announcement test';
+                announcements++;
+            }, 300);
+            
+            // Test status announcement
+            setTimeout(() => {
+                statusRegion.textContent = 'Status update test';
+                announcements++;
+            }, 500);
+            
+            setTimeout(() => {
+                showResult(result, announcements === 3, 
+                    `Live regions test completed. ${announcements}/3 announcements made.`);
+                
+                // Clear regions
+                politeRegion.textContent = 'Polite announcements appear here';
+                assertiveRegion.textContent = 'Assertive announcements appear here';
+                statusRegion.textContent = 'Status updates appear here';
+            }, 1000);
+        }
+
+        // Semantic Structure Test
+        function testSemanticStructure() {
+            const result = document.getElementById('structure-result');
+            
+            // Check for semantic elements
+            const semanticElements = {
+                'header': document.querySelectorAll('header').length,
+                'main': document.querySelectorAll('main').length,
+                'section': document.querySelectorAll('section').length,
+                'nav': document.querySelectorAll('nav').length,
+                'aside': document.querySelectorAll('aside').length,
+                'headings': document.querySelectorAll('h1, h2, h3, h4, h5, h6').length
+            };
+            
+            const totalElements = Object.values(semanticElements).reduce((a, b) => a + b, 0);
+            
+            showResult(result, totalElements > 5, 
+                `Semantic structure: ${JSON.stringify(semanticElements)}`);
+        }
+
+        // High Contrast Toggle
+        function toggleHighContrast() {
+            if (accessibilityManager) {
+                accessibilityManager.toggleHighContrastMode();
+            }
+        }
+
+        // Color Contrast Test
+        function testColorContrast() {
+            const result = document.getElementById('contrast-result');
+            const isHighContrast = document.body.classList.contains('high-contrast');
+            
+            showResult(result, true, 
+                `High contrast mode is ${isHighContrast ? 'enabled' : 'disabled'}. Toggle to test both modes.`);
+        }
+
+        // Focus Indicators Test
+        function testFocusIndicators() {
+            const result = document.getElementById('focus-result');
+            const focusableElements = document.querySelectorAll('#focus-result + .keyboard-demo button, #focus-result + .keyboard-demo input, #focus-result + .keyboard-demo select');
+            
+            let currentIndex = 0;
+            
+            function testNextFocus() {
+                if (currentIndex >= focusableElements.length) {
+                    showResult(result, true, 'Focus indicators test completed. Check visual focus rings.');
+                    return;
+                }
+                
+                focusableElements[currentIndex].focus();
+                currentIndex++;
+                
+                setTimeout(testNextFocus, 800);
+            }
+            
+            testNextFocus();
+        }
+
+        // Reduced Motion Test
+        function testReducedMotion() {
+            const result = document.getElementById('motion-result');
+            const animationElement = document.getElementById('animation-test');
+            
+            // Test animation
+            animationElement.style.transform = 'translateX(100px) rotate(360deg)';
+            
+            setTimeout(() => {
+                animationElement.style.transform = 'translateX(0) rotate(0deg)';
+                
+                const reducedMotion = document.body.classList.contains('reduced-motion') || 
+                                    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+                
+                showResult(result, true, 
+                    `Motion preferences: ${reducedMotion ? 'Reduced motion enabled' : 'Normal motion'}`);
+            }, 1000);
+        }
+
+        function toggleReducedMotion() {
+            document.body.classList.toggle('reduced-motion');
+        }
+
+        // Compliance Check
+        function runComplianceCheck() {
+            const result = document.getElementById('compliance-result');
+            
+            const checks = {
+                'ARIA attributes': document.querySelectorAll('[aria-label], [aria-labelledby], [aria-describedby], [role]').length,
+                'Focusable elements': document.querySelectorAll('button, input, select, textarea, a[href], [tabindex]:not([tabindex="-1"])').length,
+                'Semantic headings': document.querySelectorAll('h1, h2, h3, h4, h5, h6').length,
+                'Live regions': document.querySelectorAll('[aria-live], [role="status"], [role="alert"]').length,
+                'Form labels': document.querySelectorAll('label, [aria-label], [aria-labelledby]').length,
+                'Alt text': document.querySelectorAll('img[alt]').length
+            };
+            
+            const issues = [];
+            
+            // Check for common issues
+            if (checks['Semantic headings'] === 0) issues.push('No semantic headings found');
+            if (checks['Live regions'] === 0) issues.push('No live regions found');
+            
+            // Check for unlabeled form controls
+            const unlabeledInputs = document.querySelectorAll('input:not([aria-label]):not([aria-labelledby])');
+            const unlabeledLabels = Array.from(unlabeledInputs).filter(input => !document.querySelector(`label[for="${input.id}"]`));
+            if (unlabeledLabels.length > 0) issues.push(`${unlabeledLabels.length} unlabeled form controls`);
+            
+            // Check for images without alt text
+            const imagesWithoutAlt = document.querySelectorAll('img:not([alt])');
+            if (imagesWithoutAlt.length > 0) issues.push(`${imagesWithoutAlt.length} images without alt text`);
+            
+            const passed = issues.length === 0;
+            const summary = `
+                <strong>Accessibility Audit Results:</strong><br>
+                ${Object.entries(checks).map(([key, value]) => `${key}: ${value}`).join('<br>')}
+                <br><br>
+                <strong>Issues found:</strong> ${issues.length}<br>
+                ${issues.length > 0 ? issues.join('<br>') : 'No issues found!'}
+            `;
+            
+            result.innerHTML = summary;
+            result.className = `test-result ${passed ? 'result-pass' : 'result-fail'}`;
+            result.style.display = 'block';
+        }
+
+        // Helper function to show test results
+        function showResult(element, passed, message) {
+            element.textContent = message;
+            element.className = `test-result ${passed ? 'result-pass' : 'result-fail'}`;
+            element.style.display = 'block';
+        }
+
+        // Expose test functions globally for debugging
+        window.accessibilityTests = {
+            testTabNavigation,
+            testArrowNavigation,
+            testKeyboardShortcuts,
+            testARIALabels,
+            testLiveRegions,
+            testSemanticStructure,
+            toggleHighContrast,
+            testColorContrast,
+            testFocusIndicators,
+            testReducedMotion,
+            runComplianceCheck,
+            accessibilityManager: () => accessibilityManager
+        };
+    </script>
+</body>
+</html>

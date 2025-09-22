@@ -2898,6 +2898,112 @@ Press any key to close this help.
         // Subtle haptic feedback
         this.triggerHapticFeedback('tap');
     }
+
+    /**
+     * Add accessibility hooks for integration with AccessibilityManager
+     * @param {AccessibilityManager} accessibilityManager - Accessibility manager instance
+     */
+    addAccessibilityHooks(accessibilityManager) {
+        this.accessibilityManager = accessibilityManager;
+
+        // Listen for accessibility map announcements
+        document.addEventListener('accessibility-map-announce', (event) => {
+            const { message, type } = event.detail;
+            
+            // Use appropriate priority based on announcement type
+            const priority = type === 'blocked' || type === 'no-room' ? 'assertive' : 'polite';
+            this.accessibilityManager.announce(message, priority);
+        });
+
+        // Enhance answer button accessibility
+        this.enhanceAnswerButtonAccessibility();
+
+        // Setup keyboard shortcuts for answer selection
+        document.addEventListener('keydown', (event) => {
+            if (this.isQuestionActive && event.key >= '1' && event.key <= '4') {
+                const answerIndex = parseInt(event.key) - 1;
+                const buttons = document.querySelectorAll('#answer-buttons button:not([disabled])');
+                if (buttons[answerIndex]) {
+                    event.preventDefault();
+                    buttons[answerIndex].click();
+                }
+            }
+        });
+
+        // Enhance timer accessibility
+        this.enhanceTimerAccessibility();
+
+        console.log('♿ UI accessibility hooks added');
+    }
+
+    /**
+     * Enhance answer button accessibility
+     */
+    enhanceAnswerButtonAccessibility() {
+        const answerContainer = document.getElementById('answer-buttons');
+        if (answerContainer) {
+            // Improve ARIA attributes
+            answerContainer.setAttribute('role', 'radiogroup');
+            answerContainer.setAttribute('aria-label', 'Answer options');
+            
+            // Add keyboard navigation instructions
+            answerContainer.setAttribute('aria-describedby', 'answer-instructions');
+            
+            if (!document.getElementById('answer-instructions')) {
+                const instructions = document.createElement('div');
+                instructions.id = 'answer-instructions';
+                instructions.className = 'sr-only';
+                instructions.textContent = 'Use arrow keys to navigate answers, Enter to select, or press number keys 1-4';
+                answerContainer.appendChild(instructions);
+            }
+        }
+    }
+
+    /**
+     * Enhance timer accessibility
+     */
+    enhanceTimerAccessibility() {
+        const timerElement = document.getElementById('timer-text');
+        if (timerElement) {
+            // Reduce timer announcements to avoid overwhelming screen readers
+            timerElement.setAttribute('aria-live', 'off');
+            
+            // Only announce timer at critical moments
+            this.quizEngine.on('timerUpdate', (data) => {
+                const timeRemaining = data.timeRemaining;
+                
+                // Announce only at 10 seconds and 5 seconds remaining
+                if (timeRemaining === 10000 && this.accessibilityManager) {
+                    this.accessibilityManager.announce('10 seconds remaining', 'polite');
+                } else if (timeRemaining === 5000 && this.accessibilityManager) {
+                    this.accessibilityManager.announce('5 seconds remaining', 'assertive');
+                }
+            });
+        }
+    }
+
+    /**
+     * Enhanced answer selection with accessibility announcements
+     * @param {number} answerIndex - Selected answer index
+     */
+    selectAnswerWithAccessibility(answerIndex) {
+        const buttons = document.querySelectorAll('#answer-buttons button');
+        if (buttons[answerIndex] && this.accessibilityManager) {
+            const answerText = buttons[answerIndex].textContent;
+            this.accessibilityManager.announce(`Selected: ${answerText}`, 'polite');
+        }
+    }
+
+    /**
+     * Enhanced game state announcements
+     * @param {string} message - Message to announce
+     * @param {string} priority - Announcement priority
+     */
+    announceGameStateChange(message, priority = 'polite') {
+        if (this.accessibilityManager) {
+            this.accessibilityManager.announce(message, priority);
+        }
+    }
 }
 
 // Export for use in other modules

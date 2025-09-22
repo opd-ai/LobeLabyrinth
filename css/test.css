@@ -1,0 +1,849 @@
+/*
+ * LobeLabyrinth - Test Suite Styles
+ * Medieval-themed testing interface
+ */
+
+/* Import the game CSS custom properties */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap');
+
+/* CSS Custom Properties for Test Theme */
+:root {
+    /* Medieval Color Palette */
+    --medieval-gold: #d4af37;
+    --medieval-gold-dark: #b8941f;
+    --medieval-gold-light: #f4e4a0;
+    --medieval-crimson: #8b0000;
+    --medieval-crimson-light: #cd5c5c;
+    --medieval-blue: #191970;
+    --medieval-blue-light: #4169e1;
+    --medieval-green: #2d4a2b;
+    --medieval-green-light: #8fbc8f;
+    --medieval-brown: #8b4513;
+    --medieval-brown-light: #daa520;
+    --medieval-stone: #696969;
+    --medieval-stone-light: #a9a9a9;
+    --medieval-parchment: #f4e4bc;
+    --medieval-parchment-dark: #e6d3a3;
+    --medieval-ink: #2c1810;
+    --medieval-ink-light: #5d4e37;
+    
+    /* Medieval Fonts */
+    --font-title: 'Cinzel Decorative', 'Times New Roman', serif;
+    --font-heading: 'Cinzel', 'Georgia', serif;
+    --font-body: 'Cormorant Garamond', 'Times New Roman', serif;
+    --font-ui: 'Cinzel', 'Georgia', serif;
+    --font-mono: 'Courier New', 'Lucida Console', monospace;
+    
+    /* Shadows and Effects */
+    --shadow-castle: 0 8px 32px rgba(44, 24, 16, 0.4);
+    --shadow-scroll: 0 4px 16px rgba(44, 24, 16, 0.3);
+    --shadow-button: 0 4px 8px rgba(44, 24, 16, 0.25);
+    --shadow-text: 2px 2px 4px rgba(44, 24, 16, 0.5);
+    
+    /* Test-specific colors */
+    --test-success: var(--medieval-green);
+    --test-error: var(--medieval-crimson);
+    --test-warning: var(--medieval-brown);
+    --test-info: var(--medieval-blue);
+    
+    /* Gradients */
+    --gradient-parchment: linear-gradient(135deg, var(--medieval-parchment) 0%, var(--medieval-parchment-dark) 100%);
+    --gradient-gold: linear-gradient(135deg, var(--medieval-gold) 0%, var(--medieval-gold-dark) 100%);
+    --gradient-stone: linear-gradient(135deg, var(--medieval-stone-light) 0%, var(--medieval-stone) 100%);
+    --gradient-royal: linear-gradient(135deg, var(--medieval-blue) 0%, var(--medieval-crimson) 100%);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(139, 0, 0, 0.08) 0%, transparent 50%),
+        linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    background-attachment: fixed;
+    color: var(--medieval-ink);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+/* Test Container - Research Laboratory */
+.container,
+.test-container {
+    background: var(--gradient-parchment);
+    border: 3px solid var(--medieval-gold);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-castle);
+    position: relative;
+}
+
+.container::before,
+.test-container::before {
+    content: '🧪';
+    position: absolute;
+    top: -15px;
+    left: 20px;
+    background: var(--medieval-gold);
+    padding: 5px 10px;
+    border-radius: 50%;
+    font-size: 1.2em;
+    border: 2px solid var(--medieval-gold-dark);
+}
+
+/* Header Styling */
+h1 {
+    color: var(--medieval-crimson);
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.2em;
+    font-family: var(--font-title);
+    text-shadow: var(--shadow-text);
+    letter-spacing: 2px;
+}
+
+.test-header h1 {
+    margin-bottom: 15px;
+}
+
+.test-header p {
+    text-align: center;
+    color: var(--medieval-ink-light);
+    font-size: 1.1em;
+    font-family: var(--font-ui);
+    margin-bottom: 20px;
+}
+
+/* Test Section - Scroll Segments */
+.test-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 2px solid var(--medieval-brown);
+    border-radius: 10px;
+    box-shadow: var(--shadow-scroll);
+    position: relative;
+}
+
+.test-section::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 10px;
+    height: 10px;
+    background: var(--medieval-gold);
+    border-radius: 50%;
+    box-shadow: 
+        20px 0 0 var(--medieval-crimson),
+        40px 0 0 var(--medieval-blue);
+}
+
+.test-section h2,
+.test-section h3 {
+    color: var(--medieval-ink);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+    border-bottom: 2px solid var(--medieval-gold);
+    padding-bottom: 8px;
+    font-size: 1.3em;
+}
+
+.test-section h2 {
+    font-size: 1.5em;
+}
+
+/* Test Controls */
+.test-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+}
+
+.control-group {
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(244, 228, 188, 0.5);
+    border-radius: 8px;
+    border: 1px solid var(--medieval-brown);
+}
+
+.control-group h4 {
+    margin: 0 0 10px 0;
+    color: var(--medieval-ink);
+    font-family: var(--font-heading);
+    font-size: 1.1em;
+}
+
+/* Button Styling - Medieval Controls */
+button,
+.test-button,
+.btn {
+    background: var(--gradient-gold);
+    color: var(--medieval-ink);
+    border: 2px solid var(--medieval-gold-dark);
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    font-size: 0.95em;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-button);
+    margin: 5px;
+    position: relative;
+    overflow: hidden;
+}
+
+button::before,
+.test-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+button:hover,
+.test-button:hover {
+    background: var(--medieval-gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+button:hover::before,
+.test-button:hover::before {
+    left: 100%;
+}
+
+button:disabled,
+.test-button:disabled {
+    background: var(--medieval-stone-light);
+    color: var(--medieval-stone);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    border-color: var(--medieval-stone);
+}
+
+/* Specialized Button Types */
+button.danger,
+.btn-danger {
+    background: linear-gradient(135deg, var(--medieval-crimson), var(--medieval-crimson-light));
+    color: white;
+    border-color: var(--medieval-crimson);
+}
+
+button.success,
+.btn-success {
+    background: linear-gradient(135deg, var(--medieval-green), var(--medieval-green-light));
+    color: white;
+    border-color: var(--medieval-green);
+}
+
+button.warning,
+.btn-warning {
+    background: linear-gradient(135deg, var(--medieval-brown), var(--medieval-brown-light));
+    color: white;
+    border-color: var(--medieval-brown);
+}
+
+/* Status Messages - Royal Proclamations */
+.status {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin: 10px 0;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    border: 2px solid;
+    box-shadow: var(--shadow-scroll);
+}
+
+.status.success {
+    background: linear-gradient(135deg, var(--medieval-green-light), rgba(143, 188, 143, 0.3));
+    color: var(--medieval-green);
+    border-color: var(--medieval-green);
+}
+
+.status.error {
+    background: linear-gradient(135deg, var(--medieval-crimson-light), rgba(205, 92, 92, 0.3));
+    color: var(--medieval-crimson);
+    border-color: var(--medieval-crimson);
+}
+
+.status.info {
+    background: linear-gradient(135deg, var(--medieval-blue-light), rgba(65, 105, 225, 0.2));
+    color: var(--medieval-blue);
+    border-color: var(--medieval-blue);
+}
+
+.status.warning {
+    background: linear-gradient(135deg, var(--medieval-gold-light), rgba(244, 228, 160, 0.5));
+    color: var(--medieval-brown);
+    border-color: var(--medieval-brown);
+}
+
+/* Test Output Areas - Illuminated Manuscripts */
+.test-output,
+.log-output,
+.console-output {
+    background: rgba(44, 24, 16, 0.9);
+    color: var(--medieval-parchment);
+    border: 2px solid var(--medieval-brown);
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    font-family: var(--font-mono);
+    white-space: pre-wrap;
+    max-height: 300px;
+    overflow-y: auto;
+    font-size: 0.9em;
+    line-height: 1.4;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.test-console {
+    background: var(--medieval-ink);
+    color: var(--medieval-gold);
+    border: 3px solid var(--medieval-gold);
+    padding: 20px;
+    border-radius: 10px;
+    font-family: var(--font-mono);
+    margin: 20px 0;
+    box-shadow: var(--shadow-castle);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Log Message Types */
+.log-output .log-error,
+.console-output .log-error {
+    color: #ff6b6b;
+}
+
+.log-output .log-warn,
+.console-output .log-warn {
+    color: #feca57;
+}
+
+.log-output .log-success,
+.console-output .log-success {
+    color: #48cab3;
+}
+
+/* Performance Metrics */
+.performance-metrics {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid var(--medieval-gold);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-scroll);
+}
+
+.performance-metrics h3 {
+    color: var(--medieval-ink);
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+    border-bottom: 2px solid var(--medieval-gold);
+    padding-bottom: 8px;
+}
+
+.metric-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.metric-item:last-child {
+    border-bottom: none;
+}
+
+/* Test Statistics - Royal Treasury */
+.test-stats,
+.stats-display {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.stat-card,
+.stat-item {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--medieval-gold);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: var(--shadow-scroll);
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-castle);
+}
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--medieval-blue);
+    font-family: var(--font-heading);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    font-size: 0.9em;
+    color: var(--medieval-ink-light);
+    font-family: var(--font-ui);
+}
+
+/* Progress Bars */
+.progress-bar {
+    background: var(--medieval-stone-light);
+    border-radius: 10px;
+    height: 8px;
+    margin: 10px 0;
+    overflow: hidden;
+    border: 1px solid var(--medieval-brown);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+    background: var(--gradient-gold);
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.4s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation Test Areas */
+.animation-target {
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-brown);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    text-align: center;
+    transition: all 0.3s ease;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-ui);
+    font-weight: 600;
+}
+
+.score-display {
+    font-size: 2em;
+    color: var(--medieval-gold);
+    text-shadow: var(--shadow-text);
+}
+
+.answer-button {
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-brown);
+    border-radius: 8px;
+    padding: 15px;
+    margin: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+    font-size: 1em;
+}
+
+.answer-button:hover {
+    background: var(--medieval-gold-light);
+    transform: translateY(-2px);
+}
+
+.room-transition-area {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(244, 228, 188, 0.5));
+    border: 2px solid var(--medieval-gold);
+    border-radius: 12px;
+    padding: 25px;
+    margin: 15px 0;
+    text-align: center;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--shadow-scroll);
+}
+
+/* Status Display Areas */
+.status-display {
+    background: rgba(255, 255, 255, 0.8);
+    border: 2px solid var(--medieval-gold);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-scroll);
+}
+
+.status-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(139, 69, 19, 0.2);
+}
+
+.status-value {
+    font-weight: bold;
+    color: var(--medieval-blue);
+}
+
+/* Test Results Display */
+.test-results {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid var(--medieval-gold);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-scroll);
+}
+
+.test-results h3 {
+    color: var(--medieval-ink);
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+}
+
+.test-item {
+    padding: 8px 12px;
+    margin: 5px 0;
+    border-radius: 6px;
+    border: 1px solid;
+    font-family: var(--font-ui);
+}
+
+.test-item:last-child {
+    margin-bottom: 0;
+}
+
+.test-pass {
+    background: rgba(45, 74, 43, 0.1);
+    border-color: var(--medieval-green);
+    color: var(--medieval-green);
+}
+
+.test-fail {
+    background: rgba(139, 0, 0, 0.1);
+    border-color: var(--medieval-crimson);
+    color: var(--medieval-crimson);
+}
+
+/* Data Summary Cards */
+.data-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 15px 0;
+}
+
+.data-card {
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-gold);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow-scroll);
+    transition: all 0.3s ease;
+}
+
+.data-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-castle);
+}
+
+.data-card h3 {
+    margin: 0 0 10px 0;
+    color: var(--medieval-ink);
+    font-family: var(--font-heading);
+    font-size: 1.1em;
+}
+
+.data-card .count {
+    font-size: 2em;
+    font-weight: bold;
+    color: var(--medieval-blue);
+    font-family: var(--font-heading);
+}
+
+/* Loading Spinner - Mystical */
+.loading,
+.spinner {
+    border: 4px solid var(--medieval-stone-light);
+    border-top: 4px solid var(--medieval-gold);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1.2s linear infinite;
+    margin: 0 auto 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Special Elements */
+.question-display {
+    background: rgba(25, 25, 112, 0.1);
+    border: 2px solid var(--medieval-blue);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px 0;
+    border-left: 6px solid var(--medieval-blue);
+    box-shadow: var(--shadow-scroll);
+}
+
+.timer-display {
+    background: var(--gradient-gold);
+    border: 2px solid var(--medieval-gold-dark);
+    border-radius: 10px;
+    padding: 15px;
+    margin: 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    font-family: var(--font-heading);
+    box-shadow: var(--shadow-scroll);
+}
+
+.timer-display.warning {
+    background: linear-gradient(135deg, var(--medieval-crimson-light), var(--medieval-crimson));
+    color: white;
+    animation: timerPulse 1s infinite;
+}
+
+@keyframes timerPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+/* Answer Options */
+.answer-options {
+    margin: 15px 0;
+}
+
+.answer-option {
+    display: block;
+    width: 100%;
+    margin: 8px 0;
+    padding: 12px 15px;
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-brown);
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-family: var(--font-body);
+    transition: all 0.3s ease;
+}
+
+.answer-option:hover {
+    background: var(--medieval-gold-light);
+    transform: translateY(-1px);
+}
+
+.answer-option.correct {
+    background: linear-gradient(135deg, var(--medieval-green-light), var(--medieval-green));
+    color: white;
+    border-color: var(--medieval-green);
+}
+
+.answer-option.incorrect {
+    background: linear-gradient(135deg, var(--medieval-crimson-light), var(--medieval-crimson));
+    color: white;
+    border-color: var(--medieval-crimson);
+}
+
+/* Category Lists */
+.category-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.category-tag {
+    background: var(--gradient-gold);
+    color: var(--medieval-ink);
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    font-weight: 600;
+    border: 1px solid var(--medieval-gold-dark);
+}
+
+/* Enhanced Info Boxes */
+.enhanced-info,
+.victory-test-info {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+    border: 2px solid var(--medieval-gold);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: var(--shadow-scroll);
+}
+
+.feature-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.feature-item {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid var(--medieval-brown);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.feature-item h4 {
+    color: var(--medieval-ink);
+    margin-bottom: 8px;
+    font-family: var(--font-heading);
+}
+
+.feature-item p {
+    color: var(--medieval-ink-light);
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+/* Code Blocks */
+pre {
+    background: var(--medieval-ink);
+    color: var(--medieval-parchment);
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    border: 2px solid var(--medieval-brown);
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    line-height: 1.4;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+        font-size: 15px;
+    }
+
+    .container,
+    .test-container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .test-controls {
+        flex-direction: column;
+    }
+
+    .test-stats,
+    .stats-display,
+    .data-summary {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .stat-card,
+    .data-card {
+        padding: 12px;
+    }
+
+    .feature-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .container,
+    .test-container {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.6em;
+    }
+
+    .test-stats,
+    .stats-display,
+    .data-summary {
+        grid-template-columns: 1fr;
+    }
+
+    button,
+    .test-button {
+        width: 100%;
+        margin: 3px 0;
+    }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    :root {
+        --medieval-gold: #ffff00;
+        --medieval-crimson: #ff0000;
+        --medieval-blue: #0000ff;
+        --medieval-green: #008000;
+        --medieval-ink: #000000;
+        --medieval-parchment: #ffffff;
+    }
+}

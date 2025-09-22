@@ -1,0 +1,511 @@
+/*
+ * LobeLabyrinth - Achievement System Styles
+ * Medieval honors and accolades system
+ */
+
+/* Achievement Stats in Sidebar - Herald's Scroll */
+.achievement-stats-summary {
+    font-size: 0.95em;
+    color: var(--medieval-ink-light);
+    margin-bottom: 12px;
+    font-family: var(--font-ui);
+}
+
+.achievement-points {
+    color: var(--medieval-gold);
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Achievement Notification - Royal Herald */
+.achievement-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    transform: translateY(-100%);
+    opacity: 0;
+    transition: all 0.4s ease-in-out;
+    pointer-events: none;
+}
+
+.achievement-notification.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.achievement-unlock-animation {
+    background: var(--gradient-gold);
+    border: 3px solid var(--medieval-gold-dark);
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 380px;
+    box-shadow: var(--shadow-castle);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    animation: achievementFanfare 0.8s ease-out;
+    position: relative;
+}
+
+.achievement-unlock-animation::before {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    right: -3px;
+    bottom: -3px;
+    background: var(--gradient-royal);
+    border-radius: 18px;
+    z-index: -1;
+    animation: achievementGlow 2s ease-in-out infinite;
+}
+
+@keyframes achievementFanfare {
+    0% { 
+        transform: scale(0.5) rotate(-5deg); 
+        opacity: 0; 
+    }
+    50% { 
+        transform: scale(1.1) rotate(2deg); 
+    }
+    100% { 
+        transform: scale(1) rotate(0deg); 
+        opacity: 1; 
+    }
+}
+
+@keyframes achievementGlow {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+.achievement-unlock-animation .achievement-icon {
+    font-size: 3em;
+    filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
+    animation: iconBounce 1s ease-in-out;
+}
+
+@keyframes iconBounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-8px); }
+    60% { transform: translateY(-4px); }
+}
+
+.achievement-unlock-animation .achievement-details {
+    flex: 1;
+}
+
+.achievement-unlock-animation .achievement-title {
+    font-weight: bold;
+    color: var(--medieval-crimson);
+    font-size: 0.9em;
+    margin-bottom: 3px;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.achievement-unlock-animation .achievement-name {
+    font-weight: bold;
+    color: var(--medieval-ink);
+    font-size: 1.2em;
+    margin-bottom: 6px;
+    font-family: var(--font-heading);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.achievement-unlock-animation .achievement-description {
+    color: var(--medieval-ink-light);
+    font-size: 0.9em;
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.achievement-unlock-animation .achievement-points {
+    color: var(--medieval-gold-dark);
+    font-weight: bold;
+    font-size: 1em;
+    font-family: var(--font-ui);
+}
+
+.achievement-rarity {
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    font-size: 0.7em;
+    font-weight: bold;
+    padding: 6px 8px;
+    border-radius: 8px;
+    text-align: center;
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.achievement-rarity-common {
+    background: linear-gradient(135deg, var(--medieval-stone-light), var(--medieval-stone));
+    color: var(--medieval-ink);
+}
+
+.achievement-rarity-uncommon {
+    background: linear-gradient(135deg, var(--medieval-green-light), var(--medieval-green));
+    color: white;
+}
+
+.achievement-rarity-rare {
+    background: linear-gradient(135deg, var(--medieval-blue-light), var(--medieval-blue));
+    color: white;
+}
+
+.achievement-rarity-epic {
+    background: linear-gradient(135deg, #9932cc, #6a0dad);
+    color: white;
+}
+
+.achievement-rarity-legendary {
+    background: var(--gradient-gold);
+    color: var(--medieval-ink);
+    animation: legendaryShimmer 2s ease-in-out infinite;
+}
+
+@keyframes legendaryShimmer {
+    0%, 100% { box-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.8); }
+}
+
+/* Achievement Gallery - Hall of Honor */
+.achievement-gallery {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(44, 24, 16, 0.9);
+    z-index: 1001;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.achievement-gallery.visible {
+    display: flex;
+    animation: galleryFadeIn 0.5s ease-out;
+}
+
+@keyframes galleryFadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.achievement-gallery > div {
+    background: var(--gradient-parchment);
+    border: 4px solid var(--medieval-gold);
+    border-radius: 20px;
+    max-width: 900px;
+    max-height: 85vh;
+    width: 100%;
+    overflow-y: auto;
+    box-shadow: var(--shadow-castle);
+    position: relative;
+}
+
+.achievement-gallery > div::before {
+    content: '🏆 HALL OF HONOR 🏆';
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--gradient-gold);
+    color: var(--medieval-ink);
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-family: var(--font-title);
+    font-size: 0.9em;
+    letter-spacing: 1px;
+    border: 2px solid var(--medieval-gold-dark);
+}
+
+.achievement-gallery-header {
+    position: sticky;
+    top: 0;
+    background: var(--gradient-parchment);
+    padding: 25px;
+    border-bottom: 3px solid var(--medieval-gold);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 16px 16px 0 0;
+    z-index: 10;
+}
+
+.achievement-gallery-header h3 {
+    color: var(--medieval-ink);
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: 1.6em;
+}
+
+.achievement-summary {
+    color: var(--medieval-ink-light);
+    font-size: 1em;
+    font-family: var(--font-ui);
+}
+
+.achievement-close-btn {
+    background: var(--medieval-crimson);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 1.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-button);
+}
+
+.achievement-close-btn:hover {
+    background: var(--medieval-crimson-light);
+    transform: scale(1.1);
+}
+
+.achievement-categories {
+    padding: 25px;
+}
+
+.achievement-category {
+    margin-bottom: 35px;
+}
+
+.category-title {
+    color: var(--medieval-ink);
+    margin-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-heading);
+    font-size: 1.4em;
+    border-bottom: 2px solid var(--medieval-gold);
+    padding-bottom: 8px;
+}
+
+.category-progress {
+    color: var(--medieval-ink-light);
+    font-size: 0.8em;
+    font-weight: normal;
+    font-family: var(--font-ui);
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.achievement-card {
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-brown);
+    border-radius: 12px;
+    padding: 18px;
+    display: flex;
+    gap: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+.achievement-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.achievement-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-scroll);
+    border-color: var(--medieval-gold);
+}
+
+.achievement-card:hover::before {
+    left: 100%;
+}
+
+.achievement-card.unlocked {
+    background: linear-gradient(135deg, var(--medieval-parchment), rgba(212, 175, 55, 0.1));
+    border-color: var(--medieval-gold);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+.achievement-card.locked {
+    background: var(--medieval-stone-light);
+    border-color: var(--medieval-stone);
+    opacity: 0.7;
+}
+
+.achievement-card.locked .achievement-icon {
+    opacity: 0.5;
+    filter: grayscale(100%);
+}
+
+.achievement-card .achievement-icon {
+    font-size: 2.5em;
+    width: 60px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.achievement-info {
+    flex: 1;
+}
+
+.achievement-card .achievement-name {
+    font-weight: bold;
+    color: var(--medieval-ink);
+    margin-bottom: 6px;
+    font-size: 1em;
+    font-family: var(--font-heading);
+}
+
+.achievement-card .achievement-description {
+    color: var(--medieval-ink-light);
+    font-size: 0.85em;
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+.achievement-progress-bar {
+    background: var(--medieval-stone-light);
+    border-radius: 12px;
+    height: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+    border: 1px solid var(--medieval-brown);
+}
+
+.achievement-progress-fill {
+    background: var(--gradient-gold);
+    height: 100%;
+    border-radius: 12px;
+    transition: width 0.4s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.achievement-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8em;
+}
+
+.achievement-card .achievement-points {
+    color: var(--medieval-gold-dark);
+    font-weight: bold;
+    font-family: var(--font-ui);
+}
+
+.achievement-card .achievement-rarity {
+    color: var(--medieval-ink-light);
+    font-style: italic;
+    writing-mode: initial;
+    text-orientation: initial;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.05);
+    font-family: var(--font-ui);
+    text-transform: uppercase;
+    font-size: 0.7em;
+    letter-spacing: 0.5px;
+}
+
+/* Mobile responsiveness for achievements */
+@media (max-width: 768px) {
+    .achievement-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+    }
+
+    .achievement-unlock-animation {
+        max-width: none;
+        padding: 15px;
+    }
+
+    .achievement-unlock-animation .achievement-icon {
+        font-size: 2.5em;
+    }
+
+    .achievement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .achievement-gallery {
+        padding: 10px;
+    }
+
+    .achievement-gallery > div {
+        max-height: 90vh;
+        border-radius: 15px;
+    }
+
+    .achievement-gallery > div::before {
+        font-size: 0.8em;
+        padding: 6px 15px;
+    }
+
+    .achievement-gallery-header {
+        padding: 20px 15px;
+    }
+
+    .achievement-categories {
+        padding: 20px 15px;
+    }
+
+    .achievement-card {
+        padding: 15px;
+        gap: 12px;
+    }
+
+    .achievement-card .achievement-icon {
+        font-size: 2em;
+        width: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .achievement-unlock-animation {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .achievement-unlock-animation .achievement-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+    }
+
+    .achievement-grid {
+        gap: 12px;
+    }
+
+    .category-title {
+        font-size: 1.2em;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}

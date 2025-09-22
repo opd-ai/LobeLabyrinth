@@ -1,0 +1,968 @@
+/*
+ * LobeLabyrinth - Medieval Trivia Game Styles
+ * A quest through the labyrinth of knowledge
+ */
+
+/* Custom Medieval Font Imports (Web-safe fallbacks) */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap');
+
+/* CSS Custom Properties for Medieval Theme */
+:root {
+    /* Medieval Color Palette */
+    --medieval-gold: #d4af37;
+    --medieval-gold-dark: #b8941f;
+    --medieval-gold-light: #f4e4a0;
+    --medieval-crimson: #8b0000;
+    --medieval-crimson-light: #cd5c5c;
+    --medieval-blue: #191970;
+    --medieval-blue-light: #4169e1;
+    --medieval-green: #2d4a2b;
+    --medieval-green-light: #8fbc8f;
+    --medieval-brown: #8b4513;
+    --medieval-brown-light: #daa520;
+    --medieval-stone: #696969;
+    --medieval-stone-light: #a9a9a9;
+    --medieval-parchment: #f4e4bc;
+    --medieval-parchment-dark: #e6d3a3;
+    --medieval-ink: #2c1810;
+    --medieval-ink-light: #5d4e37;
+    
+    /* Medieval Fonts */
+    --font-title: 'Cinzel Decorative', 'Times New Roman', serif;
+    --font-heading: 'Cinzel', 'Georgia', serif;
+    --font-body: 'Cormorant Garamond', 'Times New Roman', serif;
+    --font-ui: 'Cinzel', 'Georgia', serif;
+    
+    /* Shadows and Effects */
+    --shadow-castle: 0 8px 32px rgba(44, 24, 16, 0.4);
+    --shadow-scroll: 0 4px 16px rgba(44, 24, 16, 0.3);
+    --shadow-button: 0 4px 8px rgba(44, 24, 16, 0.25);
+    --shadow-text: 2px 2px 4px rgba(44, 24, 16, 0.5);
+    
+    /* Gradients */
+    --gradient-parchment: linear-gradient(135deg, var(--medieval-parchment) 0%, var(--medieval-parchment-dark) 100%);
+    --gradient-gold: linear-gradient(135deg, var(--medieval-gold) 0%, var(--medieval-gold-dark) 100%);
+    --gradient-stone: linear-gradient(135deg, var(--medieval-stone-light) 0%, var(--medieval-stone) 100%);
+    --gradient-royal: linear-gradient(135deg, var(--medieval-blue) 0%, var(--medieval-crimson) 100%);
+}
+
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-body);
+    background: 
+        radial-gradient(circle at 25% 25%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(139, 0, 0, 0.1) 0%, transparent 50%),
+        linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    background-attachment: fixed;
+    color: var(--medieval-ink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Medieval Texture Overlay */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 2px,
+            rgba(212, 175, 55, 0.02) 2px,
+            rgba(212, 175, 55, 0.02) 4px
+        );
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Game Container - Castle Layout */
+.game-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    grid-template-rows: auto 1fr auto;
+    grid-gap: 20px;
+    grid-template-areas: 
+        "header header"
+        "main sidebar"
+        "footer footer";
+}
+
+/* Header - Royal Banner */
+.game-header {
+    grid-area: header;
+    background: var(--gradient-parchment);
+    border: 3px solid var(--medieval-gold);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: var(--shadow-castle);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.game-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: var(--gradient-gold);
+}
+
+.game-header::after {
+    content: '⚜️';
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 1.5em;
+    opacity: 0.7;
+}
+
+.game-header h1 {
+    color: var(--medieval-crimson);
+    margin-bottom: 10px;
+    font-size: 2.8em;
+    font-family: var(--font-title);
+    text-shadow: var(--shadow-text);
+    letter-spacing: 2px;
+}
+
+/* Main Game Area - Scroll Content */
+.game-main {
+    grid-area: main;
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-brown);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: var(--shadow-scroll);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    position: relative;
+}
+
+.game-main::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(139, 69, 19, 0.3);
+    border-radius: 8px;
+    pointer-events: none;
+}
+
+/* Sidebar - Castle Tower */
+.game-sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Footer - Castle Foundation */
+.game-footer {
+    grid-area: footer;
+    background: var(--gradient-stone);
+    border: 2px solid var(--medieval-stone);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-scroll);
+    color: var(--medieval-parchment);
+    text-align: center;
+}
+
+/* Section Containers - Illuminated Manuscripts */
+.section {
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-gold);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: var(--shadow-scroll);
+    position: relative;
+}
+
+.section::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 15px;
+    height: 15px;
+    background: var(--medieval-gold);
+    border-radius: 50%;
+    box-shadow: 
+        25px 0 0 var(--medieval-crimson),
+        50px 0 0 var(--medieval-blue);
+}
+
+.section h3 {
+    margin-bottom: 15px;
+    color: var(--medieval-crimson);
+    font-family: var(--font-heading);
+    font-size: 1.4em;
+    font-weight: 600;
+    border-bottom: 2px solid var(--medieval-gold);
+    padding-bottom: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Room Information - Chamber Description */
+#room-info h2 {
+    color: var(--medieval-blue);
+    margin-bottom: 15px;
+    font-family: var(--font-heading);
+    font-size: 1.8em;
+    text-shadow: var(--shadow-text);
+}
+
+#room-description {
+    color: var(--medieval-ink);
+    margin: 15px 0;
+    line-height: 1.7;
+    font-size: 1.1em;
+    padding: 15px;
+    background: rgba(244, 228, 188, 0.5);
+    border-left: 4px solid var(--medieval-gold);
+    border-radius: 5px;
+}
+
+/* Question Area - Royal Inquiry */
+#question-area {
+    display: none;
+}
+
+#question-text {
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--medieval-ink);
+    margin-bottom: 20px;
+    line-height: 1.5;
+    font-family: var(--font-heading);
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+    border: 2px solid var(--medieval-gold);
+    border-radius: 8px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.question-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    font-size: 0.95em;
+    color: var(--medieval-ink-light);
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    background: var(--gradient-gold);
+    color: var(--medieval-ink);
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--medieval-gold-dark);
+    font-weight: 600;
+    box-shadow: var(--shadow-button);
+}
+
+/* Answer Area - Choices of Fate */
+#answer-area {
+    display: none;
+}
+
+.answer-btn {
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 15px 20px;
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-brown);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1.1em;
+    font-family: var(--font-body);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.answer-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.answer-btn:hover {
+    background: var(--medieval-gold-light);
+    border-color: var(--medieval-gold);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-button);
+}
+
+.answer-btn:hover::before {
+    left: 100%;
+}
+
+.answer-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.answer-btn.answer-correct {
+    background: linear-gradient(135deg, var(--medieval-green-light), var(--medieval-green));
+    border-color: var(--medieval-green);
+    color: white;
+    text-shadow: var(--shadow-text);
+}
+
+.answer-btn.answer-incorrect {
+    background: linear-gradient(135deg, var(--medieval-crimson-light), var(--medieval-crimson));
+    border-color: var(--medieval-crimson);
+    color: white;
+    text-shadow: var(--shadow-text);
+}
+
+/* Keyboard Navigation - Blessed Selection */
+.answer-btn.keyboard-selected {
+    background: var(--gradient-royal);
+    color: white;
+    border-color: var(--medieval-gold);
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.5);
+    transform: translateY(-3px);
+}
+
+.answer-btn.keyboard-selected:hover {
+    background: var(--gradient-royal);
+}
+
+/* Focus indicators for accessibility */
+button:focus,
+.answer-btn:focus {
+    outline: 3px solid var(--medieval-gold);
+    outline-offset: 2px;
+}
+
+/* Keyboard help overlay */
+.keyboard-help-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(44, 24, 16, 0.9);
+    color: var(--medieval-parchment);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    font-family: var(--font-ui);
+    padding: 20px;
+}
+
+.keyboard-help-content {
+    background: var(--gradient-parchment);
+    color: var(--medieval-ink);
+    border: 3px solid var(--medieval-gold);
+    border-radius: 15px;
+    padding: 30px;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    white-space: pre-line;
+    line-height: 1.8;
+    box-shadow: var(--shadow-castle);
+}
+
+/* Map focus indicator */
+#map-canvas:focus {
+    outline: 3px solid var(--medieval-gold);
+    outline-offset: -3px;
+}
+
+/* Keyboard shortcut hints */
+.keyboard-hint {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(44, 24, 16, 0.8);
+    color: var(--medieval-gold);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8em;
+    font-family: var(--font-ui);
+    opacity: 0.9;
+}
+
+/* Timer - Hourglass of Time */
+#timer-area {
+    display: none;
+    margin: 20px 0;
+}
+
+.timer-container {
+    background: var(--gradient-parchment);
+    border: 2px solid var(--medieval-gold);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: var(--shadow-scroll);
+}
+
+.timer-bar-container {
+    background: var(--medieval-stone);
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin: 12px 0;
+    border: 1px solid var(--medieval-brown);
+}
+
+#timer-bar {
+    background: var(--gradient-gold);
+    height: 100%;
+    width: 100%;
+    transition: width 0.1s ease;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#timer-bar.timer-warning {
+    background: linear-gradient(90deg, var(--medieval-crimson), var(--medieval-crimson-light));
+    animation: pulseWarning 1s infinite;
+}
+
+@keyframes pulseWarning {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+#timer-text {
+    font-weight: bold;
+    font-size: 1.2em;
+    color: var(--medieval-ink);
+    font-family: var(--font-heading);
+}
+
+/* Score Display - Royal Treasury */
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--medieval-gold);
+    font-family: var(--font-ui);
+}
+
+.score-value {
+    font-weight: bold;
+    color: var(--medieval-blue);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+/* Progress Indicators - Quest Progress */
+.progress-item {
+    margin: 18px 0;
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 1em;
+    color: var(--medieval-ink);
+    font-family: var(--font-ui);
+    font-weight: 600;
+}
+
+.progress-percent {
+    font-weight: bold;
+    color: var(--medieval-blue);
+}
+
+.progress-bar {
+    height: 12px;
+    background: var(--medieval-stone-light);
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--medieval-brown);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    background: var(--gradient-gold);
+    border-radius: 6px;
+    transition: width 0.4s ease;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+    animation: progressShimmer 3s infinite;
+}
+
+@keyframes progressShimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.rooms-fill {
+    background: linear-gradient(90deg, var(--medieval-green) 0%, var(--medieval-green-light) 100%);
+}
+
+.accuracy-fill {
+    background: linear-gradient(90deg, var(--medieval-brown) 0%, var(--medieval-brown-light) 100%);
+}
+
+.time-indicator {
+    height: 8px;
+    background: var(--medieval-stone-light);
+    border-radius: 4px;
+    position: relative;
+    margin-top: 8px;
+    border: 1px solid var(--medieval-brown);
+}
+
+.time-pulse {
+    height: 100%;
+    width: 25px;
+    background: var(--gradient-royal);
+    border-radius: 4px;
+    animation: timePulse 2.5s ease-in-out infinite;
+}
+
+@keyframes timePulse {
+    0%, 100% { transform: translateX(0); opacity: 1; }
+    50% { transform: translateX(calc(100vw - 50px)); opacity: 0.6; }
+}
+
+.progress-fill.completed {
+    background: var(--gradient-gold);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+}
+
+.progress-fill.completed::after {
+    animation: completedPulse 2s ease-in-out infinite;
+}
+
+@keyframes completedPulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+/* Screen reader only content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Focus styles for accessibility */
+*:focus {
+    outline: 3px solid var(--medieval-gold);
+    outline-offset: 2px;
+}
+
+.answer-btn:focus,
+button:focus {
+    outline: 3px solid var(--medieval-gold);
+    outline-offset: 3px;
+    transform: scale(1.02);
+}
+
+/* Game Controls - Royal Commands */
+.controls-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 18px;
+}
+
+button {
+    background: var(--gradient-gold);
+    color: var(--medieval-ink);
+    border: 2px solid var(--medieval-gold-dark);
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-button);
+    position: relative;
+    overflow: hidden;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+button:hover {
+    background: var(--medieval-gold-light);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+button:hover::before {
+    left: 100%;
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+button:disabled {
+    background: var(--medieval-stone-light);
+    color: var(--medieval-stone);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+button.btn-secondary {
+    background: var(--gradient-stone);
+    color: var(--medieval-parchment);
+    border-color: var(--medieval-stone);
+}
+
+button.btn-secondary:hover {
+    background: var(--medieval-stone);
+}
+
+button.btn-danger {
+    background: linear-gradient(135deg, var(--medieval-crimson), var(--medieval-crimson-light));
+    color: white;
+    border-color: var(--medieval-crimson);
+}
+
+button.btn-danger:hover {
+    background: var(--medieval-crimson);
+}
+
+/* Navigation - Castle Pathways */
+.room-nav-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.room-nav-btn {
+    background: linear-gradient(135deg, var(--medieval-brown), var(--medieval-brown-light));
+    color: white;
+    padding: 10px 15px;
+    font-size: 0.95em;
+    border-color: var(--medieval-brown);
+}
+
+.room-nav-btn:hover {
+    background: var(--medieval-brown);
+}
+
+/* Feedback Messages - Royal Proclamations */
+.feedback-message {
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin: 12px 0;
+    font-weight: 600;
+    font-family: var(--font-ui);
+    border: 2px solid;
+    box-shadow: var(--shadow-scroll);
+}
+
+.feedback-success {
+    background: linear-gradient(135deg, var(--medieval-green-light), rgba(143, 188, 143, 0.3));
+    color: var(--medieval-green);
+    border-color: var(--medieval-green);
+}
+
+.feedback-error {
+    background: linear-gradient(135deg, var(--medieval-crimson-light), rgba(205, 92, 92, 0.3));
+    color: var(--medieval-crimson);
+    border-color: var(--medieval-crimson);
+}
+
+.feedback-warning {
+    background: linear-gradient(135deg, var(--medieval-gold-light), rgba(244, 228, 160, 0.5));
+    color: var(--medieval-brown);
+    border-color: var(--medieval-brown);
+}
+
+.feedback-info {
+    background: linear-gradient(135deg, var(--medieval-blue-light), rgba(65, 105, 225, 0.2));
+    color: var(--medieval-blue);
+    border-color: var(--medieval-blue);
+}
+
+/* Game Completion - Victory Banner */
+.game-completion {
+    background: var(--gradient-gold);
+    border: 3px solid var(--medieval-gold-dark);
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    margin: 25px 0;
+    box-shadow: var(--shadow-castle);
+    position: relative;
+}
+
+.game-completion::before {
+    content: '🏰';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 2em;
+    background: var(--medieval-gold);
+    padding: 5px 10px;
+    border-radius: 50%;
+    border: 2px solid var(--medieval-gold-dark);
+}
+
+.game-completion h3 {
+    color: var(--medieval-crimson);
+    margin-bottom: 15px;
+    font-size: 1.8em;
+    font-family: var(--font-title);
+    text-shadow: var(--shadow-text);
+}
+
+/* Connection status indicators */
+.connection-unlocked {
+    color: var(--medieval-green);
+    font-weight: bold;
+}
+
+.connection-locked {
+    color: var(--medieval-stone);
+    text-decoration: line-through;
+}
+
+/* Loading states - Mystical Spinner */
+.loading {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid var(--medieval-stone-light);
+    border-top: 3px solid var(--medieval-gold);
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Map Canvas Styles - Cartographer's Work */
+#map-area {
+    background: var(--gradient-parchment);
+    border: 3px solid var(--medieval-brown);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-scroll);
+    position: relative;
+}
+
+#map-area::before {
+    content: '🗺️';
+    position: absolute;
+    top: -12px;
+    left: 20px;
+    font-size: 1.5em;
+    background: var(--medieval-parchment);
+    padding: 0 10px;
+}
+
+#map-canvas {
+    width: 100%;
+    max-width: 800px;
+    height: 400px;
+    border: 3px solid var(--medieval-brown);
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    cursor: default;
+    background: var(--medieval-parchment);
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.map-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.map-header h3 {
+    color: var(--medieval-ink);
+    margin-bottom: 8px;
+    font-family: var(--font-heading);
+    font-size: 1.5em;
+}
+
+.map-legend {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 15px;
+    font-size: 0.95em;
+    flex-wrap: wrap;
+    font-family: var(--font-ui);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 15px;
+    border: 1px solid var(--medieval-brown);
+}
+
+.legend-color {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 2px solid var(--medieval-brown);
+}
+
+.legend-current { background-color: var(--medieval-blue); }
+.legend-visited { background-color: var(--medieval-green); }
+.legend-accessible { background-color: var(--medieval-brown); }
+.legend-locked { background-color: var(--medieval-stone); }
+
+/* Responsive Design - Adaptable Castle */
+@media (max-width: 768px) {
+    .game-container {
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+            "header"
+            "main"
+            "sidebar"
+            "footer";
+        padding: 15px;
+    }
+
+    .controls-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .question-meta {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .game-header h1 {
+        font-size: 2.2em;
+    }
+
+    .map-legend {
+        gap: 15px;
+    }
+
+    body {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-container {
+        padding: 10px;
+        grid-gap: 15px;
+    }
+
+    .game-header h1 {
+        font-size: 1.8em;
+    }
+
+    .section {
+        padding: 15px;
+    }
+
+    #map-canvas {
+        height: 300px;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --medieval-gold: #ffff00;
+        --medieval-crimson: #ff0000;
+        --medieval-blue: #0000ff;
+        --medieval-green: #008000;
+        --medieval-ink: #000000;
+        --medieval-parchment: #ffffff;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .game-container {
+        box-shadow: none;
+        border: 1px solid black;
+    }
+    
+    .section {
+        break-inside: avoid;
+    }
+}

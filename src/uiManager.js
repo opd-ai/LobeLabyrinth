@@ -167,19 +167,6 @@ class UIManager {
             this.elements.shareResultsBtn.addEventListener('click', () => this.handleShareResults());
         }
 
-        // Victory screen event listeners
-        if (this.elements.playAgainBtn) {
-            this.elements.playAgainBtn.addEventListener('click', () => this.handlePlayAgain());
-        }
-        
-        if (this.elements.viewAchievementsBtn) {
-            this.elements.viewAchievementsBtn.addEventListener('click', () => this.showAchievements());
-        }
-        
-        if (this.elements.shareResultsBtn) {
-            this.elements.shareResultsBtn.addEventListener('click', () => this.shareResults());
-        }
-        
         // Note: victoryClose element would need to be added to HTML if close functionality is needed
 
         // Keyboard navigation setup

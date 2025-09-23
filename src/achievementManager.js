@@ -179,18 +179,18 @@ class AchievementManager {
      */
     setupEventListeners() {
         // Listen for question answers
-        this.gameState.addEventListener('questionAnswered', (event) => {
-            this.handleQuestionAnswered(event.detail);
+        this.gameState.on('questionAnswered', (eventData) => {
+            this.handleQuestionAnswered(eventData);
         });
         
         // Listen for room changes
-        this.gameState.addEventListener('roomChanged', (event) => {
-            this.handleRoomChanged(event.detail);
+        this.gameState.on('roomChanged', (eventData) => {
+            this.handleRoomChanged(eventData);
         });
         
         // Listen for game completion
-        this.gameState.addEventListener('gameCompleted', (event) => {
-            this.handleGameCompleted(event.detail);
+        this.gameState.on('gameCompleted', (eventData) => {
+            this.handleGameCompleted(eventData);
         });
         
         console.log('Achievement event listeners set up');

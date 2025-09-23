@@ -254,15 +254,15 @@ class EnhancedDataLoader {
     }
 
     getRooms() {
-        return this.originalLoader.getRooms();
+        return this.originalLoader.getAllData().rooms;
     }
 
     getQuestions() {
-        return this.originalLoader.getQuestions();
+        return this.originalLoader.getAllData().questions;
     }
 
     getAchievements() {
-        return this.originalLoader.getAchievements();
+        return this.originalLoader.getAllData().achievements;
     }
 
     getStartingRoom() {
@@ -270,11 +270,11 @@ class EnhancedDataLoader {
     }
 
     getRoomById(roomId) {
-        return this.originalLoader.getRoomById(roomId);
+        return this.originalLoader.getRoom(roomId);
     }
 
     getQuestionById(questionId) {
-        return this.originalLoader.getQuestionById(questionId);
+        return this.originalLoader.getQuestion(questionId);
     }
 
     getRandomQuestion(category = null, excludeIds = []) {
@@ -291,8 +291,20 @@ class EnhancedDataLoader {
             }
         }
         
-        // Fallback to original implementation
-        return this.originalLoader.getRandomQuestion(category, excludeIds);
+        // Fallback: get questions from original loader and filter
+        const allQuestions = this.originalLoader.getAllData().questions || [];
+        let filteredQuestions = allQuestions.filter(q => !excludeIds.includes(q.id));
+        
+        if (category) {
+            filteredQuestions = filteredQuestions.filter(q => q.category === category);
+        }
+        
+        if (filteredQuestions.length > 0) {
+            const randomIndex = Math.floor(Math.random() * filteredQuestions.length);
+            return filteredQuestions[randomIndex];
+        }
+        
+        return null;
     }
 
     /**

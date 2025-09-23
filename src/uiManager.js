@@ -2297,12 +2297,19 @@ Press any key to close this help.
      */
     showAchievements() {
         if (this.achievementManager) {
-            // If there's an achievement display method, use it
-            if (typeof this.achievementManager.showAchievements === 'function') {
-                this.achievementManager.showAchievements();
-            } else {
-                console.log('Achievement display not implemented yet');
-                this.showFeedback('Achievement display coming soon!', 'info');
+            // Use available achievement methods
+            try {
+                const achievements = this.achievementManager.getAllAchievements();
+                const stats = this.achievementManager.getAchievementStats();
+                
+                // Display achievement info as feedback for now
+                const message = `🏆 Achievements: ${stats.unlocked}/${stats.total} (${stats.percentage}%)`;
+                this.showFeedback(message, 'info', 4000);
+                
+                console.log('Available achievements:', achievements);
+            } catch (error) {
+                console.log('Achievement display not fully implemented yet');
+                this.showFeedback('🏆 Achievement display coming soon!', 'info');
             }
         }
     }

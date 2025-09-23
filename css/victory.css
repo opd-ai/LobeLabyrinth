@@ -10,14 +10,14 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(5,5,5,0.95);
+    background: rgba(3,3,3,0.95);
     z-index: 2000;
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 16px;
     opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+    transition: opacity 0.4s ease-in-out;
     backdrop-filter: none;
 }
 
@@ -27,17 +27,17 @@
 }
 
 .victory-content {
-    background: linear-gradient(145deg, #3A3A3A 0%, #2F2F2F 35%, #252525 65%, #1A1A1A 100%);
+    background: linear-gradient(145deg, #2A2A2A 0%, #202020 35%, #181818 65%, #101010 100%);
     border: 3px outset var(--mindmaze-stone);
-    border-radius: 6px;
-    max-width: 760px;
-    max-height: 75vh;
-    width: 90vw;
+    border-radius: 4px;
+    max-width: 680px;
+    max-height: 70vh;
+    width: 85vw;
     overflow-y: auto;
-    box-shadow: 4px 4px 8px rgba(0,0,0,0.8), -2px -2px 4px rgba(255,255,255,0.05), inset 1px 1px 0 rgba(255,255,255,0.1);
-    animation: victoryGrandEntrance 0.7s ease-out;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.9), -2px -2px 4px rgba(255,255,255,0.04), inset 1px 1px 0 rgba(255,255,255,0.08);
+    animation: victoryGrandEntrance 0.6s ease-out;
     position: relative;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23222222'/><rect x='0' y='0' width='32' height='32' fill='%23282828' opacity='0.4'/><rect x='32' y='32' width='32' height='32' fill='%23282828' opacity='0.4'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><rect width='48' height='48' fill='%23151515'/><rect x='0' y='0' width='24' height='24' fill='%231A1A1A' opacity='0.6'/><rect x='24' y='24' width='24' height='24' fill='%231A1A1A' opacity='0.6'/></svg>");
 }
 
 .victory-content::before {
@@ -73,14 +73,15 @@
 
 .victory-header {
     text-align: center;
-    padding: 16px;
-    background: linear-gradient(145deg, #4A4A4A 0%, #353535 35%, #2A2A2A 65%, #1F1F1F 100%);
+    padding: 12px;
+    background: linear-gradient(145deg, #353535 0%, #2A2A2A 35%, #1F1F1F 65%, #151515 100%);
     color: var(--mindmaze-gold);
-    border-radius: 4px 4px 0 0;
+    border-radius: 2px 2px 0 0;
     position: relative;
     overflow: hidden;
     border-bottom: 2px inset var(--mindmaze-stone);
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23353535'/><rect x='0' y='0' width='16' height='16' fill='%233A3A3A' opacity='0.4'/><rect x='16' y='16' width='16' height='16' fill='%233A3A3A' opacity='0.4'/></svg>");
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23202020'/><rect x='0' y='0' width='16' height='16' fill='%23252525' opacity='0.5'/><rect x='16' y='16' width='16' height='16' fill='%23252525' opacity='0.5'/></svg>");
+    background-size: 32px 32px;
 }
 
 .victory-header::before {

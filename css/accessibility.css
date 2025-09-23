@@ -1,10 +1,17 @@
 /**
- * Accessibility CSS - Enhanced styles for a/* Enhanced focus indicators - Optimized for Dark Stone Theme */
+ * Accessibility CSS - Enhanced styles for dark medieval theme
+ * Supports high contrast mode, focus indicators, reduced motion,
+ * and screen reader optimizations
+ */
+
+/* ===== ENHANCED FOCUS INDICATORS ===== */
+
+/* Enhanced focus indicators - Optimized for Dark Stone Theme */
 :focus {
     outline: 3px solid var(--mindmaze-gold) !important;
     outline-offset: 2px;
     border-radius: 2px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.8), 0 0 0 5px rgba(212,175,55,0.3) !important;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 5px rgba(212,175,55,0.4) !important;
 }
 
 /* Enhanced focus for buttons - 90s Style Compatible */
@@ -14,12 +21,9 @@ input[type="submit"]:focus,
 [role="button"]:focus {
     outline: 3px solid var(--mindmaze-gold) !important;
     outline-offset: 2px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.8), 0 0 0 5px rgba(212,175,55,0.4), inset 0 0 0 1px rgba(255,255,255,0.2) !important;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 5px rgba(212,175,55,0.5), inset 0 0 0 1px rgba(255,255,255,0.2) !important;
     border-color: var(--mindmaze-gold) !important;
-}tures
- * Supports high contrast mode, focus indicators, reduced motion,
- * and screen reader optimizations
- */
+}
 
 /* ===== SCREEN READER UTILITIES ===== */
 
@@ -105,8 +109,9 @@ a:focus {
 
 /* Visual indicator for keyboard navigation mode - Enhanced Contrast */
 body.keyboard-navigation :focus {
-    animation: focusPulse 1.2s infinite;
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 4px var(--mindmaze-gold), 0 0 0 6px rgba(212,175,55,0.4) !important;
+    animation: focusPulse 2s infinite !important;
+    outline: 4px solid var(--mindmaze-gold) !important;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.9), 0 0 16px rgba(212, 175, 55, 0.9) !important;
 }
 
 @keyframes focusPulse {
@@ -118,19 +123,19 @@ body.keyboard-navigation :focus {
 
 /* Base high contrast variables - Enhanced for Dark Theme */
 .high-contrast {
-    --hc-bg: #000000;
-    --hc-text: #ffffff;
-    --hc-accent: #ffff00;
-    --hc-border: #ffffff;
-    --hc-focus: #ff6600;
-    --hc-link: #00ffff;
-    --hc-visited: #ff88ff;
-    --hc-success: #00ff00;
-    --hc-error: #ff4444;
-    --hc-warning: #ffaa00;
-    --hc-gold: #ffdd00;
-    --hc-panel-bg: #111111;
-    --hc-button-bg: #333333;
+    --mindmaze-text: #FFFFFF !important;
+    --mindmaze-text-dim: #E0E0E0 !important;
+    --mindmaze-gold: #FFFF00 !important;
+    --mindmaze-stone: #FFFFFF !important;
+    --mindmaze-black: #000000 !important;
+    --mindmaze-panel: #000000 !important;
+    --mindmaze-brown: #8B4513 !important;
+    --mindmaze-blue: #0000FF !important;
+    --mindmaze-crimson: #FF0000 !important;
+    --gradient-panel-raised: linear-gradient(145deg, #FFFFFF 0%, #E0E0E0 100%) !important;
+    --gradient-panel-inset: linear-gradient(145deg, #808080 0%, #404040 100%) !important;
+    --shadow-raised: 2px 2px 0px #000000 !important;
+    --shadow-inset: inset 2px 2px 0px #000000 !important;
 }
 
 /* Apply high contrast styles */

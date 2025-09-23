@@ -8,41 +8,43 @@
 
 /* CSS Custom Properties - Authentic Encarta MindMaze (1995) Theme */
 :root {
-    /* Classic MindMaze Color Palette - Darker & More Authentic */
-    --mindmaze-stone-dark: #202020;
+    /* Classic MindMaze Color Palette - Authentic 90s Dark Castle */
+    --mindmaze-stone-dark: #1A1A1A;
     --mindmaze-stone: #353535;
     --mindmaze-stone-light: #4A4A4A;
-    --mindmaze-brown-dark: #3D2914;
+    --mindmaze-brown-dark: #2C1810;
     --mindmaze-brown: #5D3A1A;
-    --mindmaze-brown-light: #7A4C23;
+    --mindmaze-brown-light: #8B4513;
     --mindmaze-gold: #D4AF37;
     --mindmaze-gold-light: #E6C547;
     --mindmaze-gold-dark: #B8941F;
-    --mindmaze-blue-dark: #0C0C2E;
-    --mindmaze-blue: #1A1A3A;
-    --mindmaze-blue-light: #2A2A5A;
-    --mindmaze-crimson: #6B0000;
-    --mindmaze-crimson-light: #8B0000;
+    --mindmaze-blue-dark: #191970;
+    --mindmaze-blue: #2E2E5A;
+    --mindmaze-blue-light: #3A3A6A;
+    --mindmaze-crimson: #8B0000;
+    --mindmaze-crimson-light: #A52A2A;
     --mindmaze-black: #0A0A0A;
-    --mindmaze-panel: #2A2A2A;
-    --mindmaze-text: #E8E8E8;
-    --mindmaze-text-dim: #A8A8A8;
+    --mindmaze-panel: #252525;
+    --mindmaze-text: #E0E0E0;
+    --mindmaze-text-dim: #999999;
     
-    /* Authentic 90s UI Gradients - Enhanced Contrast */
-    --gradient-button-raised: linear-gradient(145deg, #4A4A4A 0%, #333333 35%, #2A2A2A 65%, #1A1A1A 100%);
-    --gradient-button-pressed: linear-gradient(145deg, #1A1A1A 0%, #282828 35%, #363636 65%, #3A3A3A 100%);
-    --gradient-panel-inset: linear-gradient(145deg, #1F1F1F 0%, #2A2A2A 35%, #323232 65%, #363636 100%);
-    --gradient-panel-raised: linear-gradient(145deg, #3A3A3A 0%, #2F2F2F 35%, #252525 65%, #1A1A1A 100%);
-    --gradient-castle-bg: radial-gradient(ellipse at center, #151515 0%, #0A0A0A 50%, #050505 100%);
-    --gradient-stone-texture: conic-gradient(from 0deg at 50% 50%, #2A2A2A 0deg, #1F1F1F 72deg, #333333 144deg, #252525 216deg, #2A2A2A 288deg, #1F1F1F 360deg);
+    /* Authentic 90s UI Gradients - Classic Beveled Interface */
+    --gradient-button: linear-gradient(145deg, #505050 0%, #404040 25%, #303030 75%, #202020 100%);
+    --gradient-button-primary: linear-gradient(145deg, #D4AF37 0%, #B8941F 25%, #A17F0E 75%, #8B6F00 100%);
+    --gradient-button-pressed: linear-gradient(145deg, #202020 0%, #303030 25%, #404040 75%, #505050 100%);
+    --gradient-panel-inset: linear-gradient(145deg, #1A1A1A 0%, #252525 25%, #2F2F2F 75%, #353535 100%);
+    --gradient-panel-raised: linear-gradient(145deg, #404040 0%, #353535 25%, #2A2A2A 75%, #1F1F1F 100%);
+    --gradient-castle-bg: radial-gradient(ellipse at center, #0F0F0F 0%, #080808 50%, #040404 100%);
+    --gradient-stone-texture: repeating-conic-gradient(from 0deg at 50% 50%, #252525 0deg, #1A1A1A 60deg, #303030 120deg, #1F1F1F 180deg);
     
-    /* Authentic 90s Shadows and Effects - Enhanced Depth */
-    --shadow-inset: inset 2px 2px 5px rgba(0, 0, 0, 0.8), inset -2px -2px 3px rgba(255, 255, 255, 0.05);
-    --shadow-raised: 2px 2px 4px rgba(0, 0, 0, 0.7), -1px -1px 2px rgba(255, 255, 255, 0.08), inset 1px 1px 0px rgba(255, 255, 255, 0.15);
-    --shadow-deep: 3px 3px 8px rgba(0, 0, 0, 0.9), inset 2px 2px 4px rgba(0, 0, 0, 0.6);
-    --shadow-glow: 0 0 12px rgba(212, 175, 55, 0.5), 0 0 24px rgba(212, 175, 55, 0.2);
-    --shadow-text-emboss: 1px 1px 0px rgba(255, 255, 255, 0.1), -1px -1px 0px rgba(0, 0, 0, 0.8);
-    --shadow-button-pressed: inset 2px 2px 6px rgba(0, 0, 0, 0.8), inset -1px -1px 2px rgba(0, 0, 0, 0.5);
+    /* Authentic 90s Shadows and Effects - Classic Beveled Appearance */
+    --shadow-inset: inset 2px 2px 4px rgba(0, 0, 0, 0.9), inset -1px -1px 2px rgba(255, 255, 255, 0.1);
+    --shadow-raised: 2px 2px 3px rgba(0, 0, 0, 0.8), -1px -1px 1px rgba(255, 255, 255, 0.15), inset 1px 1px 0px rgba(255, 255, 255, 0.2);
+    --shadow-deep: 3px 3px 6px rgba(0, 0, 0, 0.9), 1px 1px 0px rgba(0, 0, 0, 0.7);
+    --shadow-glow: 0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.3);
+    --shadow-text-emboss: 1px 1px 0px rgba(255, 255, 255, 0.15), -1px -1px 0px rgba(0, 0, 0, 0.9);
+    --shadow-text-raised: 1px 1px 0px rgba(0, 0, 0, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.2);
+    --shadow-button-pressed: inset 2px 2px 4px rgba(0, 0, 0, 0.9), inset -1px -1px 2px rgba(255, 255, 255, 0.1);
     
     /* Typography - Authentic 90s System Fonts */
     --font-title: 'Times New Roman', 'Times', serif;
@@ -80,10 +82,10 @@ body {
     color: var(--mindmaze-text);
     background: 
         var(--gradient-castle-bg),
-        var(--gradient-stone-texture),
-        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><rect width="64" height="64" fill="%23151515"/><rect x="0" y="0" width="32" height="32" fill="%23202020" opacity="0.4"/><rect x="32" y="32" width="32" height="32" fill="%23202020" opacity="0.4"/><rect x="8" y="8" width="16" height="16" fill="%23181818" opacity="0.6"/><rect x="40" y="40" width="16" height="16" fill="%23181818" opacity="0.6"/><circle cx="16" cy="16" r="2" fill="%23333" opacity="0.7"/><circle cx="48" cy="48" r="2" fill="%23333" opacity="0.7"/></svg>'),
-        repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,0.015) 4px, rgba(255,255,255,0.015) 8px);
-    background-size: cover, 128px 128px, 64px 64px, 16px 16px;
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'><rect width='128' height='128' fill='%230A0A0A'/><rect x='0' y='0' width='64' height='64' fill='%23141414' opacity='0.8'/><rect x='64' y='64' width='64' height='64' fill='%23141414' opacity='0.8'/><rect x='16' y='16' width='32' height='32' fill='%23181818' opacity='0.6'/><rect x='80' y='80' width='32' height='32' fill='%23181818' opacity='0.6'/><path d='M0,0 L128,0 L128,4 L0,4 Z M0,32 L128,32 L128,36 L0,36 Z M0,64 L128,64 L128,68 L0,68 Z M0,96 L128,96 L128,100 L0,100 Z' fill='%23222' opacity='0.4'/></svg>"),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
+    background-size: cover, 128px 128px, 8px 8px, 8px 8px;
     background-attachment: fixed;
     height: 100vh;
     width: 100vw;
@@ -125,8 +127,8 @@ body::before {
 
 /* Enhanced Stone/Noise Patterns - Authentic 90s Texture */
 :root {
-    --mindmaze-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='128' height='128' fill='%23181818' filter='url(%23n)' opacity='0.05'/></svg>");
-    --mindmaze-stone-pattern: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'><rect width='96' height='96' fill='%23202020'/><polygon points='0,0 48,0 48,48 0,48' fill='%23252525' opacity='0.6'/><polygon points='48,48 96,48 96,96 48,96' fill='%23252525' opacity='0.6'/><rect x='12' y='12' width='24' height='24' fill='%231A1A1A' opacity='0.8'/><rect x='60' y='60' width='24' height='24' fill='%231A1A1A' opacity='0.8'/></svg>");
+    --mindmaze-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><filter id='noise'><feTurbulence baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='64' height='64' fill='%23101010' filter='url(%23noise)' opacity='0.08'/></svg>");
+    --mindmaze-stone-pattern: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><rect width='48' height='48' fill='%23252525'/><rect x='0' y='0' width='24' height='24' fill='%232A2A2A' opacity='0.7'/><rect x='24' y='24' width='24' height='24' fill='%232A2A2A' opacity='0.7'/><rect x='4' y='4' width='16' height='16' fill='%23202020' opacity='0.5'/><rect x='28' y='28' width='16' height='16' fill='%23202020' opacity='0.5'/><path d='M0,12 L48,12 L48,13 L0,13 Z M0,36 L48,36 L48,37 L0,37 Z' fill='%23303030' opacity='0.4'/><path d='M12,0 L13,0 L13,48 L12,48 Z M36,0 L37,0 L37,48 L36,48 Z' fill='%23303030' opacity='0.4'/></svg>");
 }
 
 /* Game Container - Authentic Castle Interface (Fixed Layout) */
@@ -136,20 +138,22 @@ body::before {
     max-width: 100vw;
     max-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr minmax(260px, min(30vw, 320px));
-    grid-template-rows: minmax(45px, max(8vh, 50px)) 1fr minmax(25px, max(4vh, 35px));
+    grid-template-columns: 1fr minmax(280px, min(32vw, 340px));
+    grid-template-rows: minmax(50px, max(9vh, 55px)) 1fr minmax(30px, max(5vh, 40px));
     grid-template-areas: 
         "header header"
         "main sidebar"
         "footer footer";
-    background: var(--gradient-panel-inset);
+    background: var(--gradient-panel-raised);
     border: 3px outset var(--mindmaze-stone);
-    box-shadow: var(--shadow-raised), inset 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow: var(--shadow-raised), inset 0 0 0 1px rgba(255,255,255,0.15);
     position: fixed;
     top: 0;
     left: 0;
     overflow: hidden;
     box-sizing: border-box;
+    background-image: var(--mindmaze-stone-pattern);
+    background-size: 48px 48px;
 }
 
     /* Authentic 90s Beveled Panel Effects */
@@ -206,30 +210,31 @@ body::before {
     grid-area: header;
     background: var(--gradient-panel-raised);
     border: 2px outset var(--mindmaze-stone);
-    border-bottom: 3px outset var(--mindmaze-stone);
-    padding: var(--spacing-md);
-    box-shadow: var(--shadow-raised), inset 0 1px 0 rgba(255,255,255,0.15);
+    border-bottom: 3px inset var(--mindmaze-stone);
+    padding: clamp(8px, 1.5vh, 12px);
+    box-shadow: var(--shadow-raised), inset 0 1px 0 rgba(255,255,255,0.2);
     text-align: center;
     position: relative;
     overflow: hidden;
-    font-size: clamp(0.8rem, 2vw, 1.2rem);
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
     background-image: var(--mindmaze-stone-pattern);
+    background-size: 24px 24px;
 }
 
 .game-header h1 {
     color: var(--mindmaze-gold);
     margin: 0;
-    font-size: clamp(1.2rem, 3.5vw, 2rem);
+    font-size: clamp(1.3rem, 3.8vw, 2.2rem);
     font-family: var(--font-title);
     font-weight: bold;
-    text-shadow: var(--shadow-text-emboss), 0 0 8px rgba(212, 175, 55, 0.4);
-    letter-spacing: 1px;
+    text-shadow: var(--shadow-text-raised), 0 0 6px rgba(212, 175, 55, 0.5);
+    letter-spacing: 2px;
 }
 
 .game-header p {
     color: var(--mindmaze-text-dim);
-    margin: var(--spacing-xs) 0 0;
-    font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+    margin: clamp(2px, 0.4vh, 4px) 0 0;
+    font-size: clamp(0.7rem, 1.4vw, 0.95rem);
     font-family: var(--font-ui);
     text-shadow: var(--shadow-text-emboss);
 }
@@ -239,14 +244,15 @@ body::before {
     grid-area: main;
     background: var(--gradient-panel-inset);
     border: 3px inset var(--mindmaze-stone);
-    padding: clamp(8px, 1.5vh, 16px);
-    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.3);
+    padding: clamp(10px, 1.8vh, 16px);
+    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 1vh, 12px);
+    gap: clamp(8px, 1.2vh, 14px);
     position: relative;
     overflow: hidden;
     background-image: var(--mindmaze-noise);
+    background-blend-mode: multiply;
     min-height: 0;
     max-height: 100%;
 }
@@ -254,14 +260,14 @@ body::before {
 .game-main::before {
     content: '';
     position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
-    bottom: 8px;
-    border: 2px solid rgba(139, 69, 19, 0.4);
-    border-radius: 6px;
+    top: 6px;
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    border: 1px solid rgba(139, 69, 19, 0.3);
+    border-radius: 4px;
     pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
 /* Sidebar - Fixed Info Panel (No Overflow) */
@@ -269,13 +275,14 @@ body::before {
     grid-area: sidebar;
     display: flex;
     flex-direction: column;
-    gap: clamp(4px, 0.8vh, 8px);
-    padding: clamp(8px, 1.5vh, 16px);
+    gap: clamp(6px, 1vh, 10px);
+    padding: clamp(10px, 1.8vh, 16px);
     background: var(--gradient-panel-inset);
     border: 3px inset var(--mindmaze-stone);
-    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.3);
+    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
     overflow: hidden;
     background-image: var(--mindmaze-noise);
+    background-blend-mode: multiply;
     min-height: 0;
     max-height: 100%;
 }
@@ -310,26 +317,27 @@ body::before {
     grid-area: footer;
     background: var(--gradient-panel-raised);
     border: 2px outset var(--mindmaze-stone);
-    border-top: 3px outset var(--mindmaze-stone);
-    padding: var(--spacing-sm) var(--spacing-md);
-    box-shadow: var(--shadow-raised), inset 0 -1px 0 rgba(255,255,255,0.1);
+    border-top: 3px inset var(--mindmaze-stone);
+    padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.5vw, 14px);
+    box-shadow: var(--shadow-raised), inset 0 -1px 0 rgba(255,255,255,0.15);
     color: var(--mindmaze-text-dim);
     text-align: center;
-    font-size: clamp(0.6rem, 1vw, 0.8rem);
+    font-size: clamp(0.6rem, 1.1vw, 0.85rem);
     font-family: var(--font-ui);
     background-image: var(--mindmaze-stone-pattern);
+    background-size: 24px 24px;
 }
 
 /* Section Containers - Compact 90s Panels */
 .section {
     background: var(--gradient-panel-raised);
     border: 2px outset var(--mindmaze-stone-light);
-    padding: clamp(6px, 1.2vh, 12px);
-    box-shadow: var(--shadow-raised), inset 1px 1px 0 rgba(255,255,255,0.1);
+    padding: clamp(8px, 1.5vh, 14px);
+    box-shadow: var(--shadow-raised), inset 1px 1px 0 rgba(255,255,255,0.15);
     position: relative;
-    margin-bottom: clamp(4px, 0.8vh, 8px);
+    margin-bottom: clamp(6px, 1vh, 10px);
     background-image: var(--mindmaze-stone-pattern);
-    background-size: 64px 64px;
+    background-size: 48px 48px;
     flex-shrink: 1;
     min-height: 0;
     overflow: hidden;
@@ -338,16 +346,16 @@ body::before {
 .section::before {
     content: '';
     position: absolute;
-    top: 6px;
-    left: 6px;
-    width: 12px;
-    height: 12px;
+    top: 4px;
+    left: 4px;
+    width: 8px;
+    height: 8px;
     background: var(--mindmaze-gold);
     border-radius: 50%;
     box-shadow: 
-        18px 0 0 var(--mindmaze-crimson), 
-        36px 0 0 var(--mindmaze-blue),
-        inset 1px 1px 2px rgba(0,0,0,0.4),
+        12px 0 0 var(--mindmaze-crimson), 
+        24px 0 0 var(--mindmaze-blue),
+        inset 1px 1px 1px rgba(0,0,0,0.5),
         1px 1px 2px rgba(0,0,0,0.3);
     border: 1px outset var(--mindmaze-stone);
 }
@@ -412,35 +420,41 @@ body::before {
 }
 
 #question-text {
-    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    font-size: clamp(1rem, 1.4vw, 1.3rem);
     font-weight: bold;
     color: var(--mindmaze-text);
-    margin-bottom: var(--spacing-lg);
-    line-height: 1.4;
+    margin-bottom: clamp(12px, 2vh, 18px);
+    line-height: 1.5;
     font-family: var(--font-body);
-    padding: var(--spacing-lg);
+    padding: clamp(12px, 2.2vh, 18px);
     background: var(--gradient-panel-inset);
-    border: 2px inset var(--mindmaze-stone);
-    box-shadow: var(--shadow-inset);
+    border: 3px inset var(--mindmaze-stone);
+    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
+    background-image: var(--mindmaze-noise);
+    background-blend-mode: multiply;
 }
 
 .question-meta {
     display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-    font-size: 0.95em;
+    gap: clamp(8px, 1.5vw, 12px);
+    margin-bottom: clamp(16px, 2.5vh, 20px);
+    font-size: clamp(0.8rem, 1.3vw, 0.95rem);
     color: var(--mindmaze-text-dim);
     flex-wrap: wrap;
 }
 
 .meta-item {
-    background: linear-gradient(90deg, rgba(212,175,55,0.06), rgba(212,175,55,0.02));
+    background: var(--gradient-panel-raised);
     color: var(--mindmaze-text);
-    padding: 6px 10px;
-    border-radius: 14px;
-    border: 1px solid var(--mindmaze-gold-dark);
-    font-weight: 600;
+    padding: clamp(4px, 0.8vh, 6px) clamp(8px, 1.5vw, 12px);
+    border-radius: 4px;
+    border: 2px outset var(--mindmaze-gold-dark);
+    font-weight: 500;
     box-shadow: var(--shadow-raised);
+    font-family: var(--font-ui);
+    background-image: var(--mindmaze-stone-pattern);
+    background-size: 16px 16px;
+    text-shadow: var(--shadow-text-emboss);
 }
 
 /* Answer Area - Choices of Fate */
@@ -451,22 +465,23 @@ body::before {
 .answer-btn {
     display: block;
     width: 100%;
-    margin: var(--spacing-sm) 0;
-    padding: var(--spacing-md);
-    background: var(--gradient-button-raised);
-    border: 2px outset var(--mindmaze-stone);
+    margin: clamp(4px, 0.8vh, 6px) 0;
+    padding: clamp(8px, 1.5vh, 12px) clamp(12px, 2.2vw, 16px);
+    background: var(--gradient-button);
+    border: 3px outset var(--mindmaze-stone);
     cursor: pointer;
     text-align: left;
-    font-size: clamp(0.8rem, 1.2vw, 1rem);
+    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
     font-family: var(--font-ui);
     color: var(--mindmaze-text);
-    transition: all 0.08s ease;
+    transition: all 0.1s ease;
     position: relative;
-    min-height: 36px;
-    box-shadow: 2px 2px 3px rgba(0,0,0,0.5), inset 1px 1px 0 rgba(255,255,255,0.15);
-    text-shadow: var(--shadow-text-emboss);
+    min-height: clamp(32px, 5vh, 42px);
+    box-shadow: var(--shadow-raised);
+    text-shadow: var(--shadow-text-raised);
     background-image: var(--mindmaze-stone-pattern);
-    background-size: 48px 48px;
+    background-size: 24px 24px;
+    border-radius: 2px;
 }
 
 .answer-btn::before {
@@ -481,12 +496,14 @@ body::before {
 }
 
 .answer-btn:hover {
-    filter: brightness(1.1);
+    background: var(--gradient-button);
+    filter: brightness(1.15);
+    transform: translateY(-1px);
 }
 
 .answer-btn:active {
     background: var(--gradient-button-pressed);
-    border: 2px inset var(--mindmaze-stone);
+    border: 3px inset var(--mindmaze-stone);
     transform: translateY(1px);
     box-shadow: var(--shadow-button-pressed);
     background-image: var(--mindmaze-noise);
@@ -494,21 +511,24 @@ body::before {
 
 .answer-btn:disabled {
     cursor: not-allowed;
-    background: var(--mindmaze-stone-dark);
+    background: linear-gradient(145deg, #2A2A2A, #1A1A1A);
     color: var(--mindmaze-text-dim);
-    border: 2px inset var(--mindmaze-stone-dark);
+    border: 3px inset var(--mindmaze-stone-dark);
+    opacity: 0.6;
 }
 
 .answer-btn.answer-correct {
-    background: linear-gradient(135deg, #228B22, #32CD32);
-    border: 2px outset #228B22;
+    background: linear-gradient(135deg, #2E7D32, #4CAF50);
+    border: 3px outset #2E7D32;
     color: white;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
 }
 
 .answer-btn.answer-incorrect {
-    background: linear-gradient(135deg, var(--mindmaze-crimson-light), var(--mindmaze-crimson));
-    border-color: var(--mindmaze-crimson);
+    background: linear-gradient(135deg, var(--mindmaze-crimson), #CD5C5C);
+    border: 3px outset var(--mindmaze-crimson);
     color: white;
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
 }
 
 /* Keyboard Navigation - Blessed Selection */

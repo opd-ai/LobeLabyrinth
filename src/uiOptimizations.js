@@ -218,8 +218,12 @@ const DOMUpdateTemplates = {
      */
     updateProgress: (progressElement, percentage, label = '') => {
         return () => {
-            const fill = progressElement.querySelector('.progress-fill');
-            const labelElement = progressElement.querySelector('.progress-label');
+            // Try to find fill element - could be a child or the element itself
+            const fill = progressElement.querySelector('.progress-fill') || 
+                        progressElement.classList.contains('progress-fill') ? progressElement : null;
+            const labelElement = progressElement.querySelector('.progress-percent') || 
+                               progressElement.querySelector('.progress-label') ||
+                               progressElement.parentElement?.querySelector('.progress-percent');
             
             if (fill) {
                 fill.style.width = `${Math.max(0, Math.min(100, percentage))}%`;
@@ -236,8 +240,15 @@ const DOMUpdateTemplates = {
      */
     updateTimer: (timerElement, timeRemaining, totalTime) => {
         return () => {
-            const fill = timerElement.querySelector('.timer-fill');
-            const text = timerElement.querySelector('.timer-text');
+            const fill = document.getElementById('timer-bar');
+            const text = document.getElementById('timer-text') || timerElement;
+            
+            if (!fill) {
+                console.warn('UI Optimizations: Timer bar element not found');
+            }
+            if (!text) {
+                console.warn('UI Optimizations: Timer text element not found');
+            }
             
             const percentage = (timeRemaining / totalTime) * 100;
             
@@ -246,11 +257,11 @@ const DOMUpdateTemplates = {
                 
                 // Update color based on time remaining
                 if (percentage < 25) {
-                    fill.className = 'timer-fill timer-critical';
+                    fill.className = 'timer-bar timer-critical';
                 } else if (percentage < 50) {
-                    fill.className = 'timer-fill timer-warning';
+                    fill.className = 'timer-bar timer-warning';
                 } else {
-                    fill.className = 'timer-fill';
+                    fill.className = 'timer-bar';
                 }
             }
             

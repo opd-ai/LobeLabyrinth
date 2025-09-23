@@ -171,35 +171,55 @@ class EnhancedUIManager {
             if (lastProgress.key === progressKey) return;
             
             if (!elements.overall) {
-                elements.overall = document.getElementById('overall-progress');
-                elements.rooms = document.getElementById('rooms-progress');
-                elements.questions = document.getElementById('questions-progress');
+                elements.overall = {
+                    percent: document.getElementById('overall-progress-percent'),
+                    fill: document.getElementById('overall-progress-fill')
+                };
+                elements.rooms = {
+                    percent: document.getElementById('rooms-progress-percent'),
+                    fill: document.getElementById('rooms-progress-fill')
+                };
+                elements.accuracy = {
+                    percent: document.getElementById('accuracy-progress-percent'),
+                    fill: document.getElementById('accuracy-progress-fill')
+                };
+                
+                // Debug logging for missing elements
+                if (!elements.overall.percent || !elements.overall.fill) {
+                    console.warn('Enhanced UI: Overall progress elements not found');
+                }
+                if (!elements.rooms.percent || !elements.rooms.fill) {
+                    console.warn('Enhanced UI: Rooms progress elements not found');
+                }
+                if (!elements.accuracy.percent || !elements.accuracy.fill) {
+                    console.warn('Enhanced UI: Accuracy progress elements not found');
+                }
             }
             
             const updates = [];
             
-            if (elements.overall && progressData.overall !== lastProgress.overall) {
-                updates.push(DOMUpdateTemplates.updateProgress(
-                    elements.overall, 
-                    progressData.overall, 
-                    `${Math.round(progressData.overall)}%`
-                ));
+            if (elements.overall && elements.overall.percent && elements.overall.fill && progressData.overall !== lastProgress.overall) {
+                updates.push(() => {
+                    elements.overall.percent.textContent = `${Math.round(progressData.overall)}%`;
+                    elements.overall.fill.style.width = `${Math.max(0, progressData.overall)}%`;
+                    elements.overall.fill.setAttribute('aria-valuenow', progressData.overall);
+                });
             }
             
-            if (elements.rooms && progressData.rooms !== lastProgress.rooms) {
-                updates.push(DOMUpdateTemplates.updateProgress(
-                    elements.rooms, 
-                    progressData.rooms, 
-                    `Rooms: ${progressData.roomsVisited}/${progressData.totalRooms}`
-                ));
+            if (elements.rooms && elements.rooms.percent && elements.rooms.fill && progressData.rooms !== lastProgress.rooms) {
+                updates.push(() => {
+                    elements.rooms.percent.textContent = `${Math.round(progressData.rooms)}%`;
+                    elements.rooms.fill.style.width = `${Math.max(0, progressData.rooms)}%`;
+                    elements.rooms.fill.setAttribute('aria-valuenow', progressData.rooms);
+                });
             }
             
-            if (elements.questions && progressData.questions !== lastProgress.questions) {
-                updates.push(DOMUpdateTemplates.updateProgress(
-                    elements.questions, 
-                    progressData.questions, 
-                    `Questions: ${progressData.questionsAnswered}/${progressData.totalQuestions}`
-                ));
+            if (elements.accuracy && elements.accuracy.percent && elements.accuracy.fill && progressData.accuracy !== lastProgress.accuracy) {
+                updates.push(() => {
+                    elements.accuracy.percent.textContent = `${Math.round(progressData.accuracy)}%`;
+                    elements.accuracy.fill.style.width = `${Math.max(0, progressData.accuracy)}%`;
+                    elements.accuracy.fill.setAttribute('aria-valuenow', progressData.accuracy);
+                });
             }
             
             // Batch progress updates
@@ -220,7 +240,11 @@ class EnhancedUIManager {
             if (lastTime === timeRemaining) return;
             
             if (!timerElement) {
-                timerElement = document.getElementById('question-timer');
+                timerElement = document.getElementById('timer-text');
+                if (!timerElement) {
+                    console.warn('Enhanced UI: Timer element (timer-text) not found');
+                    return; // Skip timer update if element not found
+                }
             }
             
             if (timerElement) {

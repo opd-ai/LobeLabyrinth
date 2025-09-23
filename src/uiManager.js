@@ -976,7 +976,8 @@ Press any key to close this help.
         
         // Use animation manager if available
         if (this.animationManager) {
-            await this.animationManager.animateAchievementUnlock(notification);
+            // Pass achievement data and container to animation manager
+            await this.animationManager.animateAchievementUnlock(achievement, notification);
         } else {
             // Fallback animation with setTimeout
             notification.style.transform = 'translateY(-100%)';

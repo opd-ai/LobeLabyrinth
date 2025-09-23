@@ -50,7 +50,7 @@ func READMEHTML() string {
 	return html
 }
 
-//go:embed */*.css */*.json */*.js *.html manifest.json
+//go:embed */*.css */*.json */*.js *.html *.ico manifest.json
 var staticFS embed.FS
 
 func main() {

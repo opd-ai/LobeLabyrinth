@@ -1,56 +1,66 @@
 /*
- * LobeLabyrinth - Medieval Trivia Game Styles
- * A quest through the labyrinth of knowledge
+ * LobeLabyrinth - Authentic Encarta MindMaze (1995) Interface
+ * Recreating the classic Windows 95 educational game experience
  */
-
-/* Custom Medieval Font Imports (Web-safe fallbacks) */
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap');
 
 /* CSS Custom Properties - Authentic Encarta MindMaze (1995) Theme */
 :root {
-    /* Classic MindMaze Color Palette - Authentic 90s Dark Castle */
-    --mindmaze-stone-dark: #1A1A1A;
-    --mindmaze-stone: #353535;
-    --mindmaze-stone-light: #4A4A4A;
-    --mindmaze-brown-dark: #2C1810;
-    --mindmaze-brown: #5D3A1A;
-    --mindmaze-brown-light: #8B4513;
-    --mindmaze-gold: #D4AF37;
-    --mindmaze-gold-light: #E6C547;
-    --mindmaze-gold-dark: #B8941F;
-    --mindmaze-blue-dark: #191970;
-    --mindmaze-blue: #2E2E5A;
-    --mindmaze-blue-light: #3A3A6A;
-    --mindmaze-crimson: #8B0000;
-    --mindmaze-crimson-light: #A52A2A;
-    --mindmaze-black: #0A0A0A;
-    --mindmaze-panel: #252525;
-    --mindmaze-text: #E0E0E0;
-    --mindmaze-text-dim: #999999;
+    /* Core MindMaze Color Palette (1995 Authentic) */
+    --mindmaze-navy: #000080;           /* Deep navy background */
+    --mindmaze-navy-light: #0000A0;     /* Lighter navy for accents */
+    --mindmaze-navy-dark: #000060;      /* Darker navy for depth */
     
-    /* Authentic 90s UI Gradients - Classic Beveled Interface */
-    --gradient-button: linear-gradient(145deg, #505050 0%, #404040 25%, #303030 75%, #202020 100%);
-    --gradient-button-primary: linear-gradient(145deg, #D4AF37 0%, #B8941F 25%, #A17F0E 75%, #8B6F00 100%);
-    --gradient-button-pressed: linear-gradient(145deg, #202020 0%, #303030 25%, #404040 75%, #505050 100%);
-    --gradient-panel-inset: linear-gradient(145deg, #1A1A1A 0%, #252525 25%, #2F2F2F 75%, #353535 100%);
-    --gradient-panel-raised: linear-gradient(145deg, #404040 0%, #353535 25%, #2A2A2A 75%, #1F1F1F 100%);
-    --gradient-castle-bg: radial-gradient(ellipse at center, #0F0F0F 0%, #080808 50%, #040404 100%);
-    --gradient-stone-texture: repeating-conic-gradient(from 0deg at 50% 50%, #252525 0deg, #1A1A1A 60deg, #303030 120deg, #1F1F1F 180deg);
+    --mindmaze-gray: #C0C0C0;           /* Light gray panels */
+    --mindmaze-gray-light: #E0E0E0;     /* Lightest gray highlights */
+    --mindmaze-gray-dark: #808080;      /* Dark gray shadows */
     
-    /* Authentic 90s Shadows and Effects - Classic Beveled Appearance */
-    --shadow-inset: inset 2px 2px 4px rgba(0, 0, 0, 0.9), inset -1px -1px 2px rgba(255, 255, 255, 0.1);
-    --shadow-raised: 2px 2px 3px rgba(0, 0, 0, 0.8), -1px -1px 1px rgba(255, 255, 255, 0.15), inset 1px 1px 0px rgba(255, 255, 255, 0.2);
-    --shadow-deep: 3px 3px 6px rgba(0, 0, 0, 0.9), 1px 1px 0px rgba(0, 0, 0, 0.7);
-    --shadow-glow: 0 0 8px rgba(212, 175, 55, 0.6), 0 0 16px rgba(212, 175, 55, 0.3);
-    --shadow-text-emboss: 1px 1px 0px rgba(255, 255, 255, 0.15), -1px -1px 0px rgba(0, 0, 0, 0.9);
-    --shadow-text-raised: 1px 1px 0px rgba(0, 0, 0, 0.8), -1px -1px 0px rgba(255, 255, 255, 0.2);
-    --shadow-button-pressed: inset 2px 2px 4px rgba(0, 0, 0, 0.9), inset -1px -1px 2px rgba(255, 255, 255, 0.1);
+    --mindmaze-stone-dark: #808080;     /* Dark gray for borders */
+    --mindmaze-stone: #C0C0C0;          /* Standard panel gray */
+    --mindmaze-stone-light: #E0E0E0;    /* Light panel highlights */
+    --mindmaze-brown-dark: #800000;     /* Dark red/maroon */
+    --mindmaze-brown: #FF0000;          /* Red for errors/warnings */
+    --mindmaze-brown-light: #FF8080;    /* Light red */
+    --mindmaze-gold: #FFFF00;           /* Bright yellow highlights */
+    --mindmaze-gold-light: #FFFF80;     /* Light yellow */
+    --mindmaze-gold-dark: #CCCC00;      /* Dark yellow */
+    --mindmaze-blue-dark: #000040;      /* Very dark blue */
+    --mindmaze-blue: #000080;           /* Standard navy blue */
+    --mindmaze-blue-light: #4040FF;     /* Brighter blue */
+    --mindmaze-crimson: #FF0000;        /* Red for errors */
+    --mindmaze-black: #000000;          /* Pure black */
+    --mindmaze-panel: #C0C0C0;          /* Standard gray panel */
+    --mindmaze-text: #000000;           /* Black text on light backgrounds */
+    --mindmaze-text-dim: #808080;       /* Gray text */
+    --mindmaze-text-light: #FFFFFF;     /* White text on dark backgrounds */
     
-    /* Typography - Authentic 90s System Fonts */
-    --font-title: 'Times New Roman', 'Times', serif;
-    --font-heading: 'MS Sans Serif', 'Arial', 'Helvetica', sans-serif;
-    --font-ui: 'MS Sans Serif', 'Tahoma', 'Arial', sans-serif;
-    --font-body: 'Times New Roman', 'Times', serif;
+    /* Windows 95 UI Gradients - Classic 3D Interface */
+    --gradient-button: none;            /* Flat colors for authenticity */
+    --gradient-button-primary: none;    /* No gradients in original */
+    --gradient-button-pressed: none;    /* Windows 95 used flat shading */
+    --gradient-panel-inset: none;       /* Flat panel backgrounds */
+    --gradient-panel-raised: none;      /* Simple raised appearance */
+    --gradient-castle-bg: none;         /* Solid navy background */
+    --gradient-stone-texture: none;     /* No texture patterns */
+    
+    /* Windows 95 3D Effects - Authentic Border Styling */
+    --shadow-inset: none;               /* No complex shadows */
+    --shadow-raised: none;              /* Simple border effects only */
+    --shadow-deep: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Basic window shadows */
+    --shadow-glow: none;                /* No glow effects */
+    --shadow-text-emboss: none;         /* Flat text rendering */
+    --shadow-text-raised: none;         /* Simple text appearance */
+    --shadow-button-pressed: none;      /* Border-based button states */
+    
+    /* Windows 95 Border Styles */
+    --border-raised: 2px outset #C0C0C0;
+    --border-sunken: 2px inset #C0C0C0;
+    --border-flat: 1px solid #808080;
+    
+    /* Typography - Windows 95 System Fonts */
+    --font-title: 'MS Sans Serif', 'Arial', sans-serif;
+    --font-heading: 'MS Sans Serif', 'Arial', sans-serif;
+    --font-ui: 'MS Sans Serif', 'Arial', sans-serif;
+    --font-body: 'MS Sans Serif', 'Arial', sans-serif;
     --font-monospace: 'Courier New', 'Courier', monospace;
     
     /* Compact Spacing - Classic Dense Layout */
@@ -79,14 +89,8 @@ body {
     font-family: var(--font-body);
     font-size: var(--base-font-size);
     line-height: 1.4;
-    color: var(--mindmaze-text);
-    background: 
-        var(--gradient-castle-bg),
-        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='128' height='128' viewBox='0 0 128 128'><rect width='128' height='128' fill='%230A0A0A'/><rect x='0' y='0' width='64' height='64' fill='%23141414' opacity='0.8'/><rect x='64' y='64' width='64' height='64' fill='%23141414' opacity='0.8'/><rect x='16' y='16' width='32' height='32' fill='%23181818' opacity='0.6'/><rect x='80' y='80' width='32' height='32' fill='%23181818' opacity='0.6'/><path d='M0,0 L128,0 L128,4 L0,4 Z M0,32 L128,32 L128,36 L0,36 Z M0,64 L128,64 L128,68 L0,68 Z M0,96 L128,96 L128,100 L0,100 Z' fill='%23222' opacity='0.4'/></svg>"),
-        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 4px),
-        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.1) 2px, rgba(0,0,0,0.1) 4px);
-    background-size: cover, 128px 128px, 8px 8px, 8px 8px;
-    background-attachment: fixed;
+    color: var(--mindmaze-text-light);
+    background: var(--mindmaze-navy);
     height: 100vh;
     width: 100vw;
     overflow: hidden;
@@ -125,13 +129,7 @@ body::before {
     opacity: 0.8;
 }
 
-/* Enhanced Stone/Noise Patterns - Authentic 90s Texture */
-:root {
-    --mindmaze-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><filter id='noise'><feTurbulence baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='64' height='64' fill='%23101010' filter='url(%23noise)' opacity='0.08'/></svg>");
-    --mindmaze-stone-pattern: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='48' height='48' viewBox='0 0 48 48'><rect width='48' height='48' fill='%23252525'/><rect x='0' y='0' width='24' height='24' fill='%232A2A2A' opacity='0.7'/><rect x='24' y='24' width='24' height='24' fill='%232A2A2A' opacity='0.7'/><rect x='4' y='4' width='16' height='16' fill='%23202020' opacity='0.5'/><rect x='28' y='28' width='16' height='16' fill='%23202020' opacity='0.5'/><path d='M0,12 L48,12 L48,13 L0,13 Z M0,36 L48,36 L48,37 L0,37 Z' fill='%23303030' opacity='0.4'/><path d='M12,0 L13,0 L13,48 L12,48 Z M36,0 L37,0 L37,48 L36,48 Z' fill='%23303030' opacity='0.4'/></svg>");
-}
-
-/* Game Container - Authentic Castle Interface (Viewport-Constrained Layout) */
+/* Game Container - Authentic Windows 95 Application Window */
 .game-container {
     width: 100vw;
     height: 100vh;
@@ -144,53 +142,25 @@ body::before {
         "header header"
         "main sidebar"
         "footer footer";
-    background: var(--gradient-panel-raised);
-    border: 3px outset var(--mindmaze-stone);
-    box-shadow: var(--shadow-raised), inset 0 0 0 1px rgba(255,255,255,0.15);
+    background: var(--mindmaze-gray);
+    border: var(--border-raised);
+    box-shadow: var(--shadow-deep);
     position: fixed;
     top: 0;
     left: 0;
     overflow: hidden;
     box-sizing: border-box;
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 48px 48px;
     font-size: clamp(10px, 1.2vw, 16px);
     gap: 0;
 }
 
-    /* Authentic 90s Beveled Panel Effects */
-    .mm-panel-raised {
-        background: var(--gradient-panel-raised);
-        border: 2px outset var(--mindmaze-stone);
-        box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.1), inset 1px 1px 0 rgba(255,255,255,0.2);
-        background-image: var(--mindmaze-stone-pattern);
-        background-blend-mode: overlay;
-    }
-
-    .mm-panel-inset {
-        background: var(--gradient-panel-inset);
-        border: 2px inset var(--mindmaze-stone);
-        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.7), inset -2px -2px 3px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);
-        background-image: var(--mindmaze-noise);
-        background-blend-mode: multiply;
-    }
-
-/* Removed viewport wrapper - using direct container approach */
-
-
-/* Header - Authentic MindMaze Title Bar */
+/* Header - Windows 95 Title Bar */
 .game-header {
     grid-area: header;
-    background: var(--gradient-panel-raised);
-    border: 2px outset var(--mindmaze-stone);
-    border-bottom: 3px inset var(--mindmaze-stone);
+    background: var(--mindmaze-gray);
+    border-bottom: var(--border-sunken);
     padding: 8px 16px;
-    box-shadow: var(--shadow-raised), inset 0 1px 0 rgba(255,255,255,0.2);
     text-align: center;
-    position: relative;
-    overflow: hidden;
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 24px 24px;
     min-height: 44px;
     display: flex;
     flex-direction: column;
@@ -198,13 +168,11 @@ body::before {
 }
 
 .game-header h1 {
-    color: var(--mindmaze-gold);
+    color: var(--mindmaze-text);
     margin: 0;
     font-size: clamp(1.2em, 3vw, 2em);
-    font-family: var(--font-title);
+    font-family: var(--font-heading);
     font-weight: bold;
-    text-shadow: var(--shadow-text-raised), 0 0 6px rgba(212, 175, 55, 0.5);
-    letter-spacing: 2px;
     line-height: 1;
 }
 
@@ -213,7 +181,6 @@ body::before {
     margin: 2px 0 0;
     font-size: clamp(0.7em, 1.2vw, 0.9em);
     font-family: var(--font-ui);
-    text-shadow: var(--shadow-text-emboss);
     line-height: 1.1;
 }
 

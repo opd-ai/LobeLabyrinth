@@ -564,14 +564,14 @@ button:focus,
     justify-content: space-between;
     margin-bottom: 10px;
     font-size: 1em;
-    color: var(--medieval-ink);
+    color: var(--mindmaze-text);
     font-family: var(--font-ui);
     font-weight: 600;
 }
 
 .progress-percent {
     font-weight: bold;
-    color: var(--medieval-blue);
+    color: var(--mindmaze-blue);
 }
 
 .progress-bar {
@@ -784,33 +784,33 @@ button.btn-danger:hover {
 }
 
 .feedback-success {
-    background: linear-gradient(135deg, var(--medieval-green-light), rgba(143, 188, 143, 0.3));
-    color: var(--medieval-green);
-    border-color: var(--medieval-green);
+    background: linear-gradient(135deg, var(--mindmaze-brown-light), rgba(160,120,80,0.18));
+    color: var(--mindmaze-brown);
+    border-color: var(--mindmaze-brown);
 }
 
 .feedback-error {
-    background: linear-gradient(135deg, var(--medieval-crimson-light), rgba(205, 92, 92, 0.3));
-    color: var(--medieval-crimson);
-    border-color: var(--medieval-crimson);
+    background: linear-gradient(135deg, var(--mindmaze-crimson-light), rgba(180, 60, 60, 0.28));
+    color: var(--mindmaze-crimson);
+    border-color: var(--mindmaze-crimson);
 }
 
 .feedback-warning {
-    background: linear-gradient(135deg, var(--medieval-gold-light), rgba(244, 228, 160, 0.5));
-    color: var(--medieval-brown);
-    border-color: var(--medieval-brown);
+    background: linear-gradient(135deg, var(--mindmaze-gold-light), rgba(212,175,55,0.14));
+    color: var(--mindmaze-brown);
+    border-color: var(--mindmaze-brown);
 }
 
 .feedback-info {
-    background: linear-gradient(135deg, var(--medieval-blue-light), rgba(65, 105, 225, 0.2));
-    color: var(--medieval-blue);
-    border-color: var(--medieval-blue);
+    background: linear-gradient(135deg, var(--mindmaze-blue-light), rgba(65, 105, 225, 0.12));
+    color: var(--mindmaze-blue);
+    border-color: var(--mindmaze-blue);
 }
 
 /* Game Completion - Victory Banner */
 .game-completion {
     background: var(--gradient-gold);
-    border: 3px solid var(--medieval-gold-dark);
+    border: 3px solid var(--mindmaze-gold-dark);
     border-radius: 15px;
     padding: 30px;
     text-align: center;
@@ -826,14 +826,14 @@ button.btn-danger:hover {
     left: 50%;
     transform: translateX(-50%);
     font-size: 2em;
-    background: var(--medieval-gold);
+    background: var(--mindmaze-gold);
     padding: 5px 10px;
     border-radius: 50%;
-    border: 2px solid var(--medieval-gold-dark);
+    border: 2px solid var(--mindmaze-gold-dark);
 }
 
 .game-completion h3 {
-    color: var(--medieval-crimson);
+    color: var(--mindmaze-crimson);
     margin-bottom: 15px;
     font-size: 1.8em;
     font-family: var(--font-title);
@@ -842,12 +842,12 @@ button.btn-danger:hover {
 
 /* Connection status indicators */
 .connection-unlocked {
-    color: var(--medieval-green);
+    color: var(--mindmaze-brown);
     font-weight: bold;
 }
 
 .connection-locked {
-    color: var(--medieval-stone);
+    color: var(--mindmaze-stone);
     text-decoration: line-through;
 }
 
@@ -856,8 +856,8 @@ button.btn-danger:hover {
     display: inline-block;
     width: 24px;
     height: 24px;
-    border: 3px solid var(--medieval-stone-light);
-    border-top: 3px solid var(--medieval-gold);
+    border: 3px solid var(--mindmaze-stone-light);
+    border-top: 3px solid var(--mindmaze-gold);
     border-radius: 50%;
     animation: spin 1.2s linear infinite;
 }
@@ -870,7 +870,7 @@ button.btn-danger:hover {
 /* Map Canvas Styles - Cartographer's Work */
 #map-area {
     background: var(--gradient-parchment);
-    border: 3px solid var(--medieval-brown);
+    border: 3px solid var(--mindmaze-brown);
     border-radius: 15px;
     padding: 25px;
     margin-bottom: 20px;
@@ -884,7 +884,7 @@ button.btn-danger:hover {
     top: -12px;
     left: 20px;
     font-size: 1.5em;
-    background: var(--medieval-parchment);
+    background: var(--mindmaze-panel);
     padding: 0 10px;
 }
 
@@ -905,7 +905,7 @@ button.btn-danger:hover {
 }
 
 .map-header h3 {
-    color: var(--medieval-ink);
+    color: var(--mindmaze-text);
     margin-bottom: 8px;
     font-family: var(--font-heading);
     font-size: 1.5em;
@@ -928,20 +928,20 @@ button.btn-danger:hover {
     padding: 5px 10px;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 15px;
-    border: 1px solid var(--medieval-brown);
+    border: 1px solid var(--mindmaze-brown);
 }
 
 .legend-color {
     width: 18px;
     height: 18px;
     border-radius: 4px;
-    border: 2px solid var(--medieval-brown);
+    border: 2px solid var(--mindmaze-brown);
 }
 
-.legend-current { background-color: var(--medieval-blue); }
-.legend-visited { background-color: var(--medieval-green); }
-.legend-accessible { background-color: var(--medieval-brown); }
-.legend-locked { background-color: var(--medieval-stone); }
+.legend-current { background-color: var(--mindmaze-blue); }
+.legend-visited { background-color: var(--mindmaze-brown); }
+.legend-accessible { background-color: var(--mindmaze-brown); }
+.legend-locked { background-color: var(--mindmaze-stone); }
 
 /* Responsive Design - Adaptable Castle */
 @media (max-width: 768px) {
@@ -999,12 +999,12 @@ button.btn-danger:hover {
 /* High contrast mode support */
 @media (prefers-contrast: high) {
     :root {
-        --medieval-gold: #ffff00;
-        --medieval-crimson: #ff0000;
-        --medieval-blue: #0000ff;
-        --medieval-green: #008000;
-        --medieval-ink: #000000;
-        --medieval-parchment: #ffffff;
+    --mindmaze-gold: #ffff00;
+    --mindmaze-crimson: #ff0000;
+    --mindmaze-blue: #0000ff;
+    --mindmaze-brown: #8B4513;
+    --mindmaze-text: #000000;
+    --mindmaze-panel: #ffffff;
     }
 }
 
@@ -1110,7 +1110,7 @@ button.btn-danger:hover {
 @media (prefers-reduced-motion: reduce) {
     .skeleton-loader {
         animation: none;
-        background: var(--medieval-parchment-light);
+        background: var(--mindmaze-panel);
     }
     
     .skeleton-loader::before {
@@ -1217,9 +1217,9 @@ button:active {
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.score-value.score-increase {
+    .score-value.score-increase {
     animation: crownFloat 1s ease-in-out;
-    color: var(--medieval-gold);
+    color: var(--mindmaze-gold);
     text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
 }
 

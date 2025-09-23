@@ -51,5 +51,24 @@ func main() {
 }
 func serve(helpContent string, staticFS embed.FS) {
 	// serve the filesystem using an HTTP server
-	http.FileServer(http.FS(staticFS))
+	// if a request is made to /help, serve the helpContent
+	// if a request is made to /, serve game.html
+	http.HandleFunc("/help", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(helpContent))
+	})
+	// serve game.html at /
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		data, err := staticFS.ReadFile("game.html")
+		if err != nil {
+			http.Error(w, "Could not load game.html", http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "text/html")
+		w.Write(data)
+	})
+	// serve static files (css, js, manifest.json)
+	fileserver := http.FileServer(http.FS(staticFS))
+	http.Handle("/static/", http.StripPrefix("/static/", fileserver))
+	http.ListenAndServe(":8080", nil)
 }

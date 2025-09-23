@@ -581,7 +581,7 @@ class UIManager {
      * @returns {boolean} True if question is active
      */
     isQuestionActive() {
-        return this.currentQuestion && this.isQuestionActive;
+        return this.currentQuestion && this.isQuestionActive === true;
     }
 
     /**

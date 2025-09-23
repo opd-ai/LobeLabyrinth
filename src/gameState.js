@@ -198,7 +198,7 @@ class GameState {
     async checkGameCompletion() {
         try {
             const gameData = await this.dataLoader.loadGameData();
-            const totalRooms = Object.keys(gameData.rooms).length;
+            const totalRooms = gameData.rooms.length;
             const totalQuestions = gameData.questions.length;
             
             const roomsVisitedCount = this.visitedRooms.size;

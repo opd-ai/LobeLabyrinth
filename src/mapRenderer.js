@@ -572,7 +572,7 @@ class MapRenderer {
      */
     navigateWithKeyboard(direction) {
         const currentRoomId = this.gameState.currentRoomId;
-        const currentRoom = this.dataLoader.getRoomById(currentRoomId);
+        const currentRoom = this.dataLoader.getRoom(currentRoomId);
         
         if (!currentRoom) {
             console.warn('No current room for keyboard navigation');
@@ -583,7 +583,7 @@ class MapRenderer {
         const targetRoomId = this.findRoomInDirection(currentRoomId, direction);
         
         if (targetRoomId) {
-            const targetRoom = this.dataLoader.getRoomById(targetRoomId);
+            const targetRoom = this.dataLoader.getRoom(targetRoomId);
             if (targetRoom && this.gameState.isRoomAccessible(targetRoomId)) {
                 // Announce navigation intent
                 this.announceRoomNavigation(targetRoom, direction);
@@ -709,12 +709,12 @@ class MapRenderer {
      * Add accessibility announcements to the render cycle
      */
     announceMapState() {
-        const currentRoom = this.dataLoader.getRoomById(this.gameState.currentRoomId);
+        const currentRoom = this.dataLoader.getRoom(this.gameState.currentRoomId);
         if (!currentRoom) return;
 
         const accessibleRooms = Array.from(this.gameState.unlockedRooms)
             .filter(roomId => roomId !== this.gameState.currentRoomId)
-            .map(roomId => this.dataLoader.getRoomById(roomId))
+            .map(roomId => this.dataLoader.getRoom(roomId))
             .filter(room => room)
             .map(room => room.name);
 

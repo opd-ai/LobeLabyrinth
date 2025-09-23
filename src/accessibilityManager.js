@@ -1098,7 +1098,7 @@ class AccessibilityManager {
         document.dispatchEvent(mapNavigationEvent);
         
         // Announce navigation attempt
-        this.announceMessage(`Navigating ${direction.replace('Arrow', '').toLowerCase()}`, 'polite');
+        this.announce(`Navigating ${direction.replace('Arrow', '').toLowerCase()}`, 'polite');
     }
 
     /**
@@ -1117,7 +1117,7 @@ class AccessibilityManager {
         
         if (buttons[nextIndex]) {
             buttons[nextIndex].focus();
-            this.announceMessage(`Answer option ${String.fromCharCode(65 + nextIndex)}`, 'polite');
+            this.announce(`Answer option ${String.fromCharCode(65 + nextIndex)}`, 'polite');
         }
     }
 

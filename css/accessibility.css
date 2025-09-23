@@ -505,26 +505,170 @@ body.keyboard-navigation :focus {
 
 /* ===== RESPONSIVE ACCESSIBILITY ===== */
 
-/* Ensure accessibility features work on mobile */
-@media (max-width: 768px) {
-    .skip-link {
-        font-size: 1.1em;
-        padding: 12px 20px;
-    }
-    
+/* Large desktop accessibility improvements */
+@media (min-width: 1440px) {
     .accessibility-modal .modal-content {
-        margin: 1rem;
-        max-height: 90vh;
+        max-width: 800px;
+        font-size: 1.1em;
     }
     
-    /* Larger touch targets for accessibility */
+    /* Maintain readable focus indicators on large screens */
+    :focus {
+        outline-width: 3px;
+        outline-offset: 3px;
+    }
+}
+
+/* Tablet landscape accessibility */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .accessibility-modal .modal-content {
+        max-width: 90vw;
+        max-height: 85vh;
+        margin: clamp(1rem, 3vw, 2rem);
+    }
+    
+    /* Enhanced touch targets for tablet */
     button,
     input,
     select,
     textarea,
-    [role="button"] {
-        min-height: 44px !important;
-        min-width: 44px !important;
+    [role="button"],
+    .answer-btn {
+        min-height: clamp(40px, 6vw, 48px) !important;
+        min-width: clamp(40px, 6vw, 48px) !important;
+        font-size: clamp(14px, 2.5vw, 16px) !important;
+    }
+}
+
+/* Mobile and tablet accessibility features */
+@media (max-width: 768px) {
+    .skip-link {
+        font-size: clamp(1em, 3vw, 1.2em);
+        padding: clamp(10px, 3vw, 15px) clamp(16px, 4vw, 24px);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .accessibility-modal {
+        padding: clamp(0.5rem, 2vw, 1rem);
+    }
+    
+    .accessibility-modal .modal-content {
+        margin: 0;
+        max-height: 95vh;
+        width: 100%;
+        border-radius: clamp(8px, 2vw, 12px);
+    }
+    
+    .accessibility-modal .modal-header {
+        padding: clamp(15px, 4vw, 20px);
+    }
+    
+    .accessibility-modal .modal-body {
+        padding: clamp(15px, 4vw, 20px);
+        font-size: clamp(14px, 3.5vw, 16px);
+        line-height: 1.6;
+    }
+    
+    .accessibility-modal .modal-close {
+        width: clamp(36px, 9vw, 44px);
+        height: clamp(36px, 9vw, 44px);
+        font-size: clamp(16px, 4vw, 20px);
+    }
+    
+    /* Enhanced touch targets for mobile accessibility */
+    button,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    .answer-btn,
+    .room-nav-btn,
+    .victory-btn {
+        min-height: clamp(44px, 11vw, 52px) !important;
+        min-width: clamp(44px, 11vw, 52px) !important;
+        font-size: clamp(14px, 3.5vw, 16px) !important;
+        padding: clamp(10px, 2.5vw, 14px) clamp(12px, 3vw, 16px) !important;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Ensure focus indicators are visible on mobile */
+    :focus {
+        outline: 3px solid #005fcc !important;
+        outline-offset: 2px !important;
+        border-radius: 4px;
+    }
+    
+    /* High contrast focus for better visibility */
+    .high-contrast :focus {
+        outline: 4px solid #ffffff !important;
+        outline-offset: 3px !important;
+        box-shadow: 0 0 0 6px #000000 !important;
+    }
+}
+
+/* Small mobile devices - Extra accessibility considerations */
+@media (max-width: 480px) {
+    .skip-link {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10000;
+        background: #005fcc;
+        color: white;
+        text-align: center;
+        font-size: clamp(1em, 4vw, 1.3em);
+        padding: clamp(12px, 3vw, 16px);
+        min-height: 44px;
+    }
+    
+    .accessibility-modal .modal-content {
+        max-height: 98vh;
+        border-radius: clamp(6px, 2vw, 10px);
+    }
+    
+    .accessibility-modal .modal-body {
+        font-size: clamp(15px, 4vw, 17px);
+        line-height: 1.7;
+    }
+    
+    .accessibility-modal .modal-body kbd {
+        font-size: clamp(12px, 3vw, 14px);
+        padding: clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 8px);
+        min-height: 28px;
+        min-width: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Extra large touch targets for small screens */
+    button,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    .answer-btn,
+    .room-nav-btn,
+    .victory-btn,
+    .achievement-close-btn {
+        min-height: clamp(48px, 12vw, 56px) !important;
+        min-width: clamp(48px, 12vw, 56px) !important;
+        font-size: clamp(15px, 4vw, 17px) !important;
+        padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 20px) !important;
+    }
+    
+    /* Increased spacing between interactive elements */
+    .controls-grid {
+        gap: clamp(12px, 3vw, 16px) !important;
+    }
+    
+    .answer-btn + .answer-btn {
+        margin-top: clamp(8px, 2vw, 12px) !important;
     }
 }
 

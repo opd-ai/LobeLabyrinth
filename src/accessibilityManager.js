@@ -1147,3 +1147,8 @@ class AccessibilityManager {
 if (typeof window !== 'undefined') {
     window.AccessibilityManager = AccessibilityManager;
 }
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = AccessibilityManager;
+}

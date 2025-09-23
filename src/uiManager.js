@@ -168,21 +168,19 @@ class UIManager {
         }
 
         // Victory screen event listeners
-        if (this.elements.victoryPlayAgain) {
-            this.elements.victoryPlayAgain.addEventListener('click', () => this.handlePlayAgain());
+        if (this.elements.playAgainBtn) {
+            this.elements.playAgainBtn.addEventListener('click', () => this.handlePlayAgain());
         }
         
-        if (this.elements.victoryViewAchievements) {
-            this.elements.victoryViewAchievements.addEventListener('click', () => this.showAchievements());
+        if (this.elements.viewAchievementsBtn) {
+            this.elements.viewAchievementsBtn.addEventListener('click', () => this.showAchievements());
         }
         
-        if (this.elements.victoryShareResults) {
-            this.elements.victoryShareResults.addEventListener('click', () => this.shareResults());
+        if (this.elements.shareResultsBtn) {
+            this.elements.shareResultsBtn.addEventListener('click', () => this.shareResults());
         }
         
-        if (this.elements.victoryClose) {
-            this.elements.victoryClose.addEventListener('click', () => this.hideVictoryScreen());
-        }
+        // Note: victoryClose element would need to be added to HTML if close functionality is needed
 
         // Keyboard navigation setup
         this.setupKeyboardNavigation();
@@ -868,10 +866,11 @@ Press any key to close this help.
      * Cycle focus through interactive elements
      */
     cycleFocus() {
+        const mapCanvas = document.getElementById('map-canvas');
         const focusableElements = [
             ...document.querySelectorAll('.answer-btn'),
             ...document.querySelectorAll('button'),
-            document.getElementById('game-canvas')
+            mapCanvas
         ].filter(el => el && el.style.display !== 'none');
 
         if (focusableElements.length === 0) return;
@@ -2529,20 +2528,22 @@ Press any key to close this help.
 
         // Add CSS animation if not already present
         if (!document.getElementById('tooltip-styles')) {
-            const style = document.createElement('style');
-            style.id = 'tooltip-styles';
-            style.textContent = `
+            try {
+                const style = document.createElement('style');
+                style.id = 'tooltip-styles';
+                style.textContent = `
                 @keyframes fadeInOut {
                     0% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
                     10% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
                     90% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
                     100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
                 }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // Add to page
+                `;
+                document.head.appendChild(style);
+            } catch (error) {
+                console.warn('UIManager: Failed to inject tooltip styles:', error);
+            }
+        }        // Add to page
         document.body.appendChild(tooltip);
 
         // Remove after duration

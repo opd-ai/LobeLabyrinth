@@ -733,3 +733,8 @@ class MapRenderer {
 if (typeof window !== 'undefined') {
     window.MapRenderer = MapRenderer;
 }
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = MapRenderer;
+}

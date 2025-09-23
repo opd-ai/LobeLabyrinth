@@ -490,3 +490,8 @@ class PerformanceManager {
 if (typeof window !== 'undefined') {
     window.PerformanceManager = PerformanceManager;
 }
+
+// Export for module systems
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = PerformanceManager;
+}

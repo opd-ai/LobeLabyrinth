@@ -434,16 +434,14 @@
             });
 
             // Listen for game state changes to announce them
-            gameState.addEventListener('roomChanged', (event) => {
-                const roomData = event.detail;
+            gameState.on('roomChanged', (roomData) => {
                 accessibilityManager.announceGameState({
                     roomChanged: true,
                     currentRoom: roomData
                 });
             });
 
-            gameState.addEventListener('scoreChanged', (event) => {
-                const scoreData = event.detail;
+            gameState.on('scoreChanged', (scoreData) => {
                 accessibilityManager.announceGameState({
                     scoreChanged: true,
                     score: scoreData.score
@@ -452,16 +450,14 @@
 
             // Listen for quiz events
             if (quizEngine) {
-                quizEngine.addEventListener('questionChanged', (event) => {
-                    const questionData = event.detail;
+                quizEngine.on('questionPresented', (questionData) => {
                     accessibilityManager.announceGameState({
                         questionChanged: true,
                         question: questionData
                     });
                 });
 
-                quizEngine.addEventListener('answerResult', (event) => {
-                    const result = event.detail;
+                quizEngine.on('answerValidated', (result) => {
                     accessibilityManager.announceAnswerResult(
                         result.isCorrect, 
                         result.explanation

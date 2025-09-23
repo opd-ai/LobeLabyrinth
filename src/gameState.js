@@ -113,6 +113,13 @@ class GameState {
                 this.score += pointsEarned;
                 this.answeredQuestions.add(questionId);
                 
+                // Emit score changed event
+                this.emit('scoreChanged', { 
+                    score: this.score, 
+                    pointsEarned: pointsEarned,
+                    previousScore: this.score - pointsEarned
+                });
+                
                 // Unlock connected rooms based on current room
                 await this.unlockConnectedRooms();
                 

@@ -1004,7 +1004,12 @@
     <script>
         // Initialize debug interface when page loads
         document.addEventListener('DOMContentLoaded', function() {
+            // Ensure debugManager is available
+            if (typeof debugManager === 'undefined') {
+                window.debugManager = new DebugManager();
+            }
             debugManager.initialize();
+            console.log('🚀 LobeLabyrinth Debug Console Initialized');
         });
     </script>
 </body>

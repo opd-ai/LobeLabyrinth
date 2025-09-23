@@ -139,35 +139,32 @@ body.keyboard-navigation :focus {
 /* Apply high contrast styles */
 .high-contrast,
 .high-contrast * {
-    background-color: var(--hc-bg) !important;
-    color: var(--hc-text) !important;
-    border-color: var(--hc-border) !important;
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
     text-shadow: none !important;
     box-shadow: none !important;
 }
 
-/* High contrast buttons - Enhanced for Dark Theme */
+/* High contrast buttons - Windows 95 System Style */
 .high-contrast button,
 .high-contrast input[type="button"],
 .high-contrast input[type="submit"],
 .high-contrast [role="button"] {
-    background: var(--hc-button-bg) !important;
-    color: var(--hc-text) !important;
-    border: 2px solid var(--hc-border) !important;
-    box-shadow: none !important;
+    background: #C0C0C0 !important;
+    color: #000000 !important;
+    border: 2px outset #C0C0C0 !important;
 }
 
 .high-contrast button:hover,
 .high-contrast button:focus {
-    background: var(--hc-accent) !important;
-    color: var(--hc-bg) !important;
-    border-color: var(--hc-text) !important;
+    background: #E0E0E0 !important;
 }
 
 .high-contrast button:disabled {
-    background-color: var(--hc-disabled) !important;
-    color: var(--hc-bg) !important;
-    border-color: var(--hc-disabled) !important;
+    background: #808080 !important;
+    color: #404040 !important;
+    border: 1px solid #808080 !important;
 }
 
 /* High contrast form elements */

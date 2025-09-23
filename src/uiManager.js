@@ -1842,6 +1842,26 @@ Press any key to close this help.
     }
 
     /**
+     * Handle question answered event from GameState
+     */
+    handleQuestionAnswered(data) {
+        // This event is emitted after GameState processes the answer
+        // Most UI updates are handled by handleAnswerValidated from QuizEngine
+        // This can be used for additional GameState-specific updates
+        console.log('Question answered in GameState:', data);
+        
+        // Update score display to reflect any GameState changes
+        this.updateScoreDisplay();
+        
+        // Update room navigation if rooms were unlocked
+        if (data.isCorrect) {
+            setTimeout(() => {
+                this.updateNavigationOptions();
+            }, 1000);
+        }
+    }
+
+    /**
      * Handle timer updates with accessibility announcements
      */
     updateTimer(data) {

@@ -651,59 +651,70 @@ button:focus,
     font-family: var(--font-heading);
 }
 
-/* Score Display - Royal Treasury */
+/* Score Display - Compact Sidebar Layout */
 .score-item {
     display: flex;
     justify-content: space-between;
-    margin: 10px 0;
-    padding: 10px 0;
+    align-items: center;
+    margin: clamp(2px, 0.5vh, 4px) 0;
+    padding: clamp(2px, 0.5vh, 4px) 0;
     border-bottom: 1px solid var(--mindmaze-gold);
-    font-family: var(--font-ui);
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+    font-size: clamp(0.65rem, 1.4vw, 0.8rem);
+    line-height: 1.2;
 }
 
 .score-value {
     font-weight: bold;
-    color: var(--mindmaze-blue);
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    color: var(--mindmaze-gold);
+    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.3);
+    font-size: inherit;
 }
 
-/* Progress Indicators - Quest Progress */
+/* Progress Indicators - Compact Sidebar Layout */
 .progress-item {
-    margin: 18px 0;
+    margin: clamp(4px, 1vh, 8px) 0;
 }
 
 .progress-label {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
-    font-size: 1em;
+    align-items: center;
+    margin-bottom: clamp(2px, 0.5vh, 4px);
+    font-size: clamp(0.65rem, 1.3vw, 0.8rem);
     color: var(--mindmaze-text);
-    font-family: var(--font-ui);
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
     font-weight: 600;
+    line-height: 1.1;
 }
 
 .progress-percent {
     font-weight: bold;
-    color: var(--mindmaze-blue);
+    color: var(--mindmaze-gold);
+    font-size: inherit;
 }
 
 .progress-bar {
-    height: 12px;
+    height: clamp(8px, 1.5vh, 12px);
     background: var(--mindmaze-stone-light);
-    border-radius: 6px;
+    border-radius: 3px;
     overflow: hidden;
     position: relative;
     border: 1px solid var(--mindmaze-brown);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 
+        inset 1px 1px 2px rgba(0, 0, 0, 0.3),
+        inset -1px -1px 1px rgba(255, 255, 255, 0.1);
 }
 
 .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, rgba(212,175,55,0.16), rgba(212,175,55,0.06));
-    border-radius: 6px;
-    transition: width 0.4s ease;
+    background: linear-gradient(90deg, var(--mindmaze-gold), rgba(212,175,55,0.8));
+    border-radius: 2px;
+    transition: width 0.3s ease;
     position: relative;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.2),
+        0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .progress-fill::after {
@@ -714,7 +725,7 @@ button:focus,
     right: 0;
     bottom: 0;
     background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
-    animation: progressShimmer 3s infinite;
+    animation: progressShimmer 2.5s infinite;
 }
 
 @keyframes progressShimmer {
@@ -792,12 +803,13 @@ button:focus {
     transform: scale(1.02);
 }
 
-/* Game Controls - Royal Commands */
+/* Game Controls - Compact Sidebar Layout */
 .controls-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-top: 18px;
+    gap: clamp(2px, 0.8vh, 4px);
+    margin-top: clamp(4px, 1vh, 8px);
+    font-size: clamp(0.6rem, 1.2vw, 0.75rem);
 }
 
 /* Game Controls - Authentic Windows 95 Push Buttons */

@@ -403,6 +403,15 @@ class GameState {
     }
 
     /**
+     * Check if a room is accessible (unlocked)
+     * @param {string} roomId - The room ID to check
+     * @returns {boolean} True if the room is accessible
+     */
+    isRoomAccessible(roomId) {
+        return this.unlockedRooms.has(roomId);
+    }
+
+    /**
      * Save game state to localStorage
      */
     saveGame() {

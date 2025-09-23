@@ -53,10 +53,14 @@ class AchievementManager {
      */
     async loadAchievements() {
         try {
-            const achievementData = await this.dataLoader.loadData('achievements');
+            const gameData = this.dataLoader.getAllData();
+            
+            if (!gameData.achievements) {
+                throw new Error('Achievement data not available. Ensure DataLoader.loadGameData() was called first.');
+            }
             
             // Convert to Map for efficient lookups
-            achievementData.achievements.forEach(achievement => {
+            gameData.achievements.forEach(achievement => {
                 this.achievements.set(achievement.id, {
                     ...achievement,
                     unlockedAt: null, // Timestamp when unlocked

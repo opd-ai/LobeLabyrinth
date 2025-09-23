@@ -14,6 +14,10 @@ class UIManager {
         this.questionActive = false;
         this.previousScore = 0; // Track previous score for animations
         
+        // DEBUG: Log the method type immediately after setting properties
+        console.log('DEBUG: After setting properties, isQuestionActive type:', typeof this.isQuestionActive);
+        console.log('DEBUG: isQuestionActive value:', this.isQuestionActive);
+        
         // Achievement notification queue
         this.achievementQueue = [];
         this.showingAchievement = false;
@@ -26,11 +30,18 @@ class UIManager {
         this.lastTimerWarning = null;
         
         console.log('UIManager initialized with animations:', !!this.animationManager, 'achievements:', !!this.achievementManager);
+        
+        // DEBUG: Check method before calling setup methods
+        console.log('DEBUG: Before setup methods, isQuestionActive type:', typeof this.isQuestionActive);
+        
         this.initializeElements();
         this.setupEventListeners();
         this.setupAriaLiveRegions();
         this.updateDisplay();
         this.setupAchievementNotifications();
+        
+        // DEBUG: Check method after calling setup methods
+        console.log('DEBUG: After setup methods, isQuestionActive type:', typeof this.isQuestionActive);
         
         // Initialize loading state management
         this.loadingStates = new Map();

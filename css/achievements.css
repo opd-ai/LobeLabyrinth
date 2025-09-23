@@ -295,10 +295,11 @@
     gap: 18px;
 }
 
-        color: var(--mindmaze-gold);
-        margin: 0;
-        font-family: var(--font-heading);
-        font-size: clamp(1rem, 2vw, 1.4rem);
+.achievement-card {
+    color: var(--mindmaze-gold);
+    margin: 0;
+    font-family: var(--font-heading);
+    font-size: clamp(1rem, 2vw, 1.4rem);
     padding: 18px;
     display: flex;
     gap: 15px;

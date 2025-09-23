@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Error Fix Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .error { background: rgba(244, 67, 54, 0.3); }
+        .success { background: rgba(76, 175, 80, 0.3); }
+        pre { background: rgba(0, 0, 0, 0.2); padding: 15px; border-radius: 5px; overflow-x: auto; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Keyboard Error Fix Verification</h1>
+    
+    <div id="status" class="status">
+        <h2>Testing Status</h2>
+        <div id="test-output">Initializing test...</div>
+    </div>
+    
+    <div class="status">
+        <h2>Instructions</h2>
+        <p>This test will verify that the keyboard input error "this.isQuestionActive is not a function" has been fixed.</p>
+        <button onclick="runTest()">Run Test</button>
+        <button onclick="simulateKeyboard()">Simulate Keyboard Input</button>
+    </div>
+    
+    <div class="status">
+        <h2>Console Output</h2>
+        <pre id="console-output">Check browser console for detailed output...</pre>
+    </div>
+
+    <!-- Add minimal DOM structure for UIManager -->
+    <div style="display: none;">
+        <div id="room-info"><div id="room-name"></div><div id="room-description"></div></div>
+        <div id="question-area"><div id="question-text"></div></div>
+        <div id="answer-area"><div id="answer-buttons"></div></div>
+        <div id="timer-area"><div id="timer-bar"></div></div>
+        <div id="score-display"><div id="current-score"></div></div>
+        <div id="game-controls">
+            <button id="new-question-btn">New Question</button>
+            <button id="hint-btn">Hint</button>
+            <button id="skip-btn">Skip</button>
+        </div>
+        <div id="feedback-area"></div>
+    </div>
+
+    <script src="src/dataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+    <script src="src/quizEngine.js"></script>
+    <script src="src/uiManager.js"></script>
+    
+    <script>
+        let testOutput = document.getElementById('test-output');
+        let consoleOutput = document.getElementById('console-output');
+        let logBuffer = [];
+        
+        // Capture console logs
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = function(...args) {
+            logBuffer.push('[LOG] ' + args.join(' '));
+            updateConsoleOutput();
+            originalLog.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            logBuffer.push('[ERROR] ' + args.join(' '));
+            updateConsoleOutput();
+            originalError.apply(console, args);
+        };
+        
+        function updateStatus(message, isError = false) {
+            testOutput.innerHTML = message;
+            document.getElementById('status').className = 'status ' + (isError ? 'error' : 'success');
+        }
+        
+        function updateConsoleOutput() {
+            consoleOutput.textContent = logBuffer.slice(-20).join('\n');
+        }
+        
+        async function runTest() {
+            try {
+                updateStatus('🔄 Running keyboard error fix test...', false);
+                
+                // Test 1: Create UIManager instance
+                console.log('Creating UIManager instance...');
+                const dataLoader = new DataLoader();
+                const gameState = new GameState(dataLoader);
+                const quizEngine = new QuizEngine(dataLoader, gameState);
+                const uiManager = new UIManager(dataLoader, gameState, quizEngine);
+                
+                console.log('✓ UIManager created successfully');
+                
+                // Test 2: Verify method exists
+                if (typeof uiManager.isQuestionActive !== 'function') {
+                    throw new Error('isQuestionActive is not a function: ' + typeof uiManager.isQuestionActive);
+                }
+                console.log('✓ isQuestionActive method exists');
+                
+                // Test 3: Test method call
+                const result = uiManager.isQuestionActive();
+                console.log('✓ isQuestionActive() returned:', result);
+                
+                // Test 4: Test keyboard input handling
+                console.log('Testing keyboard input handling...');
+                const keyEvent = new KeyboardEvent('keydown', {
+                    key: 'ArrowUp',
+                    code: 'ArrowUp',
+                    keyCode: 38
+                });
+                
+                // This should not throw an error
+                uiManager.handleKeyboardInput(keyEvent);
+                console.log('✓ Keyboard input handled without errors');
+                
+                // Test 5: Test with different states
+                uiManager.questionActive = true;
+                uiManager.currentQuestion = { id: 'test' };
+                
+                const activeResult = uiManager.isQuestionActive();
+                console.log('✓ Active state test:', activeResult);
+                
+                updateStatus('✅ All tests passed! The keyboard error has been fixed.', false);
+                
+            } catch (error) {
+                console.error('Test failed:', error);
+                updateStatus('❌ Test failed: ' + error.message, true);
+            }
+        }
+        
+        function simulateKeyboard() {
+            console.log('Simulating keyboard events...');
+            
+            // Simulate various keyboard events
+            const events = [
+                { key: 'ArrowUp' },
+                { key: 'ArrowDown' },
+                { key: 'Enter' },
+                { key: '1' },
+                { key: 'h' }, // hint
+                { key: 's' }  // skip
+            ];
+            
+            events.forEach((eventData, index) => {
+                setTimeout(() => {
+                    console.log('Simulating key:', eventData.key);
+                    document.dispatchEvent(new KeyboardEvent('keydown', eventData));
+                }, index * 100);
+            });
+        }
+        
+        // Auto-run test when page loads
+        window.addEventListener('load', () => {
+            setTimeout(runTest, 500);
+        });
+        
+        // Log any errors that occur
+        window.addEventListener('error', (event) => {
+            console.error('Window error:', event.error);
+        });
+    </script>
+</body>
+</html>

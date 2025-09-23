@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple UIManager Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .result { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        pre { background: #f8f9fa; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>UIManager Debug Test</h1>
+    <div id="results"></div>
+
+    <script src="src/dataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+    <script src="src/quizEngine.js"></script>
+    <script src="src/uiManager.js"></script>
+    
+    <script>
+        const results = document.getElementById('results');
+        
+        function addResult(message, success = true) {
+            const div = document.createElement('div');
+            div.className = `result ${success ? 'success' : 'error'}`;
+            div.textContent = message;
+            results.appendChild(div);
+        }
+        
+        function addCode(code) {
+            const pre = document.createElement('pre');
+            pre.textContent = code;
+            results.appendChild(pre);
+        }
+        
+        try {
+            // Test 1: Check if classes are loaded
+            addResult('✓ DataLoader class: ' + (typeof DataLoader), typeof DataLoader === 'function');
+            addResult('✓ GameState class: ' + (typeof GameState), typeof GameState === 'function');
+            addResult('✓ QuizEngine class: ' + (typeof QuizEngine), typeof QuizEngine === 'function');
+            addResult('✓ UIManager class: ' + (typeof UIManager), typeof UIManager === 'function');
+            
+            // Test 2: Create instances step by step
+            addResult('Creating DataLoader...');
+            const dataLoader = new DataLoader();
+            addResult('✓ DataLoader instance created');
+            
+            addResult('Creating GameState...');
+            const gameState = new GameState(dataLoader);
+            addResult('✓ GameState instance created');
+            
+            addResult('Creating QuizEngine...');
+            const quizEngine = new QuizEngine(dataLoader, gameState);
+            addResult('✓ QuizEngine instance created');
+            
+            // Test 3: Create UIManager with detailed error tracking
+            addResult('Creating UIManager...');
+            let uiManager;
+            try {
+                uiManager = new UIManager(dataLoader, gameState, quizEngine);
+                addResult('✓ UIManager constructor completed');
+            } catch (constructorError) {
+                addResult('✗ UIManager constructor failed: ' + constructorError.message, false);
+                addCode('Constructor error: ' + constructorError.stack);
+                return; // Stop here if constructor fails
+            }
+            
+            // Test 4: Check if object is properly created
+            if (uiManager) {
+                addResult('✓ UIManager object exists');
+                
+                // Check properties exist
+                addResult('Has questionActive property: ' + uiManager.hasOwnProperty('questionActive'));
+                addResult('questionActive value: ' + uiManager.questionActive);
+                
+                addResult('Has currentQuestion property: ' + uiManager.hasOwnProperty('currentQuestion'));
+                addResult('currentQuestion value: ' + uiManager.currentQuestion);
+                
+                // Check method exists
+                addResult('isQuestionActive property type: ' + (typeof uiManager.isQuestionActive));
+                
+                if (typeof uiManager.isQuestionActive === 'function') {
+                    addResult('✓ isQuestionActive is a function');
+                    try {
+                        const result = uiManager.isQuestionActive();
+                        addResult('✓ isQuestionActive() returns: ' + result);
+                    } catch (methodError) {
+                        addResult('✗ Error calling isQuestionActive(): ' + methodError.message, false);
+                        addCode('Method error: ' + methodError.stack);
+                    }
+                } else {
+                    addResult('✗ isQuestionActive is not a function', false);
+                    if (uiManager.isQuestionActive !== undefined) {
+                        addResult('isQuestionActive value: ' + uiManager.isQuestionActive);
+                    }
+                }
+                
+                // Show all own properties
+                const ownProps = Object.getOwnPropertyNames(uiManager);
+                addCode('Own properties: ' + ownProps.join(', '));
+                
+                // Check prototype chain
+                const proto = Object.getPrototypeOf(uiManager);
+                const protoProps = Object.getOwnPropertyNames(proto);
+                addCode('Prototype properties: ' + protoProps.join(', '));
+                
+            } else {
+                addResult('✗ UIManager object is null/undefined', false);
+            }
+            
+        } catch (error) {
+            addResult('✗ Test failed: ' + error.message, false);
+            addCode('Error stack: ' + error.stack);
+        }
+    </script>
+</body>
+</html>

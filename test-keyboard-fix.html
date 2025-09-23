@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Fix Test - LobeLabyrinth</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .success { background: rgba(76, 175, 80, 0.3); }
+        .error { background: rgba(244, 67, 54, 0.3); }
+        .info { background: rgba(33, 150, 243, 0.3); }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #45a049; }
+        #test-output {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎯 Keyboard Input Fix Test</h1>
+    
+    <div class="test-container">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+        
+        <h3>Actions</h3>
+        <button onclick="testKeyboardSetup()">Test Keyboard Setup</button>
+        <button onclick="testMethodResolution()">Test Method Resolution</button>
+        <button onclick="testUIManager()">Test UIManager Initialization</button>
+        <button onclick="clearResults()">Clear Results</button>
+        
+        <h3>Test Output</h3>
+        <div id="test-output"></div>
+    </div>
+
+    <script src="src/dataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+    <script src="src/quizEngine.js"></script>
+    <script src="src/uiManager.js"></script>
+    
+    <script>
+        let testResults = [];
+        let testOutput = [];
+        
+        function log(message) {
+            testOutput.push(`[${new Date().toLocaleTimeString()}] ${message}`);
+            updateOutput();
+        }
+        
+        function addResult(test, success, message) {
+            testResults.push({test, success, message});
+            updateResults();
+        }
+        
+        function updateResults() {
+            const container = document.getElementById('test-results');
+            container.innerHTML = testResults.map(result => 
+                `<div class="test-result ${result.success ? 'success' : 'error'}">
+                    <strong>${result.test}</strong>: ${result.message}
+                </div>`
+            ).join('');
+        }
+        
+        function updateOutput() {
+            document.getElementById('test-output').textContent = testOutput.join('\n');
+        }
+        
+        function clearResults() {
+            testResults = [];
+            testOutput = [];
+            updateResults();
+            updateOutput();
+        }
+        
+        async function testKeyboardSetup() {
+            log('Testing keyboard setup...');
+            
+            try {
+                // Test 1: Check if UIManager can be instantiated
+                const dataLoader = new DataLoader();
+                const gameState = new GameState(dataLoader);
+                const quizEngine = new QuizEngine(dataLoader, gameState);
+                
+                log('Creating UIManager instance...');
+                const uiManager = new UIManager(dataLoader, gameState, quizEngine);
+                
+                addResult('UIManager Creation', true, 'UIManager created successfully');
+                
+                // Test 2: Check if isQuestionActive method exists
+                if (typeof uiManager.isQuestionActive === 'function') {
+                    addResult('isQuestionActive Method', true, 'Method exists and is callable');
+                    
+                    // Test 3: Test method call
+                    try {
+                        const result = uiManager.isQuestionActive();
+                        addResult('Method Call Test', true, `Method returned: ${result}`);
+                        log(`isQuestionActive() returned: ${result}`);
+                    } catch (error) {
+                        addResult('Method Call Test', false, `Error calling method: ${error.message}`);
+                        log(`Error calling isQuestionActive(): ${error.message}`);
+                    }
+                } else {
+                    addResult('isQuestionActive Method', false, 'Method not found or not a function');
+                }
+                
+                // Test 4: Check property exists
+                if (uiManager.hasOwnProperty('questionActive')) {
+                    addResult('questionActive Property', true, `Property exists with value: ${uiManager.questionActive}`);
+                    log(`questionActive property: ${uiManager.questionActive}`);
+                } else {
+                    addResult('questionActive Property', false, 'Property not found');
+                }
+                
+            } catch (error) {
+                addResult('UIManager Creation', false, `Error: ${error.message}`);
+                log(`Error in keyboard setup test: ${error.message}`);
+                console.error('Keyboard setup test error:', error);
+            }
+        }
+        
+        function testMethodResolution() {
+            log('Testing method resolution...');
+            
+            try {
+                // Create a simple test object to verify the fix
+                const testObj = {
+                    questionActive: false,
+                    currentQuestion: null,
+                    
+                    isQuestionActive() {
+                        return this.currentQuestion && this.questionActive === true;
+                    }
+                };
+                
+                // Test the method works
+                const result1 = testObj.isQuestionActive();
+                addResult('Method Resolution Test 1', result1 === false, `Method returned ${result1} (expected false)`);
+                
+                // Set question active and test again
+                testObj.questionActive = true;
+                testObj.currentQuestion = {id: 'test'};
+                const result2 = testObj.isQuestionActive();
+                addResult('Method Resolution Test 2', result2 === true, `Method returned ${result2} (expected true)`);
+                
+                log('Method resolution tests completed');
+                
+            } catch (error) {
+                addResult('Method Resolution Test', false, `Error: ${error.message}`);
+                log(`Method resolution test error: ${error.message}`);
+            }
+        }
+        
+        async function testUIManager() {
+            log('Testing UIManager with full initialization...');
+            
+            try {
+                // Load data and create full game setup
+                const dataLoader = new DataLoader();
+                await dataLoader.loadGameData(); // Fixed: use correct method name
+                
+                const gameState = new GameState(dataLoader);
+                const quizEngine = new QuizEngine(dataLoader, gameState);
+                const uiManager = new UIManager(dataLoader, gameState, quizEngine);
+                
+                addResult('Full Initialization', true, 'All components initialized successfully');
+                
+                // Test keyboard input simulation
+                log('Testing keyboard input simulation...');
+                
+                // Create a fake keyboard event
+                const fakeEvent = {
+                    key: 'ArrowUp',
+                    preventDefault: () => {},
+                    ctrlKey: false,
+                    altKey: false,
+                    type: 'keydown'
+                };
+                
+                // Test if handleKeyboardInput works without errors
+                try {
+                    uiManager.handleKeyboardInput(fakeEvent);
+                    addResult('Keyboard Input Test', true, 'Keyboard input handled without errors');
+                    log('Keyboard input test passed');
+                } catch (error) {
+                    addResult('Keyboard Input Test', false, `Keyboard input error: ${error.message}`);
+                    log(`Keyboard input test failed: ${error.message}`);
+                }
+                
+            } catch (error) {
+                addResult('Full Initialization', false, `Error: ${error.message}`);
+                log(`Full initialization test error: ${error.message}`);
+                console.error('Full initialization test error:', error);
+            }
+        }
+        
+        // Run initial test on page load
+        window.addEventListener('load', () => {
+            log('Page loaded, running initial tests...');
+            setTimeout(testKeyboardSetup, 100);
+        });
+    </script>
+</body>
+</html>

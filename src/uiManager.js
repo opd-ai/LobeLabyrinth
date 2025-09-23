@@ -11,7 +11,7 @@ class UIManager {
         
         this.elements = {};
         this.currentQuestion = null;
-        this.isQuestionActive = false;
+        this.questionActive = false;
         this.previousScore = 0; // Track previous score for animations
         
         // Achievement notification queue
@@ -581,7 +581,7 @@ class UIManager {
      * @returns {boolean} True if question is active
      */
     isQuestionActive() {
-        return this.currentQuestion && this.isQuestionActive === true;
+        return this.currentQuestion && this.questionActive === true;
     }
 
     /**
@@ -1345,15 +1345,15 @@ Press any key to close this help.
     updateGameControls() {
         // Enable/disable buttons based on game state
         if (this.elements.newQuestionBtn) {
-            this.elements.newQuestionBtn.disabled = this.isQuestionActive;
+            this.elements.newQuestionBtn.disabled = this.questionActive;
         }
         
         if (this.elements.hintBtn) {
-            this.elements.hintBtn.disabled = !this.isQuestionActive;
+            this.elements.hintBtn.disabled = !this.questionActive;
         }
         
         if (this.elements.skipBtn) {
-            this.elements.skipBtn.disabled = !this.isQuestionActive;
+            this.elements.skipBtn.disabled = !this.questionActive;
         }
     }
 
@@ -1379,7 +1379,7 @@ Press any key to close this help.
      */
     displayQuestion(questionData) {
         this.currentQuestion = questionData;
-        this.isQuestionActive = true;
+        this.questionActive = true;
         
         // Reset timer warning tracking for new question
         this.lastTimerWarning = null;
@@ -1551,7 +1551,7 @@ Press any key to close this help.
      * Handle answer selection
      */
     async selectAnswer(answerIndex) {
-        if (!this.isQuestionActive || !this.currentQuestion) return;
+        if (!this.isQuestionActive() || !this.currentQuestion) return;
         
         // Check if quiz engine is already processing an answer
         if (this.quizEngine && this.quizEngine.processingAnswer) {
@@ -1586,7 +1586,7 @@ Press any key to close this help.
      */
     showHint() {
         // If there's an active question, show question-specific hint
-        if (this.isQuestionActive && this.quizEngine && this.currentQuestion) {
+        if (this.isQuestionActive() && this.quizEngine && this.currentQuestion) {
             this.showQuestionHint();
             return;
         }
@@ -1771,7 +1771,7 @@ Press any key to close this help.
      * Skip current question
      */
     skipQuestion() {
-        if (!this.isQuestionActive || !this.quizEngine) return;
+        if (!this.isQuestionActive() || !this.quizEngine) return;
 
         const result = this.quizEngine.skipQuestion();
         if (result) {
@@ -1987,7 +1987,7 @@ Press any key to close this help.
      */
     clearQuestion() {
         this.currentQuestion = null;
-        this.isQuestionActive = false;
+        this.questionActive = false;
         
         if (this.elements.questionArea) {
             this.elements.questionArea.style.display = 'none';
@@ -2057,7 +2057,7 @@ Press any key to close this help.
     getUIState() {
         return {
             currentQuestion: this.currentQuestion?.id || null,
-            isQuestionActive: this.isQuestionActive,
+            isQuestionActive: this.questionActive,
             elementsFound: Object.keys(this.elements).filter(key => this.elements[key] !== null)
         };
     }
@@ -2942,7 +2942,7 @@ Press any key to close this help.
 
         // Setup keyboard shortcuts for answer selection
         document.addEventListener('keydown', (event) => {
-            if (this.isQuestionActive && event.key >= '1' && event.key <= '4') {
+            if (this.isQuestionActive() && event.key >= '1' && event.key <= '4') {
                 const answerIndex = parseInt(event.key) - 1;
                 const buttons = document.querySelectorAll('#answer-buttons button:not([disabled])');
                 if (buttons[answerIndex]) {

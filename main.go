@@ -43,7 +43,7 @@ var HELP_CONTENT = HELP_HEADER + README + HELP_FOOTER
 //go:embed README.md
 var README string
 
-//go:embed */*.css */*.json */*.js game.html debug.html manifest.json
+//go:embed */*.css */*.json */*.js *.html manifest.json
 var staticFS embed.FS
 
 func main() {

@@ -246,6 +246,30 @@ body::before {
     border-radius: 5px;
 }
 
+/* Game Status Display */
+#game-status {
+    background: var(--gradient-parchment);
+    border: 1px solid var(--medieval-gold);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+#game-status h3 {
+    color: var(--medieval-blue);
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+#game-status .status-message {
+    color: var(--medieval-ink);
+    font-style: italic;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    border-left: 3px solid var(--medieval-gold);
+}
+
 /* Question Area - Royal Inquiry */
 #question-area {
     display: none;

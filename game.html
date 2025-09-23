@@ -172,6 +172,12 @@
                 </div>
             </div>
 
+            <!-- Game Status -->
+            <div id="game-status" class="section">
+                <h3>Game Status</h3>
+                <div class="status-message">Initializing game...</div>
+            </div>
+
             <!-- Game Controls -->
             <div id="game-controls" class="section">
                 <h3>Actions</h3>
@@ -368,19 +374,19 @@
                     easing: 'ease-out'
                 });
                 
-                updateGameStatus('Initializing castle map...');
-                const mapCanvas = document.getElementById('map-canvas');
-                mapRenderer = new MapRenderer(mapCanvas, gameState, dataLoader);
-                
-                // Initial map render
-                await mapRenderer.render();
-                
                 updateGameStatus('Setting up achievement system...');
                 achievementManager = new AchievementManager(dataLoader, gameState);
                 await achievementManager.initialize();
                 
                 updateGameStatus('Creating user interface...');
                 uiManager = new UIManager(dataLoader, gameState, quizEngine, animationManager, achievementManager);
+                
+                updateGameStatus('Initializing castle map...');
+                const mapCanvas = document.getElementById('map-canvas');
+                mapRenderer = new MapRenderer(mapCanvas, gameState, dataLoader, uiManager);
+                
+                // Initial map render
+                await mapRenderer.render();
                 
                 updateGameStatus('Initializing accessibility features...');
                 accessibilityManager = new AccessibilityManager();
@@ -424,6 +430,12 @@
 
         // Setup accessibility integration with game components
         function setupAccessibilityIntegration() {
+            // Verify all components are initialized before setting up event listeners
+            if (!accessibilityManager) {
+                console.warn('AccessibilityManager not initialized, skipping integration');
+                return;
+            }
+
             // Listen for map navigation accessibility events
             document.addEventListener('accessibility-map-navigate', (event) => {
                 const direction = event.detail.direction;
@@ -434,34 +446,44 @@
             });
 
             // Listen for game state changes to announce them
-            gameState.on('roomChanged', (roomData) => {
-                accessibilityManager.announceGameState({
-                    roomChanged: true,
-                    currentRoom: roomData
+            if (gameState && typeof gameState.on === 'function') {
+                gameState.on('roomChanged', (roomData) => {
+                    if (accessibilityManager && accessibilityManager.announceGameState) {
+                        accessibilityManager.announceGameState({
+                            roomChanged: true,
+                            currentRoom: roomData
+                        });
+                    }
                 });
-            });
 
-            gameState.on('scoreChanged', (scoreData) => {
-                accessibilityManager.announceGameState({
-                    scoreChanged: true,
-                    score: scoreData.score
+                gameState.on('scoreChanged', (scoreData) => {
+                    if (accessibilityManager && accessibilityManager.announceGameState) {
+                        accessibilityManager.announceGameState({
+                            scoreChanged: true,
+                            score: scoreData.score
+                        });
+                    }
                 });
-            });
+            }
 
             // Listen for quiz events
-            if (quizEngine) {
+            if (quizEngine && typeof quizEngine.on === 'function') {
                 quizEngine.on('questionPresented', (questionData) => {
-                    accessibilityManager.announceGameState({
-                        questionChanged: true,
-                        question: questionData
-                    });
+                    if (accessibilityManager && accessibilityManager.announceGameState) {
+                        accessibilityManager.announceGameState({
+                            questionChanged: true,
+                            question: questionData
+                        });
+                    }
                 });
 
                 quizEngine.on('answerValidated', (result) => {
-                    accessibilityManager.announceAnswerResult(
-                        result.isCorrect, 
-                        result.explanation
-                    );
+                    if (accessibilityManager && accessibilityManager.announceAnswerResult) {
+                        accessibilityManager.announceAnswerResult(
+                            result.isCorrect, 
+                            result.explanation
+                        );
+                    }
                 });
             }
 

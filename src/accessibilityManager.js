@@ -525,6 +525,17 @@ class AccessibilityManager {
     }
 
     /**
+     * Announce answer result to screen readers
+     * @param {boolean} isCorrect - Whether the answer was correct
+     * @param {string} explanation - Answer explanation
+     */
+    announceAnswerResult(isCorrect, explanation) {
+        const prefix = isCorrect ? '✅ Correct answer!' : '❌ Incorrect answer.';
+        const message = explanation ? `${prefix} ${explanation}` : prefix;
+        this.announce(message, 'assertive');
+    }
+
+    /**
      * Setup high contrast mode
      */
     setupHighContrastMode() {

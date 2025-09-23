@@ -504,8 +504,8 @@ class MapRenderer {
         }, 50);
 
         // Show tooltip or message
-        if (window.uiManager) {
-            window.uiManager.showTooltip('This room is not accessible yet!', 2000);
+        if (this.uiManager && this.uiManager.showTooltip) {
+            this.uiManager.showTooltip('This room is not accessible yet!', 2000);
         }
     }
 

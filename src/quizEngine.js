@@ -556,6 +556,37 @@ class QuizEngine {
         this.currentQuestion = null;
         console.log('QuizEngine destroyed');
     }
+
+    /**
+     * Event system methods
+     */
+    on(eventType, callback) {
+        if (!this.eventListeners[eventType]) {
+            this.eventListeners[eventType] = [];
+        }
+        this.eventListeners[eventType].push(callback);
+    }
+
+    removeEventListener(eventType, callback) {
+        if (this.eventListeners[eventType]) {
+            const index = this.eventListeners[eventType].indexOf(callback);
+            if (index > -1) {
+                this.eventListeners[eventType].splice(index, 1);
+            }
+        }
+    }
+
+    emit(eventType, data) {
+        if (this.eventListeners[eventType]) {
+            this.eventListeners[eventType].forEach(callback => {
+                try {
+                    callback(data);
+                } catch (error) {
+                    console.error(`Error in QuizEngine event listener for ${eventType}:`, error);
+                }
+            });
+        }
+    }
 }
 
 // Export for use in other modules

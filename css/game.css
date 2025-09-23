@@ -138,8 +138,8 @@ body::before {
     max-width: 100vw;
     max-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr minmax(280px, min(32vw, 340px));
-    grid-template-rows: minmax(50px, max(9vh, 55px)) 1fr minmax(30px, max(5vh, 40px));
+    grid-template-columns: minmax(0, 1fr) minmax(240px, 28vw);
+    grid-template-rows: auto 1fr auto;
     grid-template-areas: 
         "header header"
         "main sidebar"
@@ -154,6 +154,7 @@ body::before {
     box-sizing: border-box;
     background-image: var(--mindmaze-stone-pattern);
     background-size: 48px 48px;
+    font-size: clamp(10px, 1.2vw, 16px);
 }
 
     /* Authentic 90s Beveled Panel Effects */
@@ -173,36 +174,7 @@ body::before {
         background-blend-mode: multiply;
     }
 
-/* Viewport wrapper: lock aspect ratio and scale proportionally to viewport */
-.mindmaze-viewport {
-    /* Classic MindMaze aspect ratio roughly 4:3 (1.33) */
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: transparent;
-    overflow: hidden;
-}
-
-.mindmaze-viewport .game-container {
-    /* Use transform-based scaling to keep a fixed aspect ratio without scroll */
-    aspect-ratio: 4 / 3;
-    width: min(95vh * (4/3), 95vw);
-    height: auto;
-    max-width: 1400px;
-    max-height: 100vh;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-/* When viewport is very narrow (mobile), fall back to full-width but maintain aspect */
-@media (max-aspect-ratio: 4/3) {
-    .mindmaze-viewport .game-container {
-        width: 98vw;
-        height: calc(98vw * 3 / 4);
-    }
-}
+/* Removed viewport wrapper - using direct container approach */
 
 
 /* Header - Authentic MindMaze Title Bar */
@@ -211,32 +183,37 @@ body::before {
     background: var(--gradient-panel-raised);
     border: 2px outset var(--mindmaze-stone);
     border-bottom: 3px inset var(--mindmaze-stone);
-    padding: clamp(8px, 1.5vh, 12px);
+    padding: 8px 16px;
     box-shadow: var(--shadow-raised), inset 0 1px 0 rgba(255,255,255,0.2);
     text-align: center;
     position: relative;
     overflow: hidden;
-    font-size: clamp(0.8rem, 2vw, 1.1rem);
     background-image: var(--mindmaze-stone-pattern);
     background-size: 24px 24px;
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .game-header h1 {
     color: var(--mindmaze-gold);
     margin: 0;
-    font-size: clamp(1.3rem, 3.8vw, 2.2rem);
+    font-size: clamp(1.2em, 3vw, 2em);
     font-family: var(--font-title);
     font-weight: bold;
     text-shadow: var(--shadow-text-raised), 0 0 6px rgba(212, 175, 55, 0.5);
     letter-spacing: 2px;
+    line-height: 1;
 }
 
 .game-header p {
     color: var(--mindmaze-text-dim);
-    margin: clamp(2px, 0.4vh, 4px) 0 0;
-    font-size: clamp(0.7rem, 1.4vw, 0.95rem);
+    margin: 2px 0 0;
+    font-size: clamp(0.7em, 1.2vw, 0.9em);
     font-family: var(--font-ui);
     text-shadow: var(--shadow-text-emboss);
+    line-height: 1.1;
 }
 
 /* Main Game Area - Fixed Viewport Content (No Overflow) */
@@ -244,11 +221,11 @@ body::before {
     grid-area: main;
     background: var(--gradient-panel-inset);
     border: 3px inset var(--mindmaze-stone);
-    padding: clamp(10px, 1.8vh, 16px);
+    padding: 12px;
     box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
-    gap: clamp(8px, 1.2vh, 14px);
+    gap: 8px;
     position: relative;
     overflow: hidden;
     background-image: var(--mindmaze-noise);
@@ -275,16 +252,24 @@ body::before {
     grid-area: sidebar;
     display: flex;
     flex-direction: column;
-    gap: clamp(6px, 1vh, 10px);
-    padding: clamp(10px, 1.8vh, 16px);
-    background: var(--gradient-panel-inset);
-    border: 3px inset var(--mindmaze-stone);
-    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
-    overflow: hidden;
-    background-image: var(--mindmaze-noise);
-    background-blend-mode: multiply;
+    gap: 8px;
+    padding: 12px;
+    background: var(--gradient-panel-raised);
+    border: 2px outset var(--mindmaze-stone);
+    border-left: 3px inset var(--mindmaze-stone);
+    box-shadow: var(--shadow-raised), inset 0 0 0 1px rgba(255,255,255,0.15);
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-image: var(--mindmaze-stone-pattern);
+    background-size: 32px 32px;
     min-height: 0;
     max-height: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.game-sidebar::-webkit-scrollbar {
+    display: none;
 }
 
     /* Apply authentic retro panels to core sections */
@@ -318,27 +303,33 @@ body::before {
     background: var(--gradient-panel-raised);
     border: 2px outset var(--mindmaze-stone);
     border-top: 3px inset var(--mindmaze-stone);
-    padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.5vw, 14px);
+    padding: 6px 12px;
     box-shadow: var(--shadow-raised), inset 0 -1px 0 rgba(255,255,255,0.15);
     color: var(--mindmaze-text-dim);
     text-align: center;
-    font-size: clamp(0.6rem, 1.1vw, 0.85rem);
+    font-size: 0.8em;
     font-family: var(--font-ui);
+    text-shadow: var(--shadow-text-emboss);
     background-image: var(--mindmaze-stone-pattern);
     background-size: 24px 24px;
+    min-height: 32px;
+    overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /* Section Containers - Compact 90s Panels */
 .section {
     background: var(--gradient-panel-raised);
     border: 2px outset var(--mindmaze-stone-light);
-    padding: clamp(8px, 1.5vh, 14px);
+    padding: 10px;
     box-shadow: var(--shadow-raised), inset 1px 1px 0 rgba(255,255,255,0.15);
     position: relative;
-    margin-bottom: clamp(6px, 1vh, 10px);
+    margin-bottom: 6px;
     background-image: var(--mindmaze-stone-pattern);
     background-size: 48px 48px;
-    flex-shrink: 1;
+    flex-shrink: 0;
     min-height: 0;
     overflow: hidden;
 }
@@ -361,12 +352,16 @@ body::before {
 }
 
 .section h3 {
-    margin: 0 0 var(--spacing-md);
+    margin: 0 0 8px 0;
     color: var(--mindmaze-gold);
     font-family: var(--font-heading);
-    font-size: clamp(0.9rem, 1.3vw, 1.1rem);
+    font-size: 0.95em;
     font-weight: bold;
     text-shadow: var(--shadow-text-emboss), 0 0 6px rgba(212, 175, 55, 0.3);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--mindmaze-gold-dim);
+    padding-bottom: 3px;
 }
 
 /* Room Information - Classic Text Display */

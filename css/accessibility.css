@@ -1,5 +1,22 @@
 /**
- * Accessibility CSS - Enhanced styles for accessibility features
+ * Accessibility CSS - Enhanced styles for a/* Enhanced focus indicators - Optimized for Dark Stone Theme */
+:focus {
+    outline: 3px solid var(--mindmaze-gold) !important;
+    outline-offset: 2px;
+    border-radius: 2px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.8), 0 0 0 5px rgba(212,175,55,0.3) !important;
+}
+
+/* Enhanced focus for buttons - 90s Style Compatible */
+button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+[role="button"]:focus {
+    outline: 3px solid var(--mindmaze-gold) !important;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.8), 0 0 0 5px rgba(212,175,55,0.4), inset 0 0 0 1px rgba(255,255,255,0.2) !important;
+    border-color: var(--mindmaze-gold) !important;
+}tures
  * Supports high contrast mode, focus indicators, reduced motion,
  * and screen reader optimizations
  */
@@ -86,31 +103,34 @@ a:focus {
     position: relative;
 }
 
-/* Visual indicator for keyboard navigation mode */
+/* Visual indicator for keyboard navigation mode - Enhanced Contrast */
 body.keyboard-navigation :focus {
-    animation: focusPulse 1.5s infinite;
+    animation: focusPulse 1.2s infinite;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 4px var(--mindmaze-gold), 0 0 0 6px rgba(212,175,55,0.4) !important;
 }
 
 @keyframes focusPulse {
-    0%, 100% { box-shadow: 0 0 0 1px #fff, 0 0 0 4px #005fcc; }
-    50% { box-shadow: 0 0 0 1px #fff, 0 0 0 6px #0080ff; }
+    0%, 100% { box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 4px var(--mindmaze-gold), 0 0 0 6px rgba(212,175,55,0.4); }
+    50% { box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 4px var(--mindmaze-gold-light), 0 0 0 8px rgba(212,175,55,0.6); }
 }
 
 /* ===== HIGH CONTRAST MODE ===== */
 
-/* Base high contrast variables */
+/* Base high contrast variables - Enhanced for Dark Theme */
 .high-contrast {
     --hc-bg: #000000;
     --hc-text: #ffffff;
     --hc-accent: #ffff00;
     --hc-border: #ffffff;
-    --hc-focus: #ff0000;
+    --hc-focus: #ff6600;
     --hc-link: #00ffff;
-    --hc-visited: #ff00ff;
+    --hc-visited: #ff88ff;
     --hc-success: #00ff00;
-    --hc-error: #ff0000;
+    --hc-error: #ff4444;
     --hc-warning: #ffaa00;
-    --hc-disabled: #808080;
+    --hc-gold: #ffdd00;
+    --hc-panel-bg: #111111;
+    --hc-button-bg: #333333;
 }
 
 /* Apply high contrast styles */
@@ -123,22 +143,22 @@ body.keyboard-navigation :focus {
     box-shadow: none !important;
 }
 
-/* High contrast buttons */
+/* High contrast buttons - Enhanced for Dark Theme */
 .high-contrast button,
 .high-contrast input[type="button"],
 .high-contrast input[type="submit"],
 .high-contrast [role="button"] {
-    background-color: var(--hc-text) !important;
-    color: var(--hc-bg) !important;
+    background: var(--hc-button-bg) !important;
+    color: var(--hc-text) !important;
     border: 2px solid var(--hc-border) !important;
-    font-weight: bold !important;
+    box-shadow: none !important;
 }
 
 .high-contrast button:hover,
 .high-contrast button:focus {
-    background-color: var(--hc-accent) !important;
+    background: var(--hc-accent) !important;
     color: var(--hc-bg) !important;
-    border-color: var(--hc-accent) !important;
+    border-color: var(--hc-text) !important;
 }
 
 .high-contrast button:disabled {
@@ -173,11 +193,12 @@ body.keyboard-navigation :focus {
     color: var(--hc-bg) !important;
 }
 
-/* High contrast focus indicators */
+/* High contrast focus indicators - Optimized for Stone Theme */
 .high-contrast :focus {
     outline: 4px solid var(--hc-focus) !important;
     outline-offset: 2px !important;
-    background-color: var(--hc-accent) !important;
+    box-shadow: 0 0 0 1px var(--hc-bg), 0 0 0 6px var(--hc-focus) !important;
+    background: var(--hc-panel-bg) !important;
 }
 
 /* High contrast status indicators */
@@ -440,14 +461,16 @@ body.keyboard-navigation :focus {
     box-shadow: 0 0 0 3px var(--hc-accent) !important;
 }
 
-/* Map canvas accessibility enhancements */
+/* Map canvas accessibility enhancements - Dark Theme */
 #map-canvas:focus {
-    outline: 4px solid #005fcc;
-    outline-offset: 2px;
+    outline: 3px solid var(--mindmaze-gold) !important;
+    outline-offset: -3px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.9), inset 0 0 0 5px rgba(212,175,55,0.4) !important;
 }
 
 .high-contrast #map-canvas:focus {
     outline: 4px solid var(--hc-focus) !important;
+    box-shadow: inset 0 0 0 2px var(--hc-bg), inset 0 0 0 6px var(--hc-focus) !important;
 }
 
 /* Timer accessibility - reduce urgency for screen readers */

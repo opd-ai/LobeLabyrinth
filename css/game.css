@@ -550,7 +550,7 @@ button:focus,
 
 .score-value {
     font-weight: bold;
-    color: var(--medieval-blue);
+    color: var(--mindmaze-blue);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -576,17 +576,17 @@ button:focus,
 
 .progress-bar {
     height: 12px;
-    background: var(--medieval-stone-light);
+    background: var(--mindmaze-stone-light);
     border-radius: 6px;
     overflow: hidden;
     position: relative;
-    border: 1px solid var(--medieval-brown);
+    border: 1px solid var(--mindmaze-brown);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .progress-fill {
     height: 100%;
-    background: var(--gradient-gold);
+    background: linear-gradient(90deg, rgba(212,175,55,0.16), rgba(212,175,55,0.06));
     border-radius: 6px;
     transition: width 0.4s ease;
     position: relative;
@@ -610,26 +610,26 @@ button:focus,
 }
 
 .rooms-fill {
-    background: linear-gradient(90deg, var(--medieval-green) 0%, var(--medieval-green-light) 100%);
+    background: linear-gradient(90deg, #2e8b57 0%, #32cd32 100%);
 }
 
 .accuracy-fill {
-    background: linear-gradient(90deg, var(--medieval-brown) 0%, var(--medieval-brown-light) 100%);
+    background: linear-gradient(90deg, var(--mindmaze-brown) 0%, var(--mindmaze-brown-light) 100%);
 }
 
 .time-indicator {
     height: 8px;
-    background: var(--medieval-stone-light);
+    background: var(--mindmaze-stone-light);
     border-radius: 4px;
     position: relative;
     margin-top: 8px;
-    border: 1px solid var(--medieval-brown);
+    border: 1px solid var(--mindmaze-brown);
 }
 
 .time-pulse {
     height: 100%;
     width: 25px;
-    background: var(--gradient-royal);
+    background: linear-gradient(90deg, var(--mindmaze-blue), rgba(25,25,80,0.9));
     border-radius: 4px;
     animation: timePulse 2.5s ease-in-out infinite;
 }
@@ -640,8 +640,8 @@ button:focus,
 }
 
 .progress-fill.completed {
-    background: var(--gradient-gold);
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+    background: linear-gradient(90deg, rgba(212,175,55,0.24), rgba(212,175,55,0.08));
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
 }
 
 .progress-fill.completed::after {
@@ -668,13 +668,13 @@ button:focus,
 
 /* Focus styles for accessibility */
 *:focus {
-    outline: 3px solid var(--medieval-gold);
+    outline: 3px solid var(--mindmaze-gold);
     outline-offset: 2px;
 }
 
 .answer-btn:focus,
 button:focus {
-    outline: 3px solid var(--medieval-gold);
+    outline: 3px solid var(--mindmaze-gold);
     outline-offset: 3px;
     transform: scale(1.02);
 }
@@ -734,23 +734,23 @@ button:disabled {
 }
 
 button.btn-secondary {
-    background: var(--gradient-stone);
-    color: var(--medieval-parchment);
-    border-color: var(--medieval-stone);
+    background: var(--gradient-panel-inset);
+    color: var(--mindmaze-text-dim);
+    border-color: var(--mindmaze-stone);
 }
 
 button.btn-secondary:hover {
-    background: var(--medieval-stone);
+    background: var(--mindmaze-stone);
 }
 
 button.btn-danger {
-    background: linear-gradient(135deg, var(--medieval-crimson), var(--medieval-crimson-light));
+    background: linear-gradient(135deg, var(--mindmaze-crimson), var(--mindmaze-crimson-light));
     color: white;
-    border-color: var(--medieval-crimson);
+    border-color: var(--mindmaze-crimson);
 }
 
 button.btn-danger:hover {
-    background: var(--medieval-crimson);
+    background: var(--mindmaze-crimson);
 }
 
 /* Navigation - Castle Pathways */
@@ -761,15 +761,15 @@ button.btn-danger:hover {
 }
 
 .room-nav-btn {
-    background: linear-gradient(135deg, var(--medieval-brown), var(--medieval-brown-light));
+    background: linear-gradient(135deg, var(--mindmaze-brown), var(--mindmaze-brown-light));
     color: white;
     padding: 10px 15px;
     font-size: 0.95em;
-    border-color: var(--medieval-brown);
+    border-color: var(--mindmaze-brown);
 }
 
 .room-nav-btn:hover {
-    background: var(--medieval-brown);
+    background: var(--mindmaze-brown);
 }
 
 /* Feedback Messages - Royal Proclamations */

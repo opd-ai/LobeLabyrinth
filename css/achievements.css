@@ -6,13 +6,13 @@
 /* Achievement Stats in Sidebar - Herald's Scroll */
 .achievement-stats-summary {
     font-size: 0.95em;
-    color: var(--medieval-ink-light);
+    color: var(--mindmaze-text-dim);
     margin-bottom: 12px;
     font-family: var(--font-ui);
 }
 
 .achievement-points {
-    color: var(--medieval-gold);
+    color: var(--mindmaze-gold);
     font-weight: bold;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 }
@@ -37,7 +37,7 @@
 
 .achievement-unlock-animation {
     background: var(--gradient-gold);
-    border: 3px solid var(--medieval-gold-dark);
+    border: 3px solid var(--mindmaze-gold-dark);
     border-radius: 15px;
     padding: 20px;
     max-width: 380px;
@@ -99,7 +99,7 @@
 
 .achievement-unlock-animation .achievement-title {
     font-weight: bold;
-    color: var(--medieval-crimson);
+    color: var(--mindmaze-crimson);
     font-size: 0.9em;
     margin-bottom: 3px;
     font-family: var(--font-heading);
@@ -109,7 +109,7 @@
 
 .achievement-unlock-animation .achievement-name {
     font-weight: bold;
-    color: var(--medieval-ink);
+    color: var(--mindmaze-text);
     font-size: 1.2em;
     margin-bottom: 6px;
     font-family: var(--font-heading);
@@ -117,14 +117,14 @@
 }
 
 .achievement-unlock-animation .achievement-description {
-    color: var(--medieval-ink-light);
+    color: var(--mindmaze-text-dim);
     font-size: 0.9em;
     margin-bottom: 6px;
     line-height: 1.4;
 }
 
 .achievement-unlock-animation .achievement-points {
-    color: var(--medieval-gold-dark);
+    color: var(--mindmaze-gold-dark);
     font-weight: bold;
     font-size: 1em;
     font-family: var(--font-ui);
@@ -144,17 +144,18 @@
 }
 
 .achievement-rarity-common {
-    background: linear-gradient(135deg, var(--medieval-stone-light), var(--medieval-stone));
-    color: var(--medieval-ink);
+    background: linear-gradient(135deg, var(--mindmaze-stone-light), var(--mindmaze-stone));
+    color: var(--mindmaze-text);
 }
 
 .achievement-rarity-uncommon {
-    background: linear-gradient(135deg, var(--medieval-green-light), var(--medieval-green));
+    /* Map medieval green rarity to MindMaze brown tones for a cohesive palette */
+    background: linear-gradient(135deg, var(--mindmaze-brown-light), var(--mindmaze-brown));
     color: white;
 }
 
 .achievement-rarity-rare {
-    background: linear-gradient(135deg, var(--medieval-blue-light), var(--medieval-blue));
+    background: linear-gradient(135deg, var(--mindmaze-blue-light), var(--mindmaze-blue));
     color: white;
 }
 
@@ -181,7 +182,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(44, 24, 16, 0.9);
+    background: rgba(12, 10, 8, 0.85);
     z-index: 1001;
     display: none;
     align-items: center;
@@ -201,79 +202,66 @@
 }
 
 .achievement-gallery > div {
-    background: var(--gradient-parchment);
-    border: 4px solid var(--medieval-gold);
-    border-radius: 20px;
+    background: var(--mindmaze-panel);
+    border: 4px solid var(--mindmaze-gold);
+    border-radius: 14px;
     max-width: 900px;
     max-height: 85vh;
     width: 100%;
     overflow-y: auto;
-    box-shadow: var(--shadow-castle);
+    box-shadow: var(--shadow-raised);
     position: relative;
 }
 
 .achievement-gallery > div::before {
     content: '🏆 HALL OF HONOR 🏆';
     position: absolute;
-    top: -20px;
+    top: -18px;
     left: 50%;
-        font-weight: bold;
-        color: var(--mindmaze-gold);
-        font-size: 0.8rem;
-        margin-bottom: 2px;
-        font-family: var(--font-heading);
-        text-transform: uppercase;
+    transform: translateX(-50%);
+    display: inline-block;
+    padding: 8px 14px;
+    font-weight: bold;
+    color: var(--mindmaze-gold);
     font-size: 0.9em;
     letter-spacing: 1px;
-    border: 2px solid var(--medieval-gold-dark);
-        font-weight: bold;
-        color: var(--mindmaze-text);
-        font-size: 1rem;
-        margin-bottom: 4px;
-        font-family: var(--font-heading);
-    padding: 25px;
-    border-bottom: 3px solid var(--medieval-gold);
-    display: flex;
-        color: var(--mindmaze-text-dim);
-        font-size: 0.85rem;
-        margin-bottom: 6px;
-        line-height: 1.3;
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    border: 2px solid var(--mindmaze-gold-dark);
+    border-bottom: 3px solid var(--mindmaze-gold);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.05));
+    border-radius: 6px;
 }
 
 .achievement-gallery-header h3 {
-    color: var(--medieval-ink);
+    color: var(--mindmaze-text);
     margin: 0;
     font-family: var(--font-heading);
     font-size: 1.6em;
 }
 
 .achievement-summary {
-    color: var(--medieval-ink-light);
+    color: var(--mindmaze-text-dim);
     font-size: 1em;
     font-family: var(--font-ui);
 }
 
 .achievement-close-btn {
-    background: var(--medieval-crimson);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 35px;
-    height: 35px;
+    background: var(--mindmaze-panel);
+    color: var(--mindmaze-text);
+    border: 3px outset var(--mindmaze-stone);
+    border-radius: 10px;
+    width: 38px;
+    height: 38px;
     cursor: pointer;
-    font-size: 1.4em;
+    font-size: 1.2em;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-        background: var(--mindmaze-panel);
-        border: 3px outset var(--mindmaze-stone);
-        border-radius: 12px;
-        max-width: 900px;
-        max-height: 85vh;
-        width: 100%;
-        overflow-y: auto;
-        box-shadow: var(--shadow-raised);
+    box-shadow: var(--shadow-raised);
+}
+
 .achievement-categories {
     padding: 25px;
 }
@@ -283,19 +271,19 @@
 }
 
 .category-title {
-    color: var(--medieval-ink);
+    color: var(--mindmaze-text);
     margin-bottom: 18px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-family: var(--font-heading);
     font-size: 1.4em;
-    border-bottom: 2px solid var(--medieval-gold);
+    border-bottom: 2px solid var(--mindmaze-gold);
     padding-bottom: 8px;
 }
 
 .category-progress {
-    color: var(--medieval-ink-light);
+    color: var(--mindmaze-text-dim);
     font-size: 0.8em;
     font-weight: normal;
     font-family: var(--font-ui);
@@ -333,8 +321,8 @@
 
 .achievement-card:hover {
     transform: translateY(-3px);
-    box-shadow: var(--shadow-scroll);
-    border-color: var(--medieval-gold);
+    box-shadow: var(--shadow-raised);
+    border-color: var(--mindmaze-gold);
 }
 
 .achievement-card:hover::before {
@@ -342,14 +330,14 @@
 }
 
 .achievement-card.unlocked {
-    background: linear-gradient(135deg, var(--medieval-parchment), rgba(212, 175, 55, 0.1));
-    border-color: var(--medieval-gold);
-    box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    background: linear-gradient(135deg, var(--mindmaze-panel), rgba(212, 175, 55, 0.06));
+    border-color: var(--mindmaze-gold);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.12);
 }
 
 .achievement-card.locked {
-    background: var(--medieval-stone-light);
-    border-color: var(--medieval-stone);
+    background: var(--mindmaze-stone-light);
+    border-color: var(--mindmaze-stone);
     opacity: 0.7;
 }
 
@@ -373,26 +361,26 @@
 
 .achievement-card .achievement-name {
     font-weight: bold;
-    color: var(--medieval-ink);
+    color: var(--mindmaze-text);
     margin-bottom: 6px;
     font-size: 1em;
     font-family: var(--font-heading);
 }
 
 .achievement-card .achievement-description {
-    color: var(--medieval-ink-light);
+    color: var(--mindmaze-text-dim);
     font-size: 0.85em;
     margin-bottom: 10px;
     line-height: 1.4;
 }
 
 .achievement-progress-bar {
-    background: var(--medieval-stone-light);
+    background: var(--mindmaze-stone-light);
     border-radius: 12px;
     height: 8px;
     margin-bottom: 10px;
     overflow: hidden;
-    border: 1px solid var(--medieval-brown);
+    border: 1px solid var(--mindmaze-brown);
 }
 
 .achievement-progress-fill {
@@ -411,13 +399,13 @@
 }
 
 .achievement-card .achievement-points {
-    color: var(--medieval-gold-dark);
+    color: var(--mindmaze-gold-dark);
     font-weight: bold;
     font-family: var(--font-ui);
 }
 
 .achievement-card .achievement-rarity {
-    color: var(--medieval-ink-light);
+    color: var(--mindmaze-text-dim);
     font-style: italic;
     writing-mode: initial;
     text-orientation: initial;

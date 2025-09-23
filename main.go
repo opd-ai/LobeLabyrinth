@@ -38,10 +38,17 @@ var HELP_FOOTER = `
 </body>
 </html>
 `
-var HELP_CONTENT = HELP_HEADER + README + HELP_FOOTER
+var HELP_CONTENT = HELP_HEADER + READMEHTML() + HELP_FOOTER
 
 //go:embed README.md
 var README string
+
+func READMEHTML() string {
+	// Convert README markdown to HTML (simple conversion for demo purposes)
+	// In a real application, consider using a markdown library for better conversion
+	html := "<pre>" + README + "</pre>"
+	return html
+}
 
 //go:embed */*.css */*.json */*.js *.html manifest.json
 var staticFS embed.FS
@@ -52,23 +59,12 @@ func main() {
 func serve(helpContent string, staticFS embed.FS) {
 	// serve the filesystem using an HTTP server
 	// if a request is made to /help, serve the helpContent
-	// if a request is made to /, serve game.html
 	http.HandleFunc("/help", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/html")
 		w.Write([]byte(helpContent))
 	})
-	// serve game.html at /
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		data, err := staticFS.ReadFile("game.html")
-		if err != nil {
-			http.Error(w, "Could not load game.html", http.StatusInternalServerError)
-			return
-		}
-		w.Header().Set("Content-Type", "text/html")
-		w.Write(data)
-	})
 	// serve static files (css, js, manifest.json)
 	fileserver := http.FileServer(http.FS(staticFS))
-	http.Handle("/static/", http.StripPrefix("/static/", fileserver))
+	http.Handle("/", fileserver)
 	http.ListenAndServe(":8080", nil)
 }

@@ -658,6 +658,40 @@ class GameState {
     }
 
     /**
+     * Export comprehensive save data for download/backup
+     * @returns {Object} Complete exportable game state with metadata
+     */
+    exportSaveData() {
+        const baseSnapshot = this.getStateSnapshot();
+        const stats = this.getGameStatistics();
+        
+        return {
+            ...baseSnapshot,
+            // Add export metadata
+            exportTime: new Date().toISOString(),
+            gameVersion: '1.0.0',
+            
+            // Include comprehensive statistics
+            statistics: {
+                totalPlayTime: stats.playTime,
+                accuracy: stats.accuracy,
+                questionsAnsweredCorrectly: stats.correctAnswers,
+                totalQuestionsAnswered: stats.questionsAnswered,
+                roomsExplored: stats.roomsVisited,
+                averageAnswerTime: stats.averageAnswerTime
+            },
+            
+            // Include current room start time for accuracy
+            currentRoomStartTime: this.currentRoomStartTime,
+            startTime: this.startTime,
+            
+            // Add pause state if applicable
+            isPaused: this.isPaused,
+            pausedTime: this.pausedTime
+        };
+    }
+
+    /**
      * Event system methods
      */
     on(event, callback) {

@@ -824,6 +824,11 @@ Press any key to close this help.
      */
     exportSaveData() {
         try {
+            // Verify gameState is available
+            if (!this.gameState || typeof this.gameState.exportSaveData !== 'function') {
+                throw new Error('Game state not available or export method missing');
+            }
+            
             const saveData = this.gameState.exportSaveData();
             const blob = new Blob([JSON.stringify(saveData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
@@ -834,10 +839,11 @@ Press any key to close this help.
             a.click();
             
             URL.revokeObjectURL(url);
-            this.showTooltip('💾 Save data exported', 2000);
+            this.showTooltip('💾 Save data exported successfully', 2000);
+            console.log('✅ Game data exported successfully');
         } catch (error) {
-            console.error('Error exporting save data:', error);
-            this.showTooltip('❌ Export failed', 2000);
+            console.error('❌ Error exporting save data:', error);
+            this.showTooltip('❌ Export failed: ' + error.message, 3000);
         }
     }
 

@@ -14,10 +14,6 @@ class UIManager {
         this.questionActive = false;
         this.previousScore = 0; // Track previous score for animations
         
-        // DEBUG: Log the method type immediately after setting properties
-        console.log('DEBUG: After setting properties, isQuestionActive type:', typeof this.isQuestionActive);
-        console.log('DEBUG: isQuestionActive value:', this.isQuestionActive);
-        
         // Achievement notification queue
         this.achievementQueue = [];
         this.showingAchievement = false;
@@ -30,18 +26,11 @@ class UIManager {
         this.lastTimerWarning = null;
         
         console.log('UIManager initialized with animations:', !!this.animationManager, 'achievements:', !!this.achievementManager);
-        
-        // DEBUG: Check method before calling setup methods
-        console.log('DEBUG: Before setup methods, isQuestionActive type:', typeof this.isQuestionActive);
-        
         this.initializeElements();
         this.setupEventListeners();
         this.setupAriaLiveRegions();
         this.updateDisplay();
         this.setupAchievementNotifications();
-        
-        // DEBUG: Check method after calling setup methods
-        console.log('DEBUG: After setup methods, isQuestionActive type:', typeof this.isQuestionActive);
         
         // Initialize loading state management
         this.loadingStates = new Map();
@@ -288,7 +277,7 @@ class UIManager {
                 return;
             }
             
-            if (this.isQuestionActive()) {
+            if (this.checkQuestionActive()) {
                 this.handleQuestionKeys(event);
                 return;
             }
@@ -596,11 +585,19 @@ class UIManager {
     }
 
     /**
+     * Alternative method to check if question is active (for debugging)
+     * @returns {boolean} True if question is active
+     */
+    checkQuestionActive() {
+        return this.currentQuestion && this.questionActive === true;
+    }
+
+    /**
      * Check if map should receive navigation input
      * @returns {boolean} True if map should handle navigation
      */
     isMapFocused() {
-        return !this.isQuestionActive() && !this.isVictoryScreenVisible();
+        return !this.checkQuestionActive() && !this.isVictoryScreenVisible();
     }
 
     /**
@@ -1562,7 +1559,7 @@ Press any key to close this help.
      * Handle answer selection
      */
     async selectAnswer(answerIndex) {
-        if (!this.isQuestionActive() || !this.currentQuestion) return;
+        if (!this.checkQuestionActive() || !this.currentQuestion) return;
         
         // Check if quiz engine is already processing an answer
         if (this.quizEngine && this.quizEngine.processingAnswer) {
@@ -1597,7 +1594,7 @@ Press any key to close this help.
      */
     showHint() {
         // If there's an active question, show question-specific hint
-        if (this.isQuestionActive() && this.quizEngine && this.currentQuestion) {
+        if (this.checkQuestionActive() && this.quizEngine && this.currentQuestion) {
             this.showQuestionHint();
             return;
         }
@@ -1782,7 +1779,7 @@ Press any key to close this help.
      * Skip current question
      */
     skipQuestion() {
-        if (!this.isQuestionActive() || !this.quizEngine) return;
+        if (!this.checkQuestionActive() || !this.quizEngine) return;
 
         const result = this.quizEngine.skipQuestion();
         if (result) {
@@ -2953,7 +2950,7 @@ Press any key to close this help.
 
         // Setup keyboard shortcuts for answer selection
         document.addEventListener('keydown', (event) => {
-            if (this.isQuestionActive() && event.key >= '1' && event.key <= '4') {
+            if (this.checkQuestionActive() && event.key >= '1' && event.key <= '4') {
                 const answerIndex = parseInt(event.key) - 1;
                 const buttons = document.querySelectorAll('#answer-buttons button:not([disabled])');
                 if (buttons[answerIndex]) {

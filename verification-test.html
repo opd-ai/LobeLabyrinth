@@ -106,15 +106,15 @@
                 
                 console.log('✓ UIManager created successfully');
                 
-                // Test 2: Verify method exists
-                if (typeof uiManager.isQuestionActive !== 'function') {
-                    throw new Error('isQuestionActive is not a function: ' + typeof uiManager.isQuestionActive);
+                // Test 2: Verify method exists - using new method name
+                if (typeof uiManager.checkQuestionActive !== 'function') {
+                    throw new Error('checkQuestionActive is not a function: ' + typeof uiManager.checkQuestionActive);
                 }
-                console.log('✓ isQuestionActive method exists');
+                console.log('✓ checkQuestionActive method exists');
                 
                 // Test 3: Test method call
-                const result = uiManager.isQuestionActive();
-                console.log('✓ isQuestionActive() returned:', result);
+                const result = uiManager.checkQuestionActive();
+                console.log('✓ checkQuestionActive() returned:', result);
                 
                 // Test 4: Test keyboard input handling
                 console.log('Testing keyboard input handling...');

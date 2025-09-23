@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth - Comprehensive Debug Interface</title>
+    <link rel="stylesheet" href="css/debug.css">
+    <link rel="stylesheet" href="css/game.css">
+    <link rel="stylesheet" href="css/accessibility.css">
+</head>
+<body>
+    <!-- Skip to main content for accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    
+    <!-- Header -->
+    <header class="debug-header" role="banner">
+        <div class="header-content">
+            <h1>🏰 LobeLabyrinth Debug Console</h1>
+            <p>Comprehensive Testing & Diagnostics Interface</p>
+            <div class="header-controls">
+                <button id="run-all-tests" class="btn btn-primary" aria-describedby="run-all-desc">
+                    <span class="btn-icon">🚀</span>
+                    Run All Tests
+                </button>
+                <button id="export-results" class="btn btn-secondary" aria-describedby="export-desc">
+                    <span class="btn-icon">📋</span>
+                    Export Results
+                </button>
+                <button id="clear-results" class="btn btn-outline" aria-describedby="clear-desc">
+                    <span class="btn-icon">🗑️</span>
+                    Clear All
+                </button>
+            </div>
+            <div class="sr-only">
+                <span id="run-all-desc">Execute all test suites across all tabs</span>
+                <span id="export-desc">Export test results to JSON format</span>
+                <span id="clear-desc">Clear all test results and reset interface</span>
+            </div>
+        </div>
+        
+        <!-- Overall Status Bar -->
+        <div class="status-bar" role="status" aria-live="polite">
+            <div class="status-item">
+                <span class="status-label">Overall Status:</span>
+                <span id="overall-status" class="status-value">Ready</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Tests Run:</span>
+                <span id="tests-run" class="status-value">0</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Success Rate:</span>
+                <span id="success-rate" class="status-value">0%</span>
+            </div>
+            <div class="status-item">
+                <span class="status-label">Errors:</span>
+                <span id="error-count" class="status-value">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="debug-main" role="main">
+        <!-- Tab Navigation -->
+        <nav class="tab-navigation" role="tablist" aria-label="Test categories">
+            <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="core-systems-panel" id="core-systems-tab">
+                <span class="tab-icon">🔧</span>
+                Core Systems
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="feature-testing-panel" id="feature-testing-tab">
+                <span class="tab-icon">🌟</span>
+                Feature Testing
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="accessibility-panel" id="accessibility-tab">
+                <span class="tab-icon">♿</span>
+                Accessibility
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="debug-diagnostics-panel" id="debug-diagnostics-tab">
+                <span class="tab-icon">🐛</span>
+                Debug & Diagnostics
+            </button>
+            <button class="tab-btn" role="tab" aria-selected="false" aria-controls="verification-panel" id="verification-tab">
+                <span class="tab-icon">✅</span>
+                Verification
+            </button>
+        </nav>
+
+        <!-- Tab Panels -->
+        <div class="tab-content">
+            <!-- Core Systems Panel -->
+            <div id="core-systems-panel" class="tab-panel active" role="tabpanel" aria-labelledby="core-systems-tab">
+                <div class="panel-header">
+                    <h2>🔧 Core Systems Testing</h2>
+                    <p>Test fundamental game systems: data loading, state management, quiz engine, and map rendering.</p>
+                </div>
+                
+                <!-- Data Loading Section -->
+                <section class="test-section" data-section="data-loading">
+                    <header class="section-header">
+                        <h3>📊 Data Loading & Validation</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runDataLoadingTests()">
+                                Run Data Tests
+                            </button>
+                            <div class="status-indicator" id="data-loading-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Load Game Data</h4>
+                            <p>Test loading of rooms, questions, and achievements data.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testDataLoading()">Test Load</button>
+                                <button class="btn btn-sm btn-outline" onclick="debugManager.validateDataIntegrity()">Validate</button>
+                            </div>
+                            <div class="test-result" id="data-loading-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Data Access</h4>
+                            <p>Test room, question, and achievement data access methods.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testRoomAccess()">Rooms</button>
+                                <button class="btn btn-sm" onclick="debugManager.testQuestionAccess()">Questions</button>
+                                <button class="btn btn-sm" onclick="debugManager.testAchievementAccess()">Achievements</button>
+                            </div>
+                            <div class="test-result" id="data-access-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Error Handling</h4>
+                            <p>Test graceful handling of data loading errors.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testErrorHandling()">Test Errors</button>
+                            </div>
+                            <div class="test-result" id="error-handling-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Game State Section -->
+                <section class="test-section" data-section="game-state">
+                    <header class="section-header">
+                        <h3>🎮 Game State Management</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runGameStateTests()">
+                                Run State Tests
+                            </button>
+                            <div class="status-indicator" id="game-state-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>State Management</h4>
+                            <p>Test game state initialization and updates.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testStateInit()">Initialize</button>
+                                <button class="btn btn-sm" onclick="debugManager.refreshGameState()">Refresh</button>
+                            </div>
+                            <div class="test-result" id="state-management-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Room Movement</h4>
+                            <p>Test room navigation and movement validation.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testMoveToLibrary()">To Library</button>
+                                <button class="btn btn-sm" onclick="debugManager.testMoveToInvalidRoom()">Invalid Move</button>
+                                <button class="btn btn-sm" onclick="debugManager.testMoveToLockedRoom()">Locked Room</button>
+                            </div>
+                            <div class="test-result" id="room-movement-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Save/Load System</h4>
+                            <p>Test game state persistence and restoration.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testSaveGame()">Save</button>
+                                <button class="btn btn-sm" onclick="debugManager.testLoadGame()">Load</button>
+                                <button class="btn btn-sm btn-outline" onclick="debugManager.testResetGame()">Reset</button>
+                            </div>
+                            <div class="test-result" id="save-load-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quiz Engine Section -->
+                <section class="test-section" data-section="quiz-engine">
+                    <header class="section-header">
+                        <h3>🧠 Quiz Engine</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runQuizEngineTests()">
+                                Run Quiz Tests
+                            </button>
+                            <div class="status-indicator" id="quiz-engine-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Question Generation</h4>
+                            <p>Test question loading and category filtering.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testQuestionGeneration()">Generate</button>
+                                <button class="btn btn-sm" onclick="debugManager.testCategoryFiltering()">Filter</button>
+                            </div>
+                            <div class="test-result" id="question-generation-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Answer Processing</h4>
+                            <p>Test answer validation and scoring.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testCorrectAnswer()">Correct</button>
+                                <button class="btn btn-sm" onclick="debugManager.testIncorrectAnswer()">Incorrect</button>
+                                <button class="btn btn-sm" onclick="debugManager.testDuplicateAnswer()">Duplicate</button>
+                            </div>
+                            <div class="test-result" id="answer-processing-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Timer System</h4>
+                            <p>Test question timer and timeout handling.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testTimerSystem()">Start Timer</button>
+                                <button class="btn btn-sm" onclick="debugManager.testTimeout()">Test Timeout</button>
+                            </div>
+                            <div class="test-result" id="timer-system-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Map Renderer Section -->
+                <section class="test-section" data-section="map-renderer">
+                    <header class="section-header">
+                        <h3>🗺️ Map Renderer</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runMapRendererTests()">
+                                Run Map Tests
+                            </button>
+                            <div class="status-indicator" id="map-renderer-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card full-width">
+                            <h4>Map Visualization</h4>
+                            <p>Test map rendering and room visualization.</p>
+                            <div class="map-container">
+                                <canvas id="test-map-canvas" width="600" height="400"></canvas>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testMapRendering()">Render Map</button>
+                                <button class="btn btn-sm" onclick="debugManager.testRoomHighlight()">Highlight Room</button>
+                                <button class="btn btn-sm" onclick="debugManager.testMapInteraction()">Test Interaction</button>
+                            </div>
+                            <div class="test-result" id="map-rendering-result"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Feature Testing Panel -->
+            <div id="feature-testing-panel" class="tab-panel" role="tabpanel" aria-labelledby="feature-testing-tab">
+                <div class="panel-header">
+                    <h2>🌟 Feature Testing</h2>
+                    <p>Test advanced game features: achievements, room navigation, performance monitoring, and animations.</p>
+                </div>
+
+                <!-- Achievement System Section -->
+                <section class="test-section" data-section="achievements">
+                    <header class="section-header">
+                        <h3>🏆 Achievement System</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runAchievementTests()">
+                                Run Achievement Tests
+                            </button>
+                            <div class="status-indicator" id="achievements-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Achievement Tracking</h4>
+                            <p>Test achievement unlocking and progress tracking.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testAchievementUnlock()">Unlock</button>
+                                <button class="btn btn-sm" onclick="debugManager.testProgressTracking()">Progress</button>
+                            </div>
+                            <div class="test-result" id="achievement-tracking-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Notification System</h4>
+                            <p>Test achievement notification display.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testAchievementNotification()">Show Notification</button>
+                            </div>
+                            <div class="test-result" id="notification-system-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Statistics</h4>
+                            <p>Test achievement statistics and completion tracking.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testAchievementStats()">View Stats</button>
+                            </div>
+                            <div class="test-result" id="achievement-stats-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Room Navigation Section -->
+                <section class="test-section" data-section="room-navigation">
+                    <header class="section-header">
+                        <h3>🚪 Room Navigation</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runRoomNavigationTests()">
+                                Run Navigation Tests
+                            </button>
+                            <div class="status-indicator" id="room-navigation-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Room Accessibility</h4>
+                            <p>Test room access validation and locking mechanisms.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testRoomAccessibility()">Check Access</button>
+                                <button class="btn btn-sm" onclick="debugManager.testRoomUnlocking()">Test Unlock</button>
+                            </div>
+                            <div class="test-result" id="room-accessibility-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Navigation Events</h4>
+                            <p>Test room change events and transitions.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testNavigationEvents()">Test Events</button>
+                            </div>
+                            <div class="test-result" id="navigation-events-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Path Finding</h4>
+                            <p>Test optimal path calculation between rooms.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testPathFinding()">Calculate Path</button>
+                            </div>
+                            <div class="test-result" id="path-finding-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Performance Monitoring Section -->
+                <section class="test-section" data-section="performance">
+                    <header class="section-header">
+                        <h3>⚡ Performance Monitoring</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runPerformanceTests()">
+                                Run Performance Tests
+                            </button>
+                            <div class="status-indicator" id="performance-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Load Performance</h4>
+                            <p>Test data loading and initialization performance.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testLoadPerformance()">Test Load</button>
+                            </div>
+                            <div class="test-result" id="load-performance-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Render Performance</h4>
+                            <p>Test map rendering and UI update performance.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testRenderPerformance()">Test Render</button>
+                            </div>
+                            <div class="test-result" id="render-performance-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Memory Usage</h4>
+                            <p>Monitor memory consumption and detect leaks.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testMemoryUsage()">Check Memory</button>
+                            </div>
+                            <div class="test-result" id="memory-usage-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Animation System Section -->
+                <section class="test-section" data-section="animations">
+                    <header class="section-header">
+                        <h3>🎭 Animation System</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runAnimationTests()">
+                                Run Animation Tests
+                            </button>
+                            <div class="status-indicator" id="animations-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Transition Animations</h4>
+                            <p>Test smooth transitions between game states.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testTransitionAnimations()">Test Transitions</button>
+                            </div>
+                            <div class="test-result" id="transition-animations-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Score Animations</h4>
+                            <p>Test score update and achievement animations.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testScoreAnimations()">Test Score</button>
+                            </div>
+                            <div class="test-result" id="score-animations-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Reduced Motion</h4>
+                            <p>Test respect for accessibility motion preferences.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testReducedMotion()">Test Reduced Motion</button>
+                            </div>
+                            <div class="test-result" id="reduced-motion-result"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Accessibility Panel -->
+            <div id="accessibility-panel" class="tab-panel" role="tabpanel" aria-labelledby="accessibility-tab">
+                <div class="panel-header">
+                    <h2>♿ Accessibility Testing</h2>
+                    <p>Comprehensive accessibility compliance testing for WCAG 2.1 AA standards.</p>
+                </div>
+
+                <!-- Accessibility Overview -->
+                <section class="accessibility-overview">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-value" id="aria-elements-count">0</span>
+                            <span class="stat-label">ARIA Elements</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="focusable-elements-count">0</span>
+                            <span class="stat-label">Focusable Elements</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="live-regions-count">0</span>
+                            <span class="stat-label">Live Regions</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-value" id="keyboard-shortcuts-count">0</span>
+                            <span class="stat-label">Keyboard Shortcuts</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Keyboard Navigation Section -->
+                <section class="test-section" data-section="keyboard-navigation">
+                    <header class="section-header">
+                        <h3>⌨️ Keyboard Navigation</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runKeyboardTests()">
+                                Run Keyboard Tests
+                            </button>
+                            <div class="status-indicator" id="keyboard-navigation-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Tab Navigation</h4>
+                            <p>Test sequential keyboard navigation through all focusable elements.</p>
+                            <div class="keyboard-demo">
+                                <button>Button 1</button>
+                                <button>Button 2</button>
+                                <input type="text" placeholder="Text input">
+                                <select><option>Option 1</option><option>Option 2</option></select>
+                                <button>Button 3</button>
+                                <a href="#" onclick="event.preventDefault()">Link</a>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testTabNavigation()">Test Tab Navigation</button>
+                                <button class="btn btn-sm btn-outline" onclick="debugManager.resetTabTest()">Reset</button>
+                            </div>
+                            <div class="test-result" id="tab-navigation-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Arrow Key Navigation</h4>
+                            <p>Test spatial navigation using arrow keys for game map navigation.</p>
+                            <div class="keyboard-demo arrow-navigation">
+                                <div class="arrow-grid">
+                                    <div></div><button id="north">↑ North</button><div></div>
+                                    <button id="west">← West</button><button id="center">⊙ Center</button><button id="east">East →</button>
+                                    <div></div><button id="south">↓ South</button><div></div>
+                                </div>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testArrowNavigation()">Test Arrow Keys</button>
+                            </div>
+                            <div class="test-result" id="arrow-navigation-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Keyboard Shortcuts</h4>
+                            <p>Test accessibility keyboard shortcuts for game functions.</p>
+                            <div class="keyboard-demo">
+                                <div class="shortcut-list">
+                                    <div class="shortcut-item"><kbd>Alt+H</kbd> - Toggle High Contrast</div>
+                                    <div class="shortcut-item"><kbd>Alt+?</kbd> - Show Help</div>
+                                    <div class="shortcut-item"><kbd>Alt+1-5</kbd> - Section Navigation</div>
+                                    <div class="shortcut-item"><kbd>Alt+S</kbd> - Skip to Main Content</div>
+                                </div>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testKeyboardShortcuts()">Test Shortcuts</button>
+                            </div>
+                            <div class="test-result" id="keyboard-shortcuts-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Screen Reader Section -->
+                <section class="test-section" data-section="screen-reader">
+                    <header class="section-header">
+                        <h3>🔊 Screen Reader Support</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runScreenReaderTests()">
+                                Run Screen Reader Tests
+                            </button>
+                            <div class="status-indicator" id="screen-reader-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>ARIA Labels</h4>
+                            <p>Test ARIA attributes for screen reader compatibility.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testARIALabels()">Test ARIA</button>
+                            </div>
+                            <div class="test-result" id="aria-labels-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Live Regions</h4>
+                            <p>Test dynamic content announcements.</p>
+                            <div class="live-regions-demo">
+                                <div id="live-demo-polite" aria-live="polite">Polite announcements appear here</div>
+                                <div id="live-demo-assertive" aria-live="assertive">Assertive announcements appear here</div>
+                                <div id="live-demo-status" role="status">Status updates appear here</div>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testLiveRegions()">Test Live Regions</button>
+                            </div>
+                            <div class="test-result" id="live-regions-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Semantic Structure</h4>
+                            <p>Test semantic HTML and landmark roles.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testSemanticStructure()">Test Structure</button>
+                            </div>
+                            <div class="test-result" id="semantic-structure-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- High Contrast Section -->
+                <section class="test-section" data-section="high-contrast">
+                    <header class="section-header">
+                        <h3>🌗 High Contrast & Visual</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runVisualTests()">
+                                Run Visual Tests
+                            </button>
+                            <div class="status-indicator" id="high-contrast-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Color Contrast</h4>
+                            <p>Test high contrast color scheme for accessibility.</p>
+                            <div class="contrast-demo">
+                                <button class="contrast-test-btn">Primary Button</button>
+                                <button class="contrast-test-btn" disabled>Disabled Button</button>
+                                <a href="#" class="contrast-test-link">Test Link</a>
+                                <span class="contrast-test-success">Success Message</span>
+                                <span class="contrast-test-error">Error Message</span>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.toggleHighContrast()">Toggle High Contrast</button>
+                                <button class="btn btn-sm" onclick="debugManager.testColorContrast()">Test Contrast</button>
+                            </div>
+                            <div class="test-result" id="color-contrast-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Focus Indicators</h4>
+                            <p>Test enhanced focus indicators in high contrast mode.</p>
+                            <div class="focus-demo">
+                                <button onclick="this.focus()">Focus Test 1</button>
+                                <input type="text" value="Focus Test 2">
+                                <select><option>Focus Test 3</option></select>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testFocusIndicators()">Test Focus</button>
+                            </div>
+                            <div class="test-result" id="focus-indicators-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>WCAG Compliance</h4>
+                            <p>Run comprehensive accessibility compliance checks.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.runComplianceCheck()">Run Full Audit</button>
+                            </div>
+                            <div class="test-result" id="wcag-compliance-result"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Debug & Diagnostics Panel -->
+            <div id="debug-diagnostics-panel" class="tab-panel" role="tabpanel" aria-labelledby="debug-diagnostics-tab">
+                <div class="panel-header">
+                    <h2>🐛 Debug & Diagnostics</h2>
+                    <p>Advanced debugging tools, error detection, and system diagnostics.</p>
+                </div>
+
+                <!-- Console Output Section -->
+                <section class="test-section" data-section="console-output">
+                    <header class="section-header">
+                        <h3>📄 Console Output</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.clearConsole()">
+                                Clear Console
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="debugManager.exportConsole()">
+                                Export Logs
+                            </button>
+                            <div class="status-indicator" id="console-output-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="console-container">
+                        <div id="debug-console" class="console-output" role="log" aria-live="polite" aria-label="Debug console output">
+                            <div class="console-line info">Debug console initialized. Ready for testing.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Error Detection Section -->
+                <section class="test-section" data-section="error-detection">
+                    <header class="section-header">
+                        <h3>🚨 Error Detection</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runErrorDetection()">
+                                Scan for Errors
+                            </button>
+                            <div class="status-indicator" id="error-detection-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Script Loading</h4>
+                            <p>Check for script loading errors and conflicts.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.checkScriptLoading()">Check Scripts</button>
+                            </div>
+                            <div class="test-result" id="script-loading-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Class Instantiation</h4>
+                            <p>Test game class creation and initialization.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testClassInstantiation()">Test Classes</button>
+                            </div>
+                            <div class="test-result" id="class-instantiation-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Event System</h4>
+                            <p>Validate event listener registration and handling.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testEventSystem()">Test Events</button>
+                            </div>
+                            <div class="test-result" id="event-system-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Property Inspector Section -->
+                <section class="test-section" data-section="property-inspector">
+                    <header class="section-header">
+                        <h3>🔍 Property Inspector</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.openPropertyInspector()">
+                                Open Inspector
+                            </button>
+                            <div class="status-indicator" id="property-inspector-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="inspector-container">
+                        <div class="inspector-controls">
+                            <select id="object-selector" onchange="debugManager.selectObject(this.value)">
+                                <option value="">Select object to inspect</option>
+                                <option value="dataLoader">DataLoader</option>
+                                <option value="gameState">GameState</option>
+                                <option value="quizEngine">QuizEngine</option>
+                                <option value="uiManager">UIManager</option>
+                            </select>
+                            <button class="btn btn-sm" onclick="debugManager.refreshInspector()">Refresh</button>
+                        </div>
+                        <div id="property-display" class="property-display">
+                            <div class="placeholder">Select an object to inspect its properties</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Memory Diagnostics Section -->
+                <section class="test-section" data-section="memory-diagnostics">
+                    <header class="section-header">
+                        <h3>💾 Memory Diagnostics</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runMemoryDiagnostics()">
+                                Run Diagnostics
+                            </button>
+                            <div class="status-indicator" id="memory-diagnostics-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Memory Usage</h4>
+                            <p>Monitor current memory consumption.</p>
+                            <div class="memory-stats">
+                                <div class="memory-stat">
+                                    <span class="memory-label">Used JS Heap:</span>
+                                    <span id="js-heap-used" class="memory-value">--</span>
+                                </div>
+                                <div class="memory-stat">
+                                    <span class="memory-label">Total JS Heap:</span>
+                                    <span id="js-heap-total" class="memory-value">--</span>
+                                </div>
+                                <div class="memory-stat">
+                                    <span class="memory-label">Heap Limit:</span>
+                                    <span id="js-heap-limit" class="memory-value">--</span>
+                                </div>
+                            </div>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.updateMemoryStats()">Update Stats</button>
+                                <button class="btn btn-sm btn-outline" onclick="debugManager.forceGarbageCollection()">Force GC</button>
+                            </div>
+                            <div class="test-result" id="memory-usage-test-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Leak Detection</h4>
+                            <p>Detect potential memory leaks in game systems.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testMemoryLeaks()">Test for Leaks</button>
+                            </div>
+                            <div class="test-result" id="leak-detection-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Object Tracking</h4>
+                            <p>Track object creation and cleanup.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.trackObjects()">Start Tracking</button>
+                                <button class="btn btn-sm btn-outline" onclick="debugManager.stopTracking()">Stop Tracking</button>
+                            </div>
+                            <div class="test-result" id="object-tracking-result"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Verification Panel -->
+            <div id="verification-panel" class="tab-panel" role="tabpanel" aria-labelledby="verification-tab">
+                <div class="panel-header">
+                    <h2>✅ Verification & Integration</h2>
+                    <p>End-to-end verification testing and cross-system integration validation.</p>
+                </div>
+
+                <!-- Integration Testing Section -->
+                <section class="test-section" data-section="integration-testing">
+                    <header class="section-header">
+                        <h3>🔗 Integration Testing</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runIntegrationTests()">
+                                Run Integration Tests
+                            </button>
+                            <div class="status-indicator" id="integration-testing-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Full Game Flow</h4>
+                            <p>Test complete game flow from start to finish.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testFullGameFlow()">Test Full Flow</button>
+                            </div>
+                            <div class="test-result" id="full-game-flow-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Cross-System Communication</h4>
+                            <p>Test interaction between different game systems.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testCrossSystemCommunication()">Test Communication</button>
+                            </div>
+                            <div class="test-result" id="cross-system-communication-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Data Consistency</h4>
+                            <p>Verify data consistency across all systems.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.testDataConsistency()">Test Consistency</button>
+                            </div>
+                            <div class="test-result" id="data-consistency-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Automated Testing Section -->
+                <section class="test-section" data-section="automated-testing">
+                    <header class="section-header">
+                        <h3>🤖 Automated Testing</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.runAutomatedTests()">
+                                Run Automated Suite
+                            </button>
+                            <div class="status-indicator" id="automated-testing-status">
+                                <span class="indicator-dot"></span>
+                                <span class="indicator-text">Ready</span>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="test-progress">
+                        <div class="progress-header">
+                            <span>Test Progress</span>
+                            <span id="test-progress-text">0/0 tests completed</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div id="test-progress-fill" class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="test-grid">
+                        <div class="test-card">
+                            <h4>Unit Tests</h4>
+                            <p>Run all individual component unit tests.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.runUnitTests()">Run Unit Tests</button>
+                            </div>
+                            <div class="test-result" id="unit-tests-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Integration Tests</h4>
+                            <p>Run all system integration tests.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.runSystemIntegrationTests()">Run Integration</button>
+                            </div>
+                            <div class="test-result" id="integration-tests-result"></div>
+                        </div>
+                        <div class="test-card">
+                            <h4>Regression Tests</h4>
+                            <p>Run regression tests to catch breaking changes.</p>
+                            <div class="test-actions">
+                                <button class="btn btn-sm" onclick="debugManager.runRegressionTests()">Run Regression</button>
+                            </div>
+                            <div class="test-result" id="regression-tests-result"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Test Results Summary Section -->
+                <section class="test-section" data-section="test-summary">
+                    <header class="section-header">
+                        <h3>📊 Test Results Summary</h3>
+                        <div class="section-controls">
+                            <button class="btn btn-sm btn-primary" onclick="debugManager.generateTestReport()">
+                                Generate Report
+                            </button>
+                            <button class="btn btn-sm btn-outline" onclick="debugManager.exportTestResults()">
+                                Export Results
+                            </button>
+                        </div>
+                    </header>
+                    <div class="summary-container">
+                        <div class="summary-stats">
+                            <div class="summary-stat">
+                                <span class="summary-label">Total Tests:</span>
+                                <span id="summary-total-tests" class="summary-value">0</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="summary-label">Passed:</span>
+                                <span id="summary-passed-tests" class="summary-value summary-success">0</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="summary-label">Failed:</span>
+                                <span id="summary-failed-tests" class="summary-value summary-error">0</span>
+                            </div>
+                            <div class="summary-stat">
+                                <span class="summary-label">Success Rate:</span>
+                                <span id="summary-success-rate" class="summary-value">0%</span>
+                            </div>
+                        </div>
+                        <div id="test-report" class="test-report">
+                            <div class="placeholder">Run tests to generate a detailed report</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hidden DOM elements for testing -->
+    <div id="hidden-test-elements" style="display: none;">
+        <div id="room-info">
+            <div id="room-name"></div>
+            <div id="room-description"></div>
+        </div>
+        <div id="question-area">
+            <div id="question-text"></div>
+        </div>
+        <div id="answer-area">
+            <div id="answer-buttons"></div>
+        </div>
+        <div id="timer-area">
+            <div id="timer-bar"></div>
+        </div>
+        <div id="score-display">
+            <div id="current-score"></div>
+        </div>
+        <div id="game-controls">
+            <button id="new-question-btn">New Question</button>
+            <button id="hint-btn">Hint</button>
+            <button id="skip-btn">Skip</button>
+        </div>
+        <div id="feedback-area"></div>
+    </div>
+
+    <!-- Toast notification container -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-label="Notifications"></div>
+
+    <!-- Loading overlay -->
+    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <div class="loading-text">Running tests...</div>
+        </div>
+    </div>
+
+    <!-- Load game modules -->
+    <script src="src/dataLoader.js"></script>
+    <script src="src/enhancedDataLoader.js"></script>
+    <script src="src/gameState.js"></script>
+    <script src="src/quizEngine.js"></script>
+    <script src="src/mapRenderer.js"></script>
+    <script src="src/animationManager.js"></script>
+    <script src="src/achievementManager.js"></script>
+    <script src="src/uiManager.js"></script>
+    <script src="src/enhancedUIManager.js"></script>
+    <script src="src/accessibilityManager.js"></script>
+    <script src="src/performanceManager.js"></script>
+    <script src="src/uiOptimizations.js"></script>
+    <script src="src/performanceMonitoringDashboard.js"></script>
+    <script src="src/learningAnalytics.js"></script>
+
+    <!-- Load debug manager -->
+    <script src="src/debugManager.js"></script>
+
+    <!-- Initialize debug interface -->
+    <script>
+        // Initialize debug interface when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            debugManager.initialize();
+        });
+    </script>
+</body>
+</html>

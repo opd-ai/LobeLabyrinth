@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Interface Test</title>
+    <link rel="stylesheet" href="css/debug.css">
+</head>
+<body>
+    <div id="debug-container">
+        <h1>LobeLabyrinth Debug Interface Test</h1>
+        
+        <!-- Toast Container -->
+        <div id="toast-container"></div>
+        
+        <!-- Loading Overlay -->
+        <div id="loading-overlay">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Loading...</div>
+        </div>
+        
+        <!-- Test Status Display -->
+        <div class="status-overview">
+            <div class="status-item">
+                <span class="status-label">Overall Status:</span>
+                <span id="overall-status" class="status-value ready">Ready</span>
+            </div>
+        </div>
+        
+        <!-- Test Console -->
+        <div class="console-container">
+            <h3>Debug Console</h3>
+            <div id="debug-console" class="debug-console"></div>
+            <div class="console-controls">
+                <button id="clear-console">Clear Console</button>
+                <button id="export-console">Export Console</button>
+            </div>
+        </div>
+        
+        <!-- Test Controls -->
+        <div class="test-controls">
+            <button id="run-all-tests">Run All Tests</button>
+            <button id="export-results">Export Results</button>
+            <button id="clear-results">Clear Results</button>
+        </div>
+        
+        <!-- Test Status Indicators -->
+        <div class="test-status-grid">
+            <div id="data-loading-status" class="status-indicator ready">
+                <div class="indicator-icon">📊</div>
+                <div class="indicator-text">Ready</div>
+            </div>
+            <div id="game-state-status" class="status-indicator ready">
+                <div class="indicator-icon">🎮</div>
+                <div class="indicator-text">Ready</div>
+            </div>
+        </div>
+        
+        <!-- Tab Navigation Test -->
+        <div class="tab-navigation">
+            <button class="tab-btn active" aria-controls="test-panel">Test Tab</button>
+        </div>
+        
+        <div class="tab-content">
+            <div id="test-panel" class="tab-panel active">
+                <h2>Interface Test Panel</h2>
+                <p>This panel tests the debug interface functionality.</p>
+                <button id="test-toast">Test Toast Notification</button>
+                <button id="test-loading">Test Loading Overlay</button>
+                <button id="test-status">Test Status Update</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="src/debugManager.js"></script>
+    <script>
+        // Test functionality once loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🧪 Debug interface test loaded');
+            
+            // Test individual features
+            document.getElementById('test-toast')?.addEventListener('click', () => {
+                if (window.debugManager) {
+                    window.debugManager.showToast('Test toast notification!', 'success');
+                }
+            });
+            
+            document.getElementById('test-loading')?.addEventListener('click', () => {
+                if (window.debugManager) {
+                    window.debugManager.showLoading(true, 'Testing loading overlay...');
+                    setTimeout(() => window.debugManager.showLoading(false), 2000);
+                }
+            });
+            
+            document.getElementById('test-status')?.addEventListener('click', () => {
+                if (window.debugManager) {
+                    window.debugManager.updateOverallStatus('Testing', 'Status Update');
+                    setTimeout(() => window.debugManager.updateOverallStatus('Ready'), 2000);
+                }
+            });
+            
+            document.getElementById('clear-console')?.addEventListener('click', () => {
+                if (window.debugManager) window.debugManager.clearConsole();
+            });
+            
+            document.getElementById('export-console')?.addEventListener('click', () => {
+                if (window.debugManager) window.debugManager.exportConsole();
+            });
+        });
+    </script>
+</body>
+</html>

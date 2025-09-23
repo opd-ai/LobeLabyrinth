@@ -37,12 +37,17 @@
 .achievement-unlock-animation {
     background: var(--mindmaze-gray);
     border: 2px outset var(--mindmaze-stone);
-    padding: clamp(8px, 2vw, 12px);
-    max-width: clamp(280px, 85vw, 320px);
-    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        2px 2px 4px rgba(0, 0, 0, 0.5);
+    padding: clamp(6px, 1.5vw, 10px);
+    max-width: clamp(240px, 25vw, 280px);
+    max-height: clamp(80px, 12vh, 100px);
     display: flex;
     align-items: center;
-    gap: clamp(6px, 2vw, 10px);
+    gap: clamp(4px, 1.5vw, 8px);
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
     animation: achievementFanfare 0.6s ease-out;
 }
 
@@ -135,7 +140,7 @@
     color: var(--mindmaze-text);
 }
 
-/* Achievement Gallery - Windows 95 Dialog Window */
+/* Achievement Gallery - Windows 95 Dialog Window (15% max viewport) */
 .achievement-gallery {
     position: fixed;
     top: 0;
@@ -147,7 +152,7 @@
     display: none;
     align-items: center;
     justify-content: center;
-    padding: clamp(12px, 3vw, 20px);
+    padding: clamp(8px, 2vw, 16px);
 }
 
 .achievement-gallery.visible {
@@ -157,7 +162,14 @@
 .achievement-gallery > div {
     background: var(--mindmaze-gray);
     border: 2px outset var(--mindmaze-stone);
-    max-width: min(720px, 90vw);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        4px 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: min(85vw, 520px);
+    max-height: min(85vh, 420px);
+    width: clamp(280px, 80vw, 520px);
+    height: clamp(300px, 75vh, 420px);
     max-height: min(85vh, 600px);
     width: clamp(320px, 85vw, 720px);
     height: clamp(400px, 80vh, 600px);

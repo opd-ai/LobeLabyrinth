@@ -3,7 +3,7 @@
  * Windows 95 completion dialog
  */
 
-/* Victory Screen - Windows 95 Dialog Window */
+/* Victory Screen - Windows 95 Dialog Window (15% max viewport) */
 .victory-screen {
     position: fixed;
     top: 0;
@@ -15,7 +15,7 @@
     display: none;
     align-items: center;
     justify-content: center;
-    padding: clamp(12px, 3vw, 20px);
+    padding: clamp(8px, 2vw, 16px);
 }
 
 .victory-screen.visible {
@@ -25,15 +25,25 @@
 .victory-content {
     background: var(--mindmaze-gray);
     border: 2px outset var(--mindmaze-stone);
-    max-width: min(680px, 90vw);
-    max-height: min(85vh, 600px);
-    width: clamp(320px, 85vw, 680px);
-    height: clamp(400px, 80vh, 600px);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        4px 4px 8px rgba(0, 0, 0, 0.5);
+    max-width: min(85vw, 560px);
+    max-height: min(85vh, 480px);
+    width: clamp(300px, 80vw, 560px);
+    height: clamp(350px, 75vh, 480px);
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     display: flex;
     flex-direction: column;
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+}
+
+.victory-content::-webkit-scrollbar {
+    display: none;
 }
 
 .victory-header {

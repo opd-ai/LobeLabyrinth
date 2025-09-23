@@ -136,21 +136,25 @@ body::before {
     max-width: 100vw;
     max-height: 100vh;
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(clamp(240px, 25vw, 350px), 28vw);
+    grid-template-columns: minmax(0, 1fr) minmax(clamp(240px, 22vw, 320px), 25vw);
     grid-template-rows: minmax(auto, max-content) minmax(0, 1fr) minmax(auto, max-content);
     grid-template-areas: 
         "header header"
         "main sidebar"
         "footer footer";
     background: var(--mindmaze-gray);
-    border: var(--border-raised);
-    box-shadow: var(--shadow-deep);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        2px 2px 4px rgba(0, 0, 0, 0.5);
     position: fixed;
     top: 0;
     left: 0;
     overflow: hidden;
     box-sizing: border-box;
-    font-size: clamp(10px, 1.2vw, 16px);
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+    font-size: clamp(10px, 1.2vw, 14px);
     gap: 0;
 }
 
@@ -184,30 +188,46 @@ body::before {
     line-height: 1.1;
 }
 
-/* Main Game Area - Windows 95 Content Panel */
+/* Main Game Area - Windows 95 Content Panel with Component Hierarchy */
 .game-main {
     grid-area: main;
     background: var(--mindmaze-gray);
-    border: var(--border-sunken);
-    padding: 12px;
-    display: flex;
-    flex-direction: column;
-    gap: clamp(4px, 1vh, 8px);
+    border: 2px inset var(--mindmaze-stone);
+    box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+        inset -1px -1px 2px rgba(255, 255, 255, 0.1);
+    padding: clamp(6px, 1vw, 12px);
+    display: grid;
+    grid-template-areas: 
+        "map-area map-area"
+        "room-info timer-area"
+        "question-area question-area"
+        "answer-area answer-area";
+    grid-template-rows: 
+        minmax(120px, 25vh)    /* Map: 25% max */
+        minmax(40px, 8vh)      /* Room info + Timer: 8% max */
+        minmax(80px, 35vh)     /* Question: 35% priority */
+        minmax(60px, 1fr);     /* Answers: Flexible remaining */
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(4px, 0.8vh, 8px);
     overflow: hidden;
     min-height: 0;
     max-height: 100%;
     container-type: size;
 }
 
-/* Sidebar - Windows 95 Information Panel */
+/* Sidebar - Windows 95 Information Panel (25% max) */
 .game-sidebar {
     grid-area: sidebar;
     display: flex;
     flex-direction: column;
-    gap: clamp(4px, 1vh, 8px);
-    padding: clamp(8px, 2vw, 12px);
+    gap: clamp(2px, 0.8vh, 4px);
+    padding: clamp(4px, 1vw, 8px);
     background: var(--mindmaze-gray);
-    border-left: var(--border-sunken);
+    border-left: 2px inset var(--mindmaze-stone);
+    box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.3),
+        inset -1px -1px 2px rgba(255, 255, 255, 0.1);
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 0;
@@ -215,6 +235,7 @@ body::before {
     scrollbar-width: none;
     -ms-overflow-style: none;
     container-type: size;
+    font-size: clamp(0.7rem, 1.4vw, 0.9rem);
 }
 
 .game-sidebar::-webkit-scrollbar {
@@ -268,22 +289,25 @@ body::before {
     align-items: center;
 }
 
-/* Section Containers - Adaptive 90s Panels */
+/* Section Containers - Authentic Windows 95 Panels */
 .section {
-    background: var(--gradient-panel-raised);
-    border: 2px outset var(--mindmaze-stone-light);
-    padding: clamp(6px, 1.5vw, 10px);
-    box-shadow: var(--shadow-raised), inset 1px 1px 0 rgba(255,255,255,0.15);
+    background: var(--mindmaze-gray);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 1px 2px rgba(0, 0, 0, 0.2);
+    padding: clamp(4px, 1vw, 8px);
     position: relative;
-    margin-bottom: clamp(4px, 1vh, 6px);
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 48px 48px;
+    margin-bottom: clamp(2px, 0.5vh, 4px);
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
     flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     gap: clamp(2px, 0.5vh, 4px);
+    font-size: inherit;
 }
 
 .section::before {
@@ -316,14 +340,25 @@ body::before {
     padding-bottom: 3px;
 }
 
-/* Room Information - Classic Text Display */
 /* Room Information - Windows 95 Text Display */
+#room-info {
+    grid-area: room-info;
+    min-height: 40px;
+    max-height: 8vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: clamp(0.75rem, 1.8vw, 1rem);
+}
+
 #room-info h2 {
     color: var(--mindmaze-text);
-    margin-bottom: var(--spacing-md);
+    margin: 0 0 2px 0;
     font-family: var(--font-heading);
-    font-size: clamp(1rem, 1.5vw, 1.3rem);
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
     font-weight: bold;
+    line-height: 1.1;
 }
 
 #room-description {
@@ -358,8 +393,21 @@ body::before {
     border: var(--border-flat);
 }
 
-/* Question Area - Royal Inquiry */
+/* Question Area - Royal Inquiry (35% Priority) */
 #question-area {
+    grid-area: question-area;
+    display: flex;
+    flex-direction: column;
+    min-height: 80px;
+    max-height: 35vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    justify-content: flex-start;
+    font-size: clamp(0.9rem, 2.2vw, 1.2rem);
+}
+
+#question-area::-webkit-scrollbar {
     display: none;
 }
 
@@ -401,8 +449,20 @@ body::before {
     text-shadow: var(--shadow-text-emboss);
 }
 
-/* Answer Area - Choices of Fate */
+/* Answer Area - Choices of Fate (Flexible Remaining) */
 #answer-area {
+    grid-area: answer-area;
+    display: flex;
+    flex-direction: column;
+    min-height: 60px;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    gap: clamp(4px, 1vh, 8px);
+    font-size: clamp(0.8rem, 2vw, 1.1rem);
+}
+
+#answer-area::-webkit-scrollbar {
     display: none;
 }
 
@@ -410,25 +470,39 @@ body::before {
 .answer-btn {
     display: block;
     width: 100%;
-    margin: clamp(4px, 0.8vh, 6px) 0;
-    padding: clamp(8px, 1.5vh, 12px) clamp(12px, 2.2vw, 16px);
+    margin: clamp(2px, 0.5vh, 4px) 0;
+    padding: clamp(6px, 1.2vh, 10px) clamp(8px, 1.8vw, 12px);
     background: var(--mindmaze-gray);
-    border: var(--border-raised);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 1px 2px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     text-align: left;
-    font-size: clamp(0.85rem, 1.4vw, 1.05rem);
-    font-family: var(--font-ui);
+    font-size: clamp(0.75rem, 1.8vw, 0.95rem);
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
     color: var(--mindmaze-text);
-    min-height: clamp(32px, 5vh, 42px);
+    min-height: clamp(28px, 4vh, 36px);
+    line-height: 1.3;
+    user-select: none;
+    transition: none;
 }
 
 .answer-btn:hover {
-    background: var(--mindmaze-gray-light);
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        var(--mindmaze-gray) 50%, 
+        rgba(0, 0, 0, 0.1) 100%);
 }
 
 .answer-btn:active {
-    border: var(--border-sunken);
-    background: var(--mindmaze-gray-dark);
+    border: 2px inset var(--mindmaze-stone);
+    box-shadow: 
+        inset 2px 2px 2px rgba(0, 0, 0, 0.4),
+        inset -1px -1px 1px rgba(255, 255, 255, 0.1);
+    transform: translate(1px, 1px);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 .answer-btn:disabled {
@@ -524,8 +598,14 @@ button:focus,
 
 /* Timer - Hourglass of Time */
 #timer-area {
-    display: none;
-    margin: 20px 0;
+    grid-area: timer-area;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 40px;
+    max-height: 8vh;
+    margin: 0;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
 }
 
 .timer-container {
@@ -720,26 +800,39 @@ button:focus {
     margin-top: 18px;
 }
 
-/* Game Controls - Windows 95 Push Buttons */
+/* Game Controls - Authentic Windows 95 Push Buttons */
 button {
     background: var(--mindmaze-gray);
     color: var(--mindmaze-text);
-    border: var(--border-raised);
-    padding: var(--spacing-sm) var(--spacing-md);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        1px 1px 2px rgba(0, 0, 0, 0.3);
+    padding: clamp(4px, 1vh, 6px) clamp(8px, 2vw, 12px);
     cursor: pointer;
     font-weight: normal;
-    font-family: var(--font-ui);
-    font-size: clamp(0.7rem, 1.1vw, 0.9rem);
-    min-height: 28px;
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+    font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+    min-height: clamp(24px, 4vh, 32px);
+    transition: none;
+    user-select: none;
 }
 
 button:hover {
-    background: var(--mindmaze-gray-light);
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.1) 0%, 
+        var(--mindmaze-gray) 50%, 
+        rgba(0, 0, 0, 0.1) 100%);
 }
 
 button:active {
-    border: var(--border-sunken);
-    background: var(--mindmaze-gray-dark);
+    border: 2px inset var(--mindmaze-stone);
+    box-shadow: 
+        inset 2px 2px 2px rgba(0, 0, 0, 0.4),
+        inset -1px -1px 1px rgba(255, 255, 255, 0.1);
+    transform: translate(1px, 1px);
+    background: rgba(0, 0, 0, 0.1);
 }
 
 button:disabled {
@@ -885,19 +978,22 @@ button.btn-danger:hover {
 
 /* Map Canvas Styles - Responsive 90s Interface */
 #map-area {
+    grid-area: map-area;
     background: var(--gradient-panel-inset);
-    border: 3px inset var(--mindmaze-stone);
-    border-radius: 6px;
-    padding: clamp(8px, 1.5vh, 14px);
-    margin-bottom: clamp(6px, 1vh, 12px);
-    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
+    border: 2px inset var(--mindmaze-stone);
+    border-radius: 4px;
+    padding: clamp(4px, 1vh, 8px);
+    box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.5),
+        inset -1px -1px 2px rgba(255, 255, 255, 0.1);
     position: relative;
     background-image: var(--mindmaze-noise);
-    flex: 1 1 auto;
-    min-height: 0;
+    min-height: 120px;
+    max-height: 25vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    font-size: clamp(0.7rem, 1.5vw, 0.9rem);
 }
 
 #map-area::before {
@@ -916,10 +1012,13 @@ button.btn-danger:hover {
 #map-canvas {
     width: 100%;
     height: auto;
-    aspect-ratio: 2 / 1;
-    min-height: clamp(100px, 12vh, 140px);
-    max-height: clamp(140px, 18vh, 200px);
-    border: 3px inset var(--mindmaze-stone);
+    aspect-ratio: 4 / 3;
+    min-height: clamp(80px, 15vh, 120px);
+    max-height: clamp(120px, 20vh, 160px);
+    border: 2px inset var(--mindmaze-stone);
+    box-shadow: 
+        inset 2px 2px 4px rgba(0, 0, 0, 0.4),
+        inset -1px -1px 2px rgba(255, 255, 255, 0.1);
     display: block;
     margin: 0 auto;
     cursor: default;
@@ -995,30 +1094,33 @@ button.btn-danger:hover {
 .legend-accessible { background-color: var(--mindmaze-brown); }
 .legend-locked { background-color: var(--mindmaze-stone); }
 
-/* Responsive Design - Adaptive Castle Layout */
+/* Responsive Design - Viewport-Constrained Layout */
 
-/* Large Desktop - Optimize for ultrawide screens */
+/* Large Desktop - Optimize for ultrawide screens (No scrolling) */
 @media (min-width: 1440px) {
     .game-container {
-        grid-template-columns: minmax(0, 1fr) minmax(320px, 25vw);
-        font-size: clamp(12px, 1.1vw, 18px);
+        grid-template-columns: minmax(0, 1fr) minmax(280px, 23vw);
+        font-size: clamp(11px, 1vw, 14px);
     }
     
     .section {
-        padding: clamp(10px, 2vw, 16px);
+        padding: clamp(6px, 1.2vw, 10px);
+        gap: clamp(2px, 0.4vh, 4px);
     }
 }
 
-/* Tablet Landscape - Intermediate breakpoint for better tablet experience */
+/* Tablet Landscape - Viewport constrained (No scrolling) */
 @media (max-width: 1024px) and (min-width: 769px) {
     .game-container {
-        grid-template-columns: minmax(0, 1fr) minmax(280px, 32vw);
-        font-size: clamp(11px, 1.3vw, 15px);
+        grid-template-columns: minmax(0, 1fr) minmax(240px, 28vw);
+        font-size: clamp(10px, 1.4vw, 13px);
     }
     
     .section {
-        padding: clamp(8px, 1.8vw, 12px);
+        padding: clamp(4px, 1.5vw, 8px);
+        gap: clamp(1px, 0.3vh, 3px);
     }
+}
     
     #map-canvas {
         min-height: clamp(110px, 14vh, 160px);
@@ -1026,104 +1128,155 @@ button.btn-danger:hover {
     }
 }
 
-/* Tablet Portrait - Ensure proper stacking */
+/* Tablet Portrait - Single column viewport constrained (No scrolling) */
 @media (max-width: 768px) {
     .game-container {
         grid-template-columns: 1fr;
-        grid-template-rows: minmax(auto, max-content) minmax(0, 1fr) minmax(0, 1fr) minmax(auto, max-content);
+        grid-template-rows: 
+            minmax(40px, 8vh)      /* Header: 8% max */
+            minmax(0, 1fr)         /* Main content: Flexible */
+            minmax(120px, 22vh)    /* Sidebar: 22% max */
+            minmax(20px, 4vh);     /* Footer: 4% max */
         grid-template-areas: 
             "header"
             "main"
             "sidebar"
             "footer";
-        padding: clamp(10px, 2vw, 16px);
-        gap: clamp(6px, 1.5vh, 12px);
+        font-size: clamp(9px, 2vw, 12px);
+        gap: clamp(2px, 0.5vh, 4px);
+        padding: clamp(2px, 0.8vw, 6px);
     }
 
-    .game-main,
-    .game-sidebar {
-        min-height: 0;
-        max-height: none;
-        overflow: visible;
-    }
-    
-    .game-sidebar {
-        overflow-y: visible;
-    }
-
-    .controls-grid {
+    .game-main {
+        grid-template-areas: 
+            "map-area"
+            "room-info"
+            "question-area"
+            "answer-area"
+            "timer-area";
+        grid-template-rows: 
+            minmax(80px, 18vh)     /* Map: 18% */
+            minmax(30px, 6vh)      /* Room: 6% */
+            minmax(60px, 30vh)     /* Question: 30% priority */
+            minmax(80px, 1fr)      /* Answers: Flexible */
+            minmax(30px, 6vh);     /* Timer: 6% */
         grid-template-columns: 1fr;
-        gap: clamp(6px, 1.5vw, 10px);
     }
 
-    .question-meta {
-        flex-direction: column;
-        gap: clamp(6px, 1.5vw, 12px);
+    .game-sidebar {
+        max-height: 22vh;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
-    .game-header h1 {
-        font-size: clamp(1.8em, 4.5vw, 2.4em);
+    .game-sidebar::-webkit-scrollbar {
+        display: none;
     }
 
-    .map-legend {
-        gap: clamp(8px, 2vw, 16px);
-        flex-wrap: wrap;
-        justify-content: center;
+    .section {
+        padding: clamp(2px, 1vw, 4px);
+        gap: clamp(1px, 0.3vh, 2px);
+        margin-bottom: clamp(1px, 0.3vh, 2px);
     }
-    
+
+    .section h3 {
+        font-size: clamp(0.7rem, 2vw, 0.9rem);
+        margin-bottom: clamp(2px, 0.5vh, 4px);
+    }
+
     #map-canvas {
-        min-height: clamp(120px, 16vh, 180px);
-        max-height: clamp(180px, 22vh, 250px);
+        min-height: clamp(60px, 12vh, 100px);
+        max-height: clamp(100px, 16vh, 140px);
     }
+}
 
     body {
         font-size: clamp(14px, 3.5vw, 16px);
     }
 }
 
-/* Mobile - Compact design */
+/* Mobile - Ultra compact viewport constrained (No scrolling) */
 @media (max-width: 480px) {
     .game-container {
-        padding: clamp(6px, 2vw, 12px);
-        gap: clamp(4px, 1vh, 8px);
-        grid-template-rows: minmax(auto, max-content) minmax(0, 1fr) minmax(0, 1fr) minmax(auto, max-content);
+        font-size: clamp(8px, 2.5vw, 11px);
+        gap: clamp(1px, 0.3vh, 3px);
+        padding: clamp(1px, 0.5vw, 3px);
+        grid-template-rows: 
+            minmax(30px, 6vh)      /* Header: 6% max */
+            minmax(0, 1fr)         /* Main: Flexible */
+            minmax(100px, 20vh)    /* Sidebar: 20% max */
+            minmax(15px, 3vh);     /* Footer: 3% max */
+    }
+
+    .game-main {
+        grid-template-rows: 
+            minmax(60px, 14vh)     /* Map: 14% */
+            minmax(20px, 4vh)      /* Room: 4% */
+            minmax(50px, 32vh)     /* Question: 32% priority */
+            minmax(60px, 1fr)      /* Answers: Flexible */
+            minmax(20px, 4vh);     /* Timer: 4% */
+    }
+
+    .game-sidebar {
+        max-height: 20vh;
+        overflow-y: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .game-header {
+        padding: clamp(2px, 1vw, 4px);
     }
 
     .game-header h1 {
-        font-size: clamp(1.5em, 4vw, 2em);
+        font-size: clamp(1.2rem, 4vw, 1.6rem);
+        margin: 0;
+    }
+
+    .game-header p {
+        font-size: clamp(0.6rem, 2vw, 0.8rem);
+        margin: 0;
     }
 
     .section {
-        padding: clamp(8px, 2.5vw, 12px);
-        margin-bottom: clamp(3px, 0.8vh, 6px);
+        padding: clamp(1px, 0.8vw, 3px);
+        margin-bottom: clamp(1px, 0.2vh, 2px);
+    }
+
+    .section h3 {
+        font-size: clamp(0.6rem, 2.2vw, 0.8rem);
+        margin-bottom: clamp(1px, 0.3vh, 2px);
     }
 
     #map-canvas {
-        min-height: clamp(100px, 18vh, 160px);
-        max-height: clamp(160px, 25vh, 220px);
+        min-height: clamp(45px, 10vh, 80px);
+        max-height: clamp(80px, 12vh, 120px);
     }
-    
+
     .answer-btn {
-        min-height: 44px;
-        padding: clamp(8px, 2.5vw, 12px);
-        font-size: clamp(12px, 3.5vw, 15px);
+        min-height: clamp(22px, 3.5vh, 30px);
+        padding: clamp(3px, 0.8vh, 6px) clamp(4px, 1.5vw, 8px);
+        font-size: clamp(0.65rem, 2.2vw, 0.8rem);
     }
-    
+
     button {
-        min-height: 44px;
-        padding: clamp(6px, 2vw, 10px) clamp(8px, 2.5vw, 12px);
-        font-size: clamp(11px, 3.2vw, 14px);
+        min-height: clamp(20px, 3vh, 26px);
+        padding: clamp(2px, 0.6vh, 4px) clamp(4px, 1.8vw, 8px);
+        font-size: clamp(0.6rem, 2vw, 0.75rem);
     }
+}
+    
 }
 
 /* High contrast mode support */
 @media (prefers-contrast: high) {
     :root {
-    --mindmaze-gold: #ffff00;
-    --mindmaze-crimson: #ff0000;
-    --mindmaze-blue: #0000ff;
-    --mindmaze-brown: #8B4513;
-    --mindmaze-text: #000000;
+        --mindmaze-gold: #ffff00;
+        --mindmaze-crimson: #ff0000;
+        --mindmaze-blue: #0000ff;
+        --mindmaze-brown: #8B4513;
+        --mindmaze-text: #000000;
     --mindmaze-panel: #ffffff;
     }
 }

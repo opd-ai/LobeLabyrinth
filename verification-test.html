@@ -132,10 +132,10 @@
                 uiManager.questionActive = true;
                 uiManager.currentQuestion = { id: 'test' };
                 
-                const activeResult = uiManager.isQuestionActive();
+                const activeResult = uiManager.checkQuestionActive();
                 console.log('✓ Active state test:', activeResult);
                 
-                updateStatus('✅ All tests passed! The keyboard error has been fixed.', false);
+                updateStatus('✅ All tests passed! The keyboard error has been fixed with checkQuestionActive method.', false);
                 
             } catch (error) {
                 console.error('Test failed:', error);

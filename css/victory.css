@@ -3,22 +3,22 @@
  * Royal celebration and triumph display
  */
 
-/* Victory Screen - Royal Celebration */
+/* Victory Screen - Authentic 90s Celebration Dialog */
 .victory-screen {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(180deg, rgba(8,8,10,0.95), rgba(0,0,0,0.95));
+    background: rgba(5,5,5,0.95);
     z-index: 2000;
     display: none;
     align-items: center;
     justify-content: center;
     padding: 20px;
     opacity: 0;
-    transition: opacity 0.6s ease-in-out;
-    backdrop-filter: blur(8px);
+    transition: opacity 0.5s ease-in-out;
+    backdrop-filter: none;
 }
 
 .victory-screen.visible {
@@ -27,16 +27,17 @@
 }
 
 .victory-content {
-    background: var(--mindmaze-panel);
+    background: linear-gradient(145deg, #3A3A3A 0%, #2F2F2F 35%, #252525 65%, #1A1A1A 100%);
     border: 3px outset var(--mindmaze-stone);
-    border-radius: 12px;
-    max-width: 900px;
-    max-height: 80vh;
-    width: 92vw;
+    border-radius: 6px;
+    max-width: 760px;
+    max-height: 75vh;
+    width: 90vw;
     overflow-y: auto;
-    box-shadow: var(--shadow-raised);
-    animation: victoryGrandEntrance 0.9s ease-out;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.8), -2px -2px 4px rgba(255,255,255,0.05), inset 1px 1px 0 rgba(255,255,255,0.1);
+    animation: victoryGrandEntrance 0.7s ease-out;
     position: relative;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23222222'/><rect x='0' y='0' width='32' height='32' fill='%23282828' opacity='0.4'/><rect x='32' y='32' width='32' height='32' fill='%23282828' opacity='0.4'/></svg>");
 }
 
 .victory-content::before {
@@ -72,12 +73,14 @@
 
 .victory-header {
     text-align: center;
-    padding: 20px;
-    background: linear-gradient(90deg, rgba(30,30,60,0.95), rgba(10,10,20,0.95));
+    padding: 16px;
+    background: linear-gradient(145deg, #4A4A4A 0%, #353535 35%, #2A2A2A 65%, #1F1F1F 100%);
     color: var(--mindmaze-gold);
-    border-radius: 10px 10px 0 0;
+    border-radius: 4px 4px 0 0;
     position: relative;
     overflow: hidden;
+    border-bottom: 2px inset var(--mindmaze-stone);
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23353535'/><rect x='0' y='0' width='16' height='16' fill='%233A3A3A' opacity='0.4'/><rect x='16' y='16' width='16' height='16' fill='%233A3A3A' opacity='0.4'/></svg>");
 }
 
 .victory-header::before {

@@ -1,0 +1,72 @@
+[
+  {
+    "function": "exportSaveData",
+    "file": "src/gameState.js",
+    "line": 664,
+    "definition": "exportSaveData() {",
+    "status": "FOUND"
+  },
+  {
+    "function": "exportSaveData",
+    "file": "src/uiManager.js",
+    "line": 825,
+    "definition": "exportSaveData() {",
+    "status": "FOUND"
+  },
+  {
+    "function": "presentNewQuestion",
+    "file": "src/uiManager.js",
+    "line": 1364,
+    "definition": "async presentNewQuestion() {",
+    "status": "FOUND"
+  },
+  {
+    "function": "presentNewQuestion",
+    "file": "src/uiManager.js",
+    "line": 1364,
+    "definition": "async presentNewQuestion() {",
+    "status": "FOUND"
+  },
+  {
+    "function": "handleRoomChange",
+    "file": "src/uiManager.js",
+    "line": 1799,
+    "definition": "async handleRoomChange(data) {",
+    "status": "FOUND"
+  },
+  {
+    "function": "handleRoomChange",
+    "file": "src/uiManager.js",
+    "line": 1799,
+    "definition": "async handleRoomChange(data) {",
+    "status": "FOUND"
+  },
+  {
+    "function": "loadGameData",
+    "file": "src/dataLoader.js",
+    "line": 19,
+    "definition": "async loadGameData() {",
+    "status": "FOUND"
+  },
+  {
+    "function": "loadGameData",
+    "file": "src/dataLoader.js",
+    "line": 19,
+    "definition": "async loadGameData() {",
+    "status": "FOUND"
+  },
+  {
+    "function": "getStateSnapshot",
+    "file": "src/gameState.js",
+    "line": 647,
+    "definition": "getStateSnapshot() {",
+    "status": "FOUND"
+  },
+  {
+    "function": "getGameStatistics",
+    "file": "src/gameState.js",
+    "line": 279,
+    "definition": "getGameStatistics() {",
+    "status": "FOUND"
+  }
+]

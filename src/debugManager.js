@@ -537,46 +537,263 @@ class DebugManager {
     /**
      * Core Systems Test Suite
      */
+    /**
+     * Core Systems Test Suite
+     */
     async runCoreSystemsTests() {
-        await this.runDataLoadingTests();
-        await this.runGameStateTests();
-        await this.runQuizEngineTests();
-        await this.runMapRendererTests();
+        this.logToConsole('🔧 Running core systems test suite...', 'info');
+        this.updateOverallStatus('Running Core Systems Tests');
+        
+        try {
+            await this.runDataLoadingTests();
+            await this.runGameStateTests();
+            await this.runQuizEngineTests();
+            await this.runMapRendererTests();
+            
+            this.logToConsole('✅ Core systems test suite completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Core systems test suite failed: ${error.message}`, 'error');
+        }
     }
     
     /**
      * Feature Test Suite
      */
     async runFeatureTestsuite() {
-        await this.runAchievementTests();
-        await this.runRoomNavigationTests();
-        await this.runPerformanceTests();
-        await this.runAnimationTests();
+        this.logToConsole('🌟 Running feature test suite...', 'info');
+        this.updateOverallStatus('Running Feature Tests');
+        
+        try {
+            await this.runAchievementTests();
+            await this.runRoomNavigationTests();
+            await this.runPerformanceTests();
+            await this.runAnimationTests();
+            
+            this.logToConsole('✅ Feature test suite completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Feature test suite failed: ${error.message}`, 'error');
+        }
     }
     
     /**
      * Accessibility Test Suite
      */
     async runAccessibilityTestsuite() {
-        await this.runKeyboardTests();
-        await this.runScreenReaderTests();
-        await this.runVisualTests();
+        this.logToConsole('♿ Running accessibility test suite...', 'info');
+        this.updateOverallStatus('Running Accessibility Tests');
+        
+        try {
+            await this.runKeyboardTests();
+            await this.runScreenReaderTests();
+            await this.runVisualTests();
+            
+            this.logToConsole('✅ Accessibility test suite completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Accessibility test suite failed: ${error.message}`, 'error');
+        }
     }
     
     /**
      * Debug Test Suite
      */
     async runDebugTestsuite() {
-        await this.runErrorDetection();
-        await this.runMemoryDiagnostics();
+        this.logToConsole('🐛 Running debug test suite...', 'info');
+        this.updateOverallStatus('Running Debug Tests');
+        
+        try {
+            await this.runErrorDetection();
+            await this.runMemoryDiagnostics();
+            
+            this.logToConsole('✅ Debug test suite completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Debug test suite failed: ${error.message}`, 'error');
+        }
     }
     
     /**
      * Verification Test Suite
      */
     async runVerificationTestsuite() {
-        await this.runIntegrationTests();
-        await this.runAutomatedTests();
+        this.logToConsole('✅ Running verification test suite...', 'info');
+        this.updateOverallStatus('Running Verification Tests');
+        
+        try {
+            await this.runIntegrationTests();
+            await this.runAutomatedTests();
+            
+            this.logToConsole('✅ Verification test suite completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Verification test suite failed: ${error.message}`, 'error');
+        }
+    }
+
+    // Missing test suite implementations
+    async runAchievementTests() {
+        this.logToConsole('🏆 Running achievement system tests...', 'info');
+        
+        try {
+            await this.testAchievementUnlock();
+            await this.testProgressTracking();
+            await this.testAchievementNotification();
+            await this.testAchievementStats();
+            
+            this.logToConsole('✅ Achievement tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Achievement tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runRoomNavigationTests() {
+        this.logToConsole('🚪 Running room navigation tests...', 'info');
+        
+        try {
+            await this.testRoomAccessibility();
+            await this.testNavigationEvents();
+            await this.testPathFinding();
+            
+            this.logToConsole('✅ Room navigation tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Room navigation tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runPerformanceTests() {
+        this.logToConsole('⚡ Running performance tests...', 'info');
+        
+        try {
+            await this.testLoadPerformance();
+            await this.testRenderPerformance();
+            await this.testMemoryUsage();
+            
+            this.logToConsole('✅ Performance tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Performance tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runAnimationTests() {
+        this.logToConsole('🎭 Running animation tests...', 'info');
+        
+        try {
+            await this.testTransitionAnimations();
+            await this.testScoreAnimations();
+            await this.testReducedMotion();
+            
+            this.logToConsole('✅ Animation tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Animation tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runKeyboardTests() {
+        this.logToConsole('⌨️ Running keyboard tests...', 'info');
+        
+        try {
+            this.testTabNavigation();
+            this.testArrowNavigation();
+            this.testKeyboardShortcuts();
+            
+            this.logToConsole('✅ Keyboard tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Keyboard tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runScreenReaderTests() {
+        this.logToConsole('🔊 Running screen reader tests...', 'info');
+        
+        try {
+            this.testARIALabels();
+            this.testLiveRegions();
+            this.testSemanticStructure();
+            
+            this.logToConsole('✅ Screen reader tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Screen reader tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runVisualTests() {
+        this.logToConsole('🌗 Running visual accessibility tests...', 'info');
+        
+        try {
+            this.testColorContrast();
+            this.testFocusIndicators();
+            this.runComplianceCheck();
+            
+            this.logToConsole('✅ Visual accessibility tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Visual accessibility tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runErrorDetection() {
+        this.logToConsole('🚨 Running error detection tests...', 'info');
+        
+        try {
+            this.checkScriptLoading();
+            this.testClassInstantiation();
+            this.testEventSystem();
+            
+            this.logToConsole('✅ Error detection tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Error detection tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runMemoryDiagnostics() {
+        this.logToConsole('💾 Running memory diagnostics...', 'info');
+        
+        try {
+            this.testMemoryUsage();
+            this.testMemoryLeaks();
+            
+            this.logToConsole('✅ Memory diagnostics completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Memory diagnostics failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runIntegrationTests() {
+        this.logToConsole('🔗 Running integration tests...', 'info');
+        
+        try {
+            await this.testFullGameFlow();
+            await this.testCrossSystemCommunication();
+            await this.testDataConsistency();
+            
+            this.logToConsole('✅ Integration tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Integration tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runAutomatedTests() {
+        this.logToConsole('🤖 Running automated test suite...', 'info');
+        
+        try {
+            await this.runUnitTests();
+            await this.runSystemIntegrationTests();
+            await this.runRegressionTests();
+            
+            this.logToConsole('✅ Automated tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Automated tests failed: ${error.message}`, 'error');
+        }
+    }
+
+    async runMapRendererTests() {
+        this.logToConsole('🗺️ Running map renderer tests...', 'info');
+        
+        try {
+            await this.testMapRendering();
+            this.testRoomHighlight();
+            this.testMapInteraction();
+            
+            this.logToConsole('✅ Map renderer tests completed!', 'success');
+        } catch (error) {
+            this.logToConsole(`❌ Map renderer tests failed: ${error.message}`, 'error');
+        }
     }
     
     /**

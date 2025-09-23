@@ -214,7 +214,7 @@
 
         <!-- Footer -->
         <div class="game-footer">
-            <div id="game-status">
+            <div id="game-status-footer">
                 <span class="loading"></span> Initializing game...
             </div>
         </div>
@@ -365,8 +365,8 @@
                 updateGameStatus('Setting up quiz engine...');
                 quizEngine = new QuizEngine(dataLoader, gameState);
                 
-                // Wait for quiz engine to initialize
-                await new Promise(resolve => setTimeout(resolve, 200));
+                // Initialize quiz engine question pool
+                await quizEngine.initializeQuestionPool();
                 
                 updateGameStatus('Initializing animations...');
                 animationManager = new AnimationManager({
@@ -383,7 +383,7 @@
                 
                 updateGameStatus('Initializing castle map...');
                 const mapCanvas = document.getElementById('map-canvas');
-                mapRenderer = new MapRenderer(mapCanvas, gameState, dataLoader, uiManager);
+                mapRenderer = new MapRenderer(mapCanvas, gameState, dataLoader);
                 
                 // Initial map render
                 await mapRenderer.render();
@@ -422,7 +422,7 @@
         }
 
         function updateGameStatus(message) {
-            const statusElement = document.getElementById('game-status');
+            const statusElement = document.getElementById('game-status-footer');
             if (statusElement) {
                 statusElement.innerHTML = message;
             }
@@ -446,7 +446,7 @@
             });
 
             // Listen for game state changes to announce them
-            if (gameState && typeof gameState.on === 'function') {
+            if (gameState && gameState.on && typeof gameState.on === 'function') {
                 gameState.on('roomChanged', (roomData) => {
                     if (accessibilityManager && accessibilityManager.announceGameState) {
                         accessibilityManager.announceGameState({
@@ -467,7 +467,7 @@
             }
 
             // Listen for quiz events
-            if (quizEngine && typeof quizEngine.on === 'function') {
+            if (quizEngine && quizEngine.on && typeof quizEngine.on === 'function') {
                 quizEngine.on('questionPresented', (questionData) => {
                     if (accessibilityManager && accessibilityManager.announceGameState) {
                         accessibilityManager.announceGameState({

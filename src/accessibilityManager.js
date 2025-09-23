@@ -1055,6 +1055,92 @@ class AccessibilityManager {
             }
         }
     }
+
+    /**
+     * Handle arrow key navigation for map and UI elements
+     */
+    handleArrowNavigation(event) {
+        const element = event.target;
+        const key = event.key;
+        
+        // Handle map canvas navigation
+        if (element.matches('#map-canvas')) {
+            event.preventDefault();
+            this.handleMapArrowNavigation(key);
+            return;
+        }
+        
+        // Handle answer button navigation
+        if (element.matches('.answer-btn')) {
+            event.preventDefault();
+            this.navigateAnswerButtons(key);
+            return;
+        }
+        
+        // Handle menu/list navigation
+        if (element.matches('[role="menu"], [role="listbox"], .menu-item, .list-item')) {
+            event.preventDefault();
+            this.navigateMenuItems(key);
+            return;
+        }
+        
+        // Default: let browser handle standard navigation
+    }
+
+    /**
+     * Navigate map with arrow keys
+     */
+    handleMapArrowNavigation(direction) {
+        // Dispatch custom event for map navigation
+        const mapNavigationEvent = new CustomEvent('accessibility-map-navigate', {
+            detail: { direction: direction.replace('Arrow', '').toLowerCase() }
+        });
+        document.dispatchEvent(mapNavigationEvent);
+        
+        // Announce navigation attempt
+        this.announceMessage(`Navigating ${direction.replace('Arrow', '').toLowerCase()}`, 'polite');
+    }
+
+    /**
+     * Navigate between answer buttons with arrow keys
+     */
+    navigateAnswerButtons(direction) {
+        const buttons = Array.from(document.querySelectorAll('.answer-btn:not([disabled])'));
+        const currentIndex = buttons.findIndex(btn => btn === document.activeElement);
+        
+        let nextIndex;
+        if (direction === 'ArrowDown' || direction === 'ArrowRight') {
+            nextIndex = (currentIndex + 1) % buttons.length;
+        } else {
+            nextIndex = currentIndex <= 0 ? buttons.length - 1 : currentIndex - 1;
+        }
+        
+        if (buttons[nextIndex]) {
+            buttons[nextIndex].focus();
+            this.announceMessage(`Answer option ${String.fromCharCode(65 + nextIndex)}`, 'polite');
+        }
+    }
+
+    /**
+     * Navigate menu items with arrow keys
+     */
+    navigateMenuItems(direction) {
+        const menuItems = Array.from(document.querySelectorAll('.menu-item:not([disabled]), .list-item:not([disabled])'));
+        const currentIndex = menuItems.findIndex(item => item === document.activeElement);
+        
+        let nextIndex;
+        if (direction === 'ArrowDown') {
+            nextIndex = (currentIndex + 1) % menuItems.length;
+        } else if (direction === 'ArrowUp') {
+            nextIndex = currentIndex <= 0 ? menuItems.length - 1 : currentIndex - 1;
+        } else {
+            return; // Left/Right not handled for vertical menus
+        }
+        
+        if (menuItems[nextIndex]) {
+            menuItems[nextIndex].focus();
+        }
+    }
 }
 
 // Make AccessibilityManager available globally for debugging and integration

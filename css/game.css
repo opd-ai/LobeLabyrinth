@@ -316,7 +316,7 @@ body::before {
     padding: 6px 10px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 4px;
-    border-left: 3px solid var(--medieval-gold);
+    border-left: 3px solid var(--mindmaze-gold);
 }
 
 /* Question Area - Royal Inquiry */
@@ -342,18 +342,18 @@ body::before {
     gap: 15px;
     margin-bottom: 25px;
     font-size: 0.95em;
-    color: var(--medieval-ink-light);
+    color: var(--mindmaze-text-dim);
     flex-wrap: wrap;
 }
 
 .meta-item {
-    background: var(--gradient-gold);
-    color: var(--medieval-ink);
-    padding: 8px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--medieval-gold-dark);
+    background: linear-gradient(90deg, rgba(212,175,55,0.06), rgba(212,175,55,0.02));
+    color: var(--mindmaze-text);
+    padding: 6px 10px;
+    border-radius: 14px;
+    border: 1px solid var(--mindmaze-gold-dark);
     font-weight: 600;
-    box-shadow: var(--shadow-button);
+    box-shadow: var(--shadow-raised);
 }
 
 /* Answer Area - Choices of Fate */
@@ -413,19 +413,18 @@ body::before {
 }
 
 .answer-btn.answer-incorrect {
-    background: linear-gradient(135deg, var(--medieval-crimson-light), var(--medieval-crimson));
-    border-color: var(--medieval-crimson);
+    background: linear-gradient(135deg, var(--mindmaze-crimson-light), var(--mindmaze-crimson));
+    border-color: var(--mindmaze-crimson);
     color: white;
-    text-shadow: var(--shadow-text);
 }
 
 /* Keyboard Navigation - Blessed Selection */
 .answer-btn.keyboard-selected {
-    background: var(--gradient-royal);
+    background: linear-gradient(90deg, rgba(25,25,48,0.95), rgba(10,10,20,0.95));
     color: white;
-    border-color: var(--medieval-gold);
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.5);
-    transform: translateY(-3px);
+    border-color: var(--mindmaze-gold);
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.25);
+    transform: translateY(-2px);
 }
 
 .answer-btn.keyboard-selected:hover {
@@ -435,7 +434,7 @@ body::before {
 /* Focus indicators for accessibility */
 button:focus,
 .answer-btn:focus {
-    outline: 3px solid var(--medieval-gold);
+    outline: 3px solid var(--mindmaze-gold);
     outline-offset: 2px;
 }
 
@@ -446,33 +445,33 @@ button:focus,
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(44, 24, 16, 0.9);
-    color: var(--medieval-parchment);
+    background: rgba(5,5,5,0.85);
+    color: var(--mindmaze-text);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 3000;
     font-family: var(--font-ui);
-    padding: 20px;
+    padding: 18px;
 }
 
 .keyboard-help-content {
-    background: var(--gradient-parchment);
-    color: var(--medieval-ink);
-    border: 3px solid var(--medieval-gold);
-    border-radius: 15px;
-    padding: 30px;
+    background: var(--mindmaze-panel);
+    color: var(--mindmaze-text);
+    border: 2px outset var(--mindmaze-stone);
+    border-radius: 12px;
+    padding: 20px;
     max-width: 600px;
     max-height: 80vh;
     overflow-y: auto;
     white-space: pre-line;
-    line-height: 1.8;
-    box-shadow: var(--shadow-castle);
+    line-height: 1.6;
+    box-shadow: var(--shadow-raised);
 }
 
 /* Map focus indicator */
 #map-canvas:focus {
-    outline: 3px solid var(--medieval-gold);
+    outline: 3px solid var(--mindmaze-gold);
     outline-offset: -3px;
 }
 
@@ -481,13 +480,13 @@ button:focus,
     position: absolute;
     top: 8px;
     right: 8px;
-    background: rgba(44, 24, 16, 0.8);
-    color: var(--medieval-gold);
+    background: rgba(10,10,10,0.6);
+    color: var(--mindmaze-gold);
     padding: 4px 8px;
     border-radius: 6px;
     font-size: 0.8em;
     font-family: var(--font-ui);
-    opacity: 0.9;
+    opacity: 0.95;
 }
 
 /* Timer - Hourglass of Time */
@@ -497,25 +496,25 @@ button:focus,
 }
 
 .timer-container {
-    background: var(--gradient-parchment);
-    border: 2px solid var(--medieval-gold);
-    border-radius: 10px;
-    padding: 15px;
+    background: var(--gradient-panel-inset);
+    border: 2px inset var(--mindmaze-stone);
+    border-radius: 8px;
+    padding: 10px;
     text-align: center;
-    box-shadow: var(--shadow-scroll);
+    box-shadow: var(--shadow-inset);
 }
 
 .timer-bar-container {
-    background: var(--medieval-stone);
+    background: var(--mindmaze-stone);
     height: 12px;
     border-radius: 6px;
     overflow: hidden;
     margin: 12px 0;
-    border: 1px solid var(--medieval-brown);
+    border: 1px solid var(--mindmaze-brown);
 }
 
 #timer-bar {
-    background: var(--gradient-gold);
+    background: linear-gradient(90deg, rgba(212,175,55,0.16), rgba(212,175,55,0.06));
     height: 100%;
     width: 100%;
     transition: width 0.1s ease;
@@ -523,7 +522,7 @@ button:focus,
 }
 
 #timer-bar.timer-warning {
-    background: linear-gradient(90deg, var(--medieval-crimson), var(--medieval-crimson-light));
+    background: linear-gradient(90deg, var(--mindmaze-crimson), var(--mindmaze-crimson-light));
     animation: pulseWarning 1s infinite;
 }
 
@@ -535,7 +534,7 @@ button:focus,
 #timer-text {
     font-weight: bold;
     font-size: 1.2em;
-    color: var(--medieval-ink);
+    color: var(--mindmaze-text);
     font-family: var(--font-heading);
 }
 
@@ -545,7 +544,7 @@ button:focus,
     justify-content: space-between;
     margin: 10px 0;
     padding: 10px 0;
-    border-bottom: 1px solid var(--medieval-gold);
+    border-bottom: 1px solid var(--mindmaze-gold);
     font-family: var(--font-ui);
 }
 

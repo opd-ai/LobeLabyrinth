@@ -129,13 +129,15 @@ body::before {
     --mindmaze-stone-pattern: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'><rect width='96' height='96' fill='%23202020'/><polygon points='0,0 48,0 48,48 0,48' fill='%23252525' opacity='0.6'/><polygon points='48,48 96,48 96,96 48,96' fill='%23252525' opacity='0.6'/><rect x='12' y='12' width='24' height='24' fill='%231A1A1A' opacity='0.8'/><rect x='60' y='60' width='24' height='24' fill='%231A1A1A' opacity='0.8'/></svg>");
 }
 
-/* Game Container - Authentic Castle Interface */
+/* Game Container - Authentic Castle Interface (Fixed Layout) */
 .game-container {
     width: 100vw;
     height: 100vh;
+    max-width: 100vw;
+    max-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr clamp(280px, 28vw, 360px);
-    grid-template-rows: clamp(40px, 6vh, 60px) 1fr clamp(20px, 3vh, 30px);
+    grid-template-columns: 1fr minmax(260px, min(30vw, 320px));
+    grid-template-rows: minmax(45px, max(8vh, 50px)) 1fr minmax(25px, max(4vh, 35px));
     grid-template-areas: 
         "header header"
         "main sidebar"
@@ -143,8 +145,11 @@ body::before {
     background: var(--gradient-panel-inset);
     border: 3px outset var(--mindmaze-stone);
     box-shadow: var(--shadow-raised), inset 0 0 0 1px rgba(255,255,255,0.1);
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
     /* Authentic 90s Beveled Panel Effects */
@@ -229,19 +234,21 @@ body::before {
     text-shadow: var(--shadow-text-emboss);
 }
 
-/* Main Game Area - Fixed Viewport Content */
+/* Main Game Area - Fixed Viewport Content (No Overflow) */
 .game-main {
     grid-area: main;
     background: var(--gradient-panel-inset);
     border: 3px inset var(--mindmaze-stone);
-    padding: var(--spacing-lg);
+    padding: clamp(8px, 1.5vh, 16px);
     box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.3);
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-md);
+    gap: clamp(6px, 1vh, 12px);
     position: relative;
     overflow: hidden;
     background-image: var(--mindmaze-noise);
+    min-height: 0;
+    max-height: 100%;
 }
 
 .game-main::before {
@@ -257,18 +264,20 @@ body::before {
     box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-/* Sidebar - Classic Fixed Info Panel */
+/* Sidebar - Fixed Info Panel (No Overflow) */
 .game-sidebar {
     grid-area: sidebar;
     display: flex;
     flex-direction: column;
-    gap: var(--spacing-sm);
-    padding: var(--spacing-md);
+    gap: clamp(4px, 0.8vh, 8px);
+    padding: clamp(8px, 1.5vh, 16px);
     background: var(--gradient-panel-inset);
     border: 3px inset var(--mindmaze-stone);
     box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.3);
     overflow: hidden;
     background-image: var(--mindmaze-noise);
+    min-height: 0;
+    max-height: 100%;
 }
 
     /* Apply authentic retro panels to core sections */
@@ -311,16 +320,19 @@ body::before {
     background-image: var(--mindmaze-stone-pattern);
 }
 
-/* Section Containers - Authentic 90s Panels */
+/* Section Containers - Compact 90s Panels */
 .section {
     background: var(--gradient-panel-raised);
     border: 2px outset var(--mindmaze-stone-light);
-    padding: var(--spacing-md);
+    padding: clamp(6px, 1.2vh, 12px);
     box-shadow: var(--shadow-raised), inset 1px 1px 0 rgba(255,255,255,0.1);
     position: relative;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: clamp(4px, 0.8vh, 8px);
     background-image: var(--mindmaze-stone-pattern);
     background-size: 64px 64px;
+    flex-shrink: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
 .section::before {
@@ -954,16 +966,19 @@ button.btn-danger:hover {
     100% { transform: rotate(360deg); }
 }
 
-/* Map Canvas Styles - Authentic 90s Cartographer Interface */
+/* Map Canvas Styles - Compact 90s Interface */
 #map-area {
     background: var(--gradient-panel-inset);
     border: 3px inset var(--mindmaze-stone);
-    border-radius: 8px;
-    padding: 18px;
-    margin-bottom: 16px;
+    border-radius: 6px;
+    padding: clamp(8px, 1.5vh, 14px);
+    margin-bottom: clamp(6px, 1vh, 12px);
     box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
     position: relative;
     background-image: var(--mindmaze-noise);
+    flex-shrink: 1;
+    min-height: 0;
+    overflow: hidden;
 }
 
 #map-area::before {
@@ -981,7 +996,8 @@ button.btn-danger:hover {
 
 #map-canvas {
     width: 100%;
-    height: clamp(180px, 22vh, 280px);
+    height: clamp(120px, 15vh, 200px);
+    max-height: 200px;
     border: 3px inset var(--mindmaze-stone);
     display: block;
     margin: 0 auto;
@@ -1001,23 +1017,30 @@ button.btn-danger:hover {
 
 .map-header {
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: clamp(8px, 1.2vh, 12px);
 }
 
 .map-header h3 {
     color: var(--mindmaze-text);
-    margin-bottom: 6px;
+    margin-bottom: clamp(3px, 0.6vh, 6px);
     font-family: var(--font-heading);
-    font-size: 1.3em;
+    font-size: clamp(0.9rem, 2vw, 1.2rem);
+    text-shadow: var(--shadow-text-emboss);
+}
+
+.map-header p {
+    color: var(--mindmaze-text-dim);
+    font-size: clamp(0.7rem, 1.2vw, 0.85rem);
+    margin: 0;
     text-shadow: var(--shadow-text-emboss);
 }
 
 .map-legend {
     display: flex;
     justify-content: center;
-    gap: 16px;
-    margin-top: 12px;
-    font-size: 0.85em;
+    gap: clamp(8px, 1.5vw, 12px);
+    margin-top: clamp(6px, 1vh, 10px);
+    font-size: clamp(0.7rem, 1.2vw, 0.8rem);
     flex-wrap: wrap;
     font-family: var(--font-ui);
 }
@@ -1025,20 +1048,20 @@ button.btn-danger:hover {
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
+    gap: 4px;
+    padding: 2px 6px;
     background: var(--gradient-panel-raised);
     border: 1px outset var(--mindmaze-stone);
-    border-radius: 4px;
+    border-radius: 3px;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.3), inset 1px 1px 0 rgba(255,255,255,0.1);
     text-shadow: var(--shadow-text-emboss);
     background-image: var(--mindmaze-stone-pattern);
-    background-size: 24px 24px;
+    background-size: 16px 16px;
 }
 
 .legend-color {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     border-radius: 2px;
     border: 1px inset var(--mindmaze-stone);
     box-shadow: inset 1px 1px 2px rgba(0,0,0,0.4);

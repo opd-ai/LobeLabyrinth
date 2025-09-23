@@ -217,29 +217,27 @@
     position: absolute;
     top: -20px;
     left: 50%;
-    transform: translateX(-50%);
-    background: var(--gradient-gold);
-    color: var(--medieval-ink);
-    padding: 8px 20px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-family: var(--font-title);
+        font-weight: bold;
+        color: var(--mindmaze-gold);
+        font-size: 0.8rem;
+        margin-bottom: 2px;
+        font-family: var(--font-heading);
+        text-transform: uppercase;
     font-size: 0.9em;
     letter-spacing: 1px;
     border: 2px solid var(--medieval-gold-dark);
-}
-
-.achievement-gallery-header {
-    position: sticky;
-    top: 0;
-    background: var(--gradient-parchment);
+        font-weight: bold;
+        color: var(--mindmaze-text);
+        font-size: 1rem;
+        margin-bottom: 4px;
+        font-family: var(--font-heading);
     padding: 25px;
     border-bottom: 3px solid var(--medieval-gold);
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 16px 16px 0 0;
-    z-index: 10;
+        color: var(--mindmaze-text-dim);
+        font-size: 0.85rem;
+        margin-bottom: 6px;
+        line-height: 1.3;
 }
 
 .achievement-gallery-header h3 {
@@ -268,15 +266,14 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    transition: all 0.3s ease;
-    box-shadow: var(--shadow-button);
-}
-
-.achievement-close-btn:hover {
-    background: var(--medieval-crimson-light);
-    transform: scale(1.1);
-}
-
+        background: var(--mindmaze-panel);
+        border: 3px outset var(--mindmaze-stone);
+        border-radius: 12px;
+        max-width: 900px;
+        max-height: 85vh;
+        width: 100%;
+        overflow-y: auto;
+        box-shadow: var(--shadow-raised);
 .achievement-categories {
     padding: 25px;
 }
@@ -310,10 +307,10 @@
     gap: 18px;
 }
 
-.achievement-card {
-    background: var(--gradient-parchment);
-    border: 2px solid var(--medieval-brown);
-    border-radius: 12px;
+        color: var(--mindmaze-gold);
+        margin: 0;
+        font-family: var(--font-heading);
+        font-size: clamp(1rem, 2vw, 1.4rem);
     padding: 18px;
     display: flex;
     gap: 15px;

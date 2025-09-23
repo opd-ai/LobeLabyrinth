@@ -48,7 +48,7 @@
 
 /* High visibility focus outline for all interactive elements */
 :focus {
-    outline: 3px solid #005fcc;
+    outline: 3px solid var(--mindmaze-gold);
     outline-offset: 2px;
     border-radius: 2px;
 }
@@ -58,9 +58,9 @@ button:focus,
 input[type="button"]:focus,
 input[type="submit"]:focus,
 [role="button"]:focus {
-    outline: 3px solid #005fcc;
+    outline: 3px solid var(--mindmaze-gold);
     outline-offset: 2px;
-    box-shadow: 0 0 0 1px #fff, 0 0 0 4px #005fcc;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 0 0 4px rgba(212,175,55,0.25);
 }
 
 /* Focus for form elements */
@@ -216,6 +216,13 @@ body.keyboard-navigation :focus {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+}
+
+/* Ensure focus rings remain visible on very dark backgrounds */
+@media (forced-colors: active) {
+    :focus {
+        outline: 4px solid WindowText !important;
     }
 }
 

@@ -10,10 +10,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: 
-        radial-gradient(circle at 30% 40%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
-        radial-gradient(circle at 70% 60%, rgba(139, 0, 0, 0.15) 0%, transparent 50%),
-        rgba(44, 24, 16, 0.95);
+    background: linear-gradient(180deg, rgba(8,8,10,0.95), rgba(0,0,0,0.95));
     z-index: 2000;
     display: none;
     align-items: center;
@@ -30,31 +27,28 @@
 }
 
 .victory-content {
-    background: var(--gradient-parchment);
-    border: 4px solid var(--medieval-gold);
-    border-radius: 25px;
-    max-width: 850px;
-    max-height: 90vh;
-    width: 100%;
+    background: var(--mindmaze-panel);
+    border: 3px outset var(--mindmaze-stone);
+    border-radius: 12px;
+    max-width: 900px;
+    max-height: 80vh;
+    width: 92vw;
     overflow-y: auto;
-    box-shadow: 
-        var(--shadow-castle),
-        0 0 60px rgba(212, 175, 55, 0.3);
-    animation: victoryGrandEntrance 1s ease-out;
+    box-shadow: var(--shadow-raised);
+    animation: victoryGrandEntrance 0.9s ease-out;
     position: relative;
 }
 
 .victory-content::before {
     content: '';
     position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background: var(--gradient-royal);
-    border-radius: 29px;
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+    background: linear-gradient(90deg, rgba(20,20,20,0.5), rgba(40,40,40,0.2));
+    border-radius: 16px;
     z-index: -1;
-    animation: victoryAura 3s ease-in-out infinite;
 }
 
 @keyframes victoryGrandEntrance {
@@ -78,10 +72,10 @@
 
 .victory-header {
     text-align: center;
-    padding: 35px 35px 25px;
-    background: var(--gradient-royal);
-    color: white;
-    border-radius: 21px 21px 0 0;
+    padding: 20px;
+    background: linear-gradient(90deg, rgba(30,30,60,0.95), rgba(10,10,20,0.95));
+    color: var(--mindmaze-gold);
+    border-radius: 10px 10px 0 0;
     position: relative;
     overflow: hidden;
 }
@@ -102,22 +96,13 @@
 }
 
 .victory-title {
-    font-size: 3em;
+    font-size: clamp(1.2rem, 3vw, 2.2rem);
     font-weight: bold;
-    margin-bottom: 12px;
-    margin-top: 25px;
-    text-shadow: 
-        2px 2px 4px rgba(0, 0, 0, 0.5),
-        0 0 20px rgba(255, 255, 255, 0.3);
-    animation: victoryTitlePulse 4s ease-in-out infinite;
-    font-family: var(--font-title);
-    letter-spacing: 3px;
-    background: linear-gradient(45deg, #ffffff, #f0f0f0, #ffffff);
-    background-size: 200% auto;
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: victoryShine 3s linear infinite, victoryTitlePulse 4s ease-in-out infinite;
+    margin: 8px 0 6px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.8);
+    font-family: var(--font-heading);
+    letter-spacing: 2px;
+    color: var(--mindmaze-gold);
 }
 
 @keyframes victoryTitlePulse {

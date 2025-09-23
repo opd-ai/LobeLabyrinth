@@ -448,9 +448,13 @@ body::before {
     font-size: clamp(0.8rem, 1.2vw, 1rem);
     font-family: var(--font-ui);
     color: var(--mindmaze-text);
-    transition: all 0.1s ease;
+    transition: all 0.08s ease;
     position: relative;
-    min-height: 32px;
+    min-height: 36px;
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.5), inset 1px 1px 0 rgba(255,255,255,0.15);
+    text-shadow: var(--shadow-text-emboss);
+    background-image: var(--mindmaze-stone-pattern);
+    background-size: 48px 48px;
 }
 
 .answer-btn::before {
@@ -472,6 +476,8 @@ body::before {
     background: var(--gradient-button-pressed);
     border: 2px inset var(--mindmaze-stone);
     transform: translateY(1px);
+    box-shadow: var(--shadow-button-pressed);
+    background-image: var(--mindmaze-noise);
 }
 
 .answer-btn:disabled {
@@ -771,10 +777,13 @@ button {
     font-weight: normal;
     font-family: var(--font-ui);
     font-size: clamp(0.7rem, 1.1vw, 0.9rem);
-    transition: all 0.1s ease;
-    box-shadow: var(--shadow-raised);
+    transition: all 0.08s ease;
+    box-shadow: 2px 2px 3px rgba(0,0,0,0.5), inset 1px 1px 0 rgba(255,255,255,0.15);
     position: relative;
-    min-height: 24px;
+    min-height: 28px;
+    text-shadow: var(--shadow-text-emboss);
+    background-image: var(--mindmaze-stone-pattern);
+    background-size: 32px 32px;
 }
 
 button::before {
@@ -796,8 +805,9 @@ button:hover {
 button:active {
     background: var(--gradient-button-pressed);
     border: 2px inset var(--mindmaze-stone);
-    box-shadow: var(--shadow-inset);
+    box-shadow: var(--shadow-button-pressed);
     transform: translateY(1px);
+    background-image: var(--mindmaze-noise);
 }
 
 button:disabled {
@@ -806,6 +816,8 @@ button:disabled {
     border: 2px inset var(--mindmaze-stone-dark);
     cursor: not-allowed;
     box-shadow: var(--shadow-inset);
+    background-image: var(--mindmaze-noise);
+    filter: grayscale(0.7);
 }
 
 button.btn-secondary {
@@ -942,61 +954,70 @@ button.btn-danger:hover {
     100% { transform: rotate(360deg); }
 }
 
-/* Map Canvas Styles - Cartographer's Work */
+/* Map Canvas Styles - Authentic 90s Cartographer Interface */
 #map-area {
-    background: var(--gradient-parchment);
-    border: 3px solid var(--mindmaze-brown);
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 20px;
-    box-shadow: var(--shadow-scroll);
+    background: var(--gradient-panel-inset);
+    border: 3px inset var(--mindmaze-stone);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
     position: relative;
+    background-image: var(--mindmaze-noise);
 }
 
 #map-area::before {
     content: '🗺️';
     position: absolute;
-    top: -12px;
-    left: 20px;
-    font-size: 1.5em;
-    background: var(--mindmaze-panel);
-    padding: 0 10px;
+    top: -8px;
+    left: 16px;
+    font-size: 1.2em;
+    background: var(--gradient-panel-raised);
+    padding: 2px 8px;
+    border: 1px outset var(--mindmaze-stone);
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.4);
 }
 
 #map-canvas {
     width: 100%;
-    height: clamp(200px, 25vh, 300px);
-    border: 2px inset var(--mindmaze-stone);
+    height: clamp(180px, 22vh, 280px);
+    border: 3px inset var(--mindmaze-stone);
     display: block;
     margin: 0 auto;
     cursor: default;
     background: var(--mindmaze-black);
-    box-shadow: var(--shadow-inset);
+    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.6);
+    background-image: var(--mindmaze-noise);
+    background-blend-mode: overlay;
 }
-    .map-header { /* retro header */
-        padding: 8px 12px;
-        border-bottom: 2px solid rgba(0,0,0,0.15);
-        background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+    .map-header { /* Authentic 90s header panel */
+        padding: 6px 10px;
+        border-bottom: 2px inset var(--mindmaze-stone);
+        background: var(--gradient-panel-inset);
+        box-shadow: inset 0 1px 0 rgba(0,0,0,0.2), inset 0 -1px 0 rgba(255,255,255,0.05);
+        background-image: var(--mindmaze-noise);
     }
 
 .map-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px;
 }
 
 .map-header h3 {
     color: var(--mindmaze-text);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     font-family: var(--font-heading);
-    font-size: 1.5em;
+    font-size: 1.3em;
+    text-shadow: var(--shadow-text-emboss);
 }
 
 .map-legend {
     display: flex;
     justify-content: center;
-    gap: 25px;
-    margin-top: 15px;
-    font-size: 0.95em;
+    gap: 16px;
+    margin-top: 12px;
+    font-size: 0.85em;
     flex-wrap: wrap;
     font-family: var(--font-ui);
 }
@@ -1004,18 +1025,23 @@ button.btn-danger:hover {
 .legend-item {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 5px 10px;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 15px;
-    border: 1px solid var(--mindmaze-brown);
+    gap: 6px;
+    padding: 4px 8px;
+    background: var(--gradient-panel-raised);
+    border: 1px outset var(--mindmaze-stone);
+    border-radius: 4px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.3), inset 1px 1px 0 rgba(255,255,255,0.1);
+    text-shadow: var(--shadow-text-emboss);
+    background-image: var(--mindmaze-stone-pattern);
+    background-size: 24px 24px;
 }
 
 .legend-color {
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
-    border: 2px solid var(--mindmaze-brown);
+    width: 14px;
+    height: 14px;
+    border-radius: 2px;
+    border: 1px inset var(--mindmaze-stone);
+    box-shadow: inset 1px 1px 2px rgba(0,0,0,0.4);
 }
 
 .legend-current { background-color: var(--mindmaze-blue); }

@@ -184,53 +184,32 @@ body::before {
     line-height: 1.1;
 }
 
-/* Main Game Area - Viewport-Constrained Content Area */
+/* Main Game Area - Windows 95 Content Panel */
 .game-main {
     grid-area: main;
-    background: var(--gradient-panel-inset);
-    border: 3px inset var(--mindmaze-stone);
+    background: var(--mindmaze-gray);
+    border: var(--border-sunken);
     padding: 12px;
-    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
     gap: clamp(4px, 1vh, 8px);
-    position: relative;
     overflow: hidden;
-    background-image: var(--mindmaze-noise);
-    background-blend-mode: multiply;
     min-height: 0;
     max-height: 100%;
     container-type: size;
 }
 
-.game-main::before {
-    content: '';
-    position: absolute;
-    top: 6px;
-    left: 6px;
-    right: 6px;
-    bottom: 6px;
-    border: 1px solid rgba(139, 69, 19, 0.3);
-    border-radius: 4px;
-    pointer-events: none;
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-}
-
-/* Sidebar - Adaptive Info Panel */
+/* Sidebar - Windows 95 Information Panel */
 .game-sidebar {
     grid-area: sidebar;
     display: flex;
     flex-direction: column;
     gap: clamp(4px, 1vh, 8px);
     padding: clamp(8px, 2vw, 12px);
-    background: var(--gradient-panel-raised);
-    border: 2px outset var(--mindmaze-stone);
-    border-left: 3px inset var(--mindmaze-stone);
-    box-shadow: var(--shadow-raised), inset 0 0 0 1px rgba(255,255,255,0.15);
+    background: var(--mindmaze-gray);
+    border-left: var(--border-sunken);
     overflow-y: auto;
     overflow-x: hidden;
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 32px 32px;
     min-height: 0;
     max-height: 100%;
     scrollbar-width: none;
@@ -430,73 +409,49 @@ body::before {
     display: none;
 }
 
+/* Answer Area - Windows 95 Quiz Buttons */
 .answer-btn {
     display: block;
     width: 100%;
     margin: clamp(4px, 0.8vh, 6px) 0;
     padding: clamp(8px, 1.5vh, 12px) clamp(12px, 2.2vw, 16px);
-    background: var(--gradient-button);
-    border: 3px outset var(--mindmaze-stone);
+    background: var(--mindmaze-gray);
+    border: var(--border-raised);
     cursor: pointer;
     text-align: left;
     font-size: clamp(0.85rem, 1.4vw, 1.05rem);
     font-family: var(--font-ui);
     color: var(--mindmaze-text);
-    transition: all 0.1s ease;
-    position: relative;
     min-height: clamp(32px, 5vh, 42px);
-    box-shadow: var(--shadow-raised);
-    text-shadow: var(--shadow-text-raised);
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 24px 24px;
-    border-radius: 2px;
-}
-
-.answer-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.2), transparent);
-    transition: left 0.5s ease;
 }
 
 .answer-btn:hover {
-    background: var(--gradient-button);
-    filter: brightness(1.15);
-    transform: translateY(-1px);
+    background: var(--mindmaze-gray-light);
 }
 
 .answer-btn:active {
-    background: var(--gradient-button-pressed);
-    border: 3px inset var(--mindmaze-stone);
-    transform: translateY(1px);
-    box-shadow: var(--shadow-button-pressed);
-    background-image: var(--mindmaze-noise);
+    border: var(--border-sunken);
+    background: var(--mindmaze-gray-dark);
 }
 
 .answer-btn:disabled {
     cursor: not-allowed;
-    background: linear-gradient(145deg, #2A2A2A, #1A1A1A);
+    background: var(--mindmaze-gray);
     color: var(--mindmaze-text-dim);
-    border: 3px inset var(--mindmaze-stone-dark);
+    border: var(--border-flat);
     opacity: 0.6;
 }
 
 .answer-btn.answer-correct {
-    background: linear-gradient(135deg, #2E7D32, #4CAF50);
-    border: 3px outset #2E7D32;
-    color: white;
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+    background: var(--mindmaze-forest);
+    border: var(--border-raised);
+    color: var(--mindmaze-text-light);
 }
 
 .answer-btn.answer-incorrect {
-    background: linear-gradient(135deg, var(--mindmaze-crimson), #CD5C5C);
-    border: 3px outset var(--mindmaze-crimson);
-    color: white;
-    text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.8);
+    background: var(--mindmaze-crimson);
+    border: var(--border-raised);
+    color: var(--mindmaze-text-light);
 }
 
 /* Keyboard Navigation - Blessed Selection */
@@ -768,76 +723,53 @@ button:focus {
     margin-top: 18px;
 }
 
+/* Game Controls - Windows 95 Push Buttons */
 button {
-    background: var(--gradient-button-raised);
+    background: var(--mindmaze-gray);
     color: var(--mindmaze-text);
-    border: 2px outset var(--mindmaze-stone);
+    border: var(--border-raised);
     padding: var(--spacing-sm) var(--spacing-md);
     cursor: pointer;
     font-weight: normal;
     font-family: var(--font-ui);
     font-size: clamp(0.7rem, 1.1vw, 0.9rem);
-    transition: all 0.08s ease;
-    box-shadow: 2px 2px 3px rgba(0,0,0,0.5), inset 1px 1px 0 rgba(255,255,255,0.15);
-    position: relative;
     min-height: 28px;
-    text-shadow: var(--shadow-text-emboss);
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 32px 32px;
-}
-
-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
 }
 
 button:hover {
-    background: var(--gradient-button-raised);
-    filter: brightness(1.1);
+    background: var(--mindmaze-gray-light);
 }
 
 button:active {
-    background: var(--gradient-button-pressed);
-    border: 2px inset var(--mindmaze-stone);
-    box-shadow: var(--shadow-button-pressed);
-    transform: translateY(1px);
-    background-image: var(--mindmaze-noise);
+    border: var(--border-sunken);
+    background: var(--mindmaze-gray-dark);
 }
 
 button:disabled {
-    background: var(--mindmaze-stone-dark);
+    background: var(--mindmaze-gray);
     color: var(--mindmaze-text-dim);
-    border: 2px inset var(--mindmaze-stone-dark);
+    border: var(--border-flat);
     cursor: not-allowed;
-    box-shadow: var(--shadow-inset);
-    background-image: var(--mindmaze-noise);
-    filter: grayscale(0.7);
 }
 
 button.btn-secondary {
-    background: var(--gradient-panel-inset);
+    background: var(--mindmaze-gray);
     color: var(--mindmaze-text-dim);
-    border-color: var(--mindmaze-stone);
+    border: var(--border-raised);
 }
 
 button.btn-secondary:hover {
-    background: var(--mindmaze-stone);
+    background: var(--mindmaze-gray-light);
 }
 
 button.btn-danger {
-    background: linear-gradient(135deg, var(--mindmaze-crimson), var(--mindmaze-crimson-light));
-    color: white;
-    border-color: var(--mindmaze-crimson);
+    background: var(--mindmaze-brown);
+    color: var(--mindmaze-text-light);
+    border: var(--border-raised);
 }
 
 button.btn-danger:hover {
-    background: var(--mindmaze-crimson);
+    background: var(--mindmaze-brown-light);
 }
 
 /* Navigation - Castle Pathways */

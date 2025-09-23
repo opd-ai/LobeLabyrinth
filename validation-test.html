@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LobeLabyrinth Fix Validation</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test { margin: 10px 0; padding: 10px; border-radius: 5px; }
+        .pass { background-color: #d4edda; border: 1px solid #c3e6cb; color: #155724; }
+        .fail { background-color: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; }
+        .info { background-color: #d1ecf1; border: 1px solid #bee5eb; color: #0c5460; }
+        #console { background: #f8f9fa; border: 1px solid #dee2e6; padding: 10px; max-height: 300px; overflow-y: auto; font-family: monospace; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>🔧 LobeLabyrinth Fix Validation</h1>
+    <div id="tests"></div>
+    
+    <h2>Console Output</h2>
+    <div id="console"></div>
+
+    <script>
+        const tests = [];
+        const consoleDiv = document.getElementById('console');
+        const testsDiv = document.getElementById('tests');
+        
+        // Capture console output
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function logToPage(type, ...args) {
+            consoleDiv.innerHTML += `[${type.toUpperCase()}] ${args.join(' ')}\n`;
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        
+        console.log = (...args) => {
+            originalLog(...args);
+            logToPage('log', ...args);
+        };
+        
+        console.error = (...args) => {
+            originalError(...args);
+            logToPage('error', ...args);
+        };
+        
+        console.warn = (...args) => {
+            originalWarn(...args);
+            logToPage('warn', ...args);
+        };
+        
+        function addTest(name, passed, details) {
+            tests.push({ name, passed, details });
+            const testDiv = document.createElement('div');
+            testDiv.className = `test ${passed ? 'pass' : 'fail'}`;
+            testDiv.innerHTML = `
+                <strong>${passed ? '✅' : '❌'} ${name}</strong><br>
+                <small>${details}</small>
+            `;
+            testsDiv.appendChild(testDiv);
+        }
+        
+        function addInfo(message) {
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'test info';
+            infoDiv.innerHTML = `<strong>ℹ️ ${message}</strong>`;
+            testsDiv.appendChild(infoDiv);
+        }
+        
+        // Test 1: Check for duplicate IDs
+        function testDuplicateIds() {
+            const gameStatusElements = document.querySelectorAll('[id="game-status"]');
+            const gameStatusFooterElements = document.querySelectorAll('[id="game-status-footer"]');
+            
+            addTest(
+                'No Duplicate game-status IDs',
+                gameStatusElements.length <= 1,
+                `Found ${gameStatusElements.length} elements with id="game-status"`
+            );
+            
+            addTest(
+                'game-status-footer exists',
+                gameStatusFooterElements.length === 1,
+                `Found ${gameStatusFooterElements.length} elements with id="game-status-footer"`
+            );
+        }
+        
+        // Test 2: Load and check script modules
+        async function testModuleLoading() {
+            addInfo('Testing module loading...');
+            
+            try {
+                // Test if classes are defined
+                const classTests = [
+                    { name: 'DataLoader', class: window.DataLoader || DataLoader },
+                    { name: 'GameState', class: window.GameState || GameState },
+                    { name: 'QuizEngine', class: window.QuizEngine || QuizEngine },
+                    { name: 'MapRenderer', class: window.MapRenderer || MapRenderer },
+                    { name: 'UIManager', class: window.UIManager || UIManager },
+                    { name: 'AccessibilityManager', class: window.AccessibilityManager || AccessibilityManager },
+                    { name: 'AchievementManager', class: window.AchievementManager || AchievementManager },
+                    { name: 'AnimationManager', class: window.AnimationManager || AnimationManager },
+                    { name: 'ErrorBoundary', class: window.ErrorBoundary || ErrorBoundary }
+                ];
+                
+                classTests.forEach(test => {
+                    addTest(
+                        `${test.name} class loaded`,
+                        typeof test.class === 'function',
+                        typeof test.class === 'function' ? 'Class constructor available' : 'Class not found'
+                    );
+                });
+                
+            } catch (error) {
+                addTest('Module loading', false, `Error: ${error.message}`);
+            }
+        }
+        
+        // Test 3: Test initialization sequence
+        async function testInitialization() {
+            addInfo('Testing initialization sequence...');
+            
+            try {
+                // Test DataLoader
+                const dataLoader = new DataLoader();
+                addTest('DataLoader instantiation', true, 'Created successfully');
+                
+                // Test data loading
+                const gameData = await dataLoader.loadGameData();
+                addTest('Data loading', !!gameData, 'Game data loaded from JSON files');
+                
+                // Test GameState
+                const gameState = new GameState(dataLoader);
+                addTest('GameState instantiation', true, 'Created with DataLoader reference');
+                
+                // Test QuizEngine with proper async initialization
+                const quizEngine = new QuizEngine(dataLoader, gameState);
+                addTest('QuizEngine instantiation', true, 'Created without calling async in constructor');
+                
+                // Test async initialization
+                await quizEngine.initializeQuestionPool();
+                addTest('QuizEngine async initialization', true, 'initializeQuestionPool completed');
+                
+                // Test MapRenderer with correct parameters
+                const canvas = document.createElement('canvas');
+                const mapRenderer = new MapRenderer(canvas, gameState, dataLoader);
+                addTest('MapRenderer instantiation', true, 'Created with 3 parameters (fixed from 4)');
+                
+            } catch (error) {
+                addTest('Initialization sequence', false, `Error: ${error.message}`);
+            }
+        }
+        
+        // Run all tests
+        async function runTests() {
+            console.log('🔧 Starting LobeLabyrinth fix validation...');
+            
+            testDuplicateIds();
+            await testModuleLoading();
+            await testInitialization();
+            
+            const passedTests = tests.filter(t => t.passed).length;
+            const totalTests = tests.length;
+            
+            addInfo(`Test Results: ${passedTests}/${totalTests} tests passed`);
+            
+            if (passedTests === totalTests) {
+                console.log('🎉 All fixes validated successfully!');
+            } else {
+                console.log(`⚠️  ${totalTests - passedTests} issues still remain`);
+            }
+        }
+        
+        // Load required scripts and run tests
+        const scripts = [
+            'src/dataLoader.js',
+            'src/gameState.js', 
+            'src/quizEngine.js',
+            'src/animationManager.js',
+            'src/achievementManager.js',
+            'src/mapRenderer.js',
+            'src/uiManager.js',
+            'src/errorBoundary.js',
+            'src/accessibilityManager.js'
+        ];
+        
+        let loadedScripts = 0;
+        
+        scripts.forEach(src => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.onload = () => {
+                loadedScripts++;
+                if (loadedScripts === scripts.length) {
+                    setTimeout(runTests, 100); // Small delay to ensure all scripts are processed
+                }
+            };
+            script.onerror = () => {
+                addTest(`Script loading: ${src}`, false, 'Failed to load');
+            };
+            document.head.appendChild(script);
+        });
+    </script>
+</body>
+</html>

@@ -1,28 +1,24 @@
 /**
- * Accessibility CSS - Enhanced styles for dark medieval theme
+ * Accessibility CSS - Enhanced styles for Windows 95 MindMaze theme
  * Supports high contrast mode, focus indicators, reduced motion,
  * and screen reader optimizations
  */
 
 /* ===== ENHANCED FOCUS INDICATORS ===== */
 
-/* Enhanced focus indicators - Optimized for Dark Stone Theme */
+/* Enhanced focus indicators - Windows 95 System Style */
 :focus {
-    outline: 3px solid var(--mindmaze-gold) !important;
-    outline-offset: 2px;
-    border-radius: 2px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 5px rgba(212,175,55,0.4) !important;
+    outline: 2px dotted var(--mindmaze-text) !important;
+    outline-offset: 1px;
 }
 
-/* Enhanced focus for buttons - 90s Style Compatible */
+/* Enhanced focus for buttons - Windows 95 System Style */
 button:focus,
 input[type="button"]:focus,
 input[type="submit"]:focus,
 [role="button"]:focus {
-    outline: 3px solid var(--mindmaze-gold) !important;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 5px rgba(212,175,55,0.5), inset 0 0 0 1px rgba(255,255,255,0.2) !important;
-    border-color: var(--mindmaze-gold) !important;
+    outline: 2px dotted var(--mindmaze-text) !important;
+    outline-offset: 1px;
 }
 
 /* ===== SCREEN READER UTILITIES ===== */
@@ -121,21 +117,23 @@ body.keyboard-navigation :focus {
 
 /* ===== HIGH CONTRAST MODE ===== */
 
-/* Base high contrast variables - Enhanced for Dark Theme */
+/* Base high contrast variables - Windows 95 System Colors */
 .high-contrast {
-    --mindmaze-text: #FFFFFF !important;
-    --mindmaze-text-dim: #E0E0E0 !important;
+    --mindmaze-text: #000000 !important;
+    --mindmaze-text-dim: #000000 !important;
+    --mindmaze-text-light: #FFFFFF !important;
+    --mindmaze-gray: #FFFFFF !important;
+    --mindmaze-gray-light: #FFFFFF !important;
+    --mindmaze-gray-dark: #C0C0C0 !important;
+    --mindmaze-stone: #000000 !important;
+    --mindmaze-navy: #000080 !important;
     --mindmaze-gold: #FFFF00 !important;
-    --mindmaze-stone: #FFFFFF !important;
-    --mindmaze-black: #000000 !important;
-    --mindmaze-panel: #000000 !important;
-    --mindmaze-brown: #8B4513 !important;
     --mindmaze-blue: #0000FF !important;
     --mindmaze-crimson: #FF0000 !important;
-    --gradient-panel-raised: linear-gradient(145deg, #FFFFFF 0%, #E0E0E0 100%) !important;
-    --gradient-panel-inset: linear-gradient(145deg, #808080 0%, #404040 100%) !important;
-    --shadow-raised: 2px 2px 0px #000000 !important;
-    --shadow-inset: inset 2px 2px 0px #000000 !important;
+    --mindmaze-brown: #800000 !important;
+    --border-raised: 2px solid #000000 !important;
+    --border-sunken: 2px solid #000000 !important;
+    --border-flat: 1px solid #000000 !important;
 }
 
 /* Apply high contrast styles */

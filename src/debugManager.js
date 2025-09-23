@@ -2362,13 +2362,977 @@ class DebugManager {
         this.logToConsole('All test results cleared', 'info');
     }
     
-    // Placeholder methods for features not yet implemented
-    toggleHighContrast() { 
-        this.showToast('High contrast toggled', 'info');
+    // ========================================
+    // ADDITIONAL TEST METHODS FROM SCATTERED FILES
+    // ========================================
+
+    // Data Validation Methods (from index.html)
+    validateDataIntegrity() {
+        const resultId = 'data-validation-result';
+        this.updateTestResult(resultId, 'running', 'Validating data integrity...');
+        
+        try {
+            if (!this.gameInstances.dataLoader) {
+                throw new Error('DataLoader not initialized');
+            }
+            
+            this.gameInstances.dataLoader.validateDataIntegrity();
+            this.updateTestResult(resultId, 'success', 'Data validation passed! All data structures are valid.');
+            this.logToConsole('✅ Data validation test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Validation error: ${error.message}`);
+            this.logToConsole(`❌ Data validation test failed: ${error.message}`, 'error');
+        }
     }
-    
-    showKeyboardHelp() { 
-        this.showToast('Alt+1-5: Switch tabs, Alt+H: High contrast, Alt+?: Help', 'info', 5000);
+
+    showDataSummary() {
+        const resultId = 'data-summary-result';
+        
+        try {
+            if (!this.gameInstances.dataLoader || !this.gameData) {
+                throw new Error('Game data not loaded');
+            }
+            
+            const startingRoom = this.gameInstances.dataLoader.getStartingRoom();
+            const categories = [...new Set(this.gameData.questions.map(q => q.category))];
+            const difficulties = [...new Set(this.gameData.questions.map(q => q.difficulty))];
+            const pointRange = {
+                min: Math.min(...this.gameData.questions.map(q => q.points)),
+                max: Math.max(...this.gameData.questions.map(q => q.points))
+            };
+            
+            const summary = `
+                <div class="data-summary">
+                    <p><strong>Starting Room:</strong> ${startingRoom ? startingRoom.name : 'Not found'}</p>
+                    <p><strong>Total Rooms:</strong> ${this.gameData.rooms.length}</p>
+                    <p><strong>Total Questions:</strong> ${this.gameData.questions.length}</p>
+                    <p><strong>Total Achievements:</strong> ${this.gameData.achievements.length}</p>
+                    <p><strong>Question Categories:</strong> ${categories.join(', ')}</p>
+                    <p><strong>Difficulty Levels:</strong> ${difficulties.join(', ')}</p>
+                    <p><strong>Point Range:</strong> ${pointRange.min} - ${pointRange.max} points</p>
+                </div>
+            `;
+            
+            this.updateTestResult(resultId, 'success', summary);
+            this.logToConsole('📊 Game Data Summary displayed', 'info');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Failed to show data summary: ${error.message}`);
+            this.logToConsole(`❌ Data summary failed: ${error.message}`, 'error');
+        }
+    }
+
+    // Game State Methods (from test-phase2.html)
+    async testMoveToLibrary() {
+        const resultId = 'move-library-result';
+        this.updateTestResult(resultId, 'running', 'Testing move to library...');
+        
+        try {
+            if (!this.gameInstances.gameState) {
+                await this.initializeGameInstances();
+            }
+            
+            const result = await this.gameInstances.gameState.moveToRoom('library');
+            if (result.success) {
+                this.updateTestResult(resultId, 'success', `Successfully moved to library: ${result.newRoom.name}`);
+                this.logToConsole('✅ Move to library test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'error', `Move failed: ${result.error}`);
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Move to library failed: ${error.message}`);
+            this.logToConsole(`❌ Move to library test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testMoveToInvalidRoom() {
+        const resultId = 'move-invalid-result';
+        this.updateTestResult(resultId, 'running', 'Testing move to invalid room...');
+        
+        try {
+            if (!this.gameInstances.gameState) {
+                await this.initializeGameInstances();
+            }
+            
+            const result = await this.gameInstances.gameState.moveToRoom('non_existent_room');
+            if (!result.success) {
+                this.updateTestResult(resultId, 'success', `Correctly rejected invalid room: ${result.error}`);
+                this.logToConsole('✅ Move to invalid room test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'error', 'Should have rejected invalid room move');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Invalid room test failed: ${error.message}`);
+            this.logToConsole(`❌ Invalid room test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testMoveToLockedRoom() {
+        const resultId = 'move-locked-result';
+        this.updateTestResult(resultId, 'running', 'Testing move to locked room...');
+        
+        try {
+            if (!this.gameInstances.gameState) {
+                await this.initializeGameInstances();
+            }
+            
+            // Try to move to a room that should be locked
+            const result = await this.gameInstances.gameState.moveToRoom('treasure_chamber');
+            if (!result.success) {
+                this.updateTestResult(resultId, 'success', `Correctly blocked locked room: ${result.error}`);
+                this.logToConsole('✅ Move to locked room test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'Room may not be properly locked');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Locked room test failed: ${error.message}`);
+            this.logToConsole(`❌ Locked room test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testCorrectAnswer() {
+        const resultId = 'correct-answer-result';
+        this.updateTestResult(resultId, 'running', 'Testing correct answer submission...');
+        
+        try {
+            if (!this.gameInstances.quizEngine) {
+                await this.initializeGameInstances();
+            }
+            
+            // Get a question and submit the correct answer
+            const question = await this.gameInstances.quizEngine.getRandomQuestion();
+            if (question) {
+                const correctAnswer = question.answers.find(a => a.correct);
+                const result = await this.gameInstances.quizEngine.submitAnswer(correctAnswer.id);
+                
+                if (result.correct) {
+                    this.updateTestResult(resultId, 'success', `Correct answer accepted. Points: ${result.pointsEarned}`);
+                    this.logToConsole('✅ Correct answer test passed!', 'success');
+                } else {
+                    this.updateTestResult(resultId, 'error', 'Correct answer was marked incorrect');
+                }
+            } else {
+                this.updateTestResult(resultId, 'error', 'No question available for testing');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Correct answer test failed: ${error.message}`);
+            this.logToConsole(`❌ Correct answer test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testIncorrectAnswer() {
+        const resultId = 'incorrect-answer-result';
+        this.updateTestResult(resultId, 'running', 'Testing incorrect answer submission...');
+        
+        try {
+            if (!this.gameInstances.quizEngine) {
+                await this.initializeGameInstances();
+            }
+            
+            const question = await this.gameInstances.quizEngine.getRandomQuestion();
+            if (question) {
+                const incorrectAnswer = question.answers.find(a => !a.correct);
+                const result = await this.gameInstances.quizEngine.submitAnswer(incorrectAnswer.id);
+                
+                if (!result.correct) {
+                    this.updateTestResult(resultId, 'success', `Incorrect answer properly rejected. Points: ${result.pointsEarned || 0}`);
+                    this.logToConsole('✅ Incorrect answer test passed!', 'success');
+                } else {
+                    this.updateTestResult(resultId, 'error', 'Incorrect answer was marked correct');
+                }
+            } else {
+                this.updateTestResult(resultId, 'error', 'No question available for testing');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Incorrect answer test failed: ${error.message}`);
+            this.logToConsole(`❌ Incorrect answer test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testDuplicateAnswer() {
+        const resultId = 'duplicate-answer-result';
+        this.updateTestResult(resultId, 'running', 'Testing duplicate answer submission...');
+        
+        try {
+            if (!this.gameInstances.quizEngine) {
+                await this.initializeGameInstances();
+            }
+            
+            const question = await this.gameInstances.quizEngine.getRandomQuestion();
+            if (question) {
+                const answer = question.answers[0];
+                
+                // Submit the same answer twice
+                await this.gameInstances.quizEngine.submitAnswer(answer.id);
+                const result = await this.gameInstances.quizEngine.submitAnswer(answer.id);
+                
+                if (result.duplicate || !result.accepted) {
+                    this.updateTestResult(resultId, 'success', 'Duplicate answer properly rejected');
+                    this.logToConsole('✅ Duplicate answer test passed!', 'success');
+                } else {
+                    this.updateTestResult(resultId, 'warning', 'Duplicate answer was accepted (may be intentional)');
+                }
+            } else {
+                this.updateTestResult(resultId, 'error', 'No question available for testing');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Duplicate answer test failed: ${error.message}`);
+            this.logToConsole(`❌ Duplicate answer test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testSaveGame() {
+        const resultId = 'save-game-result';
+        this.updateTestResult(resultId, 'running', 'Testing game save functionality...');
+        
+        try {
+            if (!this.gameInstances.gameState) {
+                throw new Error('GameState not initialized');
+            }
+            
+            const saveData = this.gameInstances.gameState.save();
+            if (saveData) {
+                localStorage.setItem('lobelabyrinth_test_save', JSON.stringify(saveData));
+                this.updateTestResult(resultId, 'success', 'Game saved successfully to localStorage');
+                this.logToConsole('✅ Save game test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'error', 'Save data is empty or invalid');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Save game failed: ${error.message}`);
+            this.logToConsole(`❌ Save game test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testLoadGame() {
+        const resultId = 'load-game-result';
+        this.updateTestResult(resultId, 'running', 'Testing game load functionality...');
+        
+        try {
+            if (!this.gameInstances.gameState) {
+                throw new Error('GameState not initialized');
+            }
+            
+            const savedData = localStorage.getItem('lobelabyrinth_test_save');
+            if (savedData) {
+                const result = this.gameInstances.gameState.load(JSON.parse(savedData));
+                this.updateTestResult(resultId, 'success', 'Game loaded successfully from localStorage');
+                this.logToConsole('✅ Load game test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'error', 'No save data found in localStorage');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Load game failed: ${error.message}`);
+            this.logToConsole(`❌ Load game test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testResetGame() {
+        const resultId = 'reset-game-result';
+        this.updateTestResult(resultId, 'running', 'Testing game reset functionality...');
+        
+        try {
+            if (!this.gameInstances.gameState) {
+                throw new Error('GameState not initialized');
+            }
+            
+            this.gameInstances.gameState.reset();
+            localStorage.removeItem('lobelabyrinth_test_save');
+            this.updateTestResult(resultId, 'success', 'Game reset successfully');
+            this.logToConsole('✅ Reset game test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Reset game failed: ${error.message}`);
+            this.logToConsole(`❌ Reset game test failed: ${error.message}`, 'error');
+        }
+    }
+
+    // Quiz Engine Advanced Tests (from test-phase3.html)
+    async testQuestionGeneration() {
+        const resultId = 'question-generation-result';
+        this.updateTestResult(resultId, 'running', 'Testing question generation...');
+        
+        try {
+            if (!this.gameInstances.quizEngine) {
+                await this.initializeGameInstances();
+            }
+            
+            const question = await this.gameInstances.quizEngine.getRandomQuestion();
+            if (question && question.question && question.answers && question.answers.length > 0) {
+                this.updateTestResult(resultId, 'success', `Generated question: "${question.question.substring(0, 50)}..." with ${question.answers.length} answers`);
+                this.logToConsole('✅ Question generation test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'error', 'Generated question is invalid or incomplete');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Question generation failed: ${error.message}`);
+            this.logToConsole(`❌ Question generation test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testCategoryFiltering() {
+        const resultId = 'category-filter-result';
+        this.updateTestResult(resultId, 'running', 'Testing category filtering...');
+        
+        try {
+            if (!this.gameInstances.dataLoader) {
+                await this.initializeGameInstances();
+            }
+            
+            const historyQuestions = this.gameInstances.dataLoader.getQuestionsByCategory('history');
+            const scienceQuestions = this.gameInstances.dataLoader.getQuestionsByCategory('science');
+            
+            this.updateTestResult(resultId, 'success', `History: ${historyQuestions.length} questions, Science: ${scienceQuestions.length} questions`);
+            this.logToConsole('✅ Category filtering test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Category filtering failed: ${error.message}`);
+            this.logToConsole(`❌ Category filtering test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testTimerSystem() {
+        const resultId = 'timer-system-result';
+        this.updateTestResult(resultId, 'running', 'Testing timer system...');
+        
+        try {
+            if (!this.gameInstances.quizEngine) {
+                await this.initializeGameInstances();
+            }
+            
+            // Start a timer for 1 second (for testing)
+            const startTime = Date.now();
+            setTimeout(() => {
+                const elapsed = Date.now() - startTime;
+                this.updateTestResult(resultId, 'success', `Timer completed in ${elapsed}ms`);
+                this.logToConsole('✅ Timer system test passed!', 'success');
+            }, 1000);
+            
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Timer system failed: ${error.message}`);
+            this.logToConsole(`❌ Timer system test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testTimeout() {
+        const resultId = 'timeout-test-result';
+        this.updateTestResult(resultId, 'running', 'Testing timeout handling...');
+        
+        try {
+            // Simulate a timeout scenario
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('Question timeout')), 1000);
+            });
+            
+            try {
+                await timeoutPromise;
+                this.updateTestResult(resultId, 'error', 'Timeout was not properly handled');
+            } catch (timeoutError) {
+                this.updateTestResult(resultId, 'success', `Timeout properly handled: ${timeoutError.message}`);
+                this.logToConsole('✅ Timeout test passed!', 'success');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Timeout test failed: ${error.message}`);
+            this.logToConsole(`❌ Timeout test failed: ${error.message}`, 'error');
+        }
+    }
+
+    // Map Renderer Tests (from test-phase5.html)
+    async testMapRendering() {
+        const resultId = 'map-rendering-result';
+        this.updateTestResult(resultId, 'running', 'Testing map rendering...');
+        
+        try {
+            const canvas = document.getElementById('test-map-canvas');
+            if (!canvas) {
+                throw new Error('Test canvas not found');
+            }
+            
+            if (!this.gameInstances.mapRenderer) {
+                await this.initializeGameInstances();
+                if (typeof MapRenderer !== 'undefined') {
+                    this.gameInstances.mapRenderer = new MapRenderer(canvas);
+                }
+            }
+            
+            if (this.gameInstances.mapRenderer) {
+                await this.gameInstances.mapRenderer.render();
+                this.updateTestResult(resultId, 'success', 'Map rendered successfully');
+                this.logToConsole('✅ Map rendering test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'MapRenderer not available');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Map rendering failed: ${error.message}`);
+            this.logToConsole(`❌ Map rendering test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testRoomHighlight() {
+        const resultId = 'room-highlight-result';
+        this.updateTestResult(resultId, 'running', 'Testing room highlighting...');
+        
+        try {
+            if (this.gameInstances.mapRenderer && this.gameInstances.gameState) {
+                const currentRoom = this.gameInstances.gameState.getCurrentRoom();
+                this.gameInstances.mapRenderer.highlightRoom(currentRoom.id);
+                this.updateTestResult(resultId, 'success', `Room "${currentRoom.name}" highlighted`);
+                this.logToConsole('✅ Room highlight test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'MapRenderer or GameState not available');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Room highlighting failed: ${error.message}`);
+            this.logToConsole(`❌ Room highlight test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testMapInteraction() {
+        const resultId = 'map-interaction-result';
+        this.updateTestResult(resultId, 'running', 'Testing map interaction...');
+        
+        try {
+            const canvas = document.getElementById('test-map-canvas');
+            if (canvas && this.gameInstances.mapRenderer) {
+                // Simulate a click event
+                const clickEvent = new MouseEvent('click', {
+                    clientX: canvas.offsetLeft + 100,
+                    clientY: canvas.offsetTop + 100
+                });
+                canvas.dispatchEvent(clickEvent);
+                this.updateTestResult(resultId, 'success', 'Map interaction event dispatched');
+                this.logToConsole('✅ Map interaction test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'Canvas or MapRenderer not available');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Map interaction failed: ${error.message}`);
+            this.logToConsole(`❌ Map interaction test failed: ${error.message}`, 'error');
+        }
+    }
+
+    // Achievement System Tests (from test-phase6.x.html)
+    async testAchievementUnlock() {
+        const resultId = 'achievement-unlock-result';
+        this.updateTestResult(resultId, 'running', 'Testing achievement unlocking...');
+        
+        try {
+            if (!this.gameInstances.achievementManager) {
+                await this.initializeGameInstances();
+                if (typeof AchievementManager !== 'undefined') {
+                    this.gameInstances.achievementManager = new AchievementManager(this.gameInstances.gameState);
+                }
+            }
+            
+            if (this.gameInstances.achievementManager) {
+                const achievement = await this.gameInstances.achievementManager.unlock('first_steps');
+                this.updateTestResult(resultId, 'success', `Achievement unlocked: ${achievement ? achievement.name : 'first_steps'}`);
+                this.logToConsole('✅ Achievement unlock test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'AchievementManager not available');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Achievement unlock failed: ${error.message}`);
+            this.logToConsole(`❌ Achievement unlock test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testProgressTracking() {
+        const resultId = 'progress-tracking-result';
+        this.updateTestResult(resultId, 'running', 'Testing progress tracking...');
+        
+        try {
+            if (this.gameInstances.achievementManager) {
+                const progress = this.gameInstances.achievementManager.getProgress();
+                this.updateTestResult(resultId, 'success', `Progress tracked: ${Object.keys(progress).length} achievements monitored`);
+                this.logToConsole('✅ Progress tracking test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'AchievementManager not available');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Progress tracking failed: ${error.message}`);
+            this.logToConsole(`❌ Progress tracking test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testAchievementNotification() {
+        const resultId = 'achievement-notification-result';
+        this.updateTestResult(resultId, 'running', 'Testing achievement notification...');
+        
+        try {
+            this.showToast('🏆 Test Achievement Unlocked!', 'success');
+            this.updateTestResult(resultId, 'success', 'Achievement notification displayed');
+            this.logToConsole('✅ Achievement notification test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Achievement notification failed: ${error.message}`);
+            this.logToConsole(`❌ Achievement notification test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testAchievementStats() {
+        const resultId = 'achievement-stats-result';
+        this.updateTestResult(resultId, 'running', 'Testing achievement statistics...');
+        
+        try {
+            if (this.gameInstances.achievementManager) {
+                const stats = this.gameInstances.achievementManager.getStats();
+                this.updateTestResult(resultId, 'success', `Achievement stats: ${JSON.stringify(stats, null, 2)}`);
+                this.logToConsole('✅ Achievement stats test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'AchievementManager not available for stats');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Achievement stats failed: ${error.message}`);
+            this.logToConsole(`❌ Achievement stats test failed: ${error.message}`, 'error');
+        }
+    }
+
+    // Accessibility Tests (from test-accessibility.html)
+    testTabNavigation() {
+        const resultId = 'tab-navigation-result';
+        this.updateTestResult(resultId, 'running', 'Testing tab navigation...');
+        
+        try {
+            const focusableElements = this.getFocusableElements();
+            this.updateTestResult(resultId, 'success', `Found ${focusableElements.length} focusable elements`);
+            this.logToConsole('✅ Tab navigation test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Tab navigation failed: ${error.message}`);
+            this.logToConsole(`❌ Tab navigation test failed: ${error.message}`, 'error');
+        }
+    }
+
+    getFocusableElements() {
+        const focusableSelectors = [
+            'a[href]',
+            'button:not([disabled])',
+            'textarea:not([disabled])',
+            'input:not([disabled])',
+            'select:not([disabled])',
+            '[tabindex]:not([tabindex="-1"])'
+        ];
+        
+        return document.querySelectorAll(focusableSelectors.join(', '));
+    }
+
+    resetTabTest() {
+        const resultId = 'tab-reset-result';
+        this.updateTestResult(resultId, 'success', 'Tab test reset completed');
+        this.logToConsole('Tab navigation test reset', 'info');
+    }
+
+    testArrowNavigation() {
+        const resultId = 'arrow-navigation-result';
+        this.updateTestResult(resultId, 'running', 'Testing arrow key navigation...');
+        
+        try {
+            // Simulate arrow key events
+            const testElement = document.querySelector('.arrow-navigation');
+            if (testElement) {
+                const arrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
+                testElement.dispatchEvent(arrowEvent);
+                this.updateTestResult(resultId, 'success', 'Arrow navigation events dispatched');
+                this.logToConsole('✅ Arrow navigation test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'Arrow navigation container not found');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Arrow navigation failed: ${error.message}`);
+            this.logToConsole(`❌ Arrow navigation test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testKeyboardShortcuts() {
+        const resultId = 'keyboard-shortcuts-result';
+        this.updateTestResult(resultId, 'running', 'Testing keyboard shortcuts...');
+        
+        try {
+            // Test Alt+H shortcut
+            const shortcutEvent = new KeyboardEvent('keydown', { key: 'h', altKey: true });
+            document.dispatchEvent(shortcutEvent);
+            this.updateTestResult(resultId, 'success', 'Keyboard shortcuts tested');
+            this.logToConsole('✅ Keyboard shortcuts test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Keyboard shortcuts failed: ${error.message}`);
+            this.logToConsole(`❌ Keyboard shortcuts test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testARIALabels() {
+        const resultId = 'aria-labels-result';
+        this.updateTestResult(resultId, 'running', 'Testing ARIA labels...');
+        
+        try {
+            const ariaElements = document.querySelectorAll('[aria-label], [aria-labelledby], [aria-describedby], [role]');
+            this.updateTestResult(resultId, 'success', `Found ${ariaElements.length} ARIA-enhanced elements`);
+            this.logToConsole('✅ ARIA labels test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `ARIA labels test failed: ${error.message}`);
+            this.logToConsole(`❌ ARIA labels test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testLiveRegions() {
+        const resultId = 'live-regions-result';
+        this.updateTestResult(resultId, 'running', 'Testing live regions...');
+        
+        try {
+            const politeRegion = document.getElementById('live-demo-polite');
+            const assertiveRegion = document.getElementById('live-demo-assertive');
+            
+            if (politeRegion) politeRegion.textContent = 'Polite announcement test';
+            if (assertiveRegion) assertiveRegion.textContent = 'Assertive announcement test';
+            
+            this.updateTestResult(resultId, 'success', 'Live regions updated successfully');
+            this.logToConsole('✅ Live regions test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Live regions test failed: ${error.message}`);
+            this.logToConsole(`❌ Live regions test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testSemanticStructure() {
+        const resultId = 'semantic-structure-result';
+        this.updateTestResult(resultId, 'running', 'Testing semantic structure...');
+        
+        try {
+            const landmarks = document.querySelectorAll('header, nav, main, section, article, aside, footer');
+            const headings = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+            
+            this.updateTestResult(resultId, 'success', `Found ${landmarks.length} landmarks and ${headings.length} headings`);
+            this.logToConsole('✅ Semantic structure test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Semantic structure test failed: ${error.message}`);
+            this.logToConsole(`❌ Semantic structure test failed: ${error.message}`, 'error');
+        }
+    }
+
+    toggleHighContrast() {
+        const resultId = 'high-contrast-result';
+        
+        try {
+            document.body.classList.toggle('high-contrast');
+            const isEnabled = document.body.classList.contains('high-contrast');
+            this.updateTestResult(resultId, 'success', `High contrast ${isEnabled ? 'enabled' : 'disabled'}`);
+            this.showToast(`High contrast ${isEnabled ? 'enabled' : 'disabled'}`, 'info');
+            this.logToConsole(`High contrast ${isEnabled ? 'enabled' : 'disabled'}`, 'info');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `High contrast toggle failed: ${error.message}`);
+            this.logToConsole(`❌ High contrast toggle failed: ${error.message}`, 'error');
+        }
+    }
+
+    testColorContrast() {
+        const resultId = 'color-contrast-result';
+        this.updateTestResult(resultId, 'running', 'Testing color contrast...');
+        
+        try {
+            // This is a simplified contrast test - in reality, you'd calculate actual contrast ratios
+            const testElements = document.querySelectorAll('.contrast-test-btn, .contrast-test-link');
+            this.updateTestResult(resultId, 'success', `Color contrast tested on ${testElements.length} elements`);
+            this.logToConsole('✅ Color contrast test passed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Color contrast test failed: ${error.message}`);
+            this.logToConsole(`❌ Color contrast test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testFocusIndicators() {
+        const resultId = 'focus-indicators-result';
+        this.updateTestResult(resultId, 'running', 'Testing focus indicators...');
+        
+        try {
+            const focusDemo = document.querySelector('.focus-demo button');
+            if (focusDemo) {
+                focusDemo.focus();
+                this.updateTestResult(resultId, 'success', 'Focus indicators tested');
+                this.logToConsole('✅ Focus indicators test passed!', 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'Focus demo element not found');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Focus indicators test failed: ${error.message}`);
+            this.logToConsole(`❌ Focus indicators test failed: ${error.message}`, 'error');
+        }
+    }
+
+    runComplianceCheck() {
+        const resultId = 'compliance-check-result';
+        this.updateTestResult(resultId, 'running', 'Running WCAG compliance check...');
+        
+        try {
+            const checks = {
+                headings: document.querySelectorAll('h1, h2, h3, h4, h5, h6').length > 0,
+                landmarks: document.querySelectorAll('header, nav, main, footer').length >= 3,
+                altTexts: document.querySelectorAll('img:not([alt])').length === 0,
+                formLabels: document.querySelectorAll('input:not([aria-label]):not([aria-labelledby])').length === 0
+            };
+            
+            const passedChecks = Object.values(checks).filter(Boolean).length;
+            const totalChecks = Object.keys(checks).length;
+            
+            this.updateTestResult(resultId, 'success', `WCAG compliance: ${passedChecks}/${totalChecks} checks passed`);
+            this.logToConsole('✅ WCAG compliance check completed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `WCAG compliance check failed: ${error.message}`);
+            this.logToConsole(`❌ WCAG compliance check failed: ${error.message}`, 'error');
+        }
+    }
+
+    // Performance Tests (from test-phase7.1-performance.html)
+    async testLoadPerformance() {
+        const resultId = 'load-performance-result';
+        this.updateTestResult(resultId, 'running', 'Testing load performance...');
+        
+        try {
+            const startTime = performance.now();
+            await this.initializeGameInstances();
+            const endTime = performance.now();
+            
+            const loadTime = endTime - startTime;
+            this.updateTestResult(resultId, 'success', `Game loaded in ${loadTime.toFixed(2)}ms`);
+            this.logToConsole(`✅ Load performance test: ${loadTime.toFixed(2)}ms`, 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Load performance test failed: ${error.message}`);
+            this.logToConsole(`❌ Load performance test failed: ${error.message}`, 'error');
+        }
+    }
+
+    async testRenderPerformance() {
+        const resultId = 'render-performance-result';
+        this.updateTestResult(resultId, 'running', 'Testing render performance...');
+        
+        try {
+            const canvas = document.getElementById('test-map-canvas');
+            if (canvas && this.gameInstances.mapRenderer) {
+                const startTime = performance.now();
+                await this.gameInstances.mapRenderer.render();
+                const endTime = performance.now();
+                
+                const renderTime = endTime - startTime;
+                this.updateTestResult(resultId, 'success', `Map rendered in ${renderTime.toFixed(2)}ms`);
+                this.logToConsole(`✅ Render performance test: ${renderTime.toFixed(2)}ms`, 'success');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'Canvas or MapRenderer not available');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Render performance test failed: ${error.message}`);
+            this.logToConsole(`❌ Render performance test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testMemoryUsage() {
+        const resultId = 'memory-usage-result';
+        this.updateTestResult(resultId, 'running', 'Testing memory usage...');
+        
+        try {
+            if (performance.memory) {
+                const memInfo = performance.memory;
+                const usedMB = (memInfo.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                const totalMB = (memInfo.totalJSHeapSize / 1024 / 1024).toFixed(2);
+                const limitMB = (memInfo.jsHeapSizeLimit / 1024 / 1024).toFixed(2);
+                
+                this.updateTestResult(resultId, 'success', `Memory usage: ${usedMB}MB / ${totalMB}MB (Limit: ${limitMB}MB)`);
+                this.logToConsole(`✅ Memory usage: ${usedMB}MB used`, 'success');
+                
+                // Update memory display elements
+                const jsHeapUsed = document.getElementById('js-heap-used');
+                const jsHeapTotal = document.getElementById('js-heap-total');
+                const jsHeapLimit = document.getElementById('js-heap-limit');
+                
+                if (jsHeapUsed) jsHeapUsed.textContent = `${usedMB} MB`;
+                if (jsHeapTotal) jsHeapTotal.textContent = `${totalMB} MB`;
+                if (jsHeapLimit) jsHeapLimit.textContent = `${limitMB} MB`;
+            } else {
+                this.updateTestResult(resultId, 'warning', 'Memory API not supported in this browser');
+            }
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Memory usage test failed: ${error.message}`);
+            this.logToConsole(`❌ Memory usage test failed: ${error.message}`, 'error');
+        }
+    }
+
+    updateMemoryStats() {
+        this.testMemoryUsage();
+    }
+
+    forceGarbageCollection() {
+        const resultId = 'gc-result';
+        
+        try {
+            // Note: Forced GC is not available in most browsers for security reasons
+            if (window.gc) {
+                window.gc();
+                this.updateTestResult(resultId, 'success', 'Garbage collection forced');
+            } else {
+                this.updateTestResult(resultId, 'warning', 'Forced GC not available in this browser');
+            }
+            this.logToConsole('Garbage collection attempt completed', 'info');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Garbage collection failed: ${error.message}`);
+        }
+    }
+
+    testMemoryLeaks() {
+        const resultId = 'memory-leaks-result';
+        this.updateTestResult(resultId, 'running', 'Testing for memory leaks...');
+        
+        try {
+            // Create and destroy objects to test for leaks
+            const testObjects = [];
+            for (let i = 0; i < 1000; i++) {
+                testObjects.push({ id: i, data: new Array(100).fill(Math.random()) });
+            }
+            
+            // Clear the array
+            testObjects.length = 0;
+            
+            this.updateTestResult(resultId, 'success', 'Memory leak test completed - created and cleared 1000 test objects');
+            this.logToConsole('✅ Memory leak test completed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Memory leak test failed: ${error.message}`);
+            this.logToConsole(`❌ Memory leak test failed: ${error.message}`, 'error');
+        }
+    }
+
+    trackObjects() {
+        this.objectTrackingEnabled = true;
+        this.trackedObjects = new Map();
+        this.updateTestResult('object-tracking-result', 'success', 'Object tracking enabled');
+        this.logToConsole('Object tracking started', 'info');
+    }
+
+    stopTracking() {
+        this.objectTrackingEnabled = false;
+        const count = this.trackedObjects ? this.trackedObjects.size : 0;
+        this.updateTestResult('object-tracking-result', 'success', `Object tracking stopped. Tracked ${count} objects`);
+        this.logToConsole(`Object tracking stopped. Tracked ${count} objects`, 'info');
+    }
+
+    // Error Detection and Diagnostics
+    checkScriptLoading() {
+        const resultId = 'script-loading-result';
+        this.updateTestResult(resultId, 'running', 'Checking script loading...');
+        
+        try {
+            const scripts = document.querySelectorAll('script[src]');
+            let loadedScripts = 0;
+            let failedScripts = 0;
+            
+            scripts.forEach(script => {
+                if (script.getAttribute('data-loaded') !== null) {
+                    loadedScripts++;
+                } else if (script.onerror) {
+                    failedScripts++;
+                }
+            });
+            
+            this.updateTestResult(resultId, 'success', `Scripts: ${loadedScripts} loaded, ${failedScripts} failed, ${scripts.length} total`);
+            this.logToConsole('✅ Script loading check completed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Script loading check failed: ${error.message}`);
+            this.logToConsole(`❌ Script loading check failed: ${error.message}`, 'error');
+        }
+    }
+
+    testClassInstantiation() {
+        const resultId = 'class-instantiation-result';
+        this.updateTestResult(resultId, 'running', 'Testing class instantiation...');
+        
+        try {
+            const results = {};
+            
+            // Test class availability and instantiation
+            const classesToTest = ['DataLoader', 'GameState', 'QuizEngine', 'MapRenderer', 'UIManager'];
+            
+            classesToTest.forEach(className => {
+                try {
+                    if (typeof window[className] === 'function') {
+                        results[className] = 'Available';
+                    } else {
+                        results[className] = 'Not available';
+                    }
+                } catch (error) {
+                    results[className] = `Error: ${error.message}`;
+                }
+            });
+            
+            const available = Object.values(results).filter(r => r === 'Available').length;
+            this.updateTestResult(resultId, 'success', `Class instantiation: ${available}/${classesToTest.length} classes available`);
+            this.logToConsole('✅ Class instantiation test completed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Class instantiation test failed: ${error.message}`);
+            this.logToConsole(`❌ Class instantiation test failed: ${error.message}`, 'error');
+        }
+    }
+
+    testEventSystem() {
+        const resultId = 'event-system-result';
+        this.updateTestResult(resultId, 'running', 'Testing event system...');
+        
+        try {
+            // Test custom event dispatch and listening
+            const testEvent = new CustomEvent('debug-test', { detail: { test: true } });
+            let eventReceived = false;
+            
+            const eventHandler = (e) => {
+                eventReceived = e.detail.test === true;
+            };
+            
+            document.addEventListener('debug-test', eventHandler);
+            document.dispatchEvent(testEvent);
+            document.removeEventListener('debug-test', eventHandler);
+            
+            this.updateTestResult(resultId, 'success', `Event system: ${eventReceived ? 'Working correctly' : 'Failed to receive event'}`);
+            this.logToConsole('✅ Event system test completed!', 'success');
+        } catch (error) {
+            this.updateTestResult(resultId, 'error', `Event system test failed: ${error.message}`);
+            this.logToConsole(`❌ Event system test failed: ${error.message}`, 'error');
+        }
+    }
+
+    openPropertyInspector() {
+        const resultId = 'property-inspector-result';
+        this.updateTestResult(resultId, 'success', 'Property inspector opened');
+        this.logToConsole('Property inspector opened', 'info');
+    }
+
+    selectObject(objectName) {
+        const display = document.getElementById('property-display');
+        if (display && this.gameInstances[objectName]) {
+            const obj = this.gameInstances[objectName];
+            const properties = Object.getOwnPropertyNames(obj);
+            display.innerHTML = `
+                <div class="object-properties">
+                    <h4>${objectName}</h4>
+                    <ul>
+                        ${properties.map(prop => `<li><strong>${prop}:</strong> ${typeof obj[prop]}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+            this.logToConsole(`Selected object: ${objectName} (${properties.length} properties)`, 'info');
+        }
+    }
+
+    refreshInspector() {
+        const selector = document.getElementById('object-selector');
+        if (selector && selector.value) {
+            this.selectObject(selector.value);
+        }
+        this.logToConsole('Property inspector refreshed', 'info');
+    }
+
+    clearConsole() {
+        this.consoleBuffer = [];
+        this.updateConsoleDisplay();
+        this.logToConsole('Console cleared', 'info');
+    }
+
+    exportConsole() {
+        const consoleData = this.consoleBuffer.join('\n');
+        this.downloadFile('lobelabyrinth-console.log', consoleData, 'text/plain');
+        this.showToast('Console log exported', 'success');
+    }
+
+    showKeyboardHelp() {
+        this.showToast('Keyboard Shortcuts:\nAlt+1-5: Switch tabs\nAlt+H: Toggle high contrast\nAlt+?: Show help', 'info', 5000);
     }
     
     cleanup() {

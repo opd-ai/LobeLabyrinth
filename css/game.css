@@ -110,6 +110,11 @@ body::before {
     z-index: -1;
 }
 
+/* Subtle Stone/Noise Tile (inline SVG) - used across panels for classic textured look */
+:root {
+    --mindmaze-noise: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'><filter id='n'><feTurbulence baseFrequency='0.8' numOctaves='1' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='64' height='64' fill='%23222' filter='url(%23n)' opacity='0.03'/></svg>");
+}
+
 /* Game Container - Castle Layout */
 .game-container {
     width: 100vw;
@@ -127,6 +132,23 @@ body::before {
     position: relative;
     overflow: hidden;
 }
+
+    /* 90s beveled panel helper classes */
+    .mm-panel-raised {
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+        border: 2px outset var(--mindmaze-stone);
+        box-shadow: 0 6px 0 rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.4);
+        background-image: var(--mindmaze-noise);
+        background-blend-mode: overlay;
+    }
+
+    .mm-panel-inset {
+        background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(255,255,255,0.02));
+        border: 2px inset var(--mindmaze-stone);
+        box-shadow: inset 0 2px 0 rgba(255,255,255,0.03), inset 0 -2px 4px rgba(0,0,0,0.25);
+        background-image: var(--mindmaze-noise);
+        background-blend-mode: multiply;
+    }
 
 /* Viewport wrapper: lock aspect ratio and scale proportionally to viewport */
 .mindmaze-viewport {
@@ -229,6 +251,30 @@ body::before {
     box-shadow: var(--shadow-inset);
     overflow-y: auto;
 }
+
+    /* Apply retro panels to core sections */
+    .section {
+        /* ...existing code... */
+        padding: 16px;
+        border-radius: 8px;
+        background-clip: padding-box;
+    }
+
+    .section.mm-raised {
+        background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+        border: 2px outset var(--mindmaze-stone);
+        box-shadow: 0 6px 0 rgba(0,0,0,0.15), 0 1px 3px rgba(0,0,0,0.4);
+        background-image: var(--mindmaze-noise);
+        background-blend-mode: overlay;
+    }
+
+    .section.mm-inset {
+        background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(255,255,255,0.02));
+        border: 2px inset var(--mindmaze-stone);
+        box-shadow: inset 0 2px 0 rgba(255,255,255,0.03), inset 0 -2px 4px rgba(0,0,0,0.25);
+        background-image: var(--mindmaze-noise);
+        background-blend-mode: multiply;
+    }
 
 /* Footer - Status Bar */
 .game-footer {
@@ -898,6 +944,11 @@ button.btn-danger:hover {
     background: var(--mindmaze-black);
     box-shadow: var(--shadow-inset);
 }
+    .map-header { /* retro header */
+        padding: 8px 12px;
+        border-bottom: 2px solid rgba(0,0,0,0.15);
+        background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.04));
+    }
 
 .map-header {
     text-align: center;
@@ -1033,9 +1084,9 @@ button.btn-danger:hover {
 /* Loading State Animations - Skeleton Screens */
 .skeleton-loader {
     background: linear-gradient(90deg, 
-        var(--medieval-parchment-light) 25%, 
-        var(--medieval-ink-light) 50%, 
-        var(--medieval-parchment-light) 75%);
+        var(--mindmaze-panel) 25%, 
+        var(--mindmaze-text-dim) 50%, 
+        var(--mindmaze-panel) 75%);
     background-size: 200% 100%;
     animation: skeleton-loading 1.5s infinite;
     border-radius: 8px;

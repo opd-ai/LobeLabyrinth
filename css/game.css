@@ -1,1 +1,248 @@
+/* LobeLabyrinth Game CSS - MindMaze Authentic Design
+ * Recreates the classic Microsoft Encarta MindMaze experience
+ * with modern web improvements and Windows 95 authentic styling
+ */
 
+@import url('mm-vars.css');
+
+/* ===== GLOBAL RESET AND BASE ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--mm-font-body);
+    font-size: var(--mm-font-md);
+    background: var(--mm-gradient-castle);
+    background-image: var(--mm-texture-stone);
+    background-size: var(--mm-texture-stone-size);
+    color: var(--mm-text);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    user-select: none;
+}
+
+/* ===== SKIP LINKS (ACCESSIBILITY) ===== */
+.skip-links {
+    position: absolute;
+    top: -40px;
+    left: 0;
+    z-index: var(--mm-z-tooltip);
+}
+
+.skip-link {
+    display: inline-block;
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+    background: var(--mm-gold);
+    color: var(--mm-text);
+    text-decoration: none;
+    font-weight: bold;
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+/* ===== MAIN GAME CONTAINER ===== */
+.game-container {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "main sidebar"
+        "footer footer";
+    grid-template-rows: var(--mm-titlebar-h) 1fr var(--mm-footer-h);
+    grid-template-columns: 1fr var(--mm-sidebar-w);
+    height: 100vh;
+    width: 100vw;
+    background: var(--mm-gradient-panel);
+    border: var(--mm-border-thick) solid var(--mm-stone-dark);
+    box-shadow: var(--mm-shadow-deep);
+}
+
+/* ===== HEADER SECTION ===== */
+.game-header {
+    grid-area: header;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: var(--mm-gradient-panel);
+    border-bottom: var(--mm-border-thick) solid var(--mm-stone-dark);
+    box-shadow: var(--mm-shadow-panel-raised);
+    padding: var(--mm-spacing-sm);
+}
+
+.game-header h1 {
+    font-size: var(--mm-font-title);
+    font-weight: bold;
+    color: var(--mm-navy-dark);
+    text-shadow: var(--mm-shadow-text-emboss);
+    margin: 0;
+    line-height: 1;
+}
+
+.game-header p {
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+    margin: 0;
+    text-align: center;
+}
+
+/* ===== MAIN GAME AREA ===== */
+.game-main {
+    grid-area: main;
+    background: var(--mm-navy);
+    background-image: var(--mm-gradient-navy);
+    border-right: var(--mm-border-thick) solid var(--mm-stone-dark);
+    border-bottom: var(--mm-border-thin) solid var(--mm-stone-dark);
+    box-shadow: var(--mm-shadow-panel-sunken);
+    padding: var(--mm-spacing-md);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mm-spacing-sm);
+}
+
+/* ===== SIDEBAR ===== */
+.game-sidebar {
+    grid-area: sidebar;
+    background: var(--mm-gradient-panel);
+    border-bottom: var(--mm-border-thin) solid var(--mm-stone-dark);
+    box-shadow: var(--mm-shadow-panel-raised);
+    padding: var(--mm-spacing-md);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.game-sidebar::-webkit-scrollbar {
+    width: 16px;
+}
+
+.game-sidebar::-webkit-scrollbar-track {
+    background: var(--mm-stone-dark);
+    box-shadow: inset 2px 2px 2px rgba(0,0,0,0.3);
+}
+
+.game-sidebar::-webkit-scrollbar-thumb {
+    background: var(--mm-gradient-button);
+    border: 1px solid var(--mm-stone-dark);
+    box-shadow: var(--mm-shadow-raised);
+}
+
+.game-sidebar::-webkit-scrollbar-thumb:hover {
+    background: var(--mm-gradient-button-pressed);
+}
+
+/* ===== FOOTER ===== */
+.game-footer {
+    grid-area: footer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mm-gradient-panel);
+    border-top: var(--mm-border-thick) solid var(--mm-stone-light);
+    box-shadow: var(--mm-shadow-panel-raised);
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+}
+
+/* ===== SECTION STYLING ===== */
+.section {
+    background: var(--mm-gradient-panel);
+    border: var(--mm-border-thick) solid var(--mm-stone-dark);
+    border-top-color: var(--mm-stone-light);
+    border-left-color: var(--mm-stone-light);
+    box-shadow: var(--mm-shadow-panel-raised);
+    padding: var(--mm-spacing-md);
+    margin-bottom: var(--mm-spacing-md);
+}
+
+.section h2,
+.section h3 {
+    font-size: var(--mm-font-lg);
+    font-weight: bold;
+    color: var(--mm-navy-dark);
+    text-shadow: var(--mm-shadow-text-emboss);
+    margin-bottom: var(--mm-spacing-sm);
+    line-height: 1.2;
+}
+
+.section p {
+    font-size: var(--mm-font-sm);
+    line-height: 1.4;
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+/* ===== MAP AREA STYLING ===== */
+#map-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background: var(--mm-navy-dark);
+    border: var(--mm-border-thick) solid var(--mm-gold-dark);
+    box-shadow: var(--mm-shadow-panel-sunken), var(--mm-shadow-glow);
+}
+
+.map-header {
+    background: var(--mm-gradient-panel);
+    padding: var(--mm-spacing-sm);
+    border-bottom: var(--mm-border-thin) solid var(--mm-stone-dark);
+}
+
+.map-header h3 {
+    font-size: var(--mm-font-md);
+    color: var(--mm-navy-dark);
+    margin: 0 0 var(--mm-spacing-xs) 0;
+}
+
+.map-header p {
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+    margin: 0;
+}
+
+#map-canvas {
+    flex: 1;
+    background: var(--mm-navy-darkest);
+    border: var(--mm-border-thin) solid var(--mm-stone-darkest);
+    cursor: crosshair;
+}
+
+#map-canvas:focus {
+    outline: var(--mm-focus-outline);
+    outline-offset: 2px;
+}
+
+.map-legend {
+    display: flex;
+    justify-content: space-around;
+    background: var(--mm-gradient-panel);
+    padding: var(--mm-spacing-xs);
+    border-top: var(--mm-border-thin) solid var(--mm-stone-light);
+    font-size: var(--mm-font-xs);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--mm-spacing-xs);
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--mm-stone-darkest);
+    box-shadow: var(--mm-shadow-inset);
+}
+
+.legend-current { background: var(--mm-gold); }
+.legend-visited { background: var(--mm-forest); }
+.legend-accessible { background: var(--mm-blue-light); }
+.legend-locked { background: var(--mm-stone-dark); }

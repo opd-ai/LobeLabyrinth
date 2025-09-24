@@ -6,7 +6,7 @@
    ============================================================================= */
 
 /* Import the consolidated CSS variables */
-@import url('mm-vars.css');
+@import url('./mm-vars.css');
 
 /* =============================================================================
    GLOBAL FOUNDATIONS & RESET
@@ -61,40 +61,54 @@ button {
         "header header"
         "main sidebar"
         "footer footer";
-    grid-template-rows: 60px 1fr 40px;
-    grid-template-columns: 1fr 320px;
+    grid-template-rows: minmax(60px, auto) 1fr minmax(40px, auto);
+    grid-template-columns: 1fr minmax(300px, 350px);
     height: 100vh;
     max-height: 100vh;
     gap: 0;
-    background: var(--mm-castle-stone);
+    background: var(--mm-castle-stone, #B8B8B8);
+    font-size: 14px;
 }
 
 /* Header Section */
 .game-header {
     grid-area: header;
-    background: var(--mm-gradient-panel);
-    border-bottom: var(--mm-border-thick) outset var(--mm-stone);
-    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
+    background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 50%, #A0A0A0 100%);
+    border-bottom: 2px outset #C0C0C0;
+    padding: 12px 24px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    box-shadow: var(--mm-shadow-panel-raised);
+    box-shadow: inset 2px 2px 0 rgba(255,255,255,0.8), inset -2px -2px 0 rgba(0,0,0,0.4);
 }
 
 .game-header h1 {
     margin: 0;
-    font-size: var(--mm-font-title);
+    font-size: 20px;
     font-weight: bold;
-    color: var(--mm-navy);
-    text-shadow: var(--mm-shadow-text-emboss);
+    color: #000080;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
     letter-spacing: 1px;
 }
 
 .game-header p {
     margin: 2px 0 0 0;
-    font-size: var(--mm-font-sm);
-    color: var(--mm-text-dim);
+    font-size: 11px;
+    color: #606060;
     font-style: italic;
+}
+
+/* Footer */
+.game-footer {
+    grid-area: footer;
+    background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 50%, #A0A0A0 100%);
+    border-top: 2px outset #C0C0C0;
+    padding: 8px 24px;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 2px 2px 0 rgba(255,255,255,0.8), inset -2px -2px 0 rgba(0,0,0,0.4);
+    font-size: 11px;
+    color: #606060;
 }
 
 /* Main Game Area */
@@ -106,22 +120,27 @@ button {
         "question question"
         "timer answer"
         "feedback feedback";
-    grid-template-rows: 200px 120px 60px 1fr;
+    grid-template-rows: minmax(200px, 30vh) minmax(120px, 20vh) minmax(80px, 15vh) 1fr;
     grid-template-columns: 1fr 1fr;
-    gap: var(--mm-spacing-md);
-    padding: var(--mm-spacing-md);
-    background: var(--mm-castle-stone);
+    gap: var(--mm-spacing-md, 8px);
+    padding: var(--mm-spacing-md, 8px);
+    background: var(--mm-castle-stone, #B8B8B8);
     overflow: hidden;
+    min-height: 0;
 }
 
 /* Sidebar */
 .game-sidebar {
     grid-area: sidebar;
-    background: var(--mm-gradient-panel);
-    border-left: var(--mm-border-thick) inset var(--mm-stone);
-    padding: var(--mm-spacing-md);
+    background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 50%, #A0A0A0 100%);
+    border-left: 2px inset #C0C0C0;
+    padding: 12px;
     overflow-y: auto;
-    box-shadow: var(--mm-shadow-panel-sunken);
+    box-shadow: inset -2px -2px 0 rgba(255,255,255,0.8), inset 2px 2px 0 rgba(0,0,0,0.4);
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 /* Footer */
@@ -142,12 +161,13 @@ button {
    ============================================================================= */
 
 .section {
-    background: var(--mm-panel);
-    border: var(--mm-border-thick) outset var(--mm-stone);
-    padding: var(--mm-spacing-md);
-    margin-bottom: var(--mm-spacing-md);
-    box-shadow: var(--mm-shadow-panel-raised);
+    background: #C0C0C0;
+    border: 2px outset #C0C0C0;
+    padding: 12px;
+    margin-bottom: 12px;
+    box-shadow: inset 2px 2px 0 rgba(255,255,255,0.8), inset -2px -2px 0 rgba(0,0,0,0.4);
     position: relative;
+    display: block;
 }
 
 .section h2,
@@ -312,20 +332,24 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
+    background: #C0C0C0;
+    border: 2px outset #C0C0C0;
+    padding: 8px;
+    min-height: 60px;
 }
 
 .timer-container {
     display: flex;
     align-items: center;
-    gap: var(--mm-spacing-md);
+    gap: 12px;
     width: 100%;
 }
 
 #timer-text {
-    font-size: var(--mm-font-xl);
+    font-size: 16px;
     font-weight: bold;
-    color: var(--mm-crimson);
-    text-shadow: var(--mm-shadow-text-emboss);
+    color: #DC143C;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
     min-width: 60px;
     text-align: center;
 }
@@ -333,15 +357,15 @@ button {
 .timer-bar-container {
     flex: 1;
     height: 20px;
-    border: var(--mm-border-thick) inset var(--mm-stone-dark);
-    background: var(--mm-panel-inset);
+    border: 2px inset #808080;
+    background: #A8A8A8;
     position: relative;
     overflow: hidden;
 }
 
 .timer-bar {
     height: 100%;
-    background: linear-gradient(90deg, var(--mm-forest) 0%, var(--mm-gold) 50%, var(--mm-crimson) 100%);
+    background: linear-gradient(90deg, #228B22 0%, #FFFF00 50%, #DC143C 100%);
     transition: width 0.1s linear;
     box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
 }
@@ -364,46 +388,48 @@ button {
 }
 
 .answer-button {
-    background: var(--mm-gradient-button);
-    border: var(--mm-border-thick) outset var(--mm-stone);
-    padding: var(--mm-spacing-md);
-    font-size: var(--mm-font-sm);
+    background: linear-gradient(135deg, #E0E0E0 0%, #C8C8C8 50%, #B0B0B0 100%);
+    border: 2px outset #C0C0C0;
+    padding: 12px;
+    font-size: 12px;
     text-align: left;
     cursor: pointer;
     transition: all 0.1s ease;
-    box-shadow: var(--mm-shadow-raised);
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.3), inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.2);
     min-height: 44px;
     display: flex;
     align-items: center;
+    font-family: 'MS Sans Serif', sans-serif;
+    color: #000000;
 }
 
 .answer-button:hover {
-    background: var(--mm-gradient-button);
+    background: linear-gradient(135deg, #F0F0F0 0%, #D8D8D8 50%, #C0C0C0 100%);
     filter: brightness(1.1);
     transform: translateY(-1px);
 }
 
 .answer-button:active,
 .answer-button.selected {
-    background: var(--mm-gradient-button-pressed);
-    border: var(--mm-border-thick) inset var(--mm-stone);
-    box-shadow: var(--mm-shadow-pressed);
+    background: linear-gradient(135deg, #A0A0A0 0%, #C0C0C0 50%, #D0D0D0 100%);
+    border: 2px inset #C0C0C0;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.6), inset -1px -1px 2px rgba(255,255,255,0.1);
     transform: translateY(1px);
 }
 
 .answer-button:focus {
-    border-color: var(--mm-gold);
-    box-shadow: 0 0 0 2px var(--mm-gold-dark), var(--mm-shadow-raised);
+    border-color: #FFFF00;
+    box-shadow: 0 0 0 2px #CCCC00, 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.3), inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.2);
 }
 
 .answer-button.correct {
     background: linear-gradient(135deg, #90EE90 0%, #00FF00 50%, #228B22 100%);
-    border-color: var(--mm-forest);
+    border-color: #228B22;
 }
 
 .answer-button.incorrect {
     background: linear-gradient(135deg, #FFA0A0 0%, #FF4444 50%, #CC0000 100%);
-    border-color: var(--mm-crimson);
+    border-color: #DC143C;
 }
 
 .answer-button:disabled {
@@ -418,21 +444,22 @@ button {
 
 #feedback-area {
     grid-area: feedback;
-    padding: var(--mm-spacing-md);
-    background: var(--mm-panel-light);
-    border: var(--mm-border-thick) inset var(--mm-stone);
-    border-radius: var(--mm-radius-md);
-    box-shadow: var(--mm-shadow-panel-sunken);
+    padding: 12px;
+    background: #E0E0E0;
+    border: 2px inset #C0C0C0;
+    border-radius: 4px;
+    box-shadow: inset -2px -2px 0 rgba(255,255,255,0.8), inset 2px 2px 0 rgba(0,0,0,0.4);
     min-height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--mm-font-md);
+    font-size: 14px;
     font-weight: bold;
     text-align: center;
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.3s ease;
+    color: #000000;
 }
 
 #feedback-area.visible {
@@ -442,14 +469,14 @@ button {
 
 #feedback-area.correct {
     background: linear-gradient(135deg, #E0FFE0 0%, #C0FFC0 100%);
-    border-color: var(--mm-forest);
-    color: var(--mm-forest-dark);
+    border-color: #228B22;
+    color: #006400;
 }
 
 #feedback-area.incorrect {
     background: linear-gradient(135deg, #FFE0E0 0%, #FFC0C0 100%);
-    border-color: var(--mm-crimson);
-    color: var(--mm-crimson-dark);
+    border-color: #DC143C;
+    color: #B22222;
 }
 
 /* =============================================================================
@@ -564,16 +591,17 @@ button {
 
 .btn-primary,
 .btn-secondary,
-.btn-danger {
-    background: var(--mm-gradient-button);
-    border: var(--mm-border-thick) outset var(--mm-stone);
-    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
-    font-size: var(--mm-font-sm);
+.btn-danger,
+button {
+    background: linear-gradient(135deg, #E0E0E0 0%, #C8C8C8 50%, #B0B0B0 100%);
+    border: 2px outset #C0C0C0;
+    padding: 8px 16px;
+    font-size: 12px;
     font-weight: normal;
     cursor: pointer;
     transition: all 0.1s ease;
-    box-shadow: var(--mm-shadow-raised);
-    margin-bottom: var(--mm-spacing-sm);
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.3), inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.2);
+    margin-bottom: 8px;
     width: 100%;
     text-align: center;
     user-select: none;
@@ -581,7 +609,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--mm-spacing-sm);
+    gap: 4px;
+    font-family: 'MS Sans Serif', sans-serif;
+    color: #000000;
 }
 
 .btn-primary {
@@ -594,17 +624,20 @@ button {
 
 .btn-primary:hover,
 .btn-secondary:hover,
-.btn-danger:hover {
+.btn-danger:hover,
+button:hover {
     filter: brightness(1.05);
     transform: translateY(-1px);
+    background: linear-gradient(135deg, #F0F0F0 0%, #D8D8D8 50%, #C0C0C0 100%);
 }
 
 .btn-primary:active,
 .btn-secondary:active,
-.btn-danger:active {
-    background: var(--mm-gradient-button-pressed);
-    border: var(--mm-border-thick) inset var(--mm-stone);
-    box-shadow: var(--mm-shadow-pressed);
+.btn-danger:active,
+button:active {
+    background: linear-gradient(135deg, #A0A0A0 0%, #C0C0C0 50%, #D0D0D0 100%);
+    border: 2px inset #C0C0C0;
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.6), inset -1px -1px 2px rgba(255,255,255,0.1);
     transform: translateY(1px);
 }
 

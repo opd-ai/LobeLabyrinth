@@ -100,12 +100,10 @@ body {
     line-height: 1.4;
     color: var(--mindmaze-text-light);
     background: var(--mindmaze-navy);
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
+    min-height: 100vh;
+    width: 100%;
+    overflow: auto; /* allow normal document flow; internal panels will scroll */
+    position: relative;
     display: flex;
     flex-direction: column;
 }
@@ -203,52 +201,32 @@ body::before {
     box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
 }
 
-.game-header h1 {
-    color: var(--mindmaze-text);
-    margin: 0;
-    font-size: clamp(1.0rem, 2.2vw, 1.6rem);
-    font-family: var(--font-heading);
-    font-weight: bold;
-    line-height: 1;
-    text-transform: uppercase;
-}
-
-.game-header p {
-    color: var(--mindmaze-text-dim);
-    margin: 2px 0 0;
-    font-size: clamp(0.7em, 1.2vw, 0.9em);
-    font-family: var(--font-ui);
-    line-height: 1.1;
-}
-
-/* Main Game Area - Windows 95 Content Panel with Component Hierarchy */
-.game-main {
-    grid-area: main;
-    background: var(--mindmaze-gray);
-    border: 2px inset var(--mindmaze-stone);
-    box-shadow: 
-        inset 2px 2px 4px rgba(0, 0, 0, 0.3),
-        inset -1px -1px 2px rgba(255, 255, 255, 0.1);
-    padding: clamp(6px, 1vw, 12px);
+.game-container {
+    width: min(1200px, 98%);
+    margin: 12px auto;
+    height: auto;
+    max-height: calc(100vh - 24px);
     display: grid;
-    /* central map + stacked content below for compact layout */
+    grid-template-columns: 1fr var(--sidebar-w);
+    grid-template-rows: var(--titlebar-h) 1fr var(--footer-h);
     grid-template-areas: 
-        "map-area map-area"
-        "room-info timer-area"
-        "question-area question-area"
-        "answer-area answer-area";
-    grid-template-rows: 
-        minmax(120px, 25vh)    /* Map: 25% max */
-        minmax(40px, 8vh)      /* Room info + Timer: 8% max */
-        minmax(80px, 35vh)     /* Question: 35% priority */
-        minmax(60px, 1fr);     /* Answers: Flexible remaining */
-    grid-template-columns: 1fr 1fr;
-    gap: clamp(4px, 0.8vh, 8px);
+        "header header"
+        "main sidebar"
+        "footer footer";
+    background: var(--mindmaze-gray);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        var(--frame-shadow);
+    position: relative;
     overflow: hidden;
-    min-height: 0;
-    max-height: 100%;
-    container-type: size;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'MS Sans Serif', Arial, sans-serif;
+    font-size: clamp(10px, 1.2vw, 14px);
+    gap: 0;
 }
+/* .game-main grid definitions exist later in the file for responsive variations */
 
 /* Sidebar - Windows 95 Information Panel (25% max) */
 .game-sidebar {

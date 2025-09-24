@@ -1,12 +1,10 @@
-/*
- * LobeLabyrinth - Achievement System Styles
- * Windows 95 achievements and notifications system
- */
-
 /* CHANGELOG
- - Replaced repeated panel/background/shadow values with `--mm-` semantic variables
- - Kept selectors and specificity identical to avoid visual regressions
+ - Imported shared MindMaze variables and consolidated repeated chrome/panel styles
+ - Replaced duplicated values with --mm- variables where safe
 */
+@import url("./mm-vars.css");
+
+/* LobeLabyrinth Achievement Styles (original content preserved) */
 
 /* Achievement Stats in Sidebar - System Information */
 .achievement-stats-summary {

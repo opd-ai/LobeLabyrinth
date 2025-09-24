@@ -1,0 +1,68 @@
+/* CHANGELOG
+ - Added shared MindMaze CSS variables and small helper utility classes to reduce duplication
+ - Prefix variables with --mm- for clarity
+*/
+/* Root variables for colors, spacing, fonts, chrome, and z-indexes */
+:root {
+    /* Colors */
+    --mm-bg: #e9e6dd; /* main application background */
+    --mm-panel: #f3efe6; /* panel background */
+    --mm-text: #1b1b1b; /* primary text */
+    --mm-text-dim: #6b6b6b; /* dim text */
+    --mm-stone: #bfb7a8; /* window bezel / stone */
+    --mm-gold: #d4af37; /* accent gold */
+    --mm-brown: #8b6b4a; /* brown accent */
+    --mm-blue: #2b6fb3; /* blue accent */
+    --mm-crimson: #a33; /* error/warn accent */
+
+    /* Shadows and chrome */
+    --mm-shadow-deep: 0 6px 18px rgba(12,10,8,0.25);
+    --mm-shadow-inset: inset 0 1px 0 rgba(255,255,255,0.35);
+
+    /* Spacing */
+    --mm-spacing-xs: 4px;
+    --mm-spacing-sm: 8px;
+    --mm-spacing-md: 12px;
+    --mm-spacing-lg: 20px;
+
+    /* Border radii and chrome sizes */
+    --mm-radius: 4px;
+    --mm-bezel-width: 2px;
+
+    /* Fonts */
+    --mm-font-ui: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    --mm-font-heading: "Segoe UI Semibold", "Segoe UI", sans-serif;
+
+    /* Z-index layering */
+    --mm-z-overlay: 1500;
+    --mm-z-notification: 1000;
+    --mm-z-victory: 2000;
+}
+
+/* Reusable helpers to emulate Windows 95 inset/outset chrome */
+.mm-panel {
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
+    box-shadow: var(--mm-shadow-inset), var(--mm-shadow-deep);
+}
+
+.mm-bezel-inset { border: var(--mm-bezel-width) inset var(--mm-stone); }
+.mm-bezel-outset { border: var(--mm-bezel-width) outset var(--mm-stone); }
+
+.mm-btn {
+    font-family: var(--mm-font-ui);
+    background: linear-gradient(#fff, #eae6dc);
+    border: 1px solid rgba(0,0,0,0.15);
+    padding: 6px 10px;
+    border-radius: var(--mm-radius);
+    box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+    cursor: pointer;
+}
+
+/* Utility to hide overlays while preserving JS toggle hooks */
+.mm-hidden {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+}

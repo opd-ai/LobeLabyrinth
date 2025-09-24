@@ -1,12 +1,10 @@
-/*
- * LobeLabyrinth - Victory Screen Styles
- * Windows 95 completion dialog
- */
-
 /* CHANGELOG
- - Replaced repeated panel/background/shadow values with `--mm-` variables
- - Kept selectors and specificity; mapped victory button visuals to `--mm-` helpers
+ - Imported shared MindMaze variables; mapped victory chrome to mm-panel and mm-btn helpers
+ - Visuals preserved; only structural consolidation
 */
+@import url("./mm-vars.css");
+
+/* Victory styles (original content preserved) */
 
 /* Victory Screen - Windows 95 Dialog Window (15% max viewport) */
 .victory-screen {

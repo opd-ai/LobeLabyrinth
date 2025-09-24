@@ -7,7 +7,11 @@
  - Added `--mm-` prefixed aliases for common shadows/colors used across the project
  - Replaced a few repeated box-shadow and highlight color literals with variables to reduce duplication
  - Kept original selectors and specificity to avoid behavior changes
+ - Imported shared MindMaze variables and consolidated repetitive panel/button chrome
+ - Structural reorganization only; behavior preserved
 */
+@import url("./mm-vars.css");
+
 
 /* CSS Custom Properties for theming */
 :root {

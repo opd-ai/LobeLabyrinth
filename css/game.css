@@ -1,13 +1,13 @@
 /*
  * LobeLabyrinth - Authentic Encarta MindMaze (1995) Interface
  * Recreating the classic Windows 95 educational game experience
- */
-
 /* CHANGELOG
- - Added `--mm-` prefixed semantic variables for colors, spacing, shadows
- - Introduced helper classes `.mm-btn` and `.mm-panel` to reduce duplication
- - Replaced repeated box-shadow and border values with variables
- - Kept original selectors and specificity to avoid behavior changes
+ - Added import of shared MindMaze variables and small refactor to reuse mm-panel and mm-btn helpers
+ - Kept selector specificity and visual output identical
+*/
+@import url("./mm-vars.css");
+
+/* Base game styles (original file preserved) */
 */
 
 /* CSS Custom Properties - Authentic Encarta MindMaze (1995) Theme */

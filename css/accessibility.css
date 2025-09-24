@@ -1,0 +1,795 @@
+/* =============================================================================
+   LOBELABYRINTH - ACCESSIBILITY STYLES
+   WCAG 2.1 AA compliance, keyboard navigation, and assistive technology support
+   ============================================================================= */
+
+/* =============================================================================
+   FOCUS INDICATORS AND KEYBOARD NAVIGATION
+   ============================================================================= */
+
+/* Enhanced focus indicators for all interactive elements */
+*:focus-visible {
+    outline: 3px solid var(--mm-focus-color);
+    outline-offset: 2px;
+    border-radius: var(--mm-border-radius-sm);
+    z-index: var(--mm-z-focus);
+    position: relative;
+}
+
+/* Specific focus styles for game elements */
+button:focus-visible,
+.btn:focus-visible,
+.answer-button:focus-visible,
+.answer-btn:focus-visible {
+    outline: 3px solid var(--mm-focus-color);
+    outline-offset: 3px;
+    box-shadow: 
+        0 0 0 2px var(--mm-bg-primary),
+        0 0 0 5px var(--mm-focus-color),
+        var(--mm-shadow-subtle);
+}
+
+/* Canvas focus for map navigation */
+#map-canvas:focus-visible {
+    outline: 4px solid var(--mm-focus-color);
+    outline-offset: 4px;
+    box-shadow: 0 0 0 2px var(--mm-bg-primary), 0 0 15px rgba(0, 123, 255, 0.5);
+}
+
+/* Link focus styles */
+a:focus-visible,
+.connection-link:focus-visible {
+    outline: 2px solid var(--mm-focus-color);
+    outline-offset: 2px;
+    background: rgba(0, 123, 255, 0.1);
+    border-radius: var(--mm-border-radius-sm);
+}
+
+/* Form element focus */
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 2px solid var(--mm-focus-color);
+    outline-offset: 2px;
+    border-color: var(--mm-focus-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+}
+
+/* Modal and overlay focus management */
+.achievement-gallery:focus-within .achievement-gallery-content,
+.victory-screen:focus-within .victory-content,
+.keyboard-help-overlay:focus-within .keyboard-help-content {
+    outline: 2px solid var(--mm-focus-color);
+    outline-offset: -2px;
+}
+
+/* =============================================================================
+   SCREEN READER AND ASSISTIVE TECHNOLOGY SUPPORT
+   ============================================================================= */
+
+/* Screen reader only content */
+.sr-only,
+.screen-reader-only,
+.visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Show screen reader content when focused (for skip links) */
+.sr-only:focus,
+.screen-reader-only:focus,
+.skip-link:focus {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md) !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: auto !important;
+    white-space: normal !important;
+    background: var(--mm-accent-navy) !important;
+    color: var(--mm-text-light) !important;
+    text-decoration: none !important;
+    border-radius: var(--mm-border-radius) !important;
+    font-weight: var(--mm-font-weight-bold) !important;
+    z-index: var(--mm-z-modal) !important;
+    box-shadow: var(--mm-shadow-deep) !important;
+}
+
+/* ARIA live regions for dynamic content announcements */
+[aria-live="polite"],
+[aria-live="assertive"],
+.live-region {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.live-region.announced {
+    position: static;
+    left: auto;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    padding: var(--mm-spacing-sm);
+    background: var(--mm-info-bg);
+    color: var(--mm-info-color);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    margin-bottom: var(--mm-spacing-sm);
+    font-weight: var(--mm-font-weight-bold);
+}
+
+/* Enhanced status announcements */
+.status-announcement {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--mm-info-bg);
+    color: var(--mm-info-color);
+    padding: var(--mm-spacing-md);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    max-width: 400px;
+    z-index: var(--mm-z-toast);
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all var(--mm-transition-medium);
+    font-weight: var(--mm-font-weight-bold);
+}
+
+.status-announcement.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.status-announcement.error {
+    background: var(--mm-error-bg);
+    color: var(--mm-error-color);
+    border-color: var(--mm-error-border);
+}
+
+.status-announcement.success {
+    background: var(--mm-success-bg);
+    color: var(--mm-success-color);
+    border-color: var(--mm-success-border);
+}
+
+/* =============================================================================
+   KEYBOARD NAVIGATION HELPERS
+   ============================================================================= */
+
+/* Keyboard navigation indicators */
+.keyboard-navigating button:focus,
+.keyboard-navigating .btn:focus,
+.keyboard-navigating .answer-button:focus,
+.keyboard-navigating .answer-btn:focus {
+    background: var(--mm-btn-focus-bg);
+    border-color: var(--mm-focus-color);
+    transform: translateY(-1px);
+}
+
+/* Tab order visual indicators (development aid) */
+body.show-tab-order [tabindex]:not([tabindex="-1"])::before {
+    content: attr(tabindex);
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: var(--mm-accent-crimson);
+    color: var(--mm-text-light);
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--mm-font-weight-bold);
+    z-index: var(--mm-z-debug);
+}
+
+/* Improved button group navigation */
+.controls-grid button,
+.victory-actions button,
+.completion-actions button {
+    position: relative;
+}
+
+.controls-grid button:focus-visible::after,
+.victory-actions button:focus-visible::after,
+.completion-actions button:focus-visible::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border: 2px solid var(--mm-focus-color);
+    border-radius: calc(var(--mm-border-radius) + 4px);
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Answer button keyboard navigation */
+#answer-buttons {
+    position: relative;
+}
+
+.answer-button.keyboard-selected,
+.answer-btn.keyboard-selected {
+    background: var(--mm-btn-focus-bg);
+    border-color: var(--mm-focus-color);
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+    z-index: 1;
+}
+
+/* Map canvas keyboard navigation indicators */
+#map-canvas[data-keyboard-focus="true"] {
+    cursor: crosshair;
+    filter: brightness(1.1);
+}
+
+#map-canvas[data-keyboard-room-selected] {
+    box-shadow: inset 0 0 20px rgba(0, 123, 255, 0.5);
+}
+
+/* =============================================================================
+   HIGH CONTRAST MODE SUPPORT
+   ============================================================================= */
+
+@media (prefers-contrast: high) {
+    /* Increase border visibility */
+    .section,
+    .stat-card,
+    .achievement-card,
+    .breakdown-item,
+    button,
+    .btn,
+    .answer-button,
+    .answer-btn {
+        border-width: 2px;
+        border-style: solid;
+    }
+    
+    /* Enhance focus indicators */
+    *:focus-visible {
+        outline-width: 4px;
+        outline-offset: 3px;
+    }
+    
+    /* Strengthen text contrast */
+    .section h2,
+    .section h3,
+    .stat-value,
+    .achievement-name,
+    .victory-title {
+        color: var(--mm-text-color);
+        text-shadow: none;
+        font-weight: var(--mm-font-weight-bold);
+    }
+    
+    /* Remove gradients for clarity */
+    .progress-fill,
+    .timer-bar,
+    .category-progress-fill,
+    .achievement-progress-fill {
+        background: var(--mm-accent-blue) !important;
+    }
+    
+    /* Enhance interactive elements */
+    button:hover,
+    .btn:hover,
+    .answer-button:hover,
+    .answer-btn:hover {
+        background: var(--mm-text-color) !important;
+        color: var(--mm-bg-primary) !important;
+        border-color: var(--mm-text-color) !important;
+    }
+    
+    /* Remove animations that might cause confusion */
+    .achievement-card.unlocked::before,
+    .victory-content::before,
+    .victory-header::before {
+        display: none;
+    }
+}
+
+/* =============================================================================
+   REDUCED MOTION SUPPORT
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    /* Disable all animations and transitions */
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    /* Remove background animations */
+    .victory-screen {
+        background: rgba(0, 0, 128, 0.9) !important;
+    }
+    
+    /* Remove shimmer effects */
+    .achievement-card.unlocked::before,
+    .victory-content::before,
+    .victory-header::before,
+    .stat-card::before {
+        display: none !important;
+    }
+    
+    /* Static focus indicators */
+    *:focus-visible {
+        transition: none !important;
+    }
+    
+    /* Simplify progress indicators */
+    .progress-fill,
+    .timer-bar {
+        transition: none !important;
+    }
+    
+    /* Remove pulsing and glowing effects */
+    .time-pulse,
+    #time-pulse,
+    .completion-grade,
+    .achievement-rarity.legendary {
+        animation: none !important;
+    }
+}
+
+/* =============================================================================
+   FONT SIZE AND TEXT SCALING SUPPORT
+   ============================================================================= */
+
+/* Support for larger text sizes */
+@media (min-resolution: 1.5dppx) {
+    body {
+        font-size: calc(var(--mm-font-size-base) * 1.1);
+        line-height: calc(var(--mm-line-height-normal) * 1.1);
+    }
+}
+
+/* Text scaling for better readability */
+.large-text {
+    font-size: 1.2em;
+    line-height: 1.6;
+}
+
+.extra-large-text {
+    font-size: 1.4em;
+    line-height: 1.7;
+}
+
+/* Ensure touch targets meet accessibility guidelines */
+button,
+.btn,
+.answer-button,
+.answer-btn,
+a,
+input,
+select,
+textarea,
+[role="button"],
+[role="link"] {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+@media (max-width: 768px) {
+    button,
+    .btn,
+    .answer-button,
+    .answer-btn {
+        min-height: 48px;
+        padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+    }
+}
+
+/* =============================================================================
+   COLOR BLINDNESS SUPPORT
+   ============================================================================= */
+
+/* Pattern-based indicators for color-blind users */
+.legend-current::after,
+.room-status-current::after {
+    content: '●';
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    color: var(--mm-text-color);
+    font-size: 8px;
+}
+
+.legend-visited::after,
+.room-status-visited::after {
+    content: '✓';
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    color: var(--mm-text-color);
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.legend-accessible::after,
+.room-status-accessible::after {
+    content: '○';
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    color: var(--mm-text-color);
+    font-size: 8px;
+}
+
+.legend-locked::after,
+.room-status-locked::after {
+    content: '✕';
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    color: var(--mm-text-color);
+    font-size: 8px;
+}
+
+/* Progress indicators with patterns */
+.progress-fill {
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.1) 2px,
+        rgba(255, 255, 255, 0.1) 4px
+    );
+}
+
+.progress-fill.accuracy-fill {
+    background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 3px,
+        rgba(255, 255, 255, 0.2) 3px,
+        rgba(255, 255, 255, 0.2) 6px
+    );
+}
+
+.progress-fill.rooms-fill {
+    background-image: repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 1px,
+        rgba(255, 255, 255, 0.15) 1px,
+        rgba(255, 255, 255, 0.15) 3px
+    );
+}
+
+/* =============================================================================
+   KEYBOARD SHORTCUTS OVERLAY
+   ============================================================================= */
+
+.keyboard-help-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--mm-z-modal);
+    padding: var(--mm-spacing-md);
+}
+
+.keyboard-help-content {
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    padding: var(--mm-spacing-lg);
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.keyboard-help-content h3 {
+    color: var(--mm-accent-navy);
+    font-size: var(--mm-font-size-lg);
+    margin-bottom: var(--mm-spacing-md);
+    text-align: center;
+    border-bottom: 2px solid var(--mm-border-color);
+    padding-bottom: var(--mm-spacing-sm);
+}
+
+.keyboard-help-text {
+    font-family: monospace;
+    font-size: var(--mm-font-size-sm);
+    line-height: var(--mm-line-height-relaxed);
+    color: var(--mm-text-color);
+    white-space: pre-line;
+    background: var(--mm-bg-primary);
+    border: var(--mm-border-sunken);
+    border-radius: var(--mm-border-radius);
+    padding: var(--mm-spacing-md);
+    margin-top: var(--mm-spacing-md);
+}
+
+.keyboard-help-overlay:focus-within {
+    outline: none;
+}
+
+.keyboard-help-content:focus {
+    outline: 3px solid var(--mm-focus-color);
+    outline-offset: 2px;
+}
+
+/* =============================================================================
+   ERROR AND WARNING ANNOUNCEMENTS
+   ============================================================================= */
+
+.error-announcement,
+.warning-announcement,
+.info-announcement {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    padding: var(--mm-spacing-lg);
+    box-shadow: var(--mm-shadow-deep);
+    z-index: var(--mm-z-modal);
+    max-width: 400px;
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+    transition: all var(--mm-transition-medium);
+}
+
+.error-announcement.show,
+.warning-announcement.show,
+.info-announcement.show {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.error-announcement {
+    background: var(--mm-error-bg);
+    color: var(--mm-error-color);
+    border-color: var(--mm-error-border);
+}
+
+.warning-announcement {
+    background: var(--mm-warning-bg);
+    color: var(--mm-warning-color);
+    border-color: var(--mm-warning-border);
+}
+
+.info-announcement {
+    background: var(--mm-info-bg);
+    color: var(--mm-info-color);
+    border-color: var(--mm-info-border);
+}
+
+/* =============================================================================
+   RESPONSIVE ACCESSIBILITY ADJUSTMENTS
+   ============================================================================= */
+
+/* Mobile accessibility improvements */
+@media (max-width: 767px) {
+    /* Larger touch targets on mobile */
+    button,
+    .btn,
+    .answer-button,
+    .answer-btn,
+    a,
+    [role="button"],
+    [role="link"] {
+        min-height: 48px;
+        min-width: 48px;
+        padding: var(--mm-spacing-md);
+    }
+    
+    /* Enhanced focus indicators for touch */
+    *:focus-visible {
+        outline-width: 4px;
+        outline-offset: 4px;
+    }
+    
+    /* Better spacing for readability */
+    .section {
+        padding: var(--mm-spacing-md);
+    }
+    
+    /* Larger text for mobile screens */
+    body {
+        font-size: calc(var(--mm-font-size-base) * 1.1);
+    }
+    
+    /* Keyboard help adjustments */
+    .keyboard-help-content {
+        padding: var(--mm-spacing-md);
+        max-height: 90vh;
+    }
+    
+    .keyboard-help-text {
+        font-size: var(--mm-font-size-xs);
+    }
+}
+
+/* Large screen accessibility */
+@media (min-width: 1200px) {
+    /* Enhanced focus indicators for larger screens */
+    *:focus-visible {
+        outline-width: 3px;
+        outline-offset: 3px;
+    }
+    
+    /* Larger interactive elements */
+    button,
+    .btn {
+        min-height: 48px;
+        padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+    }
+}
+
+/* =============================================================================
+   PRINT ACCESSIBILITY
+   ============================================================================= */
+
+@media print {
+    /* Ensure good contrast for printing */
+    .section,
+    .stat-card,
+    .achievement-card,
+    .breakdown-item {
+        border: 2px solid black;
+        background: white;
+        color: black;
+    }
+    
+    /* Hide interactive elements that don't make sense in print */
+    button,
+    .btn,
+    .answer-button,
+    .answer-btn,
+    .keyboard-help-overlay,
+    .status-announcement,
+    .achievement-notification {
+        display: none;
+    }
+    
+    /* Enhance text for print */
+    body {
+        font-size: 12pt;
+        line-height: 1.5;
+        color: black;
+        background: white;
+    }
+    
+    /* Add URL information for links */
+    a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: smaller;
+        color: #666;
+    }
+    
+    /* Page break controls */
+    .section,
+    .stat-card,
+    .achievement-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+    
+    h2, h3 {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+}
+
+/* =============================================================================
+   DEBUGGING AIDS (DEVELOPMENT ONLY)
+   ============================================================================= */
+
+/* Accessibility debugging class */
+body.a11y-debug [aria-label]::before {
+    content: "ARIA: " attr(aria-label);
+    position: absolute;
+    top: -20px;
+    left: 0;
+    background: var(--mm-accent-crimson);
+    color: var(--mm-text-light);
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 2px;
+    z-index: var(--mm-z-debug);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+body.a11y-debug [role]::after {
+    content: "ROLE: " attr(role);
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    background: var(--mm-accent-blue);
+    color: var(--mm-text-light);
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 2px;
+    z-index: var(--mm-z-debug);
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+/* Focus debugging */
+body.focus-debug *:focus {
+    outline: 3px dashed red !important;
+    outline-offset: 2px !important;
+}
+
+/* =============================================================================
+   FUTURE ENHANCEMENTS
+   ============================================================================= */
+
+/* Voice control support preparation */
+[data-voice-command] {
+    position: relative;
+}
+
+[data-voice-command]::before {
+    content: attr(data-voice-command);
+    position: absolute;
+    top: -15px;
+    right: -5px;
+    background: var(--mm-accent-gold);
+    color: var(--mm-text-color);
+    font-size: 8px;
+    padding: 1px 3px;
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity var(--mm-transition-fast);
+    pointer-events: none;
+    z-index: var(--mm-z-debug);
+}
+
+body.show-voice-commands [data-voice-command]::before {
+    opacity: 1;
+}
+
+/* Screen reader landmark enhancements */
+main[role="main"],
+nav[role="navigation"],
+aside[role="complementary"],
+section[role="region"] {
+    position: relative;
+}
+
+/* Enhanced landmark identification for debugging */
+body.show-landmarks main[role="main"]::before,
+body.show-landmarks nav[role="navigation"]::before,
+body.show-landmarks aside[role="complementary"]::before {
+    content: attr(role);
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--mm-accent-navy);
+    color: var(--mm-text-light);
+    font-size: 10px;
+    padding: 2px 4px;
+    border-radius: 0 0 4px 0;
+    z-index: var(--mm-z-debug);
+    text-transform: uppercase;
+}

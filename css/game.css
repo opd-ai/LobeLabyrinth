@@ -987,6 +987,227 @@ button:disabled,
 }
 
 /* =============================================================================
+   NOTIFICATION TOASTS AND UI OPTIMIZATIONS
+   ============================================================================= */
+
+/* Generic notification toast system */
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    padding: var(--mm-spacing-md);
+    box-shadow: var(--mm-shadow-deep);
+    z-index: var(--mm-z-toast);
+    min-width: 280px;
+    max-width: 400px;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all var(--mm-transition-medium);
+    display: flex;
+    align-items: flex-start;
+    gap: var(--mm-spacing-sm);
+}
+
+.notification-toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification-toast.hide {
+    opacity: 0;
+    transform: translateX(100%);
+}
+
+.toast-icon {
+    font-size: 20px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.toast-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.toast-title {
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-text-color);
+    margin-bottom: var(--mm-spacing-xs);
+    font-size: var(--mm-font-size-sm);
+}
+
+.toast-message {
+    color: var(--mm-text-dim);
+    font-size: var(--mm-font-size-sm);
+    line-height: var(--mm-line-height-relaxed);
+}
+
+/* Toast variants */
+.toast-success {
+    background: var(--mm-success-bg);
+    border-color: var(--mm-success-border);
+}
+
+.toast-success .toast-title {
+    color: var(--mm-success-color);
+}
+
+.toast-error {
+    background: var(--mm-error-bg);
+    border-color: var(--mm-error-border);
+}
+
+.toast-error .toast-title {
+    color: var(--mm-error-color);
+}
+
+.toast-warning {
+    background: var(--mm-warning-bg);
+    border-color: var(--mm-warning-border);
+}
+
+.toast-warning .toast-title {
+    color: var(--mm-warning-color);
+}
+
+.toast-info {
+    background: var(--mm-info-bg);
+    border-color: var(--mm-info-border);
+}
+
+.toast-info .toast-title {
+    color: var(--mm-info-color);
+}
+
+/* Toast container for multiple notifications */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: var(--mm-z-toast);
+    display: flex;
+    flex-direction: column;
+    gap: var(--mm-spacing-sm);
+    pointer-events: none;
+}
+
+#toast-container .notification-toast {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin: 0;
+    pointer-events: all;
+}
+
+/* Achievement unlock animation */
+.achievement-unlock-animation {
+    display: flex;
+    align-items: center;
+    gap: var(--mm-spacing-sm);
+}
+
+.achievement-unlock-animation .achievement-icon {
+    font-size: 24px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mm-accent-gold);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    animation: achievementPop 0.6s ease-out;
+}
+
+@keyframes achievementPop {
+    0% { transform: scale(0) rotate(-180deg); }
+    60% { transform: scale(1.2) rotate(10deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.achievement-unlock-animation .achievement-details {
+    flex: 1;
+}
+
+.achievement-unlock-animation .achievement-title {
+    font-size: var(--mm-font-size-xs);
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: var(--mm-spacing-xs);
+}
+
+.achievement-unlock-animation .achievement-name {
+    font-size: var(--mm-font-size-sm);
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-text-color);
+    margin-bottom: var(--mm-spacing-xs);
+}
+
+.achievement-unlock-animation .achievement-description {
+    font-size: var(--mm-font-size-xs);
+    color: var(--mm-text-dim);
+    line-height: var(--mm-line-height-compact);
+    margin-bottom: var(--mm-spacing-xs);
+}
+
+.achievement-unlock-animation .achievement-points {
+    font-size: var(--mm-font-size-xs);
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-accent-gold-dark);
+}
+
+.achievement-rarity {
+    display: inline-block;
+    font-size: var(--mm-font-size-xs);
+    font-weight: var(--mm-font-weight-bold);
+    padding: var(--mm-spacing-xs) var(--mm-spacing-sm);
+    border-radius: var(--mm-border-radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: var(--mm-spacing-xs);
+}
+
+.achievement-rarity-common {
+    background: var(--mm-text-dim);
+    color: var(--mm-text-light);
+}
+
+.achievement-rarity-uncommon {
+    background: var(--mm-accent-forest);
+    color: var(--mm-text-light);
+}
+
+.achievement-rarity-rare {
+    background: var(--mm-accent-blue);
+    color: var(--mm-text-light);
+}
+
+.achievement-rarity-epic {
+    background: var(--mm-accent-crimson);
+    color: var(--mm-text-light);
+}
+
+.achievement-rarity-legendary {
+    background: linear-gradient(45deg, var(--mm-accent-gold), var(--mm-accent-gold-light));
+    color: var(--mm-text-color);
+    animation: legendaryShimmer 2s infinite alternate;
+}
+
+@keyframes legendaryShimmer {
+    from { box-shadow: 0 0 5px rgba(212, 175, 55, 0.5); }
+    to { box-shadow: 0 0 15px rgba(212, 175, 55, 0.8); }
+}
+
+/* =============================================================================
    PERFORMANCE OPTIMIZATIONS
    ============================================================================= */
 
@@ -1006,6 +1227,11 @@ button:disabled,
 .answer-button,
 .answer-btn {
     contain: layout paint;
+}
+
+.notification-toast {
+    contain: layout paint;
+    will-change: transform, opacity;
 }
 
 /* =============================================================================

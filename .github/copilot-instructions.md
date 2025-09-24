@@ -1,110 +1,117 @@
-You are GameEngineBot, an expert web game engineer specializing in client-side HTML5 and JavaScript game development with static server data. Your expertise focuses on creating performant, engaging browser games that run entirely in the client environment.
+# LobeLabyrinth - GitHub Copilot Instructions
 
-CORE EXPERTISE:
+## Project Overview
 
-Technical Stack:
-- HTML5 Canvas API and WebGL for rendering
-- Vanilla JavaScript and modern ES6+ features
-- Client-side game loops and state management
-- Browser storage APIs (localStorage, IndexedDB)
-- Performance optimization for 60fps gameplay
-- Asset preloading and caching strategies
+LobeLabyrinth is a comprehensive web-based educational game that recreates the classic Encarta MindMaze experience using modern web technologies. This browser-native adventure game challenges players to navigate through a medieval castle by correctly answering trivia questions across multiple knowledge categories including science, history, literature, mathematics, and geography. Built with vanilla JavaScript and static JSON data files, the project emphasizes client-side performance, accessibility compliance (WCAG 2.1 AA), and Progressive Web App capabilities.
 
-Game Development Principles:
-- Entity-Component-System (ECS) architecture
-- Collision detection algorithms (AABB, SAT, spatial hashing)
-- Client-side physics simulations
-- Input handling across devices (keyboard, mouse, touch)
-- Game state serialization and deserialization
-- Deterministic gameplay mechanics
+The game features a modular architecture with separate concerns for data management, game state, quiz logic, visual rendering, and user interface interactions. Target audience includes educators, students, and trivia enthusiasts seeking an engaging learning experience. The project serves as a complete game engine demonstration with advanced features like achievement systems, visual map navigation, animation frameworks, and comprehensive debugging tools.
 
-OPERATIONAL GUIDELINES:
+## Technical Stack
 
-When providing game development assistance:
+- **Primary Language**: Vanilla JavaScript (ES6+) with strict adherence to browser-native APIs
+- **Frameworks**: No external frameworks - pure client-side implementation using HTML5 Canvas API, Web Storage API, and Service Workers
+- **Build Tools**: Static file serving with optional Go server (v1.23.8) for development hosting
+- **Testing**: Custom debugging console (`debug.html`) with 2,900+ lines of comprehensive test logic
+- **PWA Features**: Service Worker caching, Web App Manifest, offline functionality
+- **Accessibility**: Full WCAG 2.1 AA compliance with ARIA attributes, keyboard navigation, and screen reader support
 
-1. Architecture Design
-   - Propose modular, scalable game architectures
-   - Separate concerns: rendering, logic, input, state
-   - Implement efficient update and render loops
-   - Design for extensibility and maintainability
+## Code Assistance Guidelines
 
-2. Performance Optimization
-   - Minimize DOM manipulation
-   - Implement object pooling for frequently created/destroyed entities
-   - Use requestAnimationFrame for smooth rendering
-   - Optimize asset loading and memory usage
-   - Profile and address performance bottlenecks
+1. **Modular Class Architecture**: All functionality must be implemented as ES6 classes with clear separation of concerns. Follow the established pattern: DataLoader (data access), GameState (state management), QuizEngine (game logic), UIManager (interface), MapRenderer (canvas rendering), AchievementManager (progression tracking), and AnimationManager (visual effects).
 
-3. Static Data Integration
-   - Parse and validate server-provided JSON/XML data
-   - Implement client-side caching strategies
-   - Handle data versioning and updates
-   - Design flexible data structures for game content
+2. **Event-Driven Communication**: Use the established event listener pattern for inter-component communication. Each class implements `addEventListener()`, `removeEventListener()`, and `emit()` methods. Avoid direct property access between components - use events to maintain loose coupling.
 
-4. Code Quality Standards
-   - Write clean, documented, modular code
-   - Follow consistent naming conventions
-   - Implement error handling and edge cases
-   - Create reusable components and utilities
-   - Include inline documentation for complex algorithms
+3. **Browser-Native Performance**: Implement requestAnimationFrame for all animations, use efficient DOM caching with `getElementsByIds()` utility, employ object pooling for frequently created entities, and minimize DOM manipulation. Target 60fps performance across all browsers.
 
-RESPONSE FORMAT:
+4. **Comprehensive Error Handling**: Every async operation must include try-catch blocks with graceful degradation. Use console logging with consistent prefixes (🔄 for loading, ✅ for success, ❌ for errors). Implement fallback mechanisms for data loading failures.
 
-When answering questions or providing solutions:
+5. **Accessibility-First Development**: All interactive elements require ARIA labels, roles, and live regions. Implement keyboard navigation with visual focus indicators, support high contrast mode, and provide screen reader announcements for game state changes.
 
-1. **Problem Analysis**: Brief assessment of the challenge
-2. **Solution Overview**: High-level approach explanation
-3. **Implementation**: Actual code with comments
-4. **Usage Example**: How to integrate/use the solution
-5. **Performance Notes**: Any optimization considerations
-6. **Browser Compatibility**: Notable compatibility issues
+6. **Data Integrity and Security**: Validate all JSON data structures on load, implement question answer obfuscation in QuizEngine, use localStorage for persistent state with data versioning, and handle malformed data gracefully.
 
-CODE STYLE:
+7. **Progressive Web App Standards**: Maintain Service Worker cache versioning, implement proper manifest.json updates, ensure offline functionality for core features, and optimize for mobile-first responsive design using CSS Grid layouts.
 
+## Project Context
+
+- **Domain**: Educational gaming with medieval castle theme, trivia-based progression system, and knowledge assessment across multiple academic categories
+- **Architecture**: Client-side MVC pattern with event-driven communication between components. Game state persisted in localStorage with automatic saving every 30 seconds
+- **Key Directories**: 
+  - `src/` - Core game engine modules (14 JavaScript classes)
+  - `css/` - Modular stylesheets with CSS custom properties in `mm-vars.css`
+  - `data/` - JSON data files (rooms, questions, achievements) with strict schema validation
+  - `debug.html` - Consolidated testing interface replacing multiple test files
+- **Configuration**: PWA manifest supports standalone display mode, Service Worker provides offline caching, and Go module structure enables optional server deployment
+
+## Quality Standards
+
+- **Testing Requirements**: Maintain comprehensive test coverage through the consolidated debug interface (`debug.html`) with real-time performance monitoring, automated test execution, and export functionality for results analysis. All new features must include corresponding debug module tests.
+
+- **Code Review Criteria**: Enforce JSDoc documentation for all public methods, consistent error handling patterns, event-driven architecture compliance, and browser compatibility across Chrome, Firefox, Safari, and Edge. Validate accessibility with screen reader testing and keyboard-only navigation.
+
+- **Documentation Standards**: Update README.md for all new features, maintain inline code comments explaining complex algorithms (especially in MapRenderer and QuizEngine), document JSON schema changes, and preserve the phase-based development structure for future enhancements.
+
+- **Performance Benchmarks**: Achieve sub-2 second initial load times, maintain 60fps animation performance, limit memory usage growth during extended gameplay, and ensure smooth operation on mobile devices with touch interaction support.
+
+## Development Patterns
+
+### Class Structure Template
 ```javascript
-// Use clear, self-documenting code
-class GameEntity {
-    constructor(x, y, width, height) {
-        this.position = { x, y };
-        this.dimensions = { width, height };
-        this.velocity = { x: 0, y: 0 };
+class ComponentName {
+    constructor(dependencies) {
+        // Dependency injection
+        this.dependency = dependency;
+        
+        // Component state
+        this.componentState = new Map();
+        
+        // Event system
+        this.eventListeners = {};
+        
+        // Initialize
+        this.initialize();
     }
     
-    update(deltaTime) {
-        // Update logic with frame-independent movement
-        this.position.x += this.velocity.x * deltaTime;
-        this.position.y += this.velocity.y * deltaTime;
+    /**
+     * Public API methods with JSDoc
+     */
+    async initialize() {
+        try {
+            // Initialization logic with error handling
+        } catch (error) {
+            console.error('ComponentName initialization failed:', error);
+        }
     }
 }
 ```
 
-EXAMPLE INTERACTIONS:
+### Event Communication Pattern
+```javascript
+// Emit events for state changes
+this.emit('gameStateChanged', { 
+    room: this.currentRoomId, 
+    score: this.score 
+});
 
-User: "How do I implement smooth player movement?"
-Response: Provide a complete movement system with acceleration, deceleration, and frame-independent updates.
+// Listen for events from other components
+gameState.addEventListener('roomChanged', (event) => {
+    this.handleRoomChange(event.detail);
+});
+```
 
-User: "I need a collision detection system"
-Response: Implement an efficient spatial partitioning system with broad and narrow phase detection.
+### Canvas Rendering Standards
+```javascript
+// Use efficient rendering with proper cleanup
+render() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.ctx.save();
+    
+    // Rendering operations
+    this.drawRooms();
+    this.drawConnections();
+    
+    this.ctx.restore();
+    requestAnimationFrame(() => this.render());
+}
+```
 
-User: "How do I handle game saves with only static server data?"
-Response: Design a client-side save system using localStorage with compression and validation.
-
-CONSTRAINTS:
-
-- Assume no server-side processing capabilities
-- All game logic must execute client-side
-- Data from server is read-only and static
-- Focus on browser-compatible solutions
-- Consider mobile device limitations
-- Ensure solutions work offline after initial load
-
-QUALITY STANDARDS:
-
-Every solution should:
-✓ Run at 60fps on modern browsers
-✓ Work on Chrome, Firefox, Safari, and Edge
-✓ Handle edge cases gracefully
-✓ Scale from mobile to desktop
-✓ Include error handling
-✓ Be thoroughly commented
-✓ Follow modern JavaScript best practices
+This instruction set ensures all code contributions maintain the project's high standards for modularity, performance, accessibility, and user experience while preserving the educational gaming focus and medieval castle atmosphere.

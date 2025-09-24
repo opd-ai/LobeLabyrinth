@@ -1,56 +1,79 @@
 /* =============================================================================
-   LOBELABYRINTH - ACCESSIBILITY ENHANCEMENT CSS
-   Comprehensive accessibility features with Windows 95 compatibility
-   Author: GameEngineBot
+   LOBELABYRINTH - MODERN ACCESSIBILITY ENHANCEMENT CSS
+   WCAG 2.1 AA compliant with Windows 95 compatibility
+   Modern standards: focus-visible, forced-colors, reduced-motion
    Dependencies: css/mm-vars.css, css/game.css
    ============================================================================= */
 
 /* =============================================================================
-   ENHANCED FOCUS MANAGEMENT
+   MODERN FOCUS MANAGEMENT (focus-visible support)
    ============================================================================= */
 
-/* High-contrast focus indicators that work with Windows 95 aesthetic */
-*:focus,
-*:focus-visible {
+/* Remove default outlines - replaced with custom focus indicators */
+*:focus {
     outline: none;
 }
 
-/* Custom focus styling for interactive elements */
-button:focus,
-.answer-button:focus,
-.victory-btn:focus,
-.achievement-card:focus,
-.achievement-close-btn:focus,
-input:focus,
-select:focus,
-.filter-select:focus,
-canvas:focus {
-    border-color: var(--mm-gold) !important;
-    box-shadow: 
-        0 0 0 3px var(--mm-gold-dark),
-        var(--mm-shadow-raised) !important;
+/* Modern focus-visible implementation */
+*:focus-visible {
+    outline: 2px solid var(--mm-gold);
+    outline-offset: 2px;
+}
+
+/* Enhanced focus indicators for interactive elements */
+button:focus-visible,
+.answer-button:focus-visible,
+.victory-btn:focus-visible,
+.achievement-card:focus-visible,
+.achievement-close-btn:focus-visible,
+input:focus-visible,
+select:focus-visible,
+.filter-select:focus-visible {
+    outline: 2px solid var(--mm-gold);
+    outline-offset: 2px;
+    border-color: var(--mm-gold-dark);
+    box-shadow: var(--mm-shadow-glow), var(--mm-shadow-raised);
     position: relative;
     z-index: var(--mm-z-base);
 }
 
-/* Enhanced focus for primary actions */
-.btn-primary:focus,
-.victory-btn-primary:focus {
-    box-shadow: 
-        0 0 0 3px var(--mm-gold-dark),
-        0 0 8px var(--mm-gold),
-        var(--mm-shadow-raised) !important;
+/* Canvas focus indicators */
+canvas:focus-visible {
+    outline: 3px solid var(--mm-gold);
+    outline-offset: -3px;
+    box-shadow: var(--mm-shadow-glow);
+}
+
+/* Enhanced primary action focus */
+.btn-primary:focus-visible,
+.victory-btn-primary:focus-visible {
+    outline: 3px solid var(--mm-gold);
+    outline-offset: 2px;
+    box-shadow: var(--mm-shadow-glow), 0 0 12px var(--mm-gold);
     animation: focusPulse 2s ease-in-out infinite;
 }
 
-/* Focus ring for canvas elements */
-#map-canvas:focus {
-    border-width: 3px !important;
-    border-color: var(--mm-gold) !important;
-    box-shadow: 
-        inset 0 0 0 2px var(--mm-gold-dark),
-        0 0 8px var(--mm-gold-shadow);
+/* Fallback for older browsers - use :focus when :focus-visible not supported */
+@supports not selector(:focus-visible) {
+    button:focus,
+    .answer-button:focus,
+    .victory-btn:focus,
+    input:focus,
+    select:focus {
+        outline: 2px solid var(--mm-gold);
+        outline-offset: 2px;
+    }
 }
+
+/* Focus pulse animation */
+@keyframes focusPulse {
+    0%, 100% { 
+        box-shadow: var(--mm-shadow-glow), 0 0 8px var(--mm-gold);
+    }
+    50% { 
+        box-shadow: var(--mm-shadow-glow), 0 0 16px var(--mm-gold);
+    }
+} 
 
 /* Modal focus trap styling */
 .achievement-gallery:focus-within .achievement-gallery-content,
@@ -351,19 +374,95 @@ canvas:focus {
 }
 
 /* =============================================================================
-   REDUCED MOTION ALTERNATIVES
+   FORCED COLORS MODE (Windows High Contrast)
+   ============================================================================= */
+
+@media (forced-colors: active) {
+    /* Use system colors for high contrast mode */
+    .game-container,
+    .game-main,
+    .game-sidebar {
+        background: Canvas !important;
+        color: CanvasText !important;
+        border-color: CanvasText !important;
+    }
+    
+    /* Interactive elements */
+    button,
+    .answer-button,
+    .victory-btn {
+        background: ButtonFace !important;
+        color: ButtonText !important;
+        border: 2px solid ButtonText !important;
+    }
+    
+    button:hover,
+    .answer-button:hover {
+        background: Highlight !important;
+        color: HighlightText !important;
+        border-color: Highlight !important;
+    }
+    
+    button:focus-visible,
+    .answer-button:focus-visible {
+        outline: 2px solid Highlight !important;
+        outline-offset: 2px;
+    }
+    
+    /* Links and active states */
+    a, .link {
+        color: LinkText !important;
+    }
+    
+    a:visited {
+        color: VisitedText !important;
+    }
+    
+    .answer-button.correct {
+        background: Mark !important;
+        color: MarkText !important;
+        border-color: MarkText !important;
+    }
+    
+    /* Modal and overlay elements */
+    .achievement-gallery,
+    .victory-screen {
+        background: Canvas !important;
+        color: CanvasText !important;
+        border: 2px solid CanvasText !important;
+    }
+    
+    /* Remove decorative elements */
+    .victory-header::before,
+    .achievement-card.unlocked::before,
+    .victory-content::before {
+        display: none !important;
+    }
+    
+    /* Ensure sufficient contrast for focus indicators */
+    *:focus-visible {
+        outline: 2px solid Highlight !important;
+        outline-offset: 2px;
+    }
+}
+
+/* =============================================================================
+   ENHANCED REDUCED MOTION SUPPORT  
    ============================================================================= */
 
 @media (prefers-reduced-motion: reduce) {
-    /* Remove all animations and transitions */
+    /* Remove all animations and transitions - more comprehensive */
     *,
     *::before,
     *::after {
-        animation: none !important;
-        transition: none !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0ms !important;
+        scroll-behavior: auto !important;
     }
     
-    /* Static alternatives for animated elements */
+    /* Replace animated loading indicators with static versions */
     .loading {
         border: 3px solid var(--mm-stone-dark);
         border-radius: 50%;
@@ -807,6 +906,126 @@ canvas:focus {
     height: 1px;
     opacity: 0;
     pointer-events: all;
+}
+
+/* =============================================================================
+   MOBILE ACCESSIBILITY ENHANCEMENTS
+   ============================================================================= */
+
+/* Touch-friendly minimum sizes */
+@media (max-width: 768px) {
+    /* Ensure all interactive elements meet 44px minimum */
+    button,
+    .answer-button,
+    a,
+    [role="button"],
+    [tabindex="0"] {
+        min-height: var(--mm-touch-target-min);
+        min-width: var(--mm-touch-target-min);
+        padding: var(--mm-spacing-md);
+        /* Increase tap area with transparent border if needed */
+        border-width: max(var(--mm-border-thick), 4px);
+    }
+    
+    /* Larger touch targets for critical actions */
+    .btn-primary,
+    .victory-btn-primary,
+    [data-critical="true"] {
+        min-height: var(--mm-touch-target-large);
+        min-width: var(--mm-touch-target-large);
+        padding: var(--mm-spacing-lg);
+    }
+    
+    /* Better spacing for mobile UI */
+    .game-main {
+        gap: var(--mm-spacing-lg);
+        padding: var(--mm-spacing-lg);
+    }
+    
+    /* Improved text legibility on mobile */
+    .section p,
+    .question-text,
+    .answer-button {
+        line-height: var(--mm-line-height-relaxed);
+        letter-spacing: var(--mm-letter-spacing-normal);
+    }
+}
+
+/* Orientation-specific adjustments */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    /* Compact layout for landscape mobile */
+    .game-header h1 {
+        font-size: var(--mm-font-lg);
+    }
+    
+    .game-header p {
+        display: none; /* Hide subtitle in compact mode */
+    }
+    
+    .game-main {
+        gap: var(--mm-spacing-sm);
+        padding: var(--mm-spacing-sm);
+    }
+}
+
+/* =============================================================================
+   MODERN WEB STANDARDS & PWA SUPPORT
+   ============================================================================= */
+
+/* Display mode specific styles for PWA */
+@media (display-mode: standalone) {
+    .game-container {
+        padding-top: max(var(--mm-spacing-md), var(--mm-safe-area-top));
+        padding-bottom: max(var(--mm-spacing-md), var(--mm-safe-area-bottom));
+    }
+    
+    /* Hide browser-specific elements in standalone mode */
+    .browser-only {
+        display: none !important;
+    }
+    
+    .pwa-only {
+        display: block !important;
+    }
+}
+
+/* Data-sensitive users */
+@media (prefers-reduced-data: reduce) {
+    /* Minimize data usage by removing non-essential visual effects */
+    .victory-header::before,
+    .achievement-card.unlocked::before,
+    .victory-content::before {
+        display: none !important;
+    }
+    
+    /* Use simpler backgrounds */
+    .game-container,
+    .game-main,
+    .game-sidebar {
+        background: var(--mm-panel) !important;
+    }
+    
+    /* Disable hover effects that might trigger unnecessary repaints */
+    @media (hover: hover) {
+        *:hover {
+            transform: none !important;
+            filter: none !important;
+        }
+    }
+}
+
+/* Enhanced keyboard navigation */
+@media (any-hover: none) and (any-pointer: coarse) {
+    /* Touch-only devices - enhance keyboard navigation */
+    :focus-visible {
+        outline-width: 3px;
+        outline-offset: 3px;
+    }
+    
+    /* Remove hover states that don't make sense on touch */
+    .hover-only {
+        display: none !important;
+    }
 }
 
 /* =============================================================================

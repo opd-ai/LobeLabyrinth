@@ -1,12 +1,12 @@
 /* =============================================================================
    LOBELABYRINTH - ACHIEVEMENT SYSTEM CSS
-   Complete achievement gallery, notifications, and progress tracking
-   Author: GameEngineBot
+   Mobile-optimized achievement gallery, notifications, and progress tracking
+   Modern responsive design with touch-friendly interactions
    Dependencies: css/mm-vars.css, css/game.css
    ============================================================================= */
 
 /* =============================================================================
-   ACHIEVEMENT GALLERY MODAL
+   RESPONSIVE ACHIEVEMENT GALLERY MODAL
    ============================================================================= */
 
 .achievement-gallery {
@@ -19,9 +19,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--mm-spacing-md);
+    padding: var(--mm-safe-area-padding);
     z-index: var(--mm-z-modal);
     backdrop-filter: blur(2px);
+    contain: layout style;
 }
 
 .achievement-gallery-content {
@@ -29,24 +30,63 @@
     border: var(--mm-border-thick) outset var(--mm-stone);
     border-radius: var(--mm-radius-md);
     box-shadow: var(--mm-shadow-drop-modal);
-    width: min(90vw, 800px);
-    max-height: 85vh;
+    width: 100%;
+    max-width: min(90vw, 800px);
+    height: 100%;
+    max-height: min(90vh, 600px);
     overflow: hidden;
     display: flex;
     flex-direction: column;
     position: relative;
     animation: slideUp 0.3s ease forwards;
+    contain: layout style;
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 480px) {
+    .achievement-gallery {
+        padding: var(--mm-spacing-sm);
+        align-items: flex-start;
+        padding-top: max(var(--mm-spacing-lg), var(--mm-safe-area-top));
+    }
+    
+    .achievement-gallery-content {
+        width: 100vw;
+        height: calc(100vh - var(--mm-safe-area-top) - var(--mm-safe-area-bottom));
+        max-width: none;
+        max-height: none;
+        border-radius: 0;
+        animation: slideFromBottom 0.3s ease forwards;
+    }
+}
+
+@media (min-width: 768px) {
+    .achievement-gallery-content {
+        width: min(85vw, 900px);
+        max-height: min(85vh, 700px);
+    }
 }
 
 .achievement-gallery-header {
     background: var(--mm-gradient-navy);
     color: var(--mm-text-light);
-    padding: var(--mm-spacing-lg) var(--mm-spacing-xl);
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
     border-bottom: var(--mm-border-thick) outset var(--mm-stone);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: var(--mm-z-sticky);
+    contain: layout style;
+}
+
+@media (max-width: 480px) {
+    .achievement-gallery-header {
+        padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+        flex-wrap: wrap;
+        gap: var(--mm-spacing-sm);
+    }
 }
 
 .achievement-gallery-header h3 {
@@ -70,8 +110,8 @@
     position: absolute;
     top: var(--mm-spacing-sm);
     right: var(--mm-spacing-sm);
-    width: 32px;
-    height: 32px;
+    width: var(--mm-touch-target-min);
+    height: var(--mm-touch-target-min);
     background: var(--mm-gradient-button);
     border: var(--mm-border-thick) outset var(--mm-stone);
     color: var(--mm-text);
@@ -81,14 +121,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: var(--mm-radius-sm);
     transition: all 0.1s ease;
-    box-shadow: var(--mm-shadow-raised);
+    z-index: var(--mm-z-base);
+    contain: layout style;
 }
 
-.achievement-close-btn:hover {
-    background: var(--mm-gradient-button);
-    filter: brightness(1.1);
-    transform: translateY(-1px);
+/* Enhanced touch target for mobile */
+@media (max-width: 768px) {
+    .achievement-close-btn {
+        width: var(--mm-touch-target-comfortable);
+        height: var(--mm-touch-target-comfortable);
+        top: var(--mm-spacing-md);
+        right: var(--mm-spacing-md);
+        font-size: var(--mm-font-xl);
+    }
+}
+
+/* Hover states - only for devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+    .achievement-close-btn:hover {
+        background: var(--mm-gradient-button);
+        filter: brightness(1.1);
+        transform: translateY(-1px);
+    }
 }
 
 .achievement-close-btn:active {
@@ -98,9 +154,18 @@
     transform: translateY(1px);
 }
 
-.achievement-close-btn:focus {
-    border-color: var(--mm-gold);
-    box-shadow: 0 0 0 2px var(--mm-gold-dark), var(--mm-shadow-raised);
+.achievement-close-btn:active {
+    background: var(--mm-gradient-button-pressed);
+    border: var(--mm-border-thick) inset var(--mm-stone);
+    box-shadow: var(--mm-shadow-pressed);
+    transform: translateY(1px);
+}
+
+.achievement-close-btn:focus-visible {
+    outline: 2px solid var(--mm-gold);
+    outline-offset: 2px;
+    border-color: var(--mm-gold-dark);
+    box-shadow: var(--mm-shadow-glow), var(--mm-shadow-raised);
 }
 
 /* =============================================================================
@@ -803,6 +868,69 @@
         animation: none !important;
     }
 }
+
+/* =============================================================================
+   RESPONSIVE ANIMATIONS
+   ============================================================================= */
+
+/* Default slide up animation */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Mobile slide from bottom animation */
+@keyframes slideFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Achievement card reveal animation */
+@keyframes cardReveal {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Notification slide-in animation */
+@keyframes notificationSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Staggered reveal for achievement cards */
+.achievement-card {
+    animation: cardReveal 0.3s ease forwards;
+}
+
+.achievement-card:nth-child(1) { animation-delay: 0.1s; }
+.achievement-card:nth-child(2) { animation-delay: 0.15s; }
+.achievement-card:nth-child(3) { animation-delay: 0.2s; }
+.achievement-card:nth-child(4) { animation-delay: 0.25s; }
+.achievement-card:nth-child(n+5) { animation-delay: 0.3s; }
 
 /* =============================================================================
    END OF ACHIEVEMENT SYSTEM CSS

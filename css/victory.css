@@ -1,12 +1,12 @@
 /* =============================================================================
-   LOBELABYRINTH - VICTORY & COMPLETION CSS
-   Impressive victory screen with celebration elements
-   Author: GameEngineBot
+   LOBELABYRINTH - VICTORY & COMPLETION CSS  
+   Mobile-optimized victory screen with celebration elements
+   Modern responsive design with touch-friendly interactions
    Dependencies: css/mm-vars.css, css/game.css
    ============================================================================= */
 
 /* =============================================================================
-   VICTORY SCREEN MODAL
+   RESPONSIVE VICTORY SCREEN MODAL
    ============================================================================= */
 
 .victory-screen {
@@ -19,10 +19,11 @@
     display: none; /* Hidden by default - shown via JavaScript */
     align-items: center;
     justify-content: center;
-    padding: var(--mm-spacing-lg);
+    padding: var(--mm-safe-area-padding);
     z-index: var(--mm-z-modal);
     backdrop-filter: blur(3px);
     animation: victoryFadeIn 1s ease forwards;
+    contain: layout style;
 }
 
 .victory-screen.show {
@@ -38,12 +39,44 @@
         0 0 30px var(--mm-gold-shadow),
         inset 0 0 20px rgba(255, 255, 255, 0.1);
     width: min(95vw, 900px);
-    max-height: 90vh;
+    max-height: calc(100vh - var(--mm-safe-area-top) - var(--mm-safe-area-bottom) - var(--mm-spacing-lg) * 2);
     overflow-y: auto;
     position: relative;
     animation: victorySlideUp 0.8s ease 0.2s forwards;
     transform: translateY(50px);
     opacity: 0;
+    contain: layout style;
+}
+
+/* Mobile-first responsive adjustments */
+@media (max-width: 480px) {
+    .victory-screen {
+        padding: var(--mm-spacing-sm);
+        align-items: flex-start;
+        padding-top: max(var(--mm-spacing-md), var(--mm-safe-area-top));
+    }
+    
+    .victory-content {
+        width: 100vw;
+        max-width: none;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        animation: slideUpFromBottom 0.8s ease 0.2s forwards;
+        max-height: calc(100vh - var(--mm-safe-area-top) - var(--mm-spacing-md));
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .victory-content {
+        width: min(90vw, 800px);
+    }
+}
+
+@media (min-width: 1024px) {
+    .victory-content {
+        width: min(85vw, 900px);
+    }
 }
 
 .victory-content::before {
@@ -379,7 +412,8 @@
     transition: all 0.2s ease;
     box-shadow: var(--mm-shadow-raised);
     border-radius: var(--mm-radius-md);
-    min-width: 180px;
+    min-width: var(--mm-touch-target-min);
+    min-height: var(--mm-touch-target-min);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -389,6 +423,24 @@
     user-select: none;
     position: relative;
     overflow: hidden;
+    contain: layout style;
+}
+
+/* Enhanced touch targets for mobile */
+@media (max-width: 768px) {
+    .victory-btn {
+        min-width: 100%;
+        min-height: var(--mm-touch-target-comfortable);
+        padding: var(--mm-spacing-xl);
+        font-size: var(--mm-font-lg);
+        border-radius: var(--mm-radius-lg);
+    }
+}
+
+@media (min-width: 769px) {
+    .victory-btn {
+        min-width: 200px;
+    }
 }
 
 .victory-btn::before {
@@ -908,6 +960,52 @@
 .completion-grade.average {
     background: linear-gradient(135deg, var(--mm-forest) 0%, var(--mm-forest) 100%);
     color: var(--mm-text-light) !important;
+}
+
+/* =============================================================================
+   RESPONSIVE ANIMATIONS
+   ============================================================================= */
+
+/* Mobile slide up from bottom animation */
+@keyframes slideUpFromBottom {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced victory animations with mobile consideration */
+@keyframes victoryGradePulse {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: var(--mm-shadow-glow);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: var(--mm-shadow-glow), 0 0 20px var(--mm-gold);
+    }
+}
+
+@keyframes victoryGlow {
+    0%, 100% { 
+        filter: brightness(1);
+    }
+    50% { 
+        filter: brightness(1.2);
+    }
+}
+
+/* PWA and performance optimizations */
+@supports (contain: layout) {
+    .victory-content,
+    .victory-actions,
+    .victory-stats {
+        contain: layout style;
+    }
 }
 
 /* =============================================================================

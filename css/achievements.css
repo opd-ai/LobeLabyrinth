@@ -207,6 +207,24 @@
     align-items: center;
     justify-content: center;
     font-weight: bold;
+    transition: all 0.15s ease;
+}
+
+.achievement-close-btn:hover {
+    background: var(--mm-panel-light);
+    color: var(--mm-crimson);
+    box-shadow: var(--mm-shadow-button-light);
+}
+
+.achievement-close-btn:active {
+    border: var(--mm-bezel-width) inset var(--mm-stone);
+    box-shadow: var(--mm-shadow-button-pressed);
+    transform: translate(1px, 1px);
+}
+
+.achievement-close-btn:focus {
+    outline: var(--mm-focus-outline);
+    outline-offset: 2px;
 }
 
 .achievement-categories {

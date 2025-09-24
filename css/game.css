@@ -34,7 +34,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: var(--font-body);
+    font-family: var(--mm-font-body);
     font-size: var(--base-font-size);
     line-height: 1.4;
     color: var(--mindmaze-text-light);
@@ -1836,6 +1836,280 @@ button:active {
     pointer-events: auto;
 }
 
+/* ===== COMPREHENSIVE INTERACTIVE STATES & ACCESSIBILITY ENHANCEMENTS ===== */
+
+/* Enhanced focus states for all interactive elements */
+.victory-btn:focus,
+.achievement-toggle:focus,
+.loading:focus,
+.completion-continue:focus,
+.completion-achievements:focus {
+    outline: var(--mm-focus-outline);
+    outline-offset: 2px;
+    box-shadow: var(--mm-shadow-glow), var(--mm-shadow-button-light);
+}
+
+/* Victory button states */
+.victory-btn {
+    transition: all 0.2s ease;
+}
+
+.victory-btn:hover {
+    background: var(--mm-panel-light);
+    transform: translateY(-1px);
+    box-shadow: var(--mm-shadow-raised);
+}
+
+.victory-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--mm-shadow-button-pressed);
+}
+
+.victory-btn-primary:hover {
+    background: var(--mm-navy-light);
+}
+
+.victory-btn-secondary:hover {
+    background: var(--mm-panel-light);
+}
+
+/* Achievement toggle enhanced states */
+#achievement-toggle {
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+#achievement-toggle:hover {
+    background: var(--mm-panel-light);
+    transform: scale(1.02);
+}
+
+#achievement-toggle:active {
+    transform: scale(0.98);
+}
+
+#achievement-toggle[aria-expanded="true"] {
+    background: var(--mm-navy);
+    color: var(--mm-text-light);
+    box-shadow: var(--mm-shadow-input);
+}
+
+/* Loading and spinner enhancements */
+.loading,
+.spinner {
+    transition: opacity 0.3s ease;
+}
+
+/* Section headers interactive enhancement */
+.section h2,
+.section h3 {
+    transition: color 0.2s ease;
+}
+
+.section:focus-within h2,
+.section:focus-within h3 {
+    color: var(--mm-gold);
+}
+
+/* Progress bars interactive feedback */
+.progress-bar {
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.progress-bar:hover {
+    box-shadow: var(--mm-shadow-glow);
+}
+
+.progress-fill {
+    transition: width 0.5s ease, background 0.2s ease;
+}
+
+.progress-fill:hover {
+    background: linear-gradient(90deg, var(--mm-gold-light), var(--mm-gold));
+}
+
+/* Enhanced map canvas interactive states */
+#map-canvas {
+    transition: all 0.2s ease;
+}
+
+#map-canvas:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
+}
+
+#map-canvas:focus {
+    outline: var(--mm-focus-outline);
+    outline-offset: 4px;
+    filter: brightness(1.2);
+}
+
+/* Score value animation enhancement */
+.score-value {
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.score-value.score-increase {
+    color: var(--mm-gold);
+    font-weight: bold;
+    transform: scale(1.1);
+}
+
+.score-value.score-increase::after {
+    content: "+";
+    position: absolute;
+    right: -10px;
+    top: -5px;
+    color: var(--mm-gold);
+    font-size: 0.8em;
+    animation: fadeUp 1s ease forwards;
+}
+
+@keyframes fadeUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+/* Navigation and controls enhancement */
+.controls-grid button {
+    position: relative;
+    overflow: hidden;
+}
+
+.controls-grid button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+.controls-grid button:hover::before {
+    width: 100%;
+    height: 100%;
+}
+
+/* Enhanced keyboard navigation indicators */
+.keyboard-focusable:focus {
+    position: relative;
+    z-index: 10;
+}
+
+.keyboard-focusable:focus::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    bottom: -3px;
+    left: -3px;
+    border: 2px solid var(--mm-gold);
+    border-radius: var(--mm-radius);
+    pointer-events: none;
+    animation: focusPulse 2s infinite;
+}
+
+@keyframes focusPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.02);
+    }
+}
+
+/* Enhanced timer visual states */
+.timer-container {
+    transition: all 0.2s ease;
+}
+
+.timer-container.timer-warning {
+    background: rgba(255, 165, 0, 0.1);
+    border-color: #FFA500;
+}
+
+.timer-container.timer-critical {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: var(--mm-crimson);
+    animation: timerPulse 1s infinite;
+}
+
+@keyframes timerPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+}
+
+/* Enhanced smooth transitions for all interactive elements */
+button,
+input,
+select,
+textarea,
+[role="button"],
+[tabindex="0"] {
+    transition: all 0.2s ease;
+}
+
+/* Enhanced disabled state styling */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+}
+
+/* WCAG compliance enhancements */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (prefers-contrast: high) {
+    :focus {
+        outline-width: 4px;
+        outline-color: #000;
+    }
+    
+    button,
+    .answer-btn {
+        border-width: 3px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    /* Maintain Windows 95 theme but adjust for better dark mode readability */
+    .game-container {
+        filter: brightness(0.9);
+    }
+}
+
+/* ===== END INTERACTIVE STATES & ACCESSIBILITY ENHANCEMENTS ===== */
+
 /* Keep overlays and modals controlled via inline styles or specific classes */
 
 /* ===== MISSING CSS CLASSES IDENTIFIED FROM HTML AUDIT ===== */
@@ -2034,6 +2308,119 @@ button:active {
     color: var(--mm-text-dim);
     margin-right: var(--mm-spacing-sm);
 }
+
+/* ===== MODAL AND OVERLAY POSITIONING FIXES ===== */
+
+/* Ensure all modals and overlays are properly positioned */
+.victory-screen,
+.achievement-gallery,
+.game-completion,
+.keyboard-help-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--mm-overlay-backdrop);
+    z-index: var(--mm-z-overlay);
+    padding: var(--mm-spacing-lg);
+}
+
+/* Modal content positioning */
+.victory-content,
+.achievement-gallery-content,
+.game-completion-content,
+.keyboard-help-content {
+    position: relative;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--mm-stone-dark) var(--mm-panel);
+}
+
+/* Enhanced scrollbar styling for WebKit */
+.victory-content::-webkit-scrollbar,
+.achievement-gallery-content::-webkit-scrollbar,
+.game-completion-content::-webkit-scrollbar,
+.keyboard-help-content::-webkit-scrollbar {
+    width: 12px;
+    background: var(--mm-panel);
+}
+
+.victory-content::-webkit-scrollbar-thumb,
+.achievement-gallery-content::-webkit-scrollbar-thumb,
+.game-completion-content::-webkit-scrollbar-thumb,
+.keyboard-help-content::-webkit-scrollbar-thumb {
+    background: var(--mm-stone-dark);
+    border: 1px outset var(--mm-stone);
+    border-radius: 0;
+}
+
+.victory-content::-webkit-scrollbar-thumb:hover,
+.achievement-gallery-content::-webkit-scrollbar-thumb:hover,
+.game-completion-content::-webkit-scrollbar-thumb:hover,
+.keyboard-help-content::-webkit-scrollbar-thumb:hover {
+    background: var(--mm-stone);
+}
+
+/* Grid Layout Enhancements */
+.game-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr auto auto;
+    grid-template-areas: 
+        "map-area"
+        "room-info"
+        "question-area"
+        "answer-area"
+        "timer-area";
+    gap: var(--mm-spacing-sm);
+    padding: var(--mm-spacing-sm);
+    overflow-y: auto;
+    height: 100%;
+}
+
+/* Ensure proper containment and overflow handling */
+.section {
+    min-height: 0; /* Allow flex items to shrink */
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.section:has(canvas) {
+    overflow: visible; /* Allow canvas to be interactive */
+}
+
+/* Improved Mobile Layout Handling */
+@media (max-width: 768px) {
+    /* Adjust modal padding for mobile */
+    .victory-screen,
+    .achievement-gallery,
+    .game-completion,
+    .keyboard-help-overlay {
+        padding: var(--mm-spacing-md);
+    }
+    
+    /* More compact modal content on mobile */
+    .victory-content,
+    .achievement-gallery-content,
+    .game-completion-content,
+    .keyboard-help-content {
+        max-width: 95vw;
+        max-height: 95vh;
+    }
+    
+    /* Stack layout elements more efficiently */
+    .game-main {
+        gap: var(--mm-spacing-xs);
+        padding: var(--mm-spacing-xs);
+    }
+}
+
+/* ===== END LAYOUT AND RESPONSIVE FIXES ===== */
 
 /* Additional Responsive Enhancements */
 @media (max-width: 768px) {

@@ -16,13 +16,17 @@
     right: 0;
     bottom: 0;
     background: radial-gradient(circle at center, rgba(212, 175, 55, 0.1) 0%, rgba(0, 0, 0, 0.8) 100%);
-    display: flex;
+    display: none; /* Hidden by default - shown via JavaScript */
     align-items: center;
     justify-content: center;
     padding: var(--mm-spacing-lg);
     z-index: var(--mm-z-modal);
     backdrop-filter: blur(3px);
     animation: victoryFadeIn 1s ease forwards;
+}
+
+.victory-screen.show {
+    display: flex;
 }
 
 .victory-content {

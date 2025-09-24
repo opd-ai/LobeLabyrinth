@@ -58,57 +58,104 @@ button {
 .game-container {
     display: grid;
     grid-template-areas:
-        "header header"
-        "main sidebar"
-        "footer footer";
-    grid-template-rows: minmax(60px, auto) 1fr minmax(40px, auto);
-    grid-template-columns: 1fr minmax(220px, 18vw); /* Much smaller sidebar for more main area space */
-    height: 100vh;
-    max-height: 100vh;
+        "header"
+        "main"
+        "sidebar"
+        "footer";
+    grid-template-rows: 
+        minmax(60px, auto) 
+        1fr 
+        minmax(180px, auto) 
+        minmax(40px, auto);
+    grid-template-columns: 1fr;
+    min-height: var(--mm-vh-dynamic);
     gap: 0;
-    background: var(--mm-castle-stone, #B8B8B8);
-    font-size: 14px;
+    background: var(--mm-castle-stone);
+    font-size: var(--mm-font-md);
+    padding: var(--mm-safe-area-padding);
+    contain: layout style;
+}
+
+/* Tablet and desktop layout */
+@media (min-width: 768px) {
+    .game-container {
+        grid-template-areas:
+            "header header"
+            "main sidebar"
+            "footer footer";
+        grid-template-rows: 
+            minmax(60px, auto) 
+            1fr 
+            minmax(40px, auto);
+        grid-template-columns: 1fr minmax(280px, 20vw);
+        min-height: 100vh; /* Fallback for older browsers */
+        min-height: var(--mm-vh-small);
+        padding: 0;
+    }
+}
+
+/* Large desktop optimization */
+@media (min-width: 1440px) {
+    .game-container {
+        grid-template-columns: 1fr minmax(320px, 18vw);
+    }
 }
 
 /* Header Section */
 .game-header {
     grid-area: header;
-    background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 50%, #A0A0A0 100%);
-    border-bottom: 2px outset #C0C0C0;
-    padding: 12px 24px;
+    background: var(--mm-gradient-panel);
+    border-bottom: 2px outset var(--mm-stone);
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    box-shadow: inset 2px 2px 0 rgba(255,255,255,0.8), inset -2px -2px 0 rgba(0,0,0,0.4);
+    box-shadow: var(--mm-shadow-panel-raised);
+    position: sticky;
+    top: 0;
+    z-index: var(--mm-z-sticky);
+    contain: layout style;
+}
+
+@media (max-width: 480px) {
+    .game-header {
+        padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+        text-align: center;
+    }
 }
 
 .game-header h1 {
     margin: 0;
-    font-size: 20px;
+    font-size: var(--mm-font-title);
     font-weight: bold;
-    color: #000080;
-    text-shadow: 1px 1px 0 rgba(255,255,255,0.8);
-    letter-spacing: 1px;
+    color: var(--mm-navy);
+    text-shadow: var(--mm-shadow-text-emboss);
+    letter-spacing: var(--mm-letter-spacing-wide);
+    line-height: var(--mm-line-height-tight);
 }
 
 .game-header p {
-    margin: 2px 0 0 0;
-    font-size: 11px;
-    color: #606060;
+    margin: var(--mm-spacing-xs) 0 0 0;
+    font-size: var(--mm-font-sm);
+    color: var(--mm-text-dim);
     font-style: italic;
+    line-height: var(--mm-line-height-normal);
 }
 
 /* Footer */
 .game-footer {
     grid-area: footer;
-    background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 50%, #A0A0A0 100%);
-    border-top: 2px outset #C0C0C0;
-    padding: 8px 24px;
+    background: var(--mm-gradient-panel);
+    border-top: var(--mm-border-thick) outset var(--mm-stone);
+    padding: var(--mm-spacing-sm) var(--mm-spacing-lg);
     display: flex;
     align-items: center;
-    box-shadow: inset 2px 2px 0 rgba(255,255,255,0.8), inset -2px -2px 0 rgba(0,0,0,0.4);
-    font-size: 11px;
-    color: #606060;
+    justify-content: center;
+    box-shadow: var(--mm-shadow-panel-raised);
+    font-size: var(--mm-font-sm);
+    color: var(--mm-text-dim);
+    text-align: center;
+    contain: layout style;
 }
 
 /* Main Game Area */
@@ -116,31 +163,78 @@ button {
     grid-area: main;
     display: grid;
     grid-template-areas:
-        "map room"
-        "question question"
-        "timer answer"
-        "feedback feedback";
-    grid-template-rows: minmax(320px, 40vh) minmax(180px, 25vh) minmax(120px, 20vh) minmax(80px, 15vh);
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    padding: 12px;
-    background: #B8B8B8;
-    overflow: hidden;
-    min-height: 0;
+        "map"
+        "room"
+        "question"
+        "timer"
+        "answer"
+        "feedback";
+    grid-template-rows: 
+        minmax(200px, 25vh)
+        minmax(120px, 15vh)
+        minmax(120px, 15vh)
+        minmax(80px, 10vh)
+        minmax(100px, 12vh)
+        minmax(60px, 8vh);
+    grid-template-columns: 1fr;
+    gap: var(--mm-spacing-md);
+    padding: var(--mm-spacing-md);
+    background: var(--mm-castle-stone);
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    contain: layout style;
+}
+
+/* Tablet layout - 2 column */
+@media (min-width: 768px) {
+    .game-main {
+        grid-template-areas:
+            "map room"
+            "question question"
+            "timer answer"
+            "feedback feedback";
+        grid-template-rows: 
+            minmax(320px, 35vh) 
+            minmax(140px, 20vh) 
+            minmax(100px, 15vh) 
+            minmax(80px, 10vh);
+        grid-template-columns: 1fr 1fr;
+        overflow: hidden;
+    }
+}
+
+/* Desktop layout - optimized spacing */
+@media (min-width: 1024px) {
+    .game-main {
+        grid-template-rows: 
+            minmax(360px, 40vh) 
+            minmax(160px, 22vh) 
+            minmax(120px, 18vh) 
+            minmax(80px, 10vh);
+        gap: var(--mm-spacing-lg);
+        padding: var(--mm-spacing-lg);
+    }
 }
 
 /* Sidebar */
 .game-sidebar {
     grid-area: sidebar;
-    background: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 50%, #A0A0A0 100%);
-    border-left: 2px inset #C0C0C0;
-    padding: 12px;
+    background: var(--mm-gradient-panel);
+    border-left: var(--mm-border-thick) inset var(--mm-stone);
+    padding: var(--mm-spacing-md);
     overflow-y: auto;
-    box-shadow: inset -2px -2px 0 rgba(255,255,255,0.8), inset 2px 2px 0 rgba(0,0,0,0.4);
-    min-width: 300px;
+    box-shadow: var(--mm-shadow-panel-sunken);
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: var(--mm-spacing-md);
+    contain: layout style;
+}
+
+@media (min-width: 768px) {
+    .game-sidebar {
+        border-left: var(--mm-border-thick) inset var(--mm-stone);
+        min-width: 280px;
+    }
 }
 
 /* Footer */

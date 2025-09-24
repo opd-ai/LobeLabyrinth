@@ -97,39 +97,101 @@
     --mm-navy-dark: var(--mindmaze-navy-dark);
     --mm-navy-darkest: var(--mindmaze-navy-darkest);
     
-    /* ===== SPACING AND LAYOUT ===== */
-    --mm-spacing-xs: 2px;
-    --mm-spacing-sm: 4px;
-    --mm-spacing-md: 8px;
-    --mm-spacing-lg: 12px;
-    --mm-spacing-xl: 16px;
-    --mm-spacing-xxl: 24px;
-    --mm-spacing-3xl: 32px;
+    /* ===== RESPONSIVE BREAKPOINTS ===== */
+    /* Mobile-first breakpoint system */
+    --mm-breakpoint-xs: 320px;   /* Small phones */
+    --mm-breakpoint-sm: 480px;   /* Large phones */
+    --mm-breakpoint-md: 768px;   /* Tablets */
+    --mm-breakpoint-lg: 1024px;  /* Small laptops */
+    --mm-breakpoint-xl: 1440px;  /* Desktop */
+    --mm-breakpoint-xxl: 1920px; /* Large screens */
+    
+    /* Container max-widths */
+    --mm-container-sm: 100%;
+    --mm-container-md: 720px;
+    --mm-container-lg: 960px;
+    --mm-container-xl: 1200px;
+    --mm-container-xxl: 1400px;
+    
+    /* ===== FLUID SPACING SYSTEM ===== */
+    /* Responsive spacing using clamp() for fluid scaling */
+    --mm-spacing-xs: clamp(2px, 0.5vw, 4px);
+    --mm-spacing-sm: clamp(4px, 1vw, 8px);
+    --mm-spacing-md: clamp(8px, 2vw, 16px);
+    --mm-spacing-lg: clamp(12px, 3vw, 24px);
+    --mm-spacing-xl: clamp(16px, 4vw, 32px);
+    --mm-spacing-xxl: clamp(24px, 6vw, 48px);
+    --mm-spacing-3xl: clamp(32px, 8vw, 64px);
+    
+    /* Fixed spacing for precision elements */
+    --mm-spacing-xs-fixed: 2px;
+    --mm-spacing-sm-fixed: 4px;
+    --mm-spacing-md-fixed: 8px;
+    --mm-spacing-lg-fixed: 12px;
+    --mm-spacing-xl-fixed: 16px;
+    
+    /* Touch target sizing (minimum 44x44px) */
+    --mm-touch-target-min: 44px;
+    --mm-touch-target-comfortable: 48px;
+    --mm-touch-target-large: 56px;
     
     /* Border widths */
     --mm-border-thin: 1px;
     --mm-border-thick: 2px;
     --mm-border-chunky: 3px;
     
-    /* Border radius */
+    /* Border radius - maintaining Windows 95 aesthetic */
     --mm-radius-sm: 2px;
     --mm-radius-md: 4px;
+    --mm-radius-lg: 6px;
     
-    /* Font sizes */
-    --mm-font-xs: 10px;
-    --mm-font-sm: 11px;
-    --mm-font-md: 12px;
-    --mm-font-lg: 14px;
-    --mm-font-xl: 16px;
-    --mm-font-xxl: 18px;
-    --mm-font-title: 20px;
+    /* ===== FLUID TYPOGRAPHY SYSTEM ===== */
+    /* Responsive font sizes using clamp() for optimal readability */
+    --mm-font-xs: clamp(10px, 2.5vw, 12px);
+    --mm-font-sm: clamp(11px, 2.75vw, 14px);
+    --mm-font-md: clamp(12px, 3vw, 16px);
+    --mm-font-lg: clamp(14px, 3.5vw, 18px);
+    --mm-font-xl: clamp(16px, 4vw, 20px);
+    --mm-font-xxl: clamp(18px, 4.5vw, 24px);
+    --mm-font-title: clamp(20px, 5vw, 28px);
+    --mm-font-heading: clamp(24px, 6vw, 32px);
     
-    /* Z-index layers */
+    /* Line heights for readability */
+    --mm-line-height-tight: 1.2;
+    --mm-line-height-normal: 1.4;
+    --mm-line-height-relaxed: 1.6;
+    
+    /* Letter spacing for Windows 95 aesthetic */
+    --mm-letter-spacing-tight: -0.025em;
+    --mm-letter-spacing-normal: 0;
+    --mm-letter-spacing-wide: 0.05em;
+    
+    /* ===== Z-INDEX MANAGEMENT ===== */
     --mm-z-base: 1;
-    --mm-z-overlay: 100;
-    --mm-z-modal: 200;
-    --mm-z-notification: 300;
-    --mm-z-tooltip: 400;
+    --mm-z-dropdown: 50;
+    --mm-z-sticky: 100;
+    --mm-z-overlay: 200;
+    --mm-z-modal: 300;
+    --mm-z-notification: 400;
+    --mm-z-tooltip: 500;
+    --mm-z-debug: 9999;
+    
+    /* ===== MODERN LAYOUT VARIABLES ===== */
+    /* CSS Grid and Flexbox helpers */
+    --mm-grid-gap: var(--mm-spacing-md);
+    --mm-grid-gap-sm: var(--mm-spacing-sm);
+    --mm-grid-gap-lg: var(--mm-spacing-lg);
+    
+    /* Safe area insets for mobile browsers with notches */
+    --mm-safe-area-top: env(safe-area-inset-top, 0);
+    --mm-safe-area-right: env(safe-area-inset-right, 0);
+    --mm-safe-area-bottom: env(safe-area-inset-bottom, 0);
+    --mm-safe-area-left: env(safe-area-inset-left, 0);
+    
+    /* Viewport height units for mobile compatibility */
+    --mm-vh-small: 100svh;  /* Small viewport height */
+    --mm-vh-large: 100lvh;  /* Large viewport height */
+    --mm-vh-dynamic: 100dvh; /* Dynamic viewport height */
     
     
     /* ===== SHADOWS AND 3D EFFECTS ===== */
@@ -259,3 +321,135 @@
 .mm-m-md { margin: var(--mm-spacing-md); }
 .mm-m-lg { margin: var(--mm-spacing-lg); }
 .mm-m-xl { margin: var(--mm-spacing-xl); }
+
+/* ===== MODERN LAYOUT UTILITIES ===== */
+
+/* CSS Grid containers */
+.mm-grid {
+    display: grid;
+    gap: var(--mm-grid-gap);
+}
+
+.mm-grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--mm-grid-gap);
+}
+
+.mm-grid-responsive {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--mm-grid-gap);
+}
+
+@media (min-width: 768px) {
+    .mm-grid-responsive {
+        grid-template-columns: 1fr 300px;
+    }
+}
+
+/* Flexbox utilities */
+.mm-flex {
+    display: flex;
+    gap: var(--mm-spacing-md);
+}
+
+.mm-flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mm-spacing-md);
+}
+
+.mm-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--mm-spacing-md);
+}
+
+.mm-flex-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mm-spacing-md);
+}
+
+.mm-flex-wrap {
+    flex-wrap: wrap;
+}
+
+/* Container queries support */
+.mm-container {
+    container-type: inline-size;
+    max-width: var(--mm-container-xl);
+    margin-inline: auto;
+    padding-inline: var(--mm-spacing-md);
+}
+
+/* Safe area utilities for mobile browsers */
+.mm-safe-area-padding {
+    padding-top: max(var(--mm-spacing-md), var(--mm-safe-area-top));
+    padding-right: max(var(--mm-spacing-md), var(--mm-safe-area-right));
+    padding-bottom: max(var(--mm-spacing-md), var(--mm-safe-area-bottom));
+    padding-left: max(var(--mm-spacing-md), var(--mm-safe-area-left));
+}
+
+/* Touch-friendly interactive elements */
+.mm-touch-target {
+    min-height: var(--mm-touch-target-min);
+    min-width: var(--mm-touch-target-min);
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+}
+
+.mm-touch-target-large {
+    min-height: var(--mm-touch-target-large);
+    min-width: var(--mm-touch-target-large);
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+}
+
+/* Logical properties for internationalization */
+.mm-margin-inline {
+    margin-inline: var(--mm-spacing-md);
+}
+
+.mm-padding-inline {
+    padding-inline: var(--mm-spacing-md);
+}
+
+.mm-border-inline {
+    border-inline: var(--mm-border-thin) solid var(--mm-stone-dark);
+}
+
+/* Modern focus indicators */
+.mm-focus-ring {
+    outline: 2px solid var(--mm-gold);
+    outline-offset: 2px;
+}
+
+/* Scroll snap for touch interfaces */
+.mm-scroll-snap-x {
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+}
+
+.mm-scroll-snap-y {
+    scroll-snap-type: y mandatory;
+    overflow-y: auto;
+}
+
+.mm-scroll-snap-item {
+    scroll-snap-align: start;
+}
+
+/* CSS containment for performance */
+.mm-contain-layout {
+    contain: layout;
+}
+
+.mm-contain-paint {
+    contain: paint;
+}
+
+.mm-contain-strict {
+    contain: strict;
+}

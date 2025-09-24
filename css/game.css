@@ -1,0 +1,1105 @@
+/* =============================================================================
+   LOBELABYRINTH - CORE GAME STYLES
+   Authentic Windows 95 MindMaze recreation with modern responsive design
+   ============================================================================= */
+
+/* Import the consolidated CSS variables */
+@import url('./mm-vars.css');
+
+/* =============================================================================
+   GLOBAL RESETS AND FUNDAMENTALS
+   ============================================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    height: 100%;
+    font-size: 16px;
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--mm-font-family);
+    font-size: var(--mm-font-size-base);
+    line-height: var(--mm-line-height-normal);
+    color: var(--mm-text-color);
+    background: var(--mm-bg-primary);
+    height: 100vh;
+    overflow: hidden; /* Prevent page scrolling - game fits viewport */
+    user-select: none; /* Prevent text selection in game interface */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Remove default button styling */
+button {
+    all: unset;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+/* Remove default focus outlines - we'll add custom ones */
+*:focus {
+    outline: none;
+}
+
+/* =============================================================================
+   MAIN GAME CONTAINER AND RESPONSIVE GRID
+   ============================================================================= */
+
+.game-container {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "main sidebar"
+        "footer footer";
+    grid-template-rows: auto 1fr auto;
+    grid-template-columns: 1fr auto;
+    height: 100vh;
+    background: var(--mm-bg-primary);
+    container: game-container / inline-size;
+    gap: var(--mm-spacing-xs);
+    padding: var(--mm-spacing-xs);
+}
+
+/* Mobile layout - single column */
+@media (max-width: 767px) {
+    .game-container {
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar"
+            "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr auto auto;
+        gap: var(--mm-spacing-xs);
+        padding: var(--mm-spacing-xs);
+    }
+}
+
+/* Large desktop optimization */
+@media (min-width: 1440px) {
+    .game-container {
+        max-width: 1600px;
+        margin: 0 auto;
+        padding: var(--mm-spacing-md);
+    }
+}
+
+/* Header Section */
+.game-header {
+    grid-area: header;
+    text-align: center;
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+@media (max-width: 480px) {
+    .game-header {
+        padding: var(--mm-spacing-xs) var(--mm-spacing-sm);
+    }
+}
+
+.game-header h1 {
+    font-size: var(--mm-font-size-xl);
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-accent-navy);
+    text-shadow: var(--mm-text-shadow);
+    margin-bottom: var(--mm-spacing-xs);
+}
+
+.game-header p {
+    font-size: var(--mm-font-size-sm);
+    color: var(--mm-text-dim);
+    font-style: italic;
+}
+
+/* Footer */
+.game-footer {
+    grid-area: footer;
+    padding: var(--mm-spacing-sm);
+    text-align: center;
+    font-size: var(--mm-font-size-sm);
+    color: var(--mm-text-dim);
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    margin-top: var(--mm-spacing-sm);
+}
+
+/* Main Game Area */
+.game-main {
+    grid-area: main;
+    display: grid;
+    grid-template-areas:
+        "map room"
+        "question question"
+        "timer answer"
+        "feedback feedback";
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto 1fr auto;
+    gap: var(--mm-spacing-sm);
+    padding: var(--mm-spacing-sm);
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-sunken);
+    overflow: hidden;
+    contain: layout paint;
+}
+
+/* Mobile layout - single column main */
+@media (max-width: 767px) {
+    .game-main {
+        grid-template-areas:
+            "map"
+            "room"
+            "question"
+            "timer"
+            "answer"
+            "feedback";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto auto auto;
+        max-height: calc(100vh - 300px); /* Leave space for sidebar */
+        overflow-y: auto;
+    }
+}
+
+/* Desktop layout - optimized spacing */
+@media (min-width: 1024px) {
+    .game-main {
+        padding: var(--mm-spacing-md);
+        gap: var(--mm-spacing-md);
+    }
+    
+    .game-container {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+/* Sidebar */
+.game-sidebar {
+    grid-area: sidebar;
+    display: flex;
+    flex-direction: column;
+    gap: var(--mm-spacing-sm);
+    padding: var(--mm-spacing-sm);
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-sunken);
+    max-width: 300px;
+    overflow-y: auto;
+    contain: layout paint;
+}
+
+@media (max-width: 767px) {
+    .game-sidebar {
+        max-width: none;
+        max-height: 200px;
+    }
+}
+
+/* Footer */
+.game-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+}
+
+/* =============================================================================
+   SECTION STYLING - WINDOWS 95 PANELS
+   ============================================================================= */
+
+.section {
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    padding: var(--mm-spacing-sm);
+    border-radius: var(--mm-border-radius);
+}
+
+.section h2,
+.section h3 {
+    font-size: var(--mm-font-size-lg);
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-accent-navy);
+    margin-bottom: var(--mm-spacing-sm);
+    text-shadow: var(--mm-text-shadow-light);
+}
+
+.section p {
+    margin-bottom: var(--mm-spacing-xs);
+}
+
+/* =============================================================================
+   CASTLE MAP AREA
+   ============================================================================= */
+
+#map-area {
+    grid-area: map;
+    display: flex;
+    flex-direction: column;
+    min-height: 250px;
+}
+
+#map-canvas {
+    width: 100%;
+    height: 200px;
+    border: var(--mm-border-sunken);
+    background: var(--mm-bg-canvas);
+    cursor: pointer;
+    border-radius: var(--mm-border-radius);
+}
+
+.map-header {
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+.map-header h3 {
+    font-size: var(--mm-font-size-md);
+    color: var(--mm-accent-navy);
+}
+
+.map-header p {
+    font-size: var(--mm-font-size-sm);
+    color: var(--mm-text-dim);
+    margin-top: var(--mm-spacing-xs);
+}
+
+#map-canvas {
+    display: block;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+#map-canvas:focus {
+    box-shadow: var(--mm-focus-ring);
+}
+
+.map-legend {
+    display: flex;
+    gap: var(--mm-spacing-sm);
+    margin-top: var(--mm-spacing-sm);
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--mm-spacing-xs);
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--mm-border-color);
+    border-radius: 2px;
+}
+
+/* Legend colors matching MapRenderer */
+.legend-current { background: var(--mm-accent-gold); }
+.legend-visited { background: var(--mm-accent-forest); }
+.legend-accessible { background: var(--mm-accent-blue); }
+.legend-locked { background: var(--mm-text-dim); }
+
+/* =============================================================================
+   ROOM INFORMATION
+   ============================================================================= */
+
+#room-info {
+    grid-area: room;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 200px;
+}
+
+#room-name {
+    font-size: var(--mm-font-size-lg);
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-accent-navy);
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+#room-description {
+    flex: 1;
+    color: var(--mm-text-color);
+    line-height: var(--mm-line-height-relaxed);
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+#room-connections {
+    font-size: var(--mm-font-size-sm);
+    color: var(--mm-text-dim);
+    font-style: italic;
+}
+
+/* =============================================================================
+   QUESTION AREA
+   ============================================================================= */
+
+#question-area {
+    grid-area: question;
+    display: flex;
+    flex-direction: column;
+    background: var(--mm-bg-question);
+    border: var(--mm-border-raised);
+    min-height: 120px;
+}
+
+#question-area h3 {
+    font-size: var(--mm-font-size-md);
+    color: var(--mm-accent-navy);
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+#question-text {
+    flex: 1;
+    font-size: var(--mm-font-size-base);
+    line-height: var(--mm-line-height-relaxed);
+    color: var(--mm-text-color);
+    margin-bottom: var(--mm-spacing-sm);
+    padding: var(--mm-spacing-sm);
+    background: var(--mm-bg-primary);
+    border: var(--mm-border-sunken);
+    border-radius: var(--mm-border-radius);
+}
+
+.question-meta {
+    display: flex;
+    gap: var(--mm-spacing-md);
+    font-size: var(--mm-font-size-sm);
+    flex-wrap: wrap;
+}
+
+.meta-item {
+    color: var(--mm-text-dim);
+    font-weight: var(--mm-font-weight-normal);
+}
+
+#question-text {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.question-meta {
+    margin-top: var(--mm-spacing-sm);
+    padding-top: var(--mm-spacing-sm);
+    border-top: 1px solid var(--mm-border-color);
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: var(--mm-spacing-xs);
+}
+
+/* =============================================================================
+   TIMER AREA
+   ============================================================================= */
+
+#timer-area {
+    grid-area: timer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.timer-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mm-spacing-sm);
+}
+
+#timer-text {
+    font-size: var(--mm-font-size-lg);
+    font-weight: var(--mm-font-weight-bold);
+    text-align: center;
+    color: var(--mm-accent-navy);
+}
+
+.timer-bar-container {
+    height: 20px;
+    background: var(--mm-bg-primary);
+    border: var(--mm-border-sunken);
+    border-radius: var(--mm-border-radius);
+    overflow: hidden;
+}
+
+.timer-bar,
+#timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mm-accent-forest), var(--mm-accent-gold));
+    transition: width 0.1s linear;
+    border-radius: var(--mm-border-radius-sm);
+}
+
+/* Timer warning states */
+.timer-warning #timer-text {
+    color: var(--mm-accent-crimson);
+    animation: pulse 1s infinite;
+}
+
+.timer-critical #timer-text {
+    color: var(--mm-accent-crimson);
+    animation: pulse 0.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
+/* =============================================================================
+   ANSWER AREA
+   ============================================================================= */
+
+#answer-area {
+    grid-area: answer;
+}
+
+#answer-buttons {
+    display: grid;
+    gap: var(--mm-spacing-sm);
+    grid-template-columns: 1fr;
+}
+
+/* Mobile - stack vertically */
+@media (max-width: 480px) {
+    #answer-buttons {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet and up - 2 columns */
+@media (min-width: 481px) {
+    #answer-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Large screens - potentially 2x2 grid for 4 answers */
+@container (min-width: 600px) {
+    #answer-buttons {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.answer-button,
+.answer-btn {
+    display: flex;
+    align-items: center;
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+    background: var(--mm-btn-bg);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    font-size: var(--mm-font-size-base);
+    color: var(--mm-text-color);
+    cursor: pointer;
+    transition: all var(--mm-transition-fast);
+    text-align: left;
+    min-height: 44px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* Enhanced touch targets for mobile */
+@media (max-width: 768px) {
+    .answer-button,
+    .answer-btn {
+        min-height: 48px;
+        padding: var(--mm-spacing-md);
+    }
+}
+
+/* Hover states - only on devices that support hover */
+@media (hover: hover) and (pointer: fine) {
+    .answer-button:hover,
+    .answer-btn:hover {
+        background: var(--mm-btn-hover-bg);
+        border: var(--mm-border-hover);
+        transform: translateY(-1px);
+    }
+}
+
+.answer-button:active,
+.answer-button.selected,
+.answer-btn:active,
+.answer-btn.selected {
+    background: var(--mm-btn-active-bg);
+    border: var(--mm-border-sunken);
+    transform: translateY(1px);
+}
+
+.answer-button:focus-visible,
+.answer-btn:focus-visible {
+    box-shadow: var(--mm-focus-ring);
+    z-index: 1;
+}
+
+.answer-button.correct,
+.answer-btn.correct {
+    background: var(--mm-success-bg);
+    border-color: var(--mm-success-border);
+    animation: correctPulse 0.6s ease-out;
+}
+
+.answer-button.incorrect,
+.answer-btn.incorrect {
+    background: var(--mm-error-bg);
+    border-color: var(--mm-error-border);
+    animation: incorrectShake 0.6s ease-out;
+}
+
+.answer-button:disabled,
+.answer-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--mm-btn-disabled-bg);
+}
+
+/* Micro-animations for feedback */
+@keyframes correctPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+@keyframes incorrectShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    75% { transform: translateX(4px); }
+}
+
+/* =============================================================================
+   FEEDBACK AREA
+   ============================================================================= */
+
+#feedback-area {
+    grid-area: feedback;
+    min-height: 40px;
+    padding: var(--mm-spacing-sm);
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--mm-font-weight-bold);
+    text-align: center;
+}
+
+.feedback-success {
+    color: var(--mm-success-color);
+    background: var(--mm-success-bg);
+}
+
+.feedback-error {
+    color: var(--mm-error-color);
+    background: var(--mm-error-bg);
+}
+
+.feedback-info {
+    color: var(--mm-info-color);
+    background: var(--mm-info-bg);
+}
+
+/* =============================================================================
+   SCORE DISPLAY AND PROGRESS INDICATORS
+   ============================================================================= */
+
+#score-display .score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--mm-spacing-xs);
+    padding: var(--mm-spacing-xs) 0;
+    border-bottom: 1px solid var(--mm-border-color-light);
+}
+
+#score-display .score-item:last-child {
+    border-bottom: none;
+}
+
+.score-value {
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-accent-navy);
+    font-size: var(--mm-font-size-lg);
+}
+
+/* Progress bars */
+.progress-item {
+    margin-bottom: var(--mm-spacing-md);
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--mm-spacing-xs);
+    font-size: var(--mm-font-size-sm);
+}
+
+.progress-percent {
+    font-weight: var(--mm-font-weight-bold);
+    color: var(--mm-accent-gold);
+}
+
+.progress-bar {
+    height: 16px;
+    background: var(--mm-bg-primary);
+    border: var(--mm-border-sunken);
+    border-radius: var(--mm-border-radius);
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mm-accent-blue), var(--mm-accent-gold));
+    transition: width var(--mm-transition-medium);
+    border-radius: var(--mm-border-radius-sm);
+}
+
+.progress-fill.rooms-fill {
+    background: linear-gradient(90deg, var(--mm-accent-forest), var(--mm-accent-gold));
+}
+
+.progress-fill.accuracy-fill {
+    background: linear-gradient(90deg, var(--mm-accent-crimson), var(--mm-accent-gold));
+}
+
+/* Time indicator */
+.time-indicator {
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.time-pulse,
+#time-pulse {
+    width: 12px;
+    height: 12px;
+    background: var(--mm-accent-gold);
+    border-radius: 50%;
+    animation: timePulse 2s infinite;
+}
+
+@keyframes timePulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* =============================================================================
+   GAME CONTROLS - BUTTON STYLING
+   ============================================================================= */
+
+#game-controls {
+    display: flex;
+    flex-direction: column;
+    gap: var(--mm-spacing-sm);
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mm-spacing-sm);
+}
+
+/* Base button styles */
+button,
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+    font-size: var(--mm-font-size-base);
+    font-weight: var(--mm-font-weight-normal);
+    background: var(--mm-btn-bg);
+    color: var(--mm-text-color);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    cursor: pointer;
+    transition: all var(--mm-transition-fast);
+    min-height: 32px;
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    contain: layout paint;
+}
+
+/* Button variants */
+.btn-primary {
+    background: var(--mm-accent-blue);
+    color: var(--mm-text-light);
+    font-weight: var(--mm-font-weight-bold);
+    border-color: var(--mm-accent-blue-dark);
+}
+
+.btn-secondary {
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+}
+
+.btn-danger {
+    background: var(--mm-accent-crimson);
+    color: var(--mm-text-light);
+    border-color: var(--mm-accent-crimson-dark);
+}
+
+/* Button states */
+@media (hover: hover) and (pointer: fine) {
+    button:hover,
+    .btn:hover {
+        background: var(--mm-btn-hover-bg);
+        border: var(--mm-border-hover);
+        transform: translateY(-1px);
+    }
+    
+    .btn-primary:hover {
+        background: var(--mm-accent-blue-light);
+    }
+    
+    .btn-danger:hover {
+        background: var(--mm-error-hover);
+    }
+}
+
+button:active,
+.btn:active {
+    transform: translateY(1px);
+    border: var(--mm-border-sunken);
+}
+
+button:focus-visible,
+.btn:focus-visible {
+    box-shadow: var(--mm-focus-ring);
+    z-index: 1;
+}
+
+button:disabled,
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background: var(--mm-btn-disabled-bg);
+    transform: none !important;
+}
+
+/* Large primary button */
+#new-question-btn {
+    font-size: var(--mm-font-size-lg);
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+    margin-bottom: var(--mm-spacing-md);
+    width: 100%;
+}
+
+/* =============================================================================
+   NAVIGATION AREA
+   ============================================================================= */
+
+#available-rooms {
+    font-size: var(--mm-font-size-sm);
+}
+
+.room-connection {
+    display: block;
+    margin: var(--mm-spacing-xs) 0;
+    padding: var(--mm-spacing-xs) var(--mm-spacing-sm);
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    text-decoration: none;
+    color: var(--mm-text-color);
+    transition: all var(--mm-transition-fast);
+}
+
+.room-connection:hover {
+    background: var(--mm-btn-hover-bg);
+    transform: translateY(-1px);
+}
+
+.connection-link {
+    cursor: pointer;
+    color: var(--mm-accent-blue);
+    text-decoration: underline;
+}
+
+.connection-link:hover {
+    color: var(--mm-accent-blue-light);
+}
+
+/* =============================================================================
+   LOADING STATES AND OVERLAYS
+   ============================================================================= */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--mm-z-loading);
+}
+
+.loading-content {
+    background: var(--mm-panel-bg);
+    border: var(--mm-border-raised);
+    border-radius: var(--mm-border-radius);
+    padding: var(--mm-spacing-lg);
+    text-align: center;
+    min-width: 200px;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--mm-border-color);
+    border-top: 3px solid var(--mm-accent-blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--mm-spacing-md);
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: var(--mm-text-color);
+    font-weight: var(--mm-font-weight-bold);
+}
+
+/* =============================================================================
+   ACCESSIBILITY HELPERS
+   ============================================================================= */
+
+/* Screen reader only text */
+.sr-only,
+.screen-reader-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Skip links */
+.skip-links {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: var(--mm-z-modal);
+}
+
+.skip-link {
+    position: absolute;
+    padding: var(--mm-spacing-sm) var(--mm-spacing-md);
+    background: var(--mm-accent-navy);
+    color: var(--mm-text-light);
+    text-decoration: none;
+    border-radius: var(--mm-border-radius);
+    font-weight: var(--mm-font-weight-bold);
+}
+
+.skip-link:focus {
+    top: 100px;
+    box-shadow: var(--mm-focus-ring);
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .section {
+        border-width: 2px;
+    }
+    
+    button,
+    .btn {
+        border-width: 2px;
+    }
+    
+    .answer-button,
+    .answer-btn {
+        border-width: 2px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .time-pulse,
+    #time-pulse {
+        animation: none;
+        opacity: 1;
+    }
+}
+
+/* =============================================================================
+   PRINT STYLES
+   ============================================================================= */
+
+@media print {
+    .game-container {
+        display: block;
+        height: auto;
+        overflow: visible;
+    }
+    
+    .game-main {
+        display: block;
+        overflow: visible;
+    }
+    
+    .game-sidebar {
+        display: none;
+    }
+    
+    button {
+        display: none;
+    }
+}
+
+/* =============================================================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================================================= */
+
+/* Optimize paint and layout */
+.section {
+    contain: layout paint;
+}
+
+.progress-fill {
+    will-change: width;
+}
+
+#timer-bar {
+    will-change: width;
+}
+
+.answer-button,
+.answer-btn {
+    contain: layout paint;
+}
+
+/* =============================================================================
+   RESPONSIVE FINE-TUNING
+   ============================================================================= */
+
+/* Small mobile devices */
+@media (max-width: 320px) {
+    .game-container {
+        padding: var(--mm-spacing-xs);
+        gap: var(--mm-spacing-xs);
+    }
+    
+    .section {
+        padding: var(--mm-spacing-xs);
+    }
+    
+    .controls-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Large tablets */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .game-main {
+        grid-template-areas:
+            "map room"
+            "question question"
+            "timer answer"
+            "feedback feedback";
+    }
+}
+
+/* Ultra-wide screens */
+@media (min-width: 1600px) {
+    .game-container {
+        max-width: 1800px;
+    }
+    
+    .game-main {
+        grid-template-columns: 1.5fr 1fr;
+    }
+    
+    .game-sidebar {
+        max-width: 350px;
+    }
+}
+
+/* Landscape mobile devices */
+@media (max-height: 500px) and (orientation: landscape) {
+    .game-header {
+        padding: var(--mm-spacing-xs) var(--mm-spacing-sm);
+    }
+    
+    .game-header h1 {
+        font-size: var(--mm-font-size-lg);
+        margin-bottom: 0;
+    }
+    
+    .game-header p {
+        display: none;
+    }
+    
+    .game-container {
+        grid-template-rows: auto 1fr;
+        grid-template-areas:
+            "header header"
+            "main sidebar";
+    }
+    
+    .game-footer {
+        display: none;
+    }
+}
+
+/* Container queries for advanced responsive design */
+@container game-container (max-width: 600px) {
+    .controls-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .map-legend {
+        justify-content: center;
+    }
+}
+
+@container game-container (min-width: 1200px) {
+    #answer-buttons {
+        grid-template-columns: 1fr 1fr;
+        gap: var(--mm-spacing-md);
+    }
+    
+    .answer-button,
+    .answer-btn {
+        padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+    }
+}

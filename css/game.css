@@ -1907,3 +1907,20 @@ button:active {
         transition: none;
     }
 }
+
+/* Defensive: ensure core UI regions are visible and interactive unless explicitly hidden */
+#map-area,
+#map-canvas,
+#question-area,
+#answer-area,
+.game-sidebar,
+.game-main,
+.game-header,
+.game-footer {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+/* Keep overlays and modals controlled via inline styles or specific classes */

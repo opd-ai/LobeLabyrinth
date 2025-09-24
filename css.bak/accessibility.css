@@ -1,0 +1,798 @@
+/**
+ * LobeLabyrinth Accessibility Styles - comprehensive focus management
+ * and screen reader optimizations
+/* CHANGELOG
+ - Imported shared MindMaze variables for consistent theming across accessibility features
+ - Preserved all focus and high-contrast rules; no behavior changes
+ - Replaced hardcoded shadow/color values with --mm- variables where safe
+*/
+@import url("./mm-vars.css");
+
+/* Local variable for high-contrast accent used in focus outlines in this sheet */
+:root {
+    --mm-hc-accent: #005fcc;
+}
+
+/* ===== ENHANCED FOCUS INDICATORS ===== */
+
+/* Enhanced focus indicators - Windows 95 System Style */
+:focus {
+    outline: 2px dotted var(--mindmaze-text) !important;
+    outline-offset: 1px;
+}
+
+/* Enhanced focus for buttons - Windows 95 System Style */
+button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+[role="button"]:focus {
+    outline: 2px dotted var(--mindmaze-text) !important;
+    outline-offset: 1px;
+}
+
+/* ===== SCREEN READER UTILITIES ===== */
+
+/* Screen reader only content - visually hidden but accessible to screen readers */
+.sr-only {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+/* Skip links for keyboard navigation */
+.skip-links {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+}
+
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 9999;
+    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
+    background: var(--mm-hc-accent);
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: var(--mm-radius-sm);
+    transition: left 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 0;
+}
+
+/* ===== ENHANCED FOCUS INDICATORS ===== */
+
+/* High visibility focus outline for all interactive elements */
+:focus {
+    outline: 3px solid var(--mindmaze-gold);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+/* Prefer :focus-visible to avoid noisy outlines when clicking */
+:focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Enhanced focus for buttons */
+button:focus,
+input[type="button"]:focus,
+input[type="submit"]:focus,
+[role="button"]:focus {
+    outline: 3px solid var(--mindmaze-gold);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 0 0 4px rgba(212,175,55,0.25);
+}
+
+/* Win95 style button baseline for keyboard users */
+.btn-win95:focus,
+.btn-win95:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
+}
+
+/* Focus for form elements */
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 3px solid var(--mm-hc-accent);
+    outline-offset: 2px;
+    border-color: var(--mm-hc-accent);
+}
+
+/* Focus for links */
+a:focus {
+    outline: 3px solid var(--mm-hc-accent);
+    outline-offset: 2px;
+    background-color: rgba(0, 95, 204, 0.1);
+}
+
+/* ===== KEYBOARD NAVIGATION HELPERS ===== */
+
+/* Highlight keyboard navigable elements */
+[tabindex]:not([tabindex="-1"]) {
+    position: relative;
+}
+
+/* Visual indicator for keyboard navigation mode - Enhanced Contrast */
+body.keyboard-navigation :focus {
+    animation: focusPulse 2s infinite !important;
+    outline: 4px solid var(--mindmaze-gold) !important;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.9), 0 0 16px rgba(212, 175, 55, 0.9) !important;
+}
+
+@keyframes focusPulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 4px var(--mindmaze-gold), 0 0 0 6px rgba(212,175,55,0.4); }
+    50% { box-shadow: 0 0 0 1px rgba(0,0,0,0.9), 0 0 0 4px var(--mindmaze-gold-light), 0 0 0 8px rgba(212,175,55,0.6); }
+}
+
+/* ===== HIGH CONTRAST MODE ===== */
+
+/* Base high contrast variables - Windows 95 System Colors */
+.high-contrast {
+    --mindmaze-text: #000000 !important;
+    --mindmaze-text-dim: #000000 !important;
+    --mindmaze-text-light: #FFFFFF !important;
+    --mindmaze-gray: #FFFFFF !important;
+    --mindmaze-gray-light: #FFFFFF !important;
+    --mindmaze-gray-dark: #C0C0C0 !important;
+    --mindmaze-stone: #000000 !important;
+    --mindmaze-navy: #000080 !important;
+    --mindmaze-gold: #FFFF00 !important;
+    --mindmaze-blue: #0000FF !important;
+    --mindmaze-crimson: #FF0000 !important;
+    --mindmaze-brown: #800000 !important;
+    --border-raised: 2px solid #000000 !important;
+    --border-sunken: 2px solid #000000 !important;
+    --border-flat: 1px solid #000000 !important;
+}
+
+/* Apply high contrast styles */
+.high-contrast,
+.high-contrast * {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    border-color: #000000 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+}
+
+/* High contrast buttons - Windows 95 System Style */
+.high-contrast button,
+.high-contrast input[type="button"],
+.high-contrast input[type="submit"],
+.high-contrast [role="button"] {
+    background: var(--mm-stone) !important;
+    color: #000000 !important;
+    border: 2px outset var(--mm-stone) !important;
+}
+
+.high-contrast button:hover,
+.high-contrast button:focus {
+    background: var(--mm-stone-light) !important;
+}
+
+.high-contrast button:disabled {
+    background: var(--mm-stone-dark) !important;
+    color: #404040 !important;
+    border: 1px solid #808080 !important;
+}
+
+/* High contrast form elements */
+.high-contrast input,
+.high-contrast select,
+.high-contrast textarea {
+    background-color: var(--hc-text) !important;
+    color: var(--hc-bg) !important;
+    border: 2px solid var(--hc-border) !important;
+}
+
+/* High contrast links */
+.high-contrast a {
+    color: var(--hc-link) !important;
+    text-decoration: underline !important;
+    font-weight: bold !important;
+}
+
+.high-contrast a:visited {
+    color: var(--hc-visited) !important;
+}
+
+.high-contrast a:hover,
+.high-contrast a:focus {
+    background-color: var(--hc-accent) !important;
+    color: var(--hc-bg) !important;
+}
+
+/* High contrast focus indicators - Optimized for Stone Theme */
+.high-contrast :focus {
+    outline: 4px solid var(--hc-focus) !important;
+    outline-offset: 2px !important;
+    box-shadow: 0 0 0 1px var(--hc-bg), 0 0 0 6px var(--hc-focus) !important;
+    background: var(--hc-panel-bg) !important;
+}
+
+/* High contrast status indicators */
+.high-contrast .success,
+.high-contrast .correct {
+    color: var(--hc-success) !important;
+    font-weight: bold !important;
+}
+
+.high-contrast .error,
+.high-contrast .incorrect {
+    color: var(--hc-error) !important;
+    font-weight: bold !important;
+}
+
+.high-contrast .warning {
+    color: var(--hc-warning) !important;
+    font-weight: bold !important;
+}
+
+/* High contrast canvas and images */
+.high-contrast canvas,
+.high-contrast img {
+    filter: contrast(200%) brightness(150%) !important;
+    border: 2px solid var(--hc-border) !important;
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    /* Avoid transform-based entrance animations for toasts/modals */
+    .achievement-notification,
+    .achievement-unlock-animation,
+    .victory-content,
+    .achievement-gallery > div {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+}
+
+/* Ensure focus rings remain visible on very dark backgrounds */
+@media (forced-colors: active) {
+    :focus {
+        outline: 4px solid WindowText !important;
+    }
+}
+
+/* Manual reduced motion class */
+.reduced-motion *,
+.reduced-motion *::before,
+.reduced-motion *::after {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* ===== LARGE TEXT MODE ===== */
+
+.large-text {
+    font-size: 1.25em !important;
+    line-height: 1.6 !important;
+}
+
+.large-text h1 { font-size: 2.5em !important; }
+.large-text h2 { font-size: 2.0em !important; }
+.large-text h3 { font-size: 1.75em !important; }
+.large-text h4 { font-size: 1.5em !important; }
+.large-text h5 { font-size: 1.25em !important; }
+.large-text h6 { font-size: 1.1em !important; }
+
+.large-text button,
+.large-text input,
+.large-text select,
+.large-text textarea {
+    font-size: 1.2em !important;
+    padding: 12px 16px !important;
+}
+
+/* ===== SCREEN READER MODE OPTIMIZATIONS ===== */
+
+.screen-reader-mode {
+    /* Optimize for screen reader users */
+    font-family: sans-serif;
+    line-height: 1.6;
+}
+
+/* Make hidden content visible when focused in screen reader mode */
+.screen-reader-mode .sr-only:focus {
+    position: absolute !important;
+    width: auto !important;
+    height: auto !important;
+    padding: 1em !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    clip: unset !important;
+    white-space: normal !important;
+    border: 2px solid var(--mm-hc-accent) !important;
+    background: #fff !important;
+    color: #000 !important;
+    z-index: 10000 !important;
+    top: 0 !important;
+    left: 0 !important;
+}
+
+/* ===== ACCESSIBILITY MODAL STYLES ===== */
+
+.accessibility-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+}
+
+.accessibility-modal .modal-content {
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
+    box-shadow: var(--mm-shadow-deep);
+    max-width: 90vw;
+    max-height: 80vh;
+    width: clamp(320px, 60vw, 600px);
+    border-radius: var(--mm-spacing-md);
+    overflow: hidden;
+}
+
+.accessibility-modal .modal-header {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.accessibility-modal .modal-header h2 {
+    margin: 0;
+    color: var(--mm-hc-accent);
+}
+
+.accessibility-modal .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.accessibility-modal .modal-close:hover,
+.accessibility-modal .modal-close:focus {
+    background-color: #f0f0f0;
+}
+
+.accessibility-modal .modal-body {
+    padding: 1.5rem;
+}
+
+.accessibility-modal .modal-body h3 {
+    color: var(--mm-hc-accent);
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.accessibility-modal .modal-body h3:first-child {
+    margin-top: 0;
+}
+
+.accessibility-modal .modal-body ul {
+    margin: 0.5rem 0;
+    padding-left: 1.5rem;
+}
+
+.accessibility-modal .modal-body li {
+    margin-bottom: 0.5rem;
+}
+
+.accessibility-modal .modal-body kbd {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-family: monospace;
+    font-size: 0.9em;
+}
+
+.accessibility-modal .modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #ddd;
+    text-align: right;
+}
+
+.accessibility-modal .modal-close-btn {
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
+    color: var(--mm-text);
+    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
+    cursor: pointer;
+    font-family: var(--mm-font-ui);
+    border-radius: var(--mm-radius);
+}
+
+.accessibility-modal .modal-close-btn:hover,
+.accessibility-modal .modal-close-btn:focus {
+    background: #0047a0;
+}
+
+/* High contrast modal styles */
+.high-contrast .accessibility-modal {
+    background-color: rgba(0, 0, 0, 0.95) !important;
+}
+
+.high-contrast .accessibility-modal .modal-content {
+    background: var(--hc-bg) !important;
+    color: var(--hc-text) !important;
+    border-color: var(--hc-border) !important;
+}
+
+.high-contrast .accessibility-modal .modal-header h2 {
+    color: var(--hc-accent) !important;
+}
+
+.high-contrast .accessibility-modal .modal-body h3 {
+    color: var(--hc-accent) !important;
+}
+
+.high-contrast .accessibility-modal .modal-body kbd {
+    background: var(--hc-text) !important;
+    color: var(--hc-bg) !important;
+    border-color: var(--hc-border) !important;
+}
+
+.high-contrast .accessibility-modal .modal-close-btn {
+    background: var(--hc-accent) !important;
+    color: var(--hc-bg) !important;
+}
+
+/* ===== GAME-SPECIFIC ACCESSIBILITY STYLES ===== */
+
+/* Enhanced focus for answer buttons */
+.answer-button:focus {
+    transform: scale(1.05);
+    z-index: 10;
+    box-shadow: 0 0 0 3px var(--mm-hc-accent), 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.high-contrast .answer-button:focus {
+    transform: scale(1.05) !important;
+    background-color: var(--hc-focus) !important;
+    color: var(--hc-bg) !important;
+    border-color: var(--hc-accent) !important;
+    box-shadow: 0 0 0 3px var(--hc-accent) !important;
+}
+
+/* Map canvas accessibility enhancements - Dark Theme */
+#map-canvas:focus {
+    outline: 3px solid var(--mindmaze-gold) !important;
+    outline-offset: -3px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,0.9), inset 0 0 0 5px rgba(212,175,55,0.4) !important;
+}
+
+.high-contrast #map-canvas:focus {
+    outline: 4px solid var(--hc-focus) !important;
+    box-shadow: inset 0 0 0 2px var(--hc-bg), inset 0 0 0 6px var(--hc-focus) !important;
+}
+
+/* Timer accessibility - reduce urgency for screen readers */
+.screen-reader-mode .timer-container {
+    /* Remove any blinking or urgent animations for screen readers */
+    animation: none;
+    transition: none;
+}
+
+.screen-reader-mode .timer-urgent {
+    animation: none !important;
+}
+
+/* Room info accessibility enhancements */
+#room-info:focus-within {
+    outline: 2px solid var(--mm-hc-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* Question area accessibility */
+#question-area:focus-within {
+    outline: 2px solid var(--mm-hc-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+}
+
+/* ===== RESPONSIVE ACCESSIBILITY ===== */
+
+/* Large desktop accessibility improvements */
+@media (min-width: 1440px) {
+    .accessibility-modal .modal-content {
+        max-width: 800px;
+        font-size: 1.1em;
+    }
+    
+    /* Maintain readable focus indicators on large screens */
+    :focus {
+        outline-width: 3px;
+        outline-offset: 3px;
+    }
+}
+
+/* Tablet landscape accessibility */
+@media (max-width: 1024px) and (min-width: 769px) {
+    .accessibility-modal .modal-content {
+        max-width: 90vw;
+        max-height: 85vh;
+        margin: clamp(1rem, 3vw, 2rem);
+    }
+    
+    /* Enhanced touch targets for tablet */
+    button,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    .answer-btn {
+        min-height: clamp(40px, 6vw, 48px) !important;
+        min-width: clamp(40px, 6vw, 48px) !important;
+        font-size: clamp(14px, 2.5vw, 16px) !important;
+    }
+}
+
+/* Mobile and tablet accessibility features */
+@media (max-width: 768px) {
+    .skip-link {
+        font-size: clamp(1em, 3vw, 1.2em);
+        padding: clamp(10px, 3vw, 15px) clamp(16px, 4vw, 24px);
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .accessibility-modal {
+        padding: clamp(0.5rem, 2vw, 1rem);
+    }
+    
+    .accessibility-modal .modal-content {
+        margin: 0;
+        max-height: 95vh;
+        width: 100%;
+        border-radius: clamp(8px, 2vw, 12px);
+    }
+    
+    .accessibility-modal .modal-header {
+        padding: clamp(15px, 4vw, 20px);
+    }
+    
+    .accessibility-modal .modal-body {
+        padding: clamp(15px, 4vw, 20px);
+        font-size: clamp(14px, 3.5vw, 16px);
+        line-height: 1.6;
+    }
+    
+    .accessibility-modal .modal-close {
+        width: clamp(36px, 9vw, 44px);
+        height: clamp(36px, 9vw, 44px);
+        font-size: clamp(16px, 4vw, 20px);
+    }
+    
+    /* Enhanced touch targets for mobile accessibility */
+    button,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    .answer-btn,
+    .room-nav-btn,
+    .victory-btn {
+        min-height: clamp(44px, 11vw, 52px) !important;
+        min-width: clamp(44px, 11vw, 52px) !important;
+        font-size: clamp(14px, 3.5vw, 16px) !important;
+        padding: clamp(10px, 2.5vw, 14px) clamp(12px, 3vw, 16px) !important;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Ensure focus indicators are visible on mobile */
+    :focus {
+    outline: 3px solid var(--mm-hc-accent) !important;
+        outline-offset: 2px !important;
+        border-radius: 4px;
+    }
+    
+    /* High contrast focus for better visibility */
+    .high-contrast :focus {
+        outline: 4px solid #ffffff !important;
+        outline-offset: 3px !important;
+        box-shadow: 0 0 0 6px #000000 !important;
+    }
+}
+
+/* Small mobile devices - Extra accessibility considerations */
+@media (max-width: 480px) {
+    .skip-link {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10000;
+    background: var(--mm-hc-accent);
+        color: white;
+        text-align: center;
+        font-size: clamp(1em, 4vw, 1.3em);
+        padding: clamp(12px, 3vw, 16px);
+        min-height: 44px;
+    }
+    
+    .accessibility-modal .modal-content {
+        max-height: 98vh;
+        border-radius: clamp(6px, 2vw, 10px);
+    }
+    
+    .accessibility-modal .modal-body {
+        font-size: clamp(15px, 4vw, 17px);
+        line-height: 1.7;
+    }
+    
+    .accessibility-modal .modal-body kbd {
+        font-size: clamp(12px, 3vw, 14px);
+        padding: clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 8px);
+        min-height: 28px;
+        min-width: 28px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    /* Extra large touch targets for small screens */
+    button,
+    input,
+    select,
+    textarea,
+    [role="button"],
+    .answer-btn,
+    .room-nav-btn,
+    .victory-btn,
+    .achievement-close-btn {
+        min-height: clamp(48px, 12vw, 56px) !important;
+        min-width: clamp(48px, 12vw, 56px) !important;
+        font-size: clamp(15px, 4vw, 17px) !important;
+        padding: clamp(12px, 3vw, 16px) clamp(16px, 4vw, 20px) !important;
+    }
+    
+    /* Increased spacing between interactive elements */
+    .controls-grid {
+        gap: clamp(12px, 3vw, 16px) !important;
+    }
+    
+    .answer-btn + .answer-btn {
+        margin-top: clamp(8px, 2vw, 12px) !important;
+    }
+}
+
+/* ===== PRINT ACCESSIBILITY ===== */
+
+@media print {
+    /* Ensure high contrast for printing */
+    * {
+        background: white !important;
+        color: black !important;
+    }
+    
+    /* Hide interactive elements in print */
+    .skip-links,
+    .accessibility-modal,
+    button,
+    input,
+    select,
+    textarea {
+        display: none !important;
+    }
+    
+    /* Show URLs for links */
+    a[href]:after {
+        content: " (" attr(href) ")";
+        font-size: 0.8em;
+        color: #666;
+    }
+}
+
+/* ===== FORCED COLORS MODE (Windows High Contrast) ===== */
+
+@media (forced-colors: active) {
+    /* Respect system forced colors mode */
+    .skip-link {
+        forced-color-adjust: none;
+        background: ButtonText;
+        color: ButtonFace;
+        border: 1px solid ButtonText;
+    }
+    
+    :focus {
+        outline: 2px solid Highlight;
+        outline-offset: 2px;
+    }
+    
+    /* Ensure custom elements work with forced colors */
+    .answer-button,
+    .modal-content,
+    .accessibility-modal {
+        forced-color-adjust: none;
+        border: 1px solid ButtonText;
+    }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Keyboard navigation indicators */
+.keyboard-focusable {
+    position: relative;
+}
+
+.keyboard-focusable::after {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    pointer-events: none;
+    transition: border-color 0.2s ease;
+}
+
+.keyboard-focusable:focus::after {
+    border-color: var(--mm-hc-accent);
+}
+
+/* Screen reader announcements positioning */
+.sr-announcement {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+/* High contrast image alternatives */
+.high-contrast .decorative-image {
+    display: none !important;
+}
+
+.high-contrast .icon {
+    filter: invert(1) contrast(200%);
+}

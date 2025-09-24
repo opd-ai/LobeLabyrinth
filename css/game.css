@@ -4,6 +4,7 @@
  - Grouped button selectors to use shared mm-btn base style
  - Preserved all display:none and overlay behavior for JS interaction
  - Added semantic helper classes while maintaining exact visual output
+ - Replaced duplicate shadow values with consolidated --mm-shadow-* variables from mm-vars.css
 */
 @import url("./mm-vars.css");
 
@@ -19,9 +20,7 @@
     --texture-img: url('../mindmaze1-1024x701.jpg');
     --texture-img-2: url('../mindmaze2-1024x700.jpg');
     
-    /* Game-specific shadows */
-    --frame-shadow: 2px 2px 6px rgba(0,0,0,0.5);
-    --shadow-text-emboss: 1px 1px 0 rgba(0,0,0,0.6);
+    /* Text shadow for readability */
     --shadow-text-raised: 0 1px 0 rgba(255,255,255,0.15);
 }
 
@@ -138,7 +137,7 @@ body::before {
     border: var(--mm-bezel-width) outset var(--mm-stone);
     margin-left: 6px;
     margin-right: 6px;
-    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
+    box-shadow: var(--mm-shadow-panel-light);
 }
 
 .game-container {
@@ -200,7 +199,7 @@ body::before {
     display: block;
     background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.04));
     border: 2px inset var(--mindmaze-stone);
-    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
+    box-shadow: var(--mm-shadow-panel-light);
 }
 
 /* Win95 button chrome - consolidated with shared variables */
@@ -326,7 +325,7 @@ button:active {
     .section.mm-inset {
         background: var(--mm-panel);
         border: var(--mm-bezel-width) inset var(--mm-stone);
-        box-shadow: inset 2px 2px 5px rgba(0,0,0,0.7), inset -2px -2px 3px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);
+        box-shadow: var(--mm-shadow-panel-deep);
     }
 
 /* Footer - Authentic 90s Status Bar */
@@ -554,9 +553,7 @@ button:active {
 
 .answer-btn:active {
     border: 2px inset var(--mindmaze-stone);
-    box-shadow: 
-        inset 2px 2px 2px rgba(0, 0, 0, 0.4),
-        inset -1px -1px 1px rgba(255, 255, 255, 0.1);
+    box-shadow: var(--mm-shadow-button-pressed);
     transform: translate(1px, 1px);
     background: rgba(0, 0, 0, 0.1);
 }
@@ -906,9 +903,7 @@ button:hover {
 
 button:active {
     border: 2px inset var(--mindmaze-stone);
-    box-shadow: 
-        inset 2px 2px 2px rgba(0, 0, 0, 0.4),
-        inset -1px -1px 1px rgba(255, 255, 255, 0.1);
+    box-shadow: var(--mm-shadow-button-pressed);
     transform: translate(1px, 1px);
     background: rgba(0, 0, 0, 0.1);
 }

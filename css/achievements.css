@@ -1,6 +1,7 @@
 /* CHANGELOG
  - Imported shared MindMaze variables and consolidated repeated chrome/panel styles
  - Replaced duplicated values with --mm- variables where safe
+ - Consolidated duplicate shadow patterns using --mm-shadow-* variables
 */
 @import url("./mm-vars.css");
 
@@ -269,7 +270,7 @@
 
 .achievement-card:hover {
     border: 2px inset var(--mindmaze-stone);
-    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.7), inset -1px -1px 2px rgba(255,255,255,0.05);
+    box-shadow: var(--mm-shadow-card-hover);
     transform: translateY(1px);
     background: linear-gradient(145deg, #1A1A1A 0%, #252525 35%, #2F2F2F 65%, #353535 100%);
 }

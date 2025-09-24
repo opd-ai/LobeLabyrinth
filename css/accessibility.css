@@ -1,10 +1,10 @@
 /**
- * Accessibility CSS - Enhanced styles for Windows 95 MindMaze theme
- * Supports high contrast mode, focus indicators, reduced motion,
+ * LobeLabyrinth Accessibility Styles - comprehensive focus management
  * and screen reader optimizations
 /* CHANGELOG
- - Imported shared MindMaze variables and reused mm-panel and mm-btn helpers for consistent chrome
+ - Imported shared MindMaze variables for consistent theming across accessibility features
  - Preserved all focus and high-contrast rules; no behavior changes
+ - Replaced hardcoded shadow/color values with --mm- variables where safe
 */
 @import url("./mm-vars.css");
 
@@ -174,18 +174,18 @@ body.keyboard-navigation :focus {
 .high-contrast input[type="button"],
 .high-contrast input[type="submit"],
 .high-contrast [role="button"] {
-    background: #C0C0C0 !important;
+    background: var(--mm-stone) !important;
     color: #000000 !important;
-    border: 2px outset #C0C0C0 !important;
+    border: 2px outset var(--mm-stone) !important;
 }
 
 .high-contrast button:hover,
 .high-contrast button:focus {
-    background: #E0E0E0 !important;
+    background: var(--mm-stone-light) !important;
 }
 
 .high-contrast button:disabled {
-    background: #808080 !important;
+    background: var(--mm-stone-dark) !important;
     color: #404040 !important;
     border: 1px solid #808080 !important;
 }

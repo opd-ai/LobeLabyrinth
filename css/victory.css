@@ -1,6 +1,7 @@
 /* CHANGELOG
  - Imported shared MindMaze variables; mapped victory chrome to mm-panel and mm-btn helpers
  - Visuals preserved; only structural consolidation
+ - Replaced duplicate shadow patterns with --mm-shadow-* variables
 */
 @import url("./mm-vars.css");
 
@@ -104,7 +105,7 @@
 
 .stat-card:hover {
     transform: translateY(1px);
-    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.7), inset -1px -1px 2px rgba(255,255,255,0.05);
+    box-shadow: var(--mm-shadow-card-hover);
     border: var(--mm-bezel-width) inset var(--mm-gold-dark);
     background: linear-gradient(145deg, #1F1F1F 0%, #2A2A2A 35%, #353535 65%, #3A3A3A 100%);
 }

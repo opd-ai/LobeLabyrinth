@@ -321,7 +321,11 @@ This project follows incremental development phases. Each phase builds upon the 
 4. Move to next phase only when current is stable
 5. Maintain backward compatibility
 
-## 📄 License
+## � References
+
+- [MindMaze Was the Original Wikipedia Rabbit Hole](https://www.otherstrangeness.com/2024/07/02/mindmaze-was-the-original-wikipedia-rabbit-hole/) - Historical context and inspiration for the original Encarta MindMaze
+
+## �📄 License
 
 See LICENSE file for details.
 

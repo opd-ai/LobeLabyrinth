@@ -70,6 +70,12 @@ input[type="submit"]:focus,
     border-radius: 2px;
 }
 
+/* Prefer :focus-visible to avoid noisy outlines when clicking */
+:focus:not(:focus-visible) {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
 /* Enhanced focus for buttons */
 button:focus,
 input[type="button"]:focus,
@@ -78,6 +84,14 @@ input[type="submit"]:focus,
     outline: 3px solid var(--mindmaze-gold);
     outline-offset: 2px;
     box-shadow: 0 0 0 1px rgba(0,0,0,0.6), 0 0 0 4px rgba(212,175,55,0.25);
+}
+
+/* Win95 style button baseline for keyboard users */
+.btn-win95:focus,
+.btn-win95:focus-visible {
+    outline: var(--focus-outline);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 3px rgba(212,175,55,0.12);
 }
 
 /* Focus for form elements */
@@ -237,6 +251,17 @@ body.keyboard-navigation :focus {
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
+    }
+
+    /* Avoid transform-based entrance animations for toasts/modals */
+    .achievement-notification,
+    .achievement-unlock-animation,
+    .victory-content,
+    .achievement-gallery > div {
+        transition: none !important;
+        animation: none !important;
+        transform: none !important;
+        opacity: 1 !important;
     }
 }
 

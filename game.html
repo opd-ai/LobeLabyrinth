@@ -203,16 +203,62 @@
             <!-- Game Controls -->
             <div id="game-controls" class="section">
                 <h3>Actions</h3>
-                <button id="new-question-btn">New Question</button>
+                <button id="new-question-btn" 
+                        class="btn-primary" 
+                        type="button" 
+                        aria-describedby="new-question-help"
+                        accesskey="n">
+                    🎲 New Question
+                </button>
                 <div class="controls-grid">
-                    <button id="hint-btn" disabled>💡 Hint</button>
-                    <button id="skip-btn" disabled>⏭️ Skip</button>
+                    <button id="hint-btn" 
+                            disabled 
+                            type="button" 
+                            aria-describedby="hint-help"
+                            accesskey="h">
+                        💡 Hint
+                    </button>
+                    <button id="skip-btn" 
+                            disabled 
+                            type="button" 
+                            aria-describedby="skip-help"
+                            accesskey="s">
+                        ⏭️ Skip
+                    </button>
                 </div>
                 <div class="controls-grid">
-                    <button id="save-btn" class="btn-secondary">💾 Save</button>
-                    <button id="load-btn" class="btn-secondary">📁 Load</button>
+                    <button id="save-btn" 
+                            class="btn-secondary" 
+                            type="button" 
+                            aria-describedby="save-help"
+                            accesskey="v">
+                        💾 Save
+                    </button>
+                    <button id="load-btn" 
+                            class="btn-secondary" 
+                            type="button" 
+                            aria-describedby="load-help"
+                            accesskey="l">
+                        📁 Load
+                    </button>
                 </div>
-                <button id="reset-btn" class="btn-danger">🔄 Reset Game</button>
+                <button id="reset-btn" 
+                        class="btn-danger" 
+                        type="button" 
+                        aria-describedby="reset-help"
+                        aria-label="Reset game - this will delete all progress">
+                    🔄 Reset Game
+                </button>
+                
+                <!-- Hidden help text for screen readers -->
+                <div class="sr-only">
+                    <div id="new-question-help">Get a new question to answer. Keyboard shortcut: Alt+N</div>
+                    <div id="hint-help">Get a hint for the current question. Keyboard shortcut: Alt+H</div>
+                    <div id="skip-help">Skip the current question. Keyboard shortcut: Alt+S</div>
+                    <div id="save-help">Save your current game progress. Keyboard shortcut: Alt+V</div>
+                    <div id="load-help">Load your saved game progress. Keyboard shortcut: Alt+L</div>
+                    <div id="reset-help">Reset the entire game, clearing all progress</div>
+                </div>
             </div>
 
             <!-- Navigation -->
@@ -226,11 +272,22 @@
             <!-- Achievement Stats -->
             <div id="achievement-stats" class="section">
                 <h3>🏆 Achievements</h3>
-                <div class="achievement-stats-summary">
+                <div class="achievement-stats-summary" id="achievement-stats-summary" aria-live="polite">
                     0/12 (0%)
                     <span class="achievement-points">+0 pts</span>
                 </div>
-                <button id="achievement-toggle" class="btn-secondary">View Gallery</button>
+                <button id="achievement-toggle" 
+                        class="btn-secondary" 
+                        type="button"
+                        aria-describedby="achievement-help"
+                        aria-expanded="false"
+                        aria-controls="achievement-gallery"
+                        accesskey="a">
+                    🏆 View Gallery
+                </button>
+                <div class="sr-only">
+                    <div id="achievement-help">Open achievement gallery to view all unlocked achievements. Keyboard shortcut: Alt+A</div>
+                </div>
             </div>
         </div>
 
@@ -336,15 +393,34 @@
             </div>
             
             <div class="victory-actions">
-                <button class="victory-btn victory-btn-primary" id="play-again-btn">
+                <button class="victory-btn victory-btn-primary" 
+                        id="play-again-btn"
+                        type="button"
+                        accesskey="1"
+                        aria-describedby="play-again-help">
                     🔄 Play Again
                 </button>
-                <button class="victory-btn victory-btn-secondary" id="view-achievements-btn">
+                <button class="victory-btn victory-btn-secondary" 
+                        id="view-achievements-btn"
+                        type="button"
+                        accesskey="2"
+                        aria-describedby="view-achievements-help">
                     🏆 View All Achievements
                 </button>
-                <button class="victory-btn victory-btn-secondary" id="share-results-btn">
+                <button class="victory-btn victory-btn-secondary" 
+                        id="share-results-btn"
+                        type="button"
+                        accesskey="3"
+                        aria-describedby="share-results-help">
                     📤 Share Results
                 </button>
+                
+                <!-- Hidden help text for screen readers -->
+                <div class="sr-only">
+                    <div id="play-again-help">Start a new game. Keyboard shortcut: Alt+1</div>
+                    <div id="view-achievements-help">Open achievement gallery. Keyboard shortcut: Alt+2</div>
+                    <div id="share-results-help">Share your results. Keyboard shortcut: Alt+3</div>
+                </div>
             </div>
             
             <div class="victory-footer">
@@ -589,6 +665,118 @@ Press any key to close this help.
             }
 
             console.log('♿ Accessibility integration setup complete');
+
+            // Setup enhanced keyboard navigation for new UI elements
+            setupEnhancedKeyboardHandlers();
+        }
+
+        // Setup enhanced keyboard handlers for new UI elements
+        function setupEnhancedKeyboardHandlers() {
+            // Keyboard help overlay handlers
+            const keyboardOverlay = document.getElementById('keyboard-help-overlay');
+            if (keyboardOverlay) {
+                // Close on click outside content
+                keyboardOverlay.addEventListener('click', (event) => {
+                    if (event.target === keyboardOverlay) {
+                        keyboardOverlay.style.display = 'none';
+                    }
+                });
+
+                // Close on any key press when overlay is open
+                keyboardOverlay.addEventListener('keydown', (event) => {
+                    keyboardOverlay.style.display = 'none';
+                    event.stopPropagation();
+                });
+            }
+
+            // Game completion banner handlers
+            const gameCompletion = document.getElementById('game-completion');
+            const completionContinue = document.getElementById('completion-continue');
+            const completionAchievements = document.getElementById('completion-achievements');
+
+            if (completionContinue) {
+                completionContinue.addEventListener('click', () => {
+                    if (gameCompletion) gameCompletion.style.display = 'none';
+                });
+            }
+
+            if (completionAchievements) {
+                completionAchievements.addEventListener('click', () => {
+                    if (uiManager && uiManager.toggleAchievementGallery) {
+                        uiManager.toggleAchievementGallery();
+                    }
+                });
+            }
+
+            // Achievement gallery close button
+            const achievementClose = document.getElementById('achievement-gallery-close');
+            if (achievementClose) {
+                achievementClose.addEventListener('click', () => {
+                    const gallery = document.getElementById('achievement-gallery');
+                    if (gallery) {
+                        gallery.style.display = 'none';
+                        gallery.classList.remove('visible');
+                        // Update button state
+                        const toggle = document.getElementById('achievement-toggle');
+                        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            // Global keyboard shortcuts
+            document.addEventListener('keydown', (event) => {
+                // Don't interfere if user is typing in an input field
+                if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+                    return;
+                }
+
+                // F1 key for help
+                if (event.key === 'F1') {
+                    event.preventDefault();
+                    const helpOverlay = document.getElementById('keyboard-help-overlay');
+                    if (helpOverlay) {
+                        helpOverlay.style.display = 'flex';
+                        // Focus the help content for screen readers
+                        const helpContent = helpOverlay.querySelector('.keyboard-help-content');
+                        if (helpContent) helpContent.focus();
+                    }
+                }
+
+                // Escape key for closing overlays
+                if (event.key === 'Escape') {
+                    let handled = false;
+                    
+                    const helpOverlay = document.getElementById('keyboard-help-overlay');
+                    const gameCompletion = document.getElementById('game-completion');
+                    const achievementGallery = document.getElementById('achievement-gallery');
+
+                    if (helpOverlay && helpOverlay.style.display === 'flex') {
+                        helpOverlay.style.display = 'none';
+                        handled = true;
+                    } else if (gameCompletion && gameCompletion.style.display !== 'none') {
+                        gameCompletion.style.display = 'none';
+                        handled = true;
+                    } else if (achievementGallery && (achievementGallery.classList.contains('visible') || achievementGallery.style.display !== 'none')) {
+                        achievementGallery.style.display = 'none';
+                        achievementGallery.classList.remove('visible');
+                        // Update button state
+                        const toggle = document.getElementById('achievement-toggle');
+                        if (toggle) toggle.setAttribute('aria-expanded', 'false');
+                        handled = true;
+                    }
+
+                    if (handled) event.preventDefault();
+                }
+
+                // Quick shortcuts for achievement gallery
+                if ((event.altKey || event.ctrlKey) && event.key.toLowerCase() === 'a') {
+                    event.preventDefault();
+                    const achievementToggle = document.getElementById('achievement-toggle');
+                    if (achievementToggle) achievementToggle.click();
+                }
+            });
+
+            console.log('⌨️ Enhanced keyboard handlers setup complete');
         }
 
         // Expose game instances globally for debugging

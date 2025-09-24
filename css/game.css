@@ -74,6 +74,15 @@
     --base-font-size: clamp(10px, 1.2vw, 14px);
     --container-max-width: 100vw;
     --container-max-height: 100vh;
+    /* Encarta MindMaze specific layout sizes */
+    --titlebar-h: clamp(44px, 6vh, 64px);
+    --footer-h: clamp(28px, 4vh, 36px);
+    --sidebar-w: clamp(220px, 20vw, 320px);
+    --btn-padding: clamp(6px, 1vw, 10px);
+    --focus-outline: 3px solid rgba(212,175,55,0.95);
+    --texture-img: url('../mindmaze1-1024x701.jpg');
+    --texture-img-2: url('../mindmaze2-1024x700.jpg');
+    --frame-shadow: 2px 2px 6px rgba(0,0,0,0.5);
 }
 
 /* Base Styles */
@@ -142,7 +151,15 @@ body::before {
         "header header"
         "main sidebar"
         "footer footer";
-    background: var(--mindmaze-gray);
+    /* Stone/parchment frame look with low-opacity texture overlays */
+    background-color: var(--mindmaze-gray);
+    background-image:
+        linear-gradient(rgba(255,255,255,0.03), rgba(0,0,0,0.04)),
+        var(--texture-img);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    background-blend-mode: overlay;
     border: 2px outset var(--mindmaze-stone);
     box-shadow: 
         inset 1px 1px 0px rgba(255, 255, 255, 0.1),
@@ -153,7 +170,7 @@ body::before {
     left: 0;
     overflow: hidden;
     box-sizing: border-box;
-    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'MS Sans Serif', Arial, sans-serif;
     font-size: clamp(10px, 1.2vw, 14px);
     gap: 0;
 }
@@ -161,23 +178,39 @@ body::before {
 /* Header - Windows 95 Title Bar */
 .game-header {
     grid-area: header;
-    background: var(--mindmaze-gray);
+    background: linear-gradient(180deg, var(--mindmaze-gray-light) 0%, var(--mindmaze-gray) 100%);
     border-bottom: var(--border-sunken);
-    padding: 8px 16px;
-    text-align: center;
-    min-height: 44px;
+    padding: 0 12px;
+    min-height: var(--titlebar-h);
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+}
+
+.game-header::before {
+    /* Small window icon on the left - reuse included image */
+    content: '';
+    display: block;
+    width: clamp(20px, 3.2vw, 36px);
+    height: clamp(20px, 3.2vw, 36px);
+    background-image: var(--texture-img-2);
+    background-size: cover;
+    background-position: center center;
+    border: 2px outset var(--mindmaze-stone);
+    margin-left: 6px;
+    margin-right: 6px;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
 }
 
 .game-header h1 {
     color: var(--mindmaze-text);
     margin: 0;
-    font-size: clamp(1.2em, 3vw, 2em);
+    font-size: clamp(1.0rem, 2.2vw, 1.6rem);
     font-family: var(--font-heading);
     font-weight: bold;
     line-height: 1;
+    text-transform: uppercase;
 }
 
 .game-header p {
@@ -198,6 +231,7 @@ body::before {
         inset -1px -1px 2px rgba(255, 255, 255, 0.1);
     padding: clamp(6px, 1vw, 12px);
     display: grid;
+    /* central map + stacked content below for compact layout */
     grid-template-areas: 
         "map-area map-area"
         "room-info timer-area"
@@ -236,6 +270,118 @@ body::before {
     -ms-overflow-style: none;
     container-type: size;
     font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+}
+
+/* Map area (canvas) sizing and containment */
+#map-canvas,
+.map-area {
+    width: 100%;
+    height: 100%;
+    max-height: calc(100vh - var(--titlebar-h) - var(--footer-h) - 60px);
+    min-height: 120px;
+    display: block;
+    background: linear-gradient(180deg, rgba(0,0,0,0.02), rgba(0,0,0,0.04));
+    border: 2px inset var(--mindmaze-stone);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
+}
+
+/* Win95 button chrome - reusable */
+.btn-win95,
+button,
+.room-nav-btn,
+.achievement-close-btn,
+.victory-btn {
+    padding: var(--btn-padding);
+    background: var(--mindmaze-gray);
+    color: var(--mindmaze-text);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
+    cursor: pointer;
+    min-height: 40px; /* ensure comfortable tap targets */
+    min-width: 44px;
+    font-family: var(--font-ui);
+}
+
+.btn-win95:active,
+button:active {
+    border: 2px inset var(--mindmaze-stone);
+    transform: translateY(1px);
+}
+
+/* Answer buttons - larger tiles, visible focus, hit area >=44px */
+.answer-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 12px;
+    min-height: 44px;
+    min-width: 120px;
+    background: linear-gradient(180deg, var(--mindmaze-gray-light), var(--mindmaze-gray));
+    border: 2px outset var(--mindmaze-stone);
+    color: var(--mindmaze-text);
+    font-weight: 600;
+    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
+}
+
+.answer-btn:hover,
+.answer-btn:focus {
+    background: var(--mindmaze-gray-light);
+}
+
+.answer-btn.answer-correct {
+    background: linear-gradient(180deg, #E6F7E6, #DFF0DF);
+    border-color: #66AA66;
+}
+
+.answer-btn.answer-incorrect {
+    background: linear-gradient(180deg, #F8E6E6, #F2DADA);
+    border-color: #AA6666;
+}
+
+/* Keyboard selected indicator */
+.answer-btn.keyboard-selected {
+    outline: var(--focus-outline);
+    outline-offset: 3px;
+}
+
+/* Make sure internal panels can scroll but the body stays fixed */
+.game-main > * {
+    min-height: 0;
+}
+
+/* Footer/status bar */
+.game-footer {
+    grid-area: footer;
+    background: linear-gradient(180deg, var(--mindmaze-gray), var(--mindmaze-gray-dark));
+    border-top: var(--border-raised);
+    padding: 6px 12px;
+    height: var(--footer-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+/* Responsive layout: stack side panels beneath map on narrow screens */
+@media (max-width: 900px) {
+    .game-container {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar"
+            "footer";
+    }
+    .game-sidebar {
+        order: 3;
+        width: 100%;
+        max-height: 35vh;
+    }
+    .game-main {
+        order: 2;
+        padding: clamp(6px, 2vw, 10px);
+    }
 }
 
 .game-sidebar::-webkit-scrollbar {
@@ -1028,6 +1174,41 @@ button.btn-danger:hover {
     border-top: 2px solid var(--mindmaze-gold);
     border-radius: 50%;
     animation: spin 1s linear infinite;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(128, 128, 128, 0.7);
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+}
+
+.loading-content {
+    background: var(--mindmaze-gray);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: 
+        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        4px 4px 8px rgba(0, 0, 0, 0.5);
+    padding: clamp(12px, 3vw, 20px);
+    text-align: center;
+    border-radius: 4px;
+    min-width: clamp(120px, 25vw, 200px);
+}
+
+.loading-text {
+    color: var(--mindmaze-text);
+    font-size: clamp(0.8rem, 1.6vw, 1rem);
+    margin-top: clamp(8px, 2vh, 12px);
+    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
 }
 
 @keyframes spin {

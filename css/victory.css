@@ -29,10 +29,11 @@
         inset 1px 1px 0px rgba(255, 255, 255, 0.1),
         inset -1px -1px 0px rgba(0, 0, 0, 0.3),
         4px 4px 8px rgba(0, 0, 0, 0.5);
-    max-width: min(85vw, 560px);
-    max-height: min(85vh, 480px);
-    width: clamp(300px, 80vw, 560px);
-    height: clamp(350px, 75vh, 480px);
+    /* compact modal sizing to avoid occupying >15% at rest */
+    max-width: min(80vw, 560px);
+    max-height: min(80vh, 560px);
+    width: clamp(300px, 70vw, 560px);
+    height: auto;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;

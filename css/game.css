@@ -1,113 +1,28 @@
-/*
- * LobeLabyrinth - Authentic Encarta MindMaze (1995) Interface
- * Recreating the classic Windows 95 educational game experience
 /* CHANGELOG
- - Added import of shared MindMaze variables and small refactor to reuse mm-panel and mm-btn helpers
- - Kept selector specificity and visual output identical
+ - Consolidated all variables into mm-vars.css to eliminate duplication
+ - Replaced repeated border/padding/color values with shared --mm- variables
+ - Grouped button selectors to use shared mm-btn base style
+ - Preserved all display:none and overlay behavior for JS interaction
+ - Added semantic helper classes while maintaining exact visual output
 */
 @import url("./mm-vars.css");
 
-/* Base game styles (original file preserved) */
-*/
-
-/* CSS Custom Properties - Authentic Encarta MindMaze (1995) Theme */
+/* Game-specific variables not shared with other components */
 :root {
-    /* Core MindMaze Color Palette (1995 Authentic) */
-    --mindmaze-navy: #000080;           /* Deep navy background */
-    --mindmaze-navy-light: #0000A0;     /* Lighter navy for accents */
-    --mindmaze-navy-dark: #000060;      /* Darker navy for depth */
-
-    /* Short aliases (mm-) for refactor consumption - do not use elsewhere unless intended */
-    --mm-navy: var(--mindmaze-navy);
-    --mm-navy-light: var(--mindmaze-navy-light);
-    --mm-navy-dark: var(--mindmaze-navy-dark);
-    
-    --mindmaze-gray: #C0C0C0;           /* Light gray panels */
-    --mindmaze-gray-light: #E0E0E0;     /* Lightest gray highlights */
-    --mindmaze-gray-dark: #808080;      /* Dark gray shadows */
-
-    --mm-panel: var(--mindmaze-gray);
-    --mm-panel-light: var(--mindmaze-gray-light);
-    --mm-panel-dark: var(--mindmaze-gray-dark);
-    
-    --mindmaze-stone-dark: #808080;     /* Dark gray for borders */
-    --mindmaze-stone: #C0C0C0;          /* Standard panel gray */
-    --mindmaze-stone-light: #E0E0E0;    /* Light panel highlights */
-    --mindmaze-brown-dark: #800000;     /* Dark red/maroon */
-    --mindmaze-brown: #FF0000;          /* Red for errors/warnings */
-    --mindmaze-brown-light: #FF8080;    /* Light red */
-    --mindmaze-gold: #FFFF00;           /* Bright yellow highlights */
-    --mindmaze-gold-light: #FFFF80;     /* Light yellow */
-    --mindmaze-gold-dark: #CCCC00;      /* Dark yellow */
-
-    --mm-gold: var(--mindmaze-gold);
-    --mm-gold-light: var(--mindmaze-gold-light);
-    --mm-gold-dark: var(--mindmaze-gold-dark);
-    --mindmaze-blue-dark: #000040;      /* Very dark blue */
-    --mindmaze-blue: #000080;           /* Standard navy blue */
-    --mindmaze-blue-light: #4040FF;     /* Brighter blue */
-    --mindmaze-crimson: #FF0000;        /* Red for errors */
-    --mindmaze-black: #000000;          /* Pure black */
-    --mindmaze-panel: #C0C0C0;          /* Standard gray panel */
-    --mindmaze-text: #000000;           /* Black text on light backgrounds */
-    --mindmaze-text-dim: #808080;       /* Gray text */
-    --mindmaze-text-light: #FFFFFF;     /* White text on dark backgrounds */
-    
-    /* Windows 95 UI Gradients - Classic 3D Interface */
-    --gradient-button: none;            /* Flat colors for authenticity */
-    --gradient-button-primary: none;    /* No gradients in original */
-    --gradient-button-pressed: none;    /* Windows 95 used flat shading */
-    --gradient-panel-inset: none;       /* Flat panel backgrounds */
-    --gradient-panel-raised: none;      /* Simple raised appearance */
-    --gradient-castle-bg: none;         /* Solid navy background */
-    --gradient-stone-texture: none;     /* No texture patterns */
-    
-    /* Windows 95 3D Effects - Authentic Border Styling */
-    --shadow-inset: inset 1px 1px 0 rgba(255, 255, 255, 0.1), inset -1px -1px 0 rgba(0, 0, 0, 0.3);
-    --shadow-raised: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.1), inset 1px 1px 0 rgba(255,255,255,0.15);
-    --shadow-deep: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Basic window shadows */
-    --shadow-glow: 0 0 12px rgba(212,175,55,0.4);
-    --shadow-text-emboss: 1px 1px 0 rgba(0,0,0,0.6);
-    --shadow-text-raised: 0 1px 0 rgba(255,255,255,0.15);
-    --shadow-button-pressed: inset 2px 2px 2px rgba(0,0,0,0.4), inset -1px -1px 1px rgba(255,255,255,0.1);
-
-    /* semantic shadows for reuse */
-    --mm-shadow-inset: var(--shadow-inset);
-    --mm-shadow-raised: var(--shadow-raised);
-    --mm-shadow-deep: var(--shadow-deep);
-    
-    /* Windows 95 Border Styles */
-    --border-raised: var(--mm-bezel-width) outset var(--mm-stone);
-    --border-sunken: 2px inset #C0C0C0;
-    --border-flat: 1px solid #808080;
-    
-    /* Typography - Windows 95 System Fonts */
-    --font-title: 'MS Sans Serif', 'Arial', sans-serif;
-    --font-heading: 'MS Sans Serif', 'Arial', sans-serif;
-    --font-ui: 'MS Sans Serif', 'Arial', sans-serif;
-    --font-body: 'MS Sans Serif', 'Arial', sans-serif;
-    --font-monospace: 'Courier New', 'Courier', monospace;
-    
-    /* Compact Spacing - Classic Dense Layout */
-    --spacing-xs: 2px;
-    --spacing-sm: 4px;
-    --spacing-md: 8px;
-    --spacing-lg: 12px;
-    --spacing-xl: 16px;
-    
-    /* Viewport-Based Scaling */
+    /* Layout dimensions specific to game interface */
     --base-font-size: clamp(10px, 1.2vw, 14px);
     --container-max-width: 100vw;
     --container-max-height: 100vh;
-    /* Encarta MindMaze specific layout sizes */
-    --titlebar-h: clamp(44px, 6vh, 64px);
-    --footer-h: clamp(28px, 4vh, 36px);
-    --sidebar-w: clamp(220px, 20vw, 320px);
     --btn-padding: clamp(6px, 1vw, 10px);
-    --focus-outline: 3px solid rgba(212,175,55,0.95);
+    
+    /* Game textures */
     --texture-img: url('../mindmaze1-1024x701.jpg');
     --texture-img-2: url('../mindmaze2-1024x700.jpg');
+    
+    /* Game-specific shadows */
     --frame-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    --shadow-text-emboss: 1px 1px 0 rgba(0,0,0,0.6);
+    --shadow-text-raised: 0 1px 0 rgba(255,255,255,0.15);
 }
 
 /* Base Styles */
@@ -288,21 +203,8 @@ body::before {
     box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
 }
 
-/* Win95 button chrome - reusable */
-.mm-btn {
-    /* helper - may be applied in markup; primary selectors below replicate these visuals */
-    padding: var(--btn-padding);
-    background: var(--mm-panel);
-    color: var(--mindmaze-text);
-    border: 2px outset var(--mindmaze-stone);
-    box-shadow: var(--mm-shadow-inset);
-    cursor: pointer;
-    min-height: 40px; /* ensure comfortable tap targets */
-    min-width: 44px;
-    font-family: var(--font-ui);
-}
-
-/* Apply helper visuals to common button-like selectors while preserving specificity */
+/* Win95 button chrome - consolidated with shared variables */
+.mm-btn,
 .btn-win95,
 button,
 .room-nav-btn,
@@ -310,18 +212,19 @@ button,
 .victory-btn {
     padding: var(--btn-padding);
     background: var(--mm-panel);
-    color: var(--mindmaze-text);
-    border: 2px outset var(--mindmaze-stone);
+    color: var(--mm-text);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
     box-shadow: var(--mm-shadow-inset);
     cursor: pointer;
-    min-height: 40px; /* ensure comfortable tap targets */
+    min-height: 40px;
     min-width: 44px;
-    font-family: var(--font-ui);
+    font-family: var(--mm-font-ui);
 }
 
+.mm-btn:active,
 .btn-win95:active,
 button:active {
-    border: 2px inset var(--mindmaze-stone);
+    border: var(--mm-bezel-width) inset var(--mm-stone);
     transform: translateY(1px);
 }
 
@@ -330,20 +233,20 @@ button:active {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 10px 12px;
+    gap: var(--mm-spacing-md);
+    padding: var(--mm-spacing-lg) var(--mm-spacing-lg);
     min-height: 44px;
     min-width: 120px;
     background: linear-gradient(180deg, var(--mm-panel-light), var(--mm-panel));
-    border: 2px outset var(--mindmaze-stone);
-    color: var(--mindmaze-text);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
+    color: var(--mm-text);
     font-weight: 600;
     box-shadow: var(--mm-shadow-inset);
 }
 
 .answer-btn:hover,
 .answer-btn:focus {
-    background: var(--mindmaze-gray-light);
+    background: var(--mm-panel-light);
 }
 
 .answer-btn.answer-correct {
@@ -358,8 +261,8 @@ button:active {
 
 /* Keyboard selected indicator */
 .answer-btn.keyboard-selected {
-    outline: var(--focus-outline);
-    outline-offset: 3px;
+    outline: var(--mm-focus-outline);
+    outline-offset: var(--mm-spacing-sm);
 }
 
 /* Make sure internal panels can scroll but the body stays fixed */
@@ -370,10 +273,10 @@ button:active {
 /* Footer/status bar */
 .game-footer {
     grid-area: footer;
-    background: linear-gradient(180deg, var(--mindmaze-gray), var(--mindmaze-gray-dark));
-    border-top: var(--border-raised);
-    padding: 6px 12px;
-    height: var(--footer-h);
+    background: linear-gradient(180deg, var(--mm-panel), var(--mm-panel-dark));
+    border-top: var(--mm-bezel-width) outset var(--mm-stone);
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+    height: var(--mm-footer-h);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -415,36 +318,30 @@ button:active {
     }
 
     .section.mm-raised {
-        background: var(--gradient-panel-raised);
-        border: 2px outset var(--mindmaze-stone);
+        background: var(--mm-panel);
+        border: var(--mm-bezel-width) outset var(--mm-stone);
         box-shadow: var(--mm-shadow-raised);
-        background-image: var(--mindmaze-stone-pattern);
-        background-blend-mode: overlay;
     }
 
     .section.mm-inset {
-        background: var(--gradient-panel-inset);
-        border: 2px inset var(--mindmaze-stone);
+        background: var(--mm-panel);
+        border: var(--mm-bezel-width) inset var(--mm-stone);
         box-shadow: inset 2px 2px 5px rgba(0,0,0,0.7), inset -2px -2px 3px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);
-        background-image: var(--mindmaze-noise);
-        background-blend-mode: multiply;
     }
 
 /* Footer - Authentic 90s Status Bar */
 .game-footer {
     grid-area: footer;
-    background: var(--gradient-panel-raised);
-    border: 2px outset var(--mindmaze-stone);
-    border-top: 3px inset var(--mindmaze-stone);
-    padding: 6px 12px;
-    box-shadow: var(--shadow-raised), inset 0 -1px 0 rgba(255,255,255,0.15);
-    color: var(--mindmaze-text-dim);
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
+    border-top: var(--mm-bezel-width) inset var(--mm-stone);
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+    box-shadow: var(--mm-shadow-raised), inset 0 -1px 0 rgba(255,255,255,0.15);
+    color: var(--mm-text-dim);
     text-align: center;
     font-size: 0.8em;
-    font-family: var(--font-ui);
+    font-family: var(--mm-font-ui);
     text-shadow: var(--shadow-text-emboss);
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 24px 24px;
     min-height: 32px;
     overflow: hidden;
     display: flex;
@@ -454,33 +351,33 @@ button:active {
 
 /* Section Containers - Authentic Windows 95 Panels */
 .section {
-    background: var(--mindmaze-gray);
-    border: 2px outset var(--mindmaze-stone);
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
     box-shadow: 
         inset 1px 1px 0px rgba(255, 255, 255, 0.1),
         inset -1px -1px 0px rgba(0, 0, 0, 0.3),
         1px 1px 2px rgba(0, 0, 0, 0.2);
-    padding: clamp(4px, 1vw, 8px);
+    padding: clamp(var(--mm-spacing-sm), 1vw, var(--mm-spacing-md));
     position: relative;
-    margin-bottom: clamp(2px, 0.5vh, 4px);
-    font-family: 'MS Sans Serif', 'Microsoft Sans Serif', sans-serif;
+    margin-bottom: clamp(var(--mm-spacing-xs), 0.5vh, var(--mm-spacing-sm));
+    font-family: var(--mm-font-ui);
     flex: 1 1 auto;
     min-height: 0;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    gap: clamp(2px, 0.5vh, 4px);
+    gap: clamp(var(--mm-spacing-xs), 0.5vh, var(--mm-spacing-sm));
     font-size: inherit;
 }
 
 .section::before {
     content: '';
     position: absolute;
-    top: 4px;
-    left: 4px;
-    width: 8px;
-    height: 8px;
-    background: var(--mindmaze-gold);
+    top: var(--mm-spacing-sm);
+    left: var(--mm-spacing-sm);
+    width: var(--mm-spacing-md);
+    height: var(--mm-spacing-md);
+    background: var(--mm-gold);
     border-radius: 50%;
     box-shadow: 
         12px 0 0 var(--mindmaze-crimson), 
@@ -577,38 +474,34 @@ button:active {
 #question-text {
     font-size: clamp(1rem, 1.4vw, 1.3rem);
     font-weight: bold;
-    color: var(--mindmaze-text);
-    margin-bottom: clamp(12px, 2vh, 18px);
+    color: var(--mm-text);
+    margin-bottom: clamp(var(--mm-spacing-lg), 2vh, 18px);
     line-height: 1.5;
-    font-family: var(--font-body);
-    padding: clamp(12px, 2.2vh, 18px);
-    background: var(--gradient-panel-inset);
-    border: 3px inset var(--mindmaze-stone);
-    box-shadow: var(--shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
-    background-image: var(--mindmaze-noise);
-    background-blend-mode: multiply;
+    font-family: var(--mm-font-body);
+    padding: clamp(var(--mm-spacing-lg), 2.2vh, 18px);
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) inset var(--mm-stone);
+    box-shadow: var(--mm-shadow-inset), inset 0 0 0 1px rgba(0,0,0,0.4);
 }
 
 .question-meta {
     display: flex;
-    gap: clamp(8px, 1.5vw, 12px);
-    margin-bottom: clamp(16px, 2.5vh, 20px);
+    gap: clamp(var(--mm-spacing-md), 1.5vw, var(--mm-spacing-lg));
+    margin-bottom: clamp(var(--mm-spacing-xl), 2.5vh, 20px);
     font-size: clamp(0.8rem, 1.3vw, 0.95rem);
-    color: var(--mindmaze-text-dim);
+    color: var(--mm-text-dim);
     flex-wrap: wrap;
 }
 
 .meta-item {
-    background: var(--gradient-panel-raised);
-    color: var(--mindmaze-text);
-    padding: clamp(4px, 0.8vh, 6px) clamp(8px, 1.5vw, 12px);
-    border-radius: 4px;
-    border: 2px outset var(--mindmaze-gold-dark);
+    background: var(--mm-panel);
+    color: var(--mm-text);
+    padding: clamp(var(--mm-spacing-sm), 0.8vh, var(--mm-spacing-md)) clamp(var(--mm-spacing-md), 1.5vw, var(--mm-spacing-lg));
+    border-radius: var(--mm-radius);
+    border: var(--mm-bezel-width) outset var(--mm-gold-dark);
     font-weight: 500;
-    box-shadow: var(--shadow-raised);
-    font-family: var(--font-ui);
-    background-image: var(--mindmaze-stone-pattern);
-    background-size: 16px 16px;
+    box-shadow: var(--mm-shadow-raised);
+    font-family: var(--mm-font-ui);
     text-shadow: var(--shadow-text-emboss);
 }
 

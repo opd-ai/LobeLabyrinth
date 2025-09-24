@@ -135,30 +135,29 @@ body {
 /* Skip Link for Accessibility */
 .skip-link {
     position: absolute;
-    top: -40px;
-    left: 6px;
-    background: var(--primary-color);
-    color: var(--text-light);
-    padding: var(--spacing-sm) var(--spacing-md);
+    left: -9999px;
+    top: 0;
+    z-index: 999;
+    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
+    background: var(--debug-accent);
+    color: var(--debug-text-light);
     text-decoration: none;
-    border-radius: var(--radius-md);
-    z-index: var(--z-tooltip);
-    transition: top var(--transition-fast);
-}
-
-.skip-link:focus {
-    top: 6px;
+    font-weight: 600;
+    border-radius: var(--mm-radius);
+    transition: left 0.3s ease;
 }
 
 /* Header Styles */
+/* Header Styles */
 .debug-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border-color);
+    background: var(--debug-header-bg);
+    color: var(--debug-text-light);
+    padding: var(--mm-spacing-xl) calc(var(--mm-spacing-xl) * 2);
+    border-bottom: 1px solid var(--debug-border);
+    box-shadow: var(--debug-shadow-sm);
     position: sticky;
     top: 0;
-    z-index: var(--z-sticky);
-    box-shadow: var(--shadow-md);
+    z-index: var(--debug-z-header);
 }
 
 .header-content {
@@ -186,8 +185,8 @@ body {
 
 .header-controls {
     display: flex;
-    gap: var(--spacing-sm);
-    flex-wrap: wrap;
+    gap: var(--mm-spacing-xl);
+    align-items: center;
 }
 
 /* Enhanced Test Result Styles */

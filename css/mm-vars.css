@@ -1,68 +1,201 @@
 /* CHANGELOG
- - Added shared MindMaze CSS variables and small helper utility classes to reduce duplication
- - Prefix variables with --mm- for clarity
+ - Consolidated all MindMaze CSS variables from game.css and other files
+ - Standardized --mm- prefix for shared variables to reduce duplication
+ - Added comprehensive color palette, spacing, borders, shadows, and z-indexes
 */
-/* Root variables for colors, spacing, fonts, chrome, and z-indexes */
+
+/* Consolidated MindMaze CSS Variables - Windows 95 Authentic Theme */
 :root {
-    /* Colors */
-    --mm-bg: #e9e6dd; /* main application background */
-    --mm-panel: #f3efe6; /* panel background */
-    --mm-text: #1b1b1b; /* primary text */
-    --mm-text-dim: #6b6b6b; /* dim text */
-    --mm-stone: #bfb7a8; /* window bezel / stone */
-    --mm-gold: #d4af37; /* accent gold */
-    --mm-brown: #8b6b4a; /* brown accent */
-    --mm-blue: #2b6fb3; /* blue accent */
-    --mm-crimson: #a33; /* error/warn accent */
-
-    /* Shadows and chrome */
-    --mm-shadow-deep: 0 6px 18px rgba(12,10,8,0.25);
-    --mm-shadow-inset: inset 0 1px 0 rgba(255,255,255,0.35);
-
-    /* Spacing */
-    --mm-spacing-xs: 4px;
-    --mm-spacing-sm: 8px;
-    --mm-spacing-md: 12px;
-    --mm-spacing-lg: 20px;
-
-    /* Border radii and chrome sizes */
-    --mm-radius: 4px;
+    /* ===== CORE COLOR PALETTE ===== */
+    /* Navy backgrounds */
+    --mindmaze-navy: #000080;
+    --mindmaze-navy-light: #0000A0;
+    --mindmaze-navy-dark: #000060;
+    
+    /* Gray panels and chrome */
+    --mindmaze-gray: #C0C0C0;
+    --mindmaze-gray-light: #E0E0E0;
+    --mindmaze-gray-dark: #808080;
+    --mindmaze-stone: #C0C0C0;
+    --mindmaze-stone-light: #E0E0E0;
+    --mindmaze-stone-dark: #808080;
+    
+    /* Accent colors */
+    --mindmaze-gold: #FFFF00;
+    --mindmaze-gold-light: #FFFF80;
+    --mindmaze-gold-dark: #CCCC00;
+    --mindmaze-brown: #FF0000;
+    --mindmaze-brown-light: #FF8080;
+    --mindmaze-brown-dark: #800000;
+    --mindmaze-blue: #000080;
+    --mindmaze-blue-light: #4040FF;
+    --mindmaze-blue-dark: #000040;
+    --mindmaze-crimson: #FF0000;
+    
+    /* Text colors */
+    --mindmaze-black: #000000;
+    --mindmaze-text: #000000;
+    --mindmaze-text-dim: #808080;
+    --mindmaze-text-light: #FFFFFF;
+    
+    /* Panel backgrounds */
+    --mindmaze-panel: #C0C0C0;
+    
+    /* ===== CONSOLIDATED MM- SHORTCUTS ===== */
+    /* Backgrounds and panels */
+    --mm-bg: var(--mindmaze-gray);
+    --mm-panel: var(--mindmaze-panel);
+    --mm-panel-light: var(--mindmaze-gray-light);
+    --mm-panel-dark: var(--mindmaze-gray-dark);
+    
+    /* Text */
+    --mm-text: var(--mindmaze-text);
+    --mm-text-dim: var(--mindmaze-text-dim);
+    --mm-text-light: var(--mindmaze-text-light);
+    
+    /* Chrome and borders */
+    --mm-stone: var(--mindmaze-stone);
+    --mm-stone-light: var(--mindmaze-stone-light);
+    --mm-stone-dark: var(--mindmaze-stone-dark);
+    
+    /* Accents */
+    --mm-gold: var(--mindmaze-gold);
+    --mm-gold-light: var(--mindmaze-gold-light);
+    --mm-gold-dark: var(--mindmaze-gold-dark);
+    --mm-brown: var(--mindmaze-brown);
+    --mm-blue: var(--mindmaze-blue);
+    --mm-crimson: var(--mindmaze-crimson);
+    
+    /* Navy variations */
+    --mm-navy: var(--mindmaze-navy);
+    --mm-navy-light: var(--mindmaze-navy-light);
+    --mm-navy-dark: var(--mindmaze-navy-dark);
+    
+    /* ===== SHADOWS AND 3D EFFECTS ===== */
+    --mm-shadow-inset: inset 1px 1px 0 rgba(255,255,255,0.1), inset -1px -1px 0 rgba(0,0,0,0.3);
+    --mm-shadow-raised: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.1), inset 1px 1px 0 rgba(255,255,255,0.15);
+    --mm-shadow-deep: 2px 2px 4px rgba(0,0,0,0.5);
+    --mm-shadow-glow: 0 0 12px rgba(212,175,55,0.4);
+    --mm-shadow-button-pressed: inset 2px 2px 2px rgba(0,0,0,0.4), inset -1px -1px 1px rgba(255,255,255,0.1);
+    
+    /* ===== SPACING ===== */
+    --mm-spacing-xs: 2px;
+    --mm-spacing-sm: 4px;
+    --mm-spacing-md: 8px;
+    --mm-spacing-lg: 12px;
+    --mm-spacing-xl: 16px;
+    
+    /* ===== BORDER DIMENSIONS ===== */
     --mm-bezel-width: 2px;
-
-    /* Fonts */
-    --mm-font-ui: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    --mm-font-heading: "Segoe UI Semibold", "Segoe UI", sans-serif;
-
-    /* Z-index layering */
-    --mm-z-overlay: 1500;
+    --mm-radius: 4px;
+    --mm-radius-sm: 2px;
+    --mm-radius-lg: 6px;
+    
+    /* ===== FONTS ===== */
+    --mm-font-title: 'MS Sans Serif', 'Arial', sans-serif;
+    --mm-font-heading: 'MS Sans Serif', 'Arial', sans-serif;
+    --mm-font-ui: 'MS Sans Serif', 'Arial', sans-serif;
+    --mm-font-body: 'MS Sans Serif', 'Arial', sans-serif;
+    --mm-font-monospace: 'Courier New', 'Courier', monospace;
+    
+    /* ===== Z-INDEX LAYERING ===== */
     --mm-z-notification: 1000;
+    --mm-z-achievement: 1001;
+    --mm-z-overlay: 1500;
     --mm-z-victory: 2000;
+    
+    /* ===== LAYOUT DIMENSIONS ===== */
+    --mm-titlebar-h: clamp(44px, 6vh, 64px);
+    --mm-footer-h: clamp(28px, 4vh, 36px);
+    --mm-sidebar-w: clamp(220px, 20vw, 320px);
+    
+    /* ===== COMMON RGBA VALUES ===== */
+    --mm-overlay-backdrop: rgba(128, 128, 128, 0.7);
+    --mm-achievement-glow: rgba(212, 175, 55, 0.2);
+    --mm-focus-outline: 3px solid rgba(212,175,55,0.95);
 }
 
-/* Reusable helpers to emulate Windows 95 inset/outset chrome */
+/* ===== REUSABLE HELPER CLASSES ===== */
+
+/* Windows 95 panel chrome */
 .mm-panel {
     background: var(--mm-panel);
     border: var(--mm-bezel-width) outset var(--mm-stone);
     box-shadow: var(--mm-shadow-inset), var(--mm-shadow-deep);
 }
 
-.mm-bezel-inset { border: var(--mm-bezel-width) inset var(--mm-stone); }
-.mm-bezel-outset { border: var(--mm-bezel-width) outset var(--mm-stone); }
+/* Border helpers */
+.mm-bezel-inset { 
+    border: var(--mm-bezel-width) inset var(--mm-stone); 
+}
 
+.mm-bezel-outset { 
+    border: var(--mm-bezel-width) outset var(--mm-stone); 
+}
+
+.mm-border-raised { 
+    border: var(--mm-bezel-width) outset var(--mm-stone); 
+}
+
+.mm-border-sunken { 
+    border: var(--mm-bezel-width) inset var(--mm-stone); 
+}
+
+.mm-border-flat { 
+    border: 1px solid var(--mm-stone-dark); 
+}
+
+/* Button base style */
 .mm-btn {
     font-family: var(--mm-font-ui);
     background: linear-gradient(#fff, #eae6dc);
     border: 1px solid rgba(0,0,0,0.15);
-    padding: 6px 10px;
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
     border-radius: var(--mm-radius);
     box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
     cursor: pointer;
 }
 
-/* Utility to hide overlays while preserving JS toggle hooks */
+.mm-btn:active {
+    box-shadow: var(--mm-shadow-button-pressed);
+}
+
+/* Utility classes for overlays - preserve JS toggle behavior */
 .mm-hidden {
     display: none !important;
     visibility: hidden !important;
     pointer-events: none !important;
     opacity: 0 !important;
 }
+
+.mm-overlay {
+    background: var(--mm-overlay-backdrop);
+    z-index: var(--mm-z-overlay);
+}
+
+/* Common modal backdrop */
+.mm-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--mm-overlay-backdrop);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 2vw, 16px);
+}
+
+/* Common spacing utilities */
+.mm-p-xs { padding: var(--mm-spacing-xs); }
+.mm-p-sm { padding: var(--mm-spacing-sm); }
+.mm-p-md { padding: var(--mm-spacing-md); }
+.mm-p-lg { padding: var(--mm-spacing-lg); }
+.mm-p-xl { padding: var(--mm-spacing-xl); }
+
+.mm-m-xs { margin: var(--mm-spacing-xs); }
+.mm-m-sm { margin: var(--mm-spacing-sm); }
+.mm-m-md { margin: var(--mm-spacing-md); }
+.mm-m-lg { margin: var(--mm-spacing-lg); }
+.mm-m-xl { margin: var(--mm-spacing-xl); }

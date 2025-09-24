@@ -13,12 +13,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(128, 128, 128, 0.7);
-    z-index: 2000;
+    background: var(--mm-overlay-backdrop);
+    z-index: var(--mm-z-victory);
     display: none;
     align-items: center;
     justify-content: center;
-    padding: clamp(8px, 2vw, 16px);
+    padding: clamp(var(--mm-spacing-md), 2vw, var(--mm-spacing-xl));
 }
 
 .victory-screen.visible {
@@ -49,46 +49,46 @@
 
 .victory-header {
     text-align: center;
-    padding: 12px;
+    padding: var(--mm-spacing-lg);
     background: var(--mm-panel);
-    color: var(--mindmaze-text);
+    color: var(--mm-text);
     border-bottom: var(--mm-bezel-width) inset var(--mm-stone);
 }
 
 .victory-title {
     font-size: clamp(1.1rem, 2.8vw, 2rem);
     font-weight: bold;
-    margin: 6px 0 4px;
-    font-family: var(--font-heading);
-    color: var(--mindmaze-text);
+    margin: var(--mm-spacing-md) 0 var(--mm-spacing-sm);
+    font-family: var(--mm-font-heading);
+    color: var(--mm-text);
 }
 
 .victory-subtitle {
     font-size: 1.2em;
     opacity: 0.9;
-    font-family: var(--font-ui);
+    font-family: var(--mm-font-ui);
 }
 
 .victory-stats {
-    padding: 35px;
+    padding: calc(var(--mm-spacing-xl) * 2);
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 25px;
-    margin-bottom: 35px;
+    gap: calc(var(--mm-spacing-xl) + var(--mm-spacing-sm));
+    margin-bottom: calc(var(--mm-spacing-xl) * 2);
 }
 
 .stat-card {
     background: var(--mm-panel);
     border: var(--mm-bezel-width) inset var(--mm-stone);
-    padding: 18px;
+    padding: var(--mm-spacing-xl);
     text-align: center;
 }
 
 .stat-card:hover {
-    background: var(--mindmaze-gray-light);
+    background: var(--mm-panel-light);
 }
 
 .stat-card::before {
@@ -268,48 +268,49 @@
 }
 
 .victory-actions {
+    padding: clamp(var(--mm-spacing-xl), 3vw, 24px);
+    text-align: center;
     display: flex;
+    gap: clamp(var(--mm-spacing-lg), 2.5vw, var(--mm-spacing-xl));
     justify-content: center;
-    gap: 20px;
-    padding: 0 35px 25px;
     flex-wrap: wrap;
 }
 
 .victory-btn {
-    padding: 10px 20px;
-    border: 2px outset var(--mindmaze-stone);
-    font-size: 0.9em;
-    font-weight: bold;
+    padding: clamp(var(--mm-spacing-md), 1.5vw, var(--mm-spacing-lg)) clamp(var(--mm-spacing-xl), 3vw, 24px);
+    background: var(--mm-panel);
+    color: var(--mm-text);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
     cursor: pointer;
-    min-width: 120px;
-    font-family: var(--font-ui);
-    background: var(--mindmaze-gray);
-    color: var(--mindmaze-text);
+    font-family: var(--mm-font-ui);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .victory-btn:active {
-    border: 2px inset var(--mindmaze-stone);
-    background: var(--mindmaze-gray-dark);
+    border: var(--mm-bezel-width) inset var(--mm-stone);
+    transform: translateY(1px);
 }
 
 .victory-btn-primary {
-    background: var(--mindmaze-blue);
-    color: var(--mindmaze-text-light);
-    border: 2px outset var(--mindmaze-blue);
+    background: linear-gradient(145deg, var(--mm-gold), var(--mm-gold-dark));
+    color: var(--mm-text);
+    border-color: var(--mm-gold-dark);
 }
 
 .victory-btn-primary:hover {
-    background: var(--mindmaze-blue-light);
+    background: linear-gradient(145deg, var(--mm-gold-light), var(--mm-gold));
 }
 
 .victory-btn-secondary {
-    background: var(--mindmaze-gray);
-    color: var(--mindmaze-text);
-    border: 2px outset var(--mindmaze-stone);
+    background: var(--mm-panel);
+    color: var(--mm-text);
+    border-color: var(--mm-panel-dark);
 }
 
 .victory-btn-secondary:hover {
-    background: var(--mindmaze-gray-light);
+    background: var(--mm-panel-light);
 }
 
 .victory-footer {

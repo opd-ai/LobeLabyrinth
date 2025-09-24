@@ -55,15 +55,15 @@ input[type="submit"]:focus,
 
 .skip-link {
     position: absolute;
-    top: -40px;
-    left: 6px;
-    background: #000;
-    color: #fff;
-    padding: 8px 16px;
+    left: -9999px;
+    z-index: 9999;
+    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
+    background: var(--mm-hc-accent);
+    color: white;
     text-decoration: none;
-    border-radius: 0 0 4px 4px;
     font-weight: bold;
-    transition: top 0.2s ease-in-out;
+    border-radius: var(--mm-radius-sm);
+    transition: left 0.3s ease;
 }
 
 .skip-link:focus {
@@ -353,14 +353,14 @@ body.keyboard-navigation :focus {
 }
 
 .accessibility-modal .modal-content {
-    background: #fff;
-    color: #000;
-    border-radius: 8px;
-    max-width: 600px;
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
+    box-shadow: var(--mm-shadow-deep);
+    max-width: 90vw;
     max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 2px solid var(--mm-hc-accent);
+    width: clamp(320px, 60vw, 600px);
+    border-radius: var(--mm-spacing-md);
+    overflow: hidden;
 }
 
 .accessibility-modal .modal-header {
@@ -434,13 +434,13 @@ body.keyboard-navigation :focus {
 }
 
 .accessibility-modal .modal-close-btn {
-    background: var(--mm-hc-accent);
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
+    background: var(--mm-panel);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
+    color: var(--mm-text);
+    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
     cursor: pointer;
-    font-weight: bold;
+    font-family: var(--mm-font-ui);
+    border-radius: var(--mm-radius);
 }
 
 .accessibility-modal .modal-close-btn:hover,

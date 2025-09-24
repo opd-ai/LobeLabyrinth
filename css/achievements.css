@@ -22,9 +22,9 @@
 /* Achievement Notification - Windows 95 Dialog */
 .achievement-notification {
     position: fixed;
-    top: clamp(12px, 3vw, 20px);
-    right: clamp(12px, 3vw, 20px);
-    z-index: 1000;
+    top: clamp(var(--mm-spacing-lg), 3vw, 20px);
+    right: clamp(var(--mm-spacing-lg), 3vw, 20px);
+    z-index: var(--mm-z-notification);
     transform: translateY(-6px) scale(0.98);
     opacity: 0;
     transition: transform 220ms var(--ease, ease-in-out), opacity 200ms ease-in-out;
@@ -42,15 +42,14 @@
 
 .achievement-unlock-animation {
     background: var(--mm-panel);
-    /* reuse shared bezel and shadow helpers */
     border: var(--mm-bezel-width) outset var(--mm-stone);
     box-shadow: var(--mm-shadow-inset), var(--mm-shadow-deep);
-    padding: clamp(6px, 1.5vw, 10px);
+    padding: clamp(var(--mm-spacing-md), 1.5vw, var(--mm-spacing-lg));
     max-width: clamp(240px, 25vw, 280px);
     max-height: clamp(80px, 12vh, 100px);
     display: flex;
     align-items: center;
-    gap: clamp(4px, 1.5vw, 8px);
+    gap: clamp(var(--mm-spacing-sm), 1.5vw, var(--mm-spacing-md));
     font-size: clamp(0.7rem, 1.4vw, 0.85rem);
     animation: achievementFanfare 320ms cubic-bezier(.2,.9,.2,1) both;
 }
@@ -81,34 +80,34 @@
 
 .achievement-unlock-animation .achievement-title {
     font-weight: bold;
-    color: var(--mindmaze-text);
+    color: var(--mm-text);
     font-size: 0.75em;
-    margin-bottom: 2px;
-    font-family: var(--font-ui);
+    margin-bottom: var(--mm-spacing-xs);
+    font-family: var(--mm-font-ui);
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
 
 .achievement-unlock-animation .achievement-name {
     font-weight: bold;
-    color: var(--mindmaze-text);
+    color: var(--mm-text);
     font-size: 1.05em;
-    margin-bottom: 3px;
-    font-family: var(--font-ui);
+    margin-bottom: var(--mm-spacing-sm);
+    font-family: var(--mm-font-ui);
 }
 
 .achievement-unlock-animation .achievement-description {
-    color: var(--mindmaze-text-dim);
+    color: var(--mm-text-dim);
     font-size: 0.8em;
-    margin-bottom: 3px;
+    margin-bottom: var(--mm-spacing-sm);
     line-height: 1.2;
 }
 
 .achievement-unlock-animation .achievement-points {
-    color: var(--mindmaze-text);
+    color: var(--mm-text);
     font-weight: bold;
     font-size: 0.85em;
-    font-family: var(--font-ui);
+    font-family: var(--mm-font-ui);
 }
 
 .achievement-rarity {
@@ -116,37 +115,37 @@
     text-orientation: mixed;
     font-size: 0.7em;
     font-weight: bold;
-    padding: 6px 8px;
-    border-radius: 8px;
+    padding: var(--mm-spacing-md) var(--mm-spacing-md);
+    border-radius: var(--mm-spacing-md);
     text-align: center;
-    font-family: var(--font-ui);
+    font-family: var(--mm-font-ui);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
 .achievement-rarity-common {
-    background: var(--mindmaze-gray);
-    color: var(--mindmaze-text);
+    background: var(--mm-panel);
+    color: var(--mm-text);
 }
 
 .achievement-rarity-uncommon {
-    background: var(--mindmaze-brown);
-    color: var(--mindmaze-text-light);
+    background: var(--mm-brown);
+    color: var(--mm-text-light);
 }
 
 .achievement-rarity-rare {
-    background: var(--mindmaze-blue);
-    color: var(--mindmaze-text-light);
+    background: var(--mm-blue);
+    color: var(--mm-text-light);
 }
 
 .achievement-rarity-epic {
     background: #800080;
-    color: var(--mindmaze-text-light);
+    color: var(--mm-text-light);
 }
 
 .achievement-rarity-legendary {
-    background: var(--mindmaze-gold);
-    color: var(--mindmaze-text);
+    background: var(--mm-gold);
+    color: var(--mm-text);
 }
 
 /* Achievement Gallery - Windows 95 Dialog Window (15% max viewport) */
@@ -156,12 +155,12 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(128, 128, 128, 0.7);
-    z-index: 1001;
+    background: var(--mm-overlay-backdrop);
+    z-index: var(--mm-z-achievement);
     display: none;
     align-items: center;
     justify-content: center;
-    padding: clamp(8px, 2vw, 16px);
+    padding: clamp(var(--mm-spacing-md), 2vw, var(--mm-spacing-xl));
 }
 
 .achievement-gallery.visible {

@@ -1908,19 +1908,18 @@ button:active {
     }
 }
 
-/* Defensive: ensure core UI regions are visible and interactive unless explicitly hidden */
-#map-area,
-#map-canvas,
-#question-area,
-#answer-area,
-.game-sidebar,
-.game-main,
-.game-header,
-.game-footer {
-    display: block !important;
-    visibility: visible !important;
-    opacity: 1 !important;
-    pointer-events: auto !important;
+/* Narrowed defensive override: ensure core regions are interactive when the main window is present.
+   This avoids forcing layout changes; only restores visibility and pointer-events when needed. */
+.game-container #map-area,
+.game-container #map-canvas,
+.game-container #question-area,
+.game-container #answer-area,
+.game-container .game-sidebar,
+.game-container .game-main,
+.game-container .game-header,
+.game-container .game-footer {
+    visibility: visible;
+    pointer-events: auto;
 }
 
 /* Keep overlays and modals controlled via inline styles or specific classes */

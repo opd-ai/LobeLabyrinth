@@ -42,7 +42,8 @@
 
 .achievement-unlock-animation {
     background: var(--mm-panel);
-    border: 2px outset var(--mindmaze-stone);
+    /* reuse shared bezel and shadow helpers */
+    border: var(--mm-bezel-width) outset var(--mm-stone);
     box-shadow: var(--mm-shadow-inset), var(--mm-shadow-deep);
     padding: clamp(6px, 1.5vw, 10px);
     max-width: clamp(240px, 25vw, 280px);
@@ -169,7 +170,7 @@
 
 .achievement-gallery > div {
     background: var(--mm-panel);
-    border: 2px outset var(--mindmaze-stone);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
     box-shadow: var(--mm-shadow-deep);
     max-width: min(85vw, 520px);
     max-height: min(85vh, 420px);
@@ -195,9 +196,9 @@
 }
 
 .achievement-close-btn {
-    background: var(--mindmaze-gray);
+    background: var(--mm-panel);
     color: var(--mindmaze-text);
-    border: 2px outset var(--mindmaze-stone);
+    border: var(--mm-bezel-width) outset var(--mm-stone);
     width: 32px;
     height: 32px;
     cursor: pointer;

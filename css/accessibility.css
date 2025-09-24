@@ -2,12 +2,11 @@
  * Accessibility CSS - Enhanced styles for Windows 95 MindMaze theme
  * Supports high contrast mode, focus indicators, reduced motion,
  * and screen reader optimizations
- */
-
 /* CHANGELOG
- - Added `--mm-hc-accent` variable for high-contrast accent color
- - No behavioral changes; replacements limited to focus outlines
+ - Imported shared MindMaze variables and reused mm-panel and mm-btn helpers for consistent chrome
+ - Preserved all focus and high-contrast rules; no behavior changes
 */
+@import url("./mm-vars.css");
 
 /* Local variable for high-contrast accent used in focus outlines in this sheet */
 :root {

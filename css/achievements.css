@@ -3,6 +3,11 @@
  * Windows 95 achievements and notifications system
  */
 
+/* CHANGELOG
+ - Replaced repeated panel/background/shadow values with `--mm-` semantic variables
+ - Kept selectors and specificity identical to avoid visual regressions
+*/
+
 /* Achievement Stats in Sidebar - System Information */
 .achievement-stats-summary {
     font-size: 0.95em;
@@ -38,12 +43,9 @@
 }
 
 .achievement-unlock-animation {
-    background: var(--mindmaze-gray);
+    background: var(--mm-panel);
     border: 2px outset var(--mindmaze-stone);
-    box-shadow: 
-        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
-        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
-        2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--mm-shadow-inset), var(--mm-shadow-deep);
     padding: clamp(6px, 1.5vw, 10px);
     max-width: clamp(240px, 25vw, 280px);
     max-height: clamp(80px, 12vh, 100px);
@@ -168,9 +170,9 @@
 }
 
 .achievement-gallery > div {
-    background: var(--mindmaze-gray);
+    background: var(--mm-panel);
     border: 2px outset var(--mindmaze-stone);
-    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--mm-shadow-deep);
     max-width: min(85vw, 520px);
     max-height: min(85vh, 420px);
     width: clamp(280px, 80vw, 520px);

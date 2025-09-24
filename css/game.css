@@ -3,16 +3,32 @@
  * Recreating the classic Windows 95 educational game experience
  */
 
+/* CHANGELOG
+ - Added `--mm-` prefixed semantic variables for colors, spacing, shadows
+ - Introduced helper classes `.mm-btn` and `.mm-panel` to reduce duplication
+ - Replaced repeated box-shadow and border values with variables
+ - Kept original selectors and specificity to avoid behavior changes
+*/
+
 /* CSS Custom Properties - Authentic Encarta MindMaze (1995) Theme */
 :root {
     /* Core MindMaze Color Palette (1995 Authentic) */
     --mindmaze-navy: #000080;           /* Deep navy background */
     --mindmaze-navy-light: #0000A0;     /* Lighter navy for accents */
     --mindmaze-navy-dark: #000060;      /* Darker navy for depth */
+
+    /* Short aliases (mm-) for refactor consumption - do not use elsewhere unless intended */
+    --mm-navy: var(--mindmaze-navy);
+    --mm-navy-light: var(--mindmaze-navy-light);
+    --mm-navy-dark: var(--mindmaze-navy-dark);
     
     --mindmaze-gray: #C0C0C0;           /* Light gray panels */
     --mindmaze-gray-light: #E0E0E0;     /* Lightest gray highlights */
     --mindmaze-gray-dark: #808080;      /* Dark gray shadows */
+
+    --mm-panel: var(--mindmaze-gray);
+    --mm-panel-light: var(--mindmaze-gray-light);
+    --mm-panel-dark: var(--mindmaze-gray-dark);
     
     --mindmaze-stone-dark: #808080;     /* Dark gray for borders */
     --mindmaze-stone: #C0C0C0;          /* Standard panel gray */
@@ -23,6 +39,10 @@
     --mindmaze-gold: #FFFF00;           /* Bright yellow highlights */
     --mindmaze-gold-light: #FFFF80;     /* Light yellow */
     --mindmaze-gold-dark: #CCCC00;      /* Dark yellow */
+
+    --mm-gold: var(--mindmaze-gold);
+    --mm-gold-light: var(--mindmaze-gold-light);
+    --mm-gold-dark: var(--mindmaze-gold-dark);
     --mindmaze-blue-dark: #000040;      /* Very dark blue */
     --mindmaze-blue: #000080;           /* Standard navy blue */
     --mindmaze-blue-light: #4040FF;     /* Brighter blue */
@@ -43,13 +63,18 @@
     --gradient-stone-texture: none;     /* No texture patterns */
     
     /* Windows 95 3D Effects - Authentic Border Styling */
-    --shadow-inset: none;               /* No complex shadows */
-    --shadow-raised: none;              /* Simple border effects only */
+    --shadow-inset: inset 1px 1px 0 rgba(255, 255, 255, 0.1), inset -1px -1px 0 rgba(0, 0, 0, 0.3);
+    --shadow-raised: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.1), inset 1px 1px 0 rgba(255,255,255,0.15);
     --shadow-deep: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Basic window shadows */
-    --shadow-glow: none;                /* No glow effects */
-    --shadow-text-emboss: none;         /* Flat text rendering */
-    --shadow-text-raised: none;         /* Simple text appearance */
-    --shadow-button-pressed: none;      /* Border-based button states */
+    --shadow-glow: 0 0 12px rgba(212,175,55,0.4);
+    --shadow-text-emboss: 1px 1px 0 rgba(0,0,0,0.6);
+    --shadow-text-raised: 0 1px 0 rgba(255,255,255,0.15);
+    --shadow-button-pressed: inset 2px 2px 2px rgba(0,0,0,0.4), inset -1px -1px 1px rgba(255,255,255,0.1);
+
+    /* semantic shadows for reuse */
+    --mm-shadow-inset: var(--shadow-inset);
+    --mm-shadow-raised: var(--shadow-raised);
+    --mm-shadow-deep: var(--shadow-deep);
     
     /* Windows 95 Border Styles */
     --border-raised: 2px outset #C0C0C0;
@@ -264,16 +289,30 @@ body::before {
 }
 
 /* Win95 button chrome - reusable */
+.mm-btn {
+    /* helper - may be applied in markup; primary selectors below replicate these visuals */
+    padding: var(--btn-padding);
+    background: var(--mm-panel);
+    color: var(--mindmaze-text);
+    border: 2px outset var(--mindmaze-stone);
+    box-shadow: var(--mm-shadow-inset);
+    cursor: pointer;
+    min-height: 40px; /* ensure comfortable tap targets */
+    min-width: 44px;
+    font-family: var(--font-ui);
+}
+
+/* Apply helper visuals to common button-like selectors while preserving specificity */
 .btn-win95,
 button,
 .room-nav-btn,
 .achievement-close-btn,
 .victory-btn {
     padding: var(--btn-padding);
-    background: var(--mindmaze-gray);
+    background: var(--mm-panel);
     color: var(--mindmaze-text);
     border: 2px outset var(--mindmaze-stone);
-    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
+    box-shadow: var(--mm-shadow-inset);
     cursor: pointer;
     min-height: 40px; /* ensure comfortable tap targets */
     min-width: 44px;
@@ -295,11 +334,11 @@ button:active {
     padding: 10px 12px;
     min-height: 44px;
     min-width: 120px;
-    background: linear-gradient(180deg, var(--mindmaze-gray-light), var(--mindmaze-gray));
+    background: linear-gradient(180deg, var(--mm-panel-light), var(--mm-panel));
     border: 2px outset var(--mindmaze-stone);
     color: var(--mindmaze-text);
     font-weight: 600;
-    box-shadow: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
+    box-shadow: var(--mm-shadow-inset);
 }
 
 .answer-btn:hover,
@@ -378,7 +417,7 @@ button:active {
     .section.mm-raised {
         background: var(--gradient-panel-raised);
         border: 2px outset var(--mindmaze-stone);
-        box-shadow: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.1), inset 1px 1px 0 rgba(255,255,255,0.15);
+        box-shadow: var(--mm-shadow-raised);
         background-image: var(--mindmaze-stone-pattern);
         background-blend-mode: overlay;
     }

@@ -4,6 +4,16 @@
  * and screen reader optimizations
  */
 
+/* CHANGELOG
+ - Added `--mm-hc-accent` variable for high-contrast accent color
+ - No behavioral changes; replacements limited to focus outlines
+*/
+
+/* Local variable for high-contrast accent used in focus outlines in this sheet */
+:root {
+    --mm-hc-accent: #005fcc;
+}
+
 /* ===== ENHANCED FOCUS INDICATORS ===== */
 
 /* Enhanced focus indicators - Windows 95 System Style */
@@ -98,14 +108,14 @@ input[type="submit"]:focus,
 input:focus,
 select:focus,
 textarea:focus {
-    outline: 3px solid #005fcc;
+    outline: 3px solid var(--mm-hc-accent);
     outline-offset: 2px;
-    border-color: #005fcc;
+    border-color: var(--mm-hc-accent);
 }
 
 /* Focus for links */
 a:focus {
-    outline: 3px solid #005fcc;
+    outline: 3px solid var(--mm-hc-accent);
     outline-offset: 2px;
     background-color: rgba(0, 95, 204, 0.1);
 }
@@ -320,7 +330,7 @@ body.keyboard-navigation :focus {
     overflow: visible !important;
     clip: unset !important;
     white-space: normal !important;
-    border: 2px solid #005fcc !important;
+    border: 2px solid var(--mm-hc-accent) !important;
     background: #fff !important;
     color: #000 !important;
     z-index: 10000 !important;
@@ -351,7 +361,7 @@ body.keyboard-navigation :focus {
     max-height: 80vh;
     overflow-y: auto;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    border: 2px solid #005fcc;
+    border: 2px solid var(--mm-hc-accent);
 }
 
 .accessibility-modal .modal-header {
@@ -364,7 +374,7 @@ body.keyboard-navigation :focus {
 
 .accessibility-modal .modal-header h2 {
     margin: 0;
-    color: #005fcc;
+    color: var(--mm-hc-accent);
 }
 
 .accessibility-modal .modal-close {
@@ -391,7 +401,7 @@ body.keyboard-navigation :focus {
 }
 
 .accessibility-modal .modal-body h3 {
-    color: #005fcc;
+    color: var(--mm-hc-accent);
     margin-top: 1.5rem;
     margin-bottom: 0.5rem;
 }
@@ -425,7 +435,7 @@ body.keyboard-navigation :focus {
 }
 
 .accessibility-modal .modal-close-btn {
-    background: #005fcc;
+    background: var(--mm-hc-accent);
     color: #fff;
     border: none;
     padding: 8px 16px;
@@ -475,7 +485,7 @@ body.keyboard-navigation :focus {
 .answer-button:focus {
     transform: scale(1.05);
     z-index: 10;
-    box-shadow: 0 0 0 3px #005fcc, 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 0 3px var(--mm-hc-accent), 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .high-contrast .answer-button:focus {
@@ -511,14 +521,14 @@ body.keyboard-navigation :focus {
 
 /* Room info accessibility enhancements */
 #room-info:focus-within {
-    outline: 2px solid #005fcc;
+    outline: 2px solid var(--mm-hc-accent);
     outline-offset: 2px;
     border-radius: 4px;
 }
 
 /* Question area accessibility */
 #question-area:focus-within {
-    outline: 2px solid #005fcc;
+    outline: 2px solid var(--mm-hc-accent);
     outline-offset: 2px;
     border-radius: 4px;
 }
@@ -617,7 +627,7 @@ body.keyboard-navigation :focus {
     
     /* Ensure focus indicators are visible on mobile */
     :focus {
-        outline: 3px solid #005fcc !important;
+    outline: 3px solid var(--mm-hc-accent) !important;
         outline-offset: 2px !important;
         border-radius: 4px;
     }
@@ -638,7 +648,7 @@ body.keyboard-navigation :focus {
         left: 0;
         right: 0;
         z-index: 10000;
-        background: #005fcc;
+    background: var(--mm-hc-accent);
         color: white;
         text-align: center;
         font-size: clamp(1em, 4vw, 1.3em);
@@ -765,7 +775,7 @@ body.keyboard-navigation :focus {
 }
 
 .keyboard-focusable:focus::after {
-    border-color: #005fcc;
+    border-color: var(--mm-hc-accent);
 }
 
 /* Screen reader announcements positioning */

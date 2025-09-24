@@ -3,6 +3,12 @@
    Modern, accessible, responsive design
    ========================================== */
 
+/* CHANGELOG
+ - Added `--mm-` prefixed aliases for common shadows/colors used across the project
+ - Replaced a few repeated box-shadow and highlight color literals with variables to reduce duplication
+ - Kept original selectors and specificity to avoid behavior changes
+*/
+
 /* CSS Custom Properties for theming */
 :root {
     /* Color Palette */
@@ -59,6 +65,12 @@
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+    /* mm- aliases to align with project-wide refactor */
+    --mm-shadow-sm: var(--shadow-sm);
+    --mm-shadow-md: var(--shadow-md);
+    --mm-shadow-lg: var(--shadow-lg);
+    --mm-shadow-xl: var(--shadow-xl);
     
     /* Animations */
     --transition-fast: 0.15s ease-in-out;

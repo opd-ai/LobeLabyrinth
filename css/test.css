@@ -3,6 +3,12 @@
  * Medieval-themed testing interface
  */
 
+/* CHANGELOG
+ - Added `--mm-` prefixed aliases for shadows used by the test theme
+ - Replaced a few repeated shadow literals with variables to reduce duplication
+ - Kept selectors and behavior unchanged to preserve visual appearance
+*/
+
 /* Import the game CSS custom properties */
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@400;700&family=Cormorant+Garamond:wght@300;400;600&display=swap');
 
@@ -39,6 +45,11 @@
     --shadow-scroll: 0 4px 16px rgba(44, 24, 16, 0.3);
     --shadow-button: 0 4px 8px rgba(44, 24, 16, 0.25);
     --shadow-text: 2px 2px 4px rgba(44, 24, 16, 0.5);
+
+    /* mm- aliases for consistency with other css refactors */
+    --mm-shadow-castle: var(--shadow-castle);
+    --mm-shadow-scroll: var(--shadow-scroll);
+    --mm-shadow-button: var(--shadow-button);
     
     /* Test-specific colors */
     --test-success: var(--medieval-green);

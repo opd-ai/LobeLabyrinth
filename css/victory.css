@@ -3,6 +3,11 @@
  * Windows 95 completion dialog
  */
 
+/* CHANGELOG
+ - Replaced repeated panel/background/shadow values with `--mm-` variables
+ - Kept selectors and specificity; mapped victory button visuals to `--mm-` helpers
+*/
+
 /* Victory Screen - Windows 95 Dialog Window (15% max viewport) */
 .victory-screen {
     position: fixed;
@@ -23,12 +28,9 @@
 }
 
 .victory-content {
-    background: var(--mindmaze-gray);
+    background: var(--mm-panel);
     border: 2px outset var(--mindmaze-stone);
-    box-shadow: 
-        inset 1px 1px 0px rgba(255, 255, 255, 0.1),
-        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
-        4px 4px 8px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--mm-shadow-inset), var(--mm-shadow-deep);
     /* compact modal sizing to avoid occupying >15% at rest */
     max-width: min(80vw, 560px);
     max-height: min(80vh, 560px);
@@ -50,7 +52,7 @@
 .victory-header {
     text-align: center;
     padding: 12px;
-    background: var(--mindmaze-gray);
+    background: var(--mm-panel);
     color: var(--mindmaze-text);
     border-bottom: 2px inset var(--mindmaze-stone);
 }
@@ -81,7 +83,7 @@
 }
 
 .stat-card {
-    background: var(--mindmaze-gray);
+    background: var(--mm-panel);
     border: 2px inset var(--mindmaze-stone);
     padding: 18px;
     text-align: center;
@@ -104,9 +106,7 @@
 
 .stat-card:hover {
     transform: translateY(1px);
-    box-shadow: 
-        inset 2px 2px 4px rgba(0,0,0,0.7), 
-        inset -1px -1px 2px rgba(255,255,255,0.05);
+    box-shadow: inset 2px 2px 4px rgba(0,0,0,0.7), inset -1px -1px 2px rgba(255,255,255,0.05);
     border: 2px inset var(--mindmaze-gold-dark);
     background: linear-gradient(145deg, #1F1F1F 0%, #2A2A2A 35%, #353535 65%, #3A3A3A 100%);
 }

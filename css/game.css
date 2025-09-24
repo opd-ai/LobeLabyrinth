@@ -1,0 +1,1007 @@
+/* =============================================================================
+   LOBELABYRINTH - MAIN GAME CSS
+   Complete recreation of Encarta MindMaze visual experience
+   Author: GameEngineBot
+   Dependencies: css/mm-vars.css (CSS custom properties)
+   ============================================================================= */
+
+/* Import the consolidated CSS variables */
+@import url('mm-vars.css');
+
+/* =============================================================================
+   GLOBAL FOUNDATIONS & RESET
+   ============================================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'MS Sans Serif', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: var(--mm-font-md);
+    line-height: 1.4;
+    background: var(--mm-castle-stone);
+    background-image: var(--mm-texture-stone);
+    background-size: var(--mm-texture-stone-size);
+    color: var(--mm-text);
+    overflow: hidden;
+    user-select: none;
+}
+
+/* Remove default button styling */
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+    user-select: none;
+}
+
+/* Remove default focus outlines - we'll add custom ones */
+*:focus {
+    outline: none;
+}
+
+/* =============================================================================
+   MAIN LAYOUT ARCHITECTURE - CSS GRID SYSTEM
+   ============================================================================= */
+
+.game-container {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "main sidebar"
+        "footer footer";
+    grid-template-rows: 60px 1fr 40px;
+    grid-template-columns: 1fr 320px;
+    height: 100vh;
+    max-height: 100vh;
+    gap: 0;
+    background: var(--mm-castle-stone);
+}
+
+/* Header Section */
+.game-header {
+    grid-area: header;
+    background: var(--mm-gradient-panel);
+    border-bottom: var(--mm-border-thick) outset var(--mm-stone);
+    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: var(--mm-shadow-panel-raised);
+}
+
+.game-header h1 {
+    margin: 0;
+    font-size: var(--mm-font-title);
+    font-weight: bold;
+    color: var(--mm-navy);
+    text-shadow: var(--mm-shadow-text-emboss);
+    letter-spacing: 1px;
+}
+
+.game-header p {
+    margin: 2px 0 0 0;
+    font-size: var(--mm-font-sm);
+    color: var(--mm-text-dim);
+    font-style: italic;
+}
+
+/* Main Game Area */
+.game-main {
+    grid-area: main;
+    display: grid;
+    grid-template-areas:
+        "map room"
+        "question question"
+        "timer answer"
+        "feedback feedback";
+    grid-template-rows: 200px 120px 60px 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mm-spacing-md);
+    padding: var(--mm-spacing-md);
+    background: var(--mm-castle-stone);
+    overflow: hidden;
+}
+
+/* Sidebar */
+.game-sidebar {
+    grid-area: sidebar;
+    background: var(--mm-gradient-panel);
+    border-left: var(--mm-border-thick) inset var(--mm-stone);
+    padding: var(--mm-spacing-md);
+    overflow-y: auto;
+    box-shadow: var(--mm-shadow-panel-sunken);
+}
+
+/* Footer */
+.game-footer {
+    grid-area: footer;
+    background: var(--mm-gradient-panel);
+    border-top: var(--mm-border-thick) outset var(--mm-stone);
+    padding: var(--mm-spacing-md) var(--mm-spacing-xl);
+    display: flex;
+    align-items: center;
+    box-shadow: var(--mm-shadow-panel-raised);
+    font-size: var(--mm-font-sm);
+    color: var(--mm-text-dim);
+}
+
+/* =============================================================================
+   SECTION COMPONENTS - WINDOWS 95 PANEL STYLING
+   ============================================================================= */
+
+.section {
+    background: var(--mm-panel);
+    border: var(--mm-border-thick) outset var(--mm-stone);
+    padding: var(--mm-spacing-md);
+    margin-bottom: var(--mm-spacing-md);
+    box-shadow: var(--mm-shadow-panel-raised);
+    position: relative;
+}
+
+.section h2,
+.section h3 {
+    margin: 0 0 var(--mm-spacing-md) 0;
+    font-size: var(--mm-font-lg);
+    font-weight: bold;
+    color: var(--mm-navy);
+    text-shadow: var(--mm-shadow-text-emboss);
+    border-bottom: 1px solid var(--mm-stone-dark);
+    padding-bottom: var(--mm-spacing-xs);
+}
+
+.section p {
+    margin: var(--mm-spacing-sm) 0;
+    line-height: 1.4;
+}
+
+/* =============================================================================
+   MAP AREA - CASTLE MAP CANVAS STYLING
+   ============================================================================= */
+
+#map-area {
+    grid-area: map;
+    display: flex;
+    flex-direction: column;
+}
+
+.map-header {
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+.map-header h3 {
+    margin: 0;
+    font-size: var(--mm-font-md);
+    color: var(--mm-navy);
+}
+
+.map-header p {
+    margin: 2px 0 0 0;
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+    font-style: italic;
+}
+
+#map-canvas {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    border: var(--mm-border-thick) inset var(--mm-stone-dark);
+    background: var(--mm-navy-darkest);
+    cursor: crosshair;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+#map-canvas:focus {
+    border-color: var(--mm-gold);
+    box-shadow: 0 0 0 2px var(--mm-gold-dark);
+}
+
+.map-legend {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--mm-spacing-xs);
+    padding: var(--mm-spacing-xs);
+    background: var(--mm-panel-inset);
+    border: 1px inset var(--mm-stone-dark);
+    font-size: var(--mm-font-xs);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: var(--mm-spacing-xs);
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border: 1px solid var(--mm-text-dim);
+    display: inline-block;
+}
+
+/* =============================================================================
+   ROOM INFORMATION PANEL
+   ============================================================================= */
+
+#room-info {
+    grid-area: room;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#room-name {
+    font-size: var(--mm-font-xl);
+    color: var(--mm-navy);
+    margin: 0 0 var(--mm-spacing-sm) 0;
+    text-shadow: var(--mm-shadow-text-emboss);
+}
+
+#room-description {
+    flex: 1;
+    margin: 0;
+    font-size: var(--mm-font-sm);
+    line-height: 1.6;
+    color: var(--mm-text);
+}
+
+#room-connections {
+    margin: var(--mm-spacing-sm) 0 0 0;
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+    font-style: italic;
+}
+
+/* =============================================================================
+   QUESTION AREA STYLING
+   ============================================================================= */
+
+#question-area {
+    grid-area: question;
+    background: var(--mm-panel-light);
+    border: var(--mm-border-thick) inset var(--mm-stone);
+    box-shadow: var(--mm-shadow-panel-sunken);
+}
+
+#question-text {
+    background: white;
+    border: 1px inset var(--mm-stone-dark);
+    padding: var(--mm-spacing-md);
+    margin: var(--mm-spacing-sm) 0;
+    font-size: var(--mm-font-md);
+    line-height: 1.6;
+    min-height: 60px;
+    border-radius: var(--mm-radius-sm);
+}
+
+.question-meta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--mm-spacing-sm);
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+}
+
+.meta-item {
+    padding: var(--mm-spacing-xs) var(--mm-spacing-sm);
+    background: var(--mm-panel-inset);
+    border: 1px inset var(--mm-stone-dark);
+    border-radius: var(--mm-radius-sm);
+}
+
+/* =============================================================================
+   TIMER AREA STYLING
+   ============================================================================= */
+
+#timer-area {
+    grid-area: timer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-container {
+    display: flex;
+    align-items: center;
+    gap: var(--mm-spacing-md);
+    width: 100%;
+}
+
+#timer-text {
+    font-size: var(--mm-font-xl);
+    font-weight: bold;
+    color: var(--mm-crimson);
+    text-shadow: var(--mm-shadow-text-emboss);
+    min-width: 60px;
+    text-align: center;
+}
+
+.timer-bar-container {
+    flex: 1;
+    height: 20px;
+    border: var(--mm-border-thick) inset var(--mm-stone-dark);
+    background: var(--mm-panel-inset);
+    position: relative;
+    overflow: hidden;
+}
+
+.timer-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mm-forest) 0%, var(--mm-gold) 50%, var(--mm-crimson) 100%);
+    transition: width 0.1s linear;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* =============================================================================
+   ANSWER AREA STYLING
+   ============================================================================= */
+
+#answer-area {
+    grid-area: answer;
+    display: flex;
+    flex-direction: column;
+}
+
+#answer-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mm-spacing-sm);
+    flex: 1;
+}
+
+.answer-button {
+    background: var(--mm-gradient-button);
+    border: var(--mm-border-thick) outset var(--mm-stone);
+    padding: var(--mm-spacing-md);
+    font-size: var(--mm-font-sm);
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow: var(--mm-shadow-raised);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.answer-button:hover {
+    background: var(--mm-gradient-button);
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.answer-button:active,
+.answer-button.selected {
+    background: var(--mm-gradient-button-pressed);
+    border: var(--mm-border-thick) inset var(--mm-stone);
+    box-shadow: var(--mm-shadow-pressed);
+    transform: translateY(1px);
+}
+
+.answer-button:focus {
+    border-color: var(--mm-gold);
+    box-shadow: 0 0 0 2px var(--mm-gold-dark), var(--mm-shadow-raised);
+}
+
+.answer-button.correct {
+    background: linear-gradient(135deg, #90EE90 0%, #00FF00 50%, #228B22 100%);
+    border-color: var(--mm-forest);
+}
+
+.answer-button.incorrect {
+    background: linear-gradient(135deg, #FFA0A0 0%, #FF4444 50%, #CC0000 100%);
+    border-color: var(--mm-crimson);
+}
+
+.answer-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    filter: grayscale(0.3);
+}
+
+/* =============================================================================
+   FEEDBACK AREA
+   ============================================================================= */
+
+#feedback-area {
+    grid-area: feedback;
+    padding: var(--mm-spacing-md);
+    background: var(--mm-panel-light);
+    border: var(--mm-border-thick) inset var(--mm-stone);
+    border-radius: var(--mm-radius-md);
+    box-shadow: var(--mm-shadow-panel-sunken);
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--mm-font-md);
+    font-weight: bold;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+}
+
+#feedback-area.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#feedback-area.correct {
+    background: linear-gradient(135deg, #E0FFE0 0%, #C0FFC0 100%);
+    border-color: var(--mm-forest);
+    color: var(--mm-forest-dark);
+}
+
+#feedback-area.incorrect {
+    background: linear-gradient(135deg, #FFE0E0 0%, #FFC0C0 100%);
+    border-color: var(--mm-crimson);
+    color: var(--mm-crimson-dark);
+}
+
+/* =============================================================================
+   SIDEBAR COMPONENTS
+   ============================================================================= */
+
+.game-sidebar .section {
+    margin-bottom: var(--mm-spacing-lg);
+    padding: var(--mm-spacing-md);
+    background: var(--mm-panel);
+    border: var(--mm-border-thin) outset var(--mm-stone);
+    box-shadow: var(--mm-shadow-panel-raised);
+}
+
+.game-sidebar .section:last-child {
+    margin-bottom: 0;
+}
+
+.game-sidebar h3 {
+    margin: 0 0 var(--mm-spacing-md) 0;
+    font-size: var(--mm-font-md);
+    color: var(--mm-navy);
+    text-shadow: var(--mm-shadow-text-emboss);
+    border-bottom: 1px solid var(--mm-stone-dark);
+    padding-bottom: var(--mm-spacing-xs);
+}
+
+/* Score Display */
+.score-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--mm-spacing-sm);
+    padding: var(--mm-spacing-xs) var(--mm-spacing-sm);
+    background: var(--mm-panel-inset);
+    border: 1px inset var(--mm-stone-dark);
+    border-radius: var(--mm-radius-sm);
+    font-size: var(--mm-font-sm);
+}
+
+.score-value {
+    font-weight: bold;
+    color: var(--mm-navy);
+    text-shadow: var(--mm-shadow-text-emboss);
+}
+
+/* Progress Indicators */
+.progress-item {
+    margin-bottom: var(--mm-spacing-md);
+}
+
+.progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--mm-spacing-xs);
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+}
+
+.progress-bar {
+    height: 16px;
+    background: var(--mm-panel-inset);
+    border: 1px inset var(--mm-stone-dark);
+    border-radius: var(--mm-radius-sm);
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mm-forest) 0%, var(--mm-gold) 100%);
+    transition: width 0.5s ease;
+    box-shadow: inset 0 1px 2px rgba(255,255,255,0.3);
+}
+
+.time-indicator {
+    display: flex;
+    gap: var(--mm-spacing-xs);
+    align-items: center;
+    font-size: var(--mm-font-xs);
+    color: var(--mm-text-dim);
+}
+
+.time-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--mm-stone-dark);
+    transition: background-color 0.3s ease;
+}
+
+.time-dot.active {
+    background: var(--mm-gold);
+    box-shadow: 0 0 4px var(--mm-gold-shadow);
+}
+
+/* Game Status */
+.status-message {
+    padding: var(--mm-spacing-sm);
+    background: var(--mm-panel-inset);
+    border: 1px inset var(--mm-stone-dark);
+    border-radius: var(--mm-radius-sm);
+    font-size: var(--mm-font-sm);
+    text-align: center;
+    font-style: italic;
+    color: var(--mm-text-dim);
+}
+
+/* =============================================================================
+   BUTTON SYSTEM - AUTHENTIC WINDOWS 95 BUTTONS
+   ============================================================================= */
+
+.btn-primary,
+.btn-secondary,
+.btn-danger {
+    background: var(--mm-gradient-button);
+    border: var(--mm-border-thick) outset var(--mm-stone);
+    padding: var(--mm-spacing-md) var(--mm-spacing-lg);
+    font-size: var(--mm-font-sm);
+    font-weight: normal;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    box-shadow: var(--mm-shadow-raised);
+    margin-bottom: var(--mm-spacing-sm);
+    width: 100%;
+    text-align: center;
+    user-select: none;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--mm-spacing-sm);
+}
+
+.btn-primary {
+    font-weight: bold;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #FFB0B0 0%, #FF8080 50%, #FF6060 100%);
+}
+
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-danger:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.btn-primary:active,
+.btn-secondary:active,
+.btn-danger:active {
+    background: var(--mm-gradient-button-pressed);
+    border: var(--mm-border-thick) inset var(--mm-stone);
+    box-shadow: var(--mm-shadow-pressed);
+    transform: translateY(1px);
+}
+
+.btn-danger:active {
+    background: linear-gradient(135deg, #FF6060 0%, #FF8080 50%, #FFB0B0 100%);
+}
+
+.btn-primary:focus,
+.btn-secondary:focus,
+.btn-danger:focus {
+    border-color: var(--mm-gold);
+    box-shadow: 0 0 0 2px var(--mm-gold-dark), var(--mm-shadow-raised);
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled,
+.btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+}
+
+.controls-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--mm-spacing-sm);
+    margin-bottom: var(--mm-spacing-sm);
+}
+
+.controls-grid .btn-secondary {
+    margin-bottom: 0;
+}
+
+/* =============================================================================
+   NAVIGATION AREA
+   ============================================================================= */
+
+#available-rooms {
+    font-size: var(--mm-font-sm);
+    color: var(--mm-text-dim);
+    text-align: center;
+    font-style: italic;
+    padding: var(--mm-spacing-md);
+    background: var(--mm-panel-inset);
+    border: 1px inset var(--mm-stone-dark);
+    border-radius: var(--mm-radius-sm);
+}
+
+/* =============================================================================
+   ACHIEVEMENT STATS PREVIEW
+   ============================================================================= */
+
+.achievement-stats-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--mm-spacing-sm);
+    background: var(--mm-panel-inset);
+    border: 1px inset var(--mm-stone-dark);
+    border-radius: var(--mm-radius-sm);
+    font-size: var(--mm-font-sm);
+    margin-bottom: var(--mm-spacing-md);
+}
+
+.achievement-points {
+    font-weight: bold;
+    color: var(--mm-gold-dark);
+    text-shadow: var(--mm-shadow-text-emboss);
+}
+
+/* =============================================================================
+   LOADING STATES
+   ============================================================================= */
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--mm-z-overlay);
+}
+
+.loading-content {
+    background: var(--mm-panel);
+    border: var(--mm-border-thick) outset var(--mm-stone);
+    padding: var(--mm-spacing-xl);
+    text-align: center;
+    box-shadow: var(--mm-shadow-deep);
+    border-radius: var(--mm-radius-md);
+}
+
+.loading {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--mm-stone-light);
+    border-top: 3px solid var(--mm-navy);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto var(--mm-spacing-md) auto;
+}
+
+.loading-text {
+    font-size: var(--mm-font-md);
+    color: var(--mm-navy);
+    font-weight: bold;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* =============================================================================
+   SKIP LINKS - ACCESSIBILITY
+   ============================================================================= */
+
+.skip-links {
+    position: absolute;
+    top: -100px;
+    left: 0;
+    z-index: var(--mm-z-tooltip);
+}
+
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--mm-navy);
+    color: white;
+    padding: var(--mm-spacing-md);
+    text-decoration: none;
+    border-radius: var(--mm-radius-sm);
+    transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+    top: 100px;
+}
+
+/* =============================================================================
+   RESPONSIVE DESIGN - MOBILE & TABLET ADAPTATIONS
+   ============================================================================= */
+
+/* Tablet Portrait (768px and down) */
+@media screen and (max-width: 768px) {
+    .game-container {
+        grid-template-areas:
+            "header"
+            "main"
+            "sidebar"
+            "footer";
+        grid-template-rows: 60px 1fr auto 40px;
+        grid-template-columns: 1fr;
+    }
+    
+    .game-sidebar {
+        border-left: none;
+        border-top: var(--mm-border-thick) inset var(--mm-stone);
+        max-height: 40vh;
+        overflow-y: auto;
+    }
+    
+    .game-main {
+        grid-template-areas:
+            "map map"
+            "room room"
+            "question question"
+            "timer answer"
+            "feedback feedback";
+        grid-template-rows: 150px 80px 100px 60px 1fr;
+        padding: var(--mm-spacing-sm);
+        gap: var(--mm-spacing-sm);
+    }
+}
+
+/* Mobile (480px and down) */
+@media screen and (max-width: 480px) {
+    .game-container {
+        grid-template-rows: 50px 1fr auto 30px;
+    }
+    
+    .game-header {
+        padding: var(--mm-spacing-sm);
+    }
+    
+    .game-header h1 {
+        font-size: var(--mm-font-lg);
+    }
+    
+    .game-header p {
+        font-size: var(--mm-font-xs);
+    }
+    
+    .game-main {
+        grid-template-areas:
+            "map"
+            "room"
+            "question"
+            "timer"
+            "answer"
+            "feedback";
+        grid-template-rows: 120px 60px 100px 50px 120px 1fr;
+        grid-template-columns: 1fr;
+    }
+    
+    #answer-buttons {
+        grid-template-columns: 1fr;
+        gap: var(--mm-spacing-xs);
+    }
+    
+    .controls-grid {
+        grid-template-columns: 1fr;
+        gap: var(--mm-spacing-xs);
+    }
+    
+    .game-sidebar .section {
+        padding: var(--mm-spacing-sm);
+        margin-bottom: var(--mm-spacing-sm);
+    }
+    
+    .question-meta {
+        flex-direction: column;
+        gap: var(--mm-spacing-xs);
+    }
+    
+    .meta-item {
+        text-align: center;
+    }
+}
+
+/* Large Desktop (1440px and up) */
+@media screen and (min-width: 1440px) {
+    .game-container {
+        grid-template-columns: 1fr 360px;
+    }
+    
+    .game-main {
+        grid-template-rows: 240px 140px 80px 1fr;
+        padding: var(--mm-spacing-lg);
+        gap: var(--mm-spacing-lg);
+    }
+    
+    .game-sidebar {
+        padding: var(--mm-spacing-lg);
+    }
+    
+    #question-text {
+        font-size: var(--mm-font-lg);
+        padding: var(--mm-spacing-lg);
+        min-height: 80px;
+    }
+    
+    .answer-button {
+        padding: var(--mm-spacing-lg);
+        font-size: var(--mm-font-md);
+        min-height: 54px;
+    }
+}
+
+/* High DPI / Retina Display Adaptations */
+@media screen and (-webkit-min-device-pixel-ratio: 2), 
+       screen and (min-resolution: 2dppx) {
+    #map-canvas {
+        image-rendering: auto;
+    }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+    .loading,
+    .timer-bar,
+    .progress-bar-fill,
+    .time-dot,
+    #feedback-area,
+    button {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+/* =============================================================================
+   UTILITY CLASSES
+   ============================================================================= */
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.visible {
+    display: block !important;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-bold {
+    font-weight: bold;
+}
+
+.no-select {
+    user-select: none;
+}
+
+/* =============================================================================
+   ANIMATION KEYFRAMES
+   ============================================================================= */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 5px var(--mm-gold-shadow); }
+    50% { box-shadow: 0 0 15px var(--mm-gold), 0 0 25px var(--mm-gold-light); }
+}
+
+/* Apply animations to appropriate elements */
+.fade-in {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+.slide-up {
+    animation: slideUp 0.3s ease forwards;
+}
+
+.bounce {
+    animation: bounce 0.6s ease;
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.glow {
+    animation: glow 2s ease-in-out infinite;
+}
+
+/* =============================================================================
+   DEBUG MODE STYLES (DEVELOPMENT)
+   ============================================================================= */
+
+.debug-mode .game-container * {
+    outline: 1px solid rgba(255, 0, 0, 0.3) !important;
+}
+
+.debug-mode .section {
+    position: relative;
+}
+
+.debug-mode .section::before {
+    content: attr(id);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    padding: 2px 4px;
+    z-index: 1000;
+}
+
+/* =============================================================================
+   END OF MAIN GAME CSS
+   ============================================================================= */

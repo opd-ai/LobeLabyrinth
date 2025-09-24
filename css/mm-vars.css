@@ -2,129 +2,177 @@
  - Consolidated all MindMaze CSS variables from game.css and other files
  - Standardized --mm- prefix for shared variables to reduce duplication
  - Added comprehensive color palette, spacing, borders, shadows, and z-indexes
+ - Enhanced with authentic MindMaze/Windows 95 values for complete redesign
 */
 
 /* Consolidated MindMaze CSS Variables - Windows 95 Authentic Theme */
 :root {
     /* ===== CORE COLOR PALETTE ===== */
-    /* Navy backgrounds */
+    /* Navy backgrounds - exact MindMaze colors */
     --mindmaze-navy: #000080;
-    --mindmaze-navy-light: #0000A0;
-    --mindmaze-navy-dark: #000060;
+    --mindmaze-navy-light: #000099;
+    --mindmaze-navy-dark: #000066;
+    --mindmaze-navy-darkest: #000044;
     
-    /* Gray panels and chrome */
+    /* Gray panels and chrome - Windows 95 authentic */
     --mindmaze-gray: #C0C0C0;
     --mindmaze-gray-light: #E0E0E0;
+    --mindmaze-gray-lightest: #F0F0F0;
     --mindmaze-gray-dark: #808080;
+    --mindmaze-gray-darkest: #404040;
     --mindmaze-stone: #C0C0C0;
     --mindmaze-stone-light: #E0E0E0;
-    --mindmaze-stone-dark: #808080;
+    --mindmaze-stone-dark: #A0A0A0;
+    --mindmaze-stone-darkest: #808080;
     
-    /* Accent colors */
+    /* Castle/Medieval colors */
+    --mindmaze-castle-stone: #B8B8B8;
+    --mindmaze-castle-shadow: #6C6C6C;
+    --mindmaze-castle-highlight: #DCDCDC;
+    --mindmaze-castle-mortar: #909090;
+    
+    /* Accent colors - MindMaze authentic */
     --mindmaze-gold: #FFFF00;
     --mindmaze-gold-light: #FFFF80;
     --mindmaze-gold-dark: #CCCC00;
-    --mindmaze-brown: #FF0000;
-    --mindmaze-brown-light: #FF8080;
-    --mindmaze-brown-dark: #800000;
+    --mindmaze-gold-shadow: #999900;
+    --mindmaze-brown: #8B4513;
+    --mindmaze-brown-light: #CD853F;
+    --mindmaze-brown-dark: #654321;
     --mindmaze-blue: #000080;
     --mindmaze-blue-light: #4040FF;
     --mindmaze-blue-dark: #000040;
-    --mindmaze-crimson: #FF0000;
-    --mindmaze-forest: #008000;
+    --mindmaze-crimson: #DC143C;
+    --mindmaze-crimson-dark: #B22222;
+    --mindmaze-forest: #228B22;
+    --mindmaze-forest-dark: #006400;
     
     /* Text colors */
     --mindmaze-black: #000000;
     --mindmaze-text: #000000;
-    --mindmaze-text-dim: #808080;
+    --mindmaze-text-dim: #606060;
     --mindmaze-text-light: #FFFFFF;
+    --mindmaze-text-shadow: #404040;
     
     /* Panel backgrounds */
     --mindmaze-panel: #C0C0C0;
+    --mindmaze-panel-inset: #A8A8A8;
+    
     
     /* ===== CONSOLIDATED MM- SHORTCUTS ===== */
     /* Backgrounds and panels */
-    --mm-bg: var(--mindmaze-gray);
+    --mm-bg: var(--mindmaze-castle-stone);
     --mm-panel: var(--mindmaze-panel);
     --mm-panel-light: var(--mindmaze-gray-light);
     --mm-panel-dark: var(--mindmaze-gray-dark);
+    --mm-panel-inset: var(--mindmaze-panel-inset);
     
     /* Text */
     --mm-text: var(--mindmaze-text);
     --mm-text-dim: var(--mindmaze-text-dim);
     --mm-text-light: var(--mindmaze-text-light);
+    --mm-text-shadow: var(--mindmaze-text-shadow);
     
     /* Chrome and borders */
     --mm-stone: var(--mindmaze-stone);
     --mm-stone-light: var(--mindmaze-stone-light);
     --mm-stone-dark: var(--mindmaze-stone-dark);
+    --mm-castle-stone: var(--mindmaze-castle-stone);
+    --mm-castle-shadow: var(--mindmaze-castle-shadow);
+    --mm-castle-highlight: var(--mindmaze-castle-highlight);
     
     /* Accents */
     --mm-gold: var(--mindmaze-gold);
     --mm-gold-light: var(--mindmaze-gold-light);
     --mm-gold-dark: var(--mindmaze-gold-dark);
+    --mm-gold-shadow: var(--mindmaze-gold-shadow);
     --mm-brown: var(--mindmaze-brown);
     --mm-blue: var(--mindmaze-blue);
     --mm-crimson: var(--mindmaze-crimson);
+    --mm-forest: var(--mindmaze-forest);
     
     /* Navy variations */
     --mm-navy: var(--mindmaze-navy);
     --mm-navy-light: var(--mindmaze-navy-light);
     --mm-navy-dark: var(--mindmaze-navy-dark);
+    --mm-navy-darkest: var(--mindmaze-navy-darkest);
     
-    /* ===== SHADOWS AND 3D EFFECTS ===== */
-    --mm-shadow-inset: inset 1px 1px 0 rgba(255,255,255,0.1), inset -1px -1px 0 rgba(0,0,0,0.3);
-    --mm-shadow-raised: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.1), inset 1px 1px 0 rgba(255,255,255,0.15);
-    --mm-shadow-deep: 2px 2px 4px rgba(0,0,0,0.5);
-    --mm-shadow-glow: 0 0 12px rgba(212,175,55,0.4);
-    --mm-shadow-button-pressed: inset 2px 2px 2px rgba(0,0,0,0.4), inset -1px -1px 1px rgba(255,255,255,0.1);
-    
-    /* Additional commonly-repeated shadow patterns */
-    --mm-shadow-frame: 2px 2px 6px rgba(0,0,0,0.5);
-    --mm-shadow-text-emboss: 1px 1px 0 rgba(0,0,0,0.6);
-    --mm-shadow-panel-light: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.25);
-    --mm-shadow-panel-deep: inset 2px 2px 5px rgba(0,0,0,0.7), inset -2px -2px 3px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(255,255,255,0.05);
-    --mm-shadow-button-light: inset 1px 1px 0px rgba(255, 255, 255, 0.2), inset -1px -1px 0px rgba(0, 0, 0, 0.1);
-    --mm-shadow-button-light-subtle: inset 1px 1px 0px rgba(255, 255, 255, 0.1), inset -1px -1px 0px rgba(0, 0, 0, 0.05);
-    --mm-shadow-input: inset 1px 1px 2px rgba(0, 0, 0, 0.3), inset -1px -1px 0px rgba(255, 255, 255, 0.1);
-    --mm-shadow-card-hover: inset 2px 2px 4px rgba(0,0,0,0.7), inset -1px -1px 2px rgba(255,255,255,0.05);
-    --mm-shadow-subtle: 1px 1px 2px rgba(0,0,0,0.3);
-    
-    /* ===== SPACING ===== */
+    /* ===== SPACING AND LAYOUT ===== */
     --mm-spacing-xs: 2px;
     --mm-spacing-sm: 4px;
     --mm-spacing-md: 8px;
     --mm-spacing-lg: 12px;
     --mm-spacing-xl: 16px;
+    --mm-spacing-xxl: 24px;
+    --mm-spacing-3xl: 32px;
     
-    /* ===== BORDER DIMENSIONS ===== */
-    --mm-bezel-width: 2px;
-    --mm-radius: 4px;
+    /* Border widths */
+    --mm-border-thin: 1px;
+    --mm-border-thick: 2px;
+    --mm-border-chunky: 3px;
+    
+    /* Border radius */
     --mm-radius-sm: 2px;
-    --mm-radius-lg: 6px;
+    --mm-radius-md: 4px;
     
-    /* ===== FONTS ===== */
-    --mm-font-title: 'MS Sans Serif', 'Arial', sans-serif;
-    --mm-font-heading: 'MS Sans Serif', 'Arial', sans-serif;
-    --mm-font-ui: 'MS Sans Serif', 'Arial', sans-serif;
-    --mm-font-body: 'MS Sans Serif', 'Arial', sans-serif;
-    --mm-font-monospace: 'Courier New', 'Courier', monospace;
+    /* Font sizes */
+    --mm-font-xs: 10px;
+    --mm-font-sm: 11px;
+    --mm-font-md: 12px;
+    --mm-font-lg: 14px;
+    --mm-font-xl: 16px;
+    --mm-font-xxl: 18px;
+    --mm-font-title: 20px;
     
-    /* ===== Z-INDEX LAYERING ===== */
-    --mm-z-notification: 1000;
-    --mm-z-achievement: 1001;
-    --mm-z-overlay: 1500;
-    --mm-z-victory: 2000;
+    /* Z-index layers */
+    --mm-z-base: 1;
+    --mm-z-overlay: 100;
+    --mm-z-modal: 200;
+    --mm-z-notification: 300;
+    --mm-z-tooltip: 400;
     
-    /* ===== LAYOUT DIMENSIONS ===== */
-    --mm-titlebar-h: clamp(44px, 6vh, 64px);
-    --mm-footer-h: clamp(28px, 4vh, 36px);
-    --mm-sidebar-w: clamp(220px, 20vw, 320px);
     
-    /* ===== COMMON RGBA VALUES ===== */
-    --mm-overlay-backdrop: rgba(128, 128, 128, 0.7);
-    --mm-achievement-glow: rgba(212, 175, 55, 0.2);
-    --mm-focus-outline: 3px solid rgba(212,175,55,0.95);
+    /* ===== SHADOWS AND 3D EFFECTS ===== */
+    /* Windows 95 authentic 3D button effects */
+    --mm-shadow-inset: inset 1px 1px 0 rgba(255,255,255,0.8), inset -1px -1px 0 rgba(0,0,0,0.5);
+    --mm-shadow-raised: 2px 2px 4px rgba(0,0,0,0.6), -1px -1px 2px rgba(255,255,255,0.3), inset 1px 1px 0 rgba(255,255,255,0.4), inset -1px -1px 0 rgba(0,0,0,0.2);
+    --mm-shadow-pressed: inset 2px 2px 4px rgba(0,0,0,0.6), inset -1px -1px 2px rgba(255,255,255,0.1);
+    --mm-shadow-deep: 3px 3px 6px rgba(0,0,0,0.7);
+    --mm-shadow-glow: 0 0 12px rgba(212,175,55,0.6);
+    
+    /* Panel shadows */
+    --mm-shadow-panel-raised: inset 2px 2px 0 rgba(255,255,255,0.8), inset -2px -2px 0 rgba(0,0,0,0.4);
+    --mm-shadow-panel-sunken: inset -2px -2px 0 rgba(255,255,255,0.8), inset 2px 2px 0 rgba(0,0,0,0.4);
+    --mm-shadow-panel-deep: inset 3px 3px 6px rgba(0,0,0,0.5);
+    
+    /* Text shadows */
+    --mm-shadow-text-emboss: 1px 1px 0 rgba(255,255,255,0.8);
+    --mm-shadow-text-engrave: 1px 1px 0 rgba(0,0,0,0.8);
+    --mm-shadow-text-glow: 0 0 8px rgba(255,255,0,0.8);
+    
+    /* Drop shadows */
+    --mm-shadow-drop-light: 2px 2px 4px rgba(0,0,0,0.3);
+    --mm-shadow-drop-heavy: 4px 4px 8px rgba(0,0,0,0.6);
+    --mm-shadow-drop-modal: 8px 8px 16px rgba(0,0,0,0.8);
+    
+    /* Stone texture effects */
+    --mm-shadow-stone-raised: inset 1px 1px 0 rgba(255,255,255,0.6), inset -1px -1px 0 rgba(0,0,0,0.3), 1px 1px 2px rgba(0,0,0,0.2);
+    --mm-shadow-stone-sunken: inset -1px -1px 0 rgba(255,255,255,0.6), inset 1px 1px 0 rgba(0,0,0,0.3);
+    
+    /* ===== GRADIENTS AND TEXTURES ===== */
+    --mm-gradient-panel: linear-gradient(135deg, #E0E0E0 0%, #C0C0C0 50%, #A0A0A0 100%);
+    --mm-gradient-button: linear-gradient(135deg, #E0E0E0 0%, #C8C8C8 50%, #B0B0B0 100%);
+    --mm-gradient-button-pressed: linear-gradient(135deg, #A0A0A0 0%, #C0C0C0 50%, #D0D0D0 100%);
+    --mm-gradient-castle: radial-gradient(ellipse at center top, #D0D0D0 0%, #B8B8B8 50%, #A0A0A0 100%);
+    --mm-gradient-navy: linear-gradient(180deg, #000099 0%, #000080 50%, #000066 100%);
+    --mm-gradient-gold: linear-gradient(135deg, #FFFF80 0%, #FFFF00 50%, #CCCC00 100%);
+    
+    /* Stone texture pattern (CSS-only) */
+    --mm-texture-stone: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 80% 80%, rgba(0,0,0,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40% 60%, rgba(255,255,255,0.05) 2px, transparent 2px);
+    --mm-texture-stone-size: 16px 16px, 12px 12px, 20px 20px;
 }
 
 /* ===== REUSABLE HELPER CLASSES ===== */
